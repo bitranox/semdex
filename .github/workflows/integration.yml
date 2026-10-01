@@ -131,6 +131,7 @@ jobs:
           python -m pytest -p no:cacheprovider -o addopts=""
           tests/test_embedding_local.py tests/test_embedding_sentence_transformers.py
           tests/test_chunker_local.py tests/test_vectorstore_pgvector.py tests/test_vectorstore_mariadb.py
+          tests/test_e2e_mcp_knowledge_matrix.py
 
   doc-extractors:
     # Exercises the HTTP document-extractor backends (docling/xberg/mineru),

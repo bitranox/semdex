@@ -28,6 +28,7 @@ depend on who else is running), MERGE=1 to add rows to an existing OUT rather th
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import sys
@@ -40,6 +41,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _bench_timing import DEFAULT_REPEATS, MIN_SAMPLE_SECONDS, load_snapshot, measure
+from _optional_ml import set_torch_threads
 
 from semdex.composition import build_chunker
 from semdex.domain.enums import ChunkStrategy
@@ -111,12 +113,8 @@ def cap_native_threads(threads: int) -> None:
     """
     for name in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS", "TORCH_NUM_THREADS"):
         os.environ.setdefault(name, str(threads))
-    try:
-        import torch
-
-        torch.set_num_threads(threads)
-    except ImportError:
-        pass
+    with contextlib.suppress(ImportError):
+        set_torch_threads(threads)
 
 
 def existing_rows(path: Path) -> list[dict[str, Any]]:

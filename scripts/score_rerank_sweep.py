@@ -47,6 +47,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _fusion import reciprocal_rank_fusion
+from _optional_ml import CrossEncoderModel, load_cross_encoder, set_torch_threads
 from _provenance import stamped
 from _score_kernel import topk_stream
 from _score_stats import bootstrap_ci
@@ -58,14 +59,11 @@ _METRICS = ("ndcg@10", "recall@10", "mrr", "p@1")
 _BASE_METHODS = ("dense", "bm25", "hybrid")
 
 
-def load_reranker(name: str) -> Any:
-    import torch
-    from sentence_transformers import CrossEncoder
-
+def load_reranker(name: str) -> CrossEncoderModel:
     threads = int(os.environ.get("SEMDEX_RERANK_THREADS", "0"))
     if threads:
-        torch.set_num_threads(threads)
-    return CrossEncoder(name, device="cpu", max_length=int(os.environ.get("SEMDEX_RERANK_MAXLEN", "512")))
+        set_torch_threads(threads)
+    return load_cross_encoder(name, max_length=int(os.environ.get("SEMDEX_RERANK_MAXLEN", "512")))
 
 
 def _documents_with_source(rows: Any, uris: list[str], limit: int) -> list[tuple[str, int]]:
@@ -87,7 +85,7 @@ def _documents_with_source(rows: Any, uris: list[str], limit: int) -> list[tuple
 class ScoreCache:
     """(query id, chunk row) -> cross-encoder score, computed once per corpus."""
 
-    def __init__(self, model: Any, batch: int) -> None:
+    def __init__(self, model: CrossEncoderModel, batch: int) -> None:
         self._model = model
         self._batch = batch
         self._scores: dict[tuple[str, int], float] = {}

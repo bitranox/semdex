@@ -9,7 +9,7 @@ dependencies = [
     "lib_cli_exit_tools>=2.3.4",
     "lib_log_rich>=6.3.7",
     "lib_layered_config>=6.1.1",
-    "btx_lib_mail>=2.0.0",
+    "btx_lib_mail>=3.0.0",
     "pydantic>=2.13.5",
     "orjson>=3.12.0",
     # Cross-OS user cache dir for the fastembed model cache (persistent default,
@@ -49,6 +49,9 @@ system-dependencies-macos = []
 system-dependencies-windows-pip = []
 system-dependencies-windows-choco = []
 os = ["ubuntu-latest", "windows-latest", "macos-latest"]
+# The integration-marked tests need Docker databases, dataset downloads and real models;
+# .github/workflows/integration.yml runs them weekly and on demand, so the push CI skips them.
+pytest-exclude-markers = ["integration"]
 
 [project.urls]
 Homepage = "https://github.com/bitranox/semdex"
@@ -201,6 +204,9 @@ dev = [
   "pymysql>=1.2.3",
   "ir_datasets>=0.6.3",
   "datasets>=5.0.1",
+  # bench extra: scripts/score_hybrid_sweep.py imports bm25s and Stemmer (PyStemmer).
+  "bm25s>=0.3.11",
+  "PyStemmer>=3.1.0",
   "lancedb>=0.39.0",
   # MCP server (mcp-server extra) mirrored into dev so CI's `.[dev]` pyright run
   # can type-check the adapters/mcp/ modules and their tests.
