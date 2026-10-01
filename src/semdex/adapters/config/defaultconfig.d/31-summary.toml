@@ -1,0 +1,131 @@
+# ==============================================================================
+# semdex - per-document summary tier ([summary])
+# ==============================================================================
+#
+# OPT-IN tier, OFF by default. When on, an LLM condenses each SOURCE document into
+# a short summary ONCE at index/reindex time (one call per document, never per
+# chunk), stored alongside the chunks and returned on every search hit as
+# "summary". A calling LLM can then triage which results matter WITHOUT opening
+# the source: a hit already carries WHERE it is (uri + ordinal), the specific
+# MATCH (text), and now WHAT the whole document is about (summary).
+#
+# Cost model: one LLM call per document at index time (cached, no per-query
+# latency). Intended for CURATED datasets (docs, knowledge bases) - NOT million-
+# document benchmark corpora. reconcile only regenerates a summary for a CHANGED
+# source, so steady-state reindex cost is near zero.
+#
+# Classification: there is no separate tag column - ask the prompt for a leading
+# category and it rides inside the summary (a structured tag column is a possible
+# future addition).
+#
+# The chat model runs as its OWN server (ollama or any OpenAI-compatible one), so
+# semdex carries only a small HTTP client (install semdex[summary]); no ML deps.
+#
+# Override any key via environment / .env, e.g. SEMDEX___SUMMARY__PROVIDER=ollama
+#
+# Per-dataset: a [[dataset]] opts in with `summarize = true` (see 16-datasets.toml)
+# and may override `summary_model` / `summary_endpoint`; the provider, api_key,
+# timeout, prompt, and clip below apply to every dataset that opts in.
+# ==============================================================================
+
+[summary]
+
+# provider - which summarizer backend to use (or none to disable the tier).
+#   Default: "none" - the tier is OFF; hits carry no summary and behaviour /
+#     output JSON are unchanged.
+#   Effect: selects the adapter. "ollama" speaks ollama's native POST /api/chat;
+#     "openai" speaks the standard POST /v1/chat/completions, which hosted OpenAI,
+#     ollama's own /v1, AND llama.cpp's llama-server all expose.
+#   When to change: set "ollama" or "openai" to enrich hits with a per-document
+#     summary for a curated dataset an agent triages.
+#   Consequences: adds one LLM call per document at index time (needs a reachable
+#     chat server + set endpoint); "openai" against hosted OpenAI also needs
+#     api_key. Existing collections gain summaries only after a reindex.
+#   Recommendation: keep "none" for benchmark/large corpora; enable for a docs or
+#     knowledge dataset where triage-without-opening pays off.
+provider = "none"
+
+# model - chat model id for the selected provider.
+#   Default: unset -> each provider's own default (ollama: llama3.2, openai:
+#     gpt-4o-mini).
+#   Effect: picks the concrete instruct/chat model that writes the summary.
+#   When to change: use a stronger model for better summaries, or a small local
+#     one to cut cost/latency. Must be a model the chosen provider serves.
+#   Consequences: a bigger model = better summaries but more time/cost per
+#     document at index time.
+#   Recommendation: a small, fast instruct model is usually enough for triage
+#     summaries; pull the tag on your server first (e.g. `ollama pull llama3.2`).
+# model = "llama3.2"
+
+# endpoint - base URL of the chat server.
+#   Default: unset. "ollama" then uses http://127.0.0.1:11434 (semdex appends
+#     /api/chat). "openai" then uses https://api.openai.com/v1 (semdex appends
+#     /chat/completions).
+#   Convention: for "openai" this is the base URL ending in /v1. A local ollama
+#     /v1 is "http://127.0.0.1:11434/v1"; a llama.cpp llama-server is
+#     "http://HOST:8080/v1". For "ollama" it is the host root (no /api path).
+#   When to change: point at a remote/other-port host, or select a local server.
+#   Consequences: the request contains your document text; keep the host on a
+#     trusted network.
+#   Recommendation: set with provider = "ollama" or "openai".
+# endpoint = "http://127.0.0.1:11434"
+
+# api_key - Bearer token for the "openai" provider.
+#   Default: unset (no Authorization header - correct for local ollama/llama.cpp).
+#   Effect: sent as "Authorization: Bearer <key>" to the /v1/chat/completions
+#     server; used only by the "openai" provider.
+#   When to change: required for hosted OpenAI or a secured gateway.
+#   SECRET: do NOT write the literal here. Set it from the environment, e.g.
+#     SEMDEX___SUMMARY__API_KEY=sk-... (or your .env), so it never lands in a
+#     committed/tracked config file.
+#   Recommendation: env-only; keep this line commented.
+# api_key = ""  # set via SEMDEX___SUMMARY__API_KEY, never inline
+
+# timeout - per-request HTTP timeout in seconds for "ollama"/"openai".
+#   Default: unset -> 60 s (the loader default).
+#   Effect: caps how long one summary request may take before failing with a
+#     SummaryError.
+#   When to change: raise it for a slow CPU-only chat server or a large model.
+#   Consequences: too low fails a legitimately slow summary; too high delays the
+#     error when a server is genuinely stuck.
+#   Recommendation: leave unset on a GPU host; set to 120-300 for a CPU-only server.
+# timeout = 120.0
+
+# retries - total attempts per summary request for "ollama"/"openai".
+#   Default: unset -> 4 (the loader default).
+#   Effect: how many times ONE summary request is tried before its error surfaces,
+#     retrying only a TRANSIENT blip - a dropped connection, a 5xx, or a 429 -
+#     with exponential backoff (1s, 2s, 4s, ... capped at 30s). A 4xx (bad request)
+#     or a malformed response is never retried.
+#   When to change: raise it for a flaky network or a busy shared chat server that
+#     occasionally drops a connection during a large reindex; set it to 1 to disable
+#     retries and fail fast.
+#   Consequences: more attempts survive brief outages but delay the final error when
+#     a server is genuinely down (each attempt also waits out its backoff).
+#   Recommendation: leave unset (4) for most deployments; raise it for a long
+#     unattended reindex over an unreliable link.
+# retries = 4
+
+# max_input_chars - clip the document text sent to the model.
+#   Default: 8000 characters.
+#   Effect: only the first N characters of each document are summarized, so a huge
+#     source cannot overflow the model's context window or blow up the call.
+#   When to change: raise it for a large-context model when whole-document
+#     coverage matters; lower it to cut cost/latency.
+#   Consequences: too low may miss content later in a long document; too high
+#     risks exceeding the model's context or slowing the call.
+#   Recommendation: 8000 suits triage summaries on most models; tune to the
+#     model's context and your documents' length.
+# max_input_chars = 8000
+
+# prompt - the system prompt: the summary's LENGTH and TONE control.
+#   Default: a 1-2 sentence triage prompt that asks for a leading topic label.
+#   Effect: instructs the model how to summarize; changing it is how you make
+#     summaries longer/shorter, add a required category prefix (folding a
+#     classification into the summary), or change register.
+#   When to change: to tune length/tone, force a category prefix, or summarize in
+#     a specific language.
+#   Consequences: a longer summary costs more tokens per document and enlarges the
+#     store; keep it focused for triage.
+#   Recommendation: keep it short and ask for a leading label so hits are scannable.
+# prompt = "Summarize the document below in 1-2 sentences ... Start with a short topic label."

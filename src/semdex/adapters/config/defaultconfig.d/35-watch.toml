@@ -1,0 +1,54 @@
+# ==============================================================================
+# semdex - live filesystem watching ([watch])
+# ==============================================================================
+#
+# The `serve` command can WATCH each filesystem-backed source dataset and
+# auto-reindex it when a file changes, so search results stay fresh without a
+# manual reindex. Watching never mutates the sources - it only re-reads changed
+# files and updates the vector store. Needs the optional `semdex[watch]` extra
+# (the `watchfiles` library: native OS events with a polling fallback).
+#
+# What gets watched: a `[[dataset]]` that has `sources` AND is not `writable`
+# (a knowledge dataset is client-written, never watched) AND is not `read_only`
+# (read-only opts a dataset out of server-side auto-reindex too). Writable and
+# read-only datasets are skipped.
+#
+# Override any key via environment / .env, e.g. SEMDEX___WATCH__MODE=poll
+# ==============================================================================
+
+[watch]
+
+# enabled - master switch for live watching in `serve`.
+#   Default: true (filesystem source datasets are watched + auto-reindexed).
+#   Effect: true starts one watcher per eligible dataset; false serves a static
+#     index (reindex only when a client calls the reindex tool).
+#   When to change: set false for a read-mostly corpus you reindex on a schedule,
+#     or to avoid the watcher's small idle overhead / on a platform where you do
+#     not want native file events.
+#   Consequences: with false, edits to source files are NOT reflected until the
+#     next explicit reindex.
+#   Recommendation: keep true for a live, self-maintaining corpus.
+enabled = true
+
+# mode - watch strategy.
+#   Default: "auto" - native OS events (inotify/FSEvents/ReadDirectoryChangesW)
+#     with an automatic polling fallback where native events are unavailable.
+#   Effect: "native" forces OS events (lowest latency/CPU, but silent on some
+#     network filesystems); "poll" forces the polling observer (works anywhere,
+#     higher CPU); "auto" picks native and falls back as needed.
+#   When to change: use "poll" when the sources live on an NFS/SMB/overlay mount
+#     where native events do not fire; "native" only if you know the FS supports it.
+#   Consequences: "poll" scans periodically (more CPU on large trees); "native"
+#     on an unsupported mount may miss changes.
+#   Recommendation: leave "auto"; switch to "poll" only if changes are missed.
+# mode = "auto"
+
+# debounce_ms - how long to batch a burst of changes before one reindex.
+#   Default: 400 (ms). A save that rewrites several files fires a single reconcile.
+#   Effect: the watcher collects change events for this window, then reconciles once.
+#   When to change: raise it for a large tree or an editor that writes many temp
+#     files per save (fewer reindexes); lower it for snappier updates on a small set.
+#   Consequences: higher = fewer, larger reindexes but more update latency; too low
+#     = a multi-file save can trigger several reindexes.
+#   Recommendation: 300-1000 for most setups; the 400 default is a good middle.
+# debounce_ms = 400

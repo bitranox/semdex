@@ -1,0 +1,50 @@
+[
+  {
+    "store": "lancedb",
+    "mode": "stream",
+    "ndcg@10": 0.6164,
+    "recall@10": 0.73,
+    "mrr@10": 0.5929,
+    "embed_s": 22074.3,
+    "upsert_s": 101.7,
+    "search_p50_ms": 60.3,
+    "search_p95_ms": 237.9,
+    "db_bytes": 1804668360,
+    "db_mb": 1804.7,
+    "scale": 1000000,
+    "chunks": 1000587,
+    "chunk_s": 16.7
+  },
+  {
+    "store": "pgvector",
+    "mode": "stream",
+    "ndcg@10": 0.686,
+    "recall@10": 0.85,
+    "mrr@10": 0.6345,
+    "embed_s": 22074.3,
+    "upsert_s": 6635.1,
+    "search_p50_ms": 50.9,
+    "search_p95_ms": 72.9,
+    "db_bytes": 4915201862,
+    "db_mb": 4915.2,
+    "scale": 1000000,
+    "chunks": 1000587,
+    "chunk_s": 16.7
+  },
+  {
+    "store": "mariadb",
+    "mode": "stream",
+    "ndcg@10": 0.4904,
+    "recall@10": 0.61,
+    "mrr@10": 0.4544,
+    "embed_s": 22074.3,
+    "upsert_s": 9331.4,
+    "search_p50_ms": 363.6,
+    "search_p95_ms": 522.8,
+    "db_bytes": 3423468378,
+    "db_mb": 3423.5,
+    "scale": 1000000,
+    "chunks": 1000587,
+    "chunk_s": 16.7
+  }
+]

@@ -1,0 +1,704 @@
+{
+  "benchmark": "OmniDocBench (opendatalab), page images wrapped as single-page PDFs",
+  "by_language": [
+    {
+      "edit_similarity": 0.4853,
+      "extractor": "docling",
+      "failed": 0,
+      "language": "en_ch_mixed",
+      "latency_p50_ms": 4010.1,
+      "pages": 11,
+      "word_recall": 0.6918
+    },
+    {
+      "edit_similarity": 0.7046,
+      "extractor": "docling",
+      "failed": 0,
+      "language": "english",
+      "latency_p50_ms": 6007.9,
+      "pages": 48,
+      "word_recall": 0.4877
+    },
+    {
+      "edit_similarity": 0.5391,
+      "extractor": "docling",
+      "failed": 0,
+      "language": "simplified_chinese",
+      "latency_p50_ms": 4009.0,
+      "pages": 49,
+      "word_recall": 0.8739
+    },
+    {
+      "edit_similarity": 0.2589,
+      "extractor": "docling",
+      "failed": 0,
+      "language": "traditional_chinese",
+      "latency_p50_ms": 4011.0,
+      "pages": 5,
+      "word_recall": 0.8168
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 0,
+      "language": "en_ch_mixed",
+      "latency_p50_ms": 77.8,
+      "pages": 11,
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 4,
+      "language": "english",
+      "latency_p50_ms": 78.1,
+      "pages": 48,
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 1,
+      "language": "simplified_chinese",
+      "latency_p50_ms": 131.4,
+      "pages": 49,
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 0,
+      "language": "traditional_chinese",
+      "latency_p50_ms": 522.5,
+      "pages": 5,
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.6395,
+      "extractor": "mineru",
+      "failed": 0,
+      "language": "en_ch_mixed",
+      "latency_p50_ms": 5596.5,
+      "pages": 11,
+      "word_recall": 0.9915
+    },
+    {
+      "edit_similarity": 0.7037,
+      "extractor": "mineru",
+      "failed": 0,
+      "language": "english",
+      "latency_p50_ms": 5418.6,
+      "pages": 48,
+      "word_recall": 0.9731
+    },
+    {
+      "edit_similarity": 0.5569,
+      "extractor": "mineru",
+      "failed": 0,
+      "language": "simplified_chinese",
+      "latency_p50_ms": 4230.2,
+      "pages": 49,
+      "word_recall": 0.9779
+    },
+    {
+      "edit_similarity": 0.7328,
+      "extractor": "mineru",
+      "failed": 0,
+      "language": "traditional_chinese",
+      "latency_p50_ms": 4153.2,
+      "pages": 5,
+      "word_recall": 0.9724
+    },
+    {
+      "edit_similarity": 0.6295,
+      "extractor": "olmocr",
+      "failed": 0,
+      "language": "en_ch_mixed",
+      "latency_p50_ms": 10448.6,
+      "pages": 11,
+      "word_recall": 0.9935
+    },
+    {
+      "edit_similarity": 0.6065,
+      "extractor": "olmocr",
+      "failed": 1,
+      "language": "english",
+      "latency_p50_ms": 17372.9,
+      "pages": 48,
+      "word_recall": 0.7945
+    },
+    {
+      "edit_similarity": 0.5843,
+      "extractor": "olmocr",
+      "failed": 0,
+      "language": "simplified_chinese",
+      "latency_p50_ms": 10891.2,
+      "pages": 49,
+      "word_recall": 0.8889
+    },
+    {
+      "edit_similarity": 0.4805,
+      "extractor": "olmocr",
+      "failed": 0,
+      "language": "traditional_chinese",
+      "latency_p50_ms": 9433.2,
+      "pages": 5,
+      "word_recall": 0.5475
+    },
+    {
+      "edit_similarity": 0.3543,
+      "extractor": "xberg",
+      "failed": 0,
+      "language": "en_ch_mixed",
+      "latency_p50_ms": 1434.7,
+      "pages": 11,
+      "word_recall": 0.5739
+    },
+    {
+      "edit_similarity": 0.7111,
+      "extractor": "xberg",
+      "failed": 7,
+      "language": "english",
+      "latency_p50_ms": 1722.5,
+      "pages": 48,
+      "word_recall": 0.8595
+    },
+    {
+      "edit_similarity": 0.284,
+      "extractor": "xberg",
+      "failed": 2,
+      "language": "simplified_chinese",
+      "latency_p50_ms": 1335.6,
+      "pages": 49,
+      "word_recall": 0.7552
+    },
+    {
+      "edit_similarity": 0.1305,
+      "extractor": "xberg",
+      "failed": 1,
+      "language": "traditional_chinese",
+      "latency_p50_ms": 1476.2,
+      "pages": 5,
+      "word_recall": 0.3115
+    }
+  ],
+  "by_source": [
+    {
+      "edit_similarity": 0.6423,
+      "extractor": "docling",
+      "failed": 0,
+      "latency_p50_ms": 4007.2,
+      "pages": 12,
+      "source": "PPT2PDF",
+      "word_recall": 0.85
+    },
+    {
+      "edit_similarity": 0.6418,
+      "extractor": "docling",
+      "failed": 0,
+      "latency_p50_ms": 6008.6,
+      "pages": 12,
+      "source": "academic_literature",
+      "word_recall": 0.3708
+    },
+    {
+      "edit_similarity": 0.7331,
+      "extractor": "docling",
+      "failed": 0,
+      "latency_p50_ms": 4007.8,
+      "pages": 12,
+      "source": "book",
+      "word_recall": 0.7719
+    },
+    {
+      "edit_similarity": 0.5328,
+      "extractor": "docling",
+      "failed": 0,
+      "latency_p50_ms": 4007.6,
+      "pages": 12,
+      "source": "colorful_textbook",
+      "word_recall": 0.7919
+    },
+    {
+      "edit_similarity": 0.7199,
+      "extractor": "docling",
+      "failed": 0,
+      "latency_p50_ms": 4015.6,
+      "pages": 12,
+      "source": "exam_paper",
+      "word_recall": 0.7188
+    },
+    {
+      "edit_similarity": 0.1611,
+      "extractor": "docling",
+      "failed": 0,
+      "latency_p50_ms": 4008.7,
+      "pages": 5,
+      "source": "historical_document",
+      "word_recall": 0.8099
+    },
+    {
+      "edit_similarity": 0.744,
+      "extractor": "docling",
+      "failed": 0,
+      "latency_p50_ms": 10013.7,
+      "pages": 12,
+      "source": "magazine",
+      "word_recall": 0.4179
+    },
+    {
+      "edit_similarity": 0.6217,
+      "extractor": "docling",
+      "failed": 0,
+      "latency_p50_ms": 8024.5,
+      "pages": 12,
+      "source": "newspaper",
+      "word_recall": 0.5659
+    },
+    {
+      "edit_similarity": 0.4452,
+      "extractor": "docling",
+      "failed": 0,
+      "latency_p50_ms": 4009.1,
+      "pages": 12,
+      "source": "note",
+      "word_recall": 0.6786
+    },
+    {
+      "edit_similarity": 0.4248,
+      "extractor": "docling",
+      "failed": 0,
+      "latency_p50_ms": 6009.6,
+      "pages": 12,
+      "source": "research_report",
+      "word_recall": 0.9903
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 0,
+      "latency_p50_ms": 78.1,
+      "pages": 12,
+      "source": "PPT2PDF",
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 0,
+      "latency_p50_ms": 68.1,
+      "pages": 12,
+      "source": "academic_literature",
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 0,
+      "latency_p50_ms": 71.9,
+      "pages": 12,
+      "source": "book",
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 1,
+      "latency_p50_ms": 75.2,
+      "pages": 12,
+      "source": "colorful_textbook",
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 0,
+      "latency_p50_ms": 183.8,
+      "pages": 12,
+      "source": "exam_paper",
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 0,
+      "latency_p50_ms": 522.5,
+      "pages": 5,
+      "source": "historical_document",
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 3,
+      "latency_p50_ms": 95.6,
+      "pages": 12,
+      "source": "magazine",
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 1,
+      "latency_p50_ms": 168.0,
+      "pages": 12,
+      "source": "newspaper",
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 0,
+      "latency_p50_ms": 250.9,
+      "pages": 12,
+      "source": "note",
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 0,
+      "latency_p50_ms": 215.9,
+      "pages": 12,
+      "source": "research_report",
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.5787,
+      "extractor": "mineru",
+      "failed": 0,
+      "latency_p50_ms": 2924.9,
+      "pages": 12,
+      "source": "PPT2PDF",
+      "word_recall": 0.9842
+    },
+    {
+      "edit_similarity": 0.5685,
+      "extractor": "mineru",
+      "failed": 0,
+      "latency_p50_ms": 5940.6,
+      "pages": 12,
+      "source": "academic_literature",
+      "word_recall": 0.9321
+    },
+    {
+      "edit_similarity": 0.6688,
+      "extractor": "mineru",
+      "failed": 0,
+      "latency_p50_ms": 4757.6,
+      "pages": 12,
+      "source": "book",
+      "word_recall": 0.9819
+    },
+    {
+      "edit_similarity": 0.5095,
+      "extractor": "mineru",
+      "failed": 0,
+      "latency_p50_ms": 5630.8,
+      "pages": 12,
+      "source": "colorful_textbook",
+      "word_recall": 0.9659
+    },
+    {
+      "edit_similarity": 0.7431,
+      "extractor": "mineru",
+      "failed": 0,
+      "latency_p50_ms": 5106.4,
+      "pages": 12,
+      "source": "exam_paper",
+      "word_recall": 0.979
+    },
+    {
+      "edit_similarity": 0.7646,
+      "extractor": "mineru",
+      "failed": 0,
+      "latency_p50_ms": 5137.7,
+      "pages": 5,
+      "source": "historical_document",
+      "word_recall": 0.9783
+    },
+    {
+      "edit_similarity": 0.764,
+      "extractor": "mineru",
+      "failed": 0,
+      "latency_p50_ms": 5653.6,
+      "pages": 12,
+      "source": "magazine",
+      "word_recall": 0.9941
+    },
+    {
+      "edit_similarity": 0.9098,
+      "extractor": "mineru",
+      "failed": 0,
+      "latency_p50_ms": 8425.0,
+      "pages": 12,
+      "source": "newspaper",
+      "word_recall": 0.992
+    },
+    {
+      "edit_similarity": 0.5665,
+      "extractor": "mineru",
+      "failed": 0,
+      "latency_p50_ms": 3814.5,
+      "pages": 12,
+      "source": "note",
+      "word_recall": 0.9657
+    },
+    {
+      "edit_similarity": 0.3529,
+      "extractor": "mineru",
+      "failed": 0,
+      "latency_p50_ms": 4619.8,
+      "pages": 12,
+      "source": "research_report",
+      "word_recall": 0.9972
+    },
+    {
+      "edit_similarity": 0.6535,
+      "extractor": "olmocr",
+      "failed": 0,
+      "latency_p50_ms": 5322.4,
+      "pages": 12,
+      "source": "PPT2PDF",
+      "word_recall": 0.9842
+    },
+    {
+      "edit_similarity": 0.5866,
+      "extractor": "olmocr",
+      "failed": 0,
+      "latency_p50_ms": 28124.7,
+      "pages": 12,
+      "source": "academic_literature",
+      "word_recall": 0.9194
+    },
+    {
+      "edit_similarity": 0.7124,
+      "extractor": "olmocr",
+      "failed": 0,
+      "latency_p50_ms": 14836.0,
+      "pages": 12,
+      "source": "book",
+      "word_recall": 0.9775
+    },
+    {
+      "edit_similarity": 0.5067,
+      "extractor": "olmocr",
+      "failed": 0,
+      "latency_p50_ms": 9269.8,
+      "pages": 12,
+      "source": "colorful_textbook",
+      "word_recall": 0.8195
+    },
+    {
+      "edit_similarity": 0.7525,
+      "extractor": "olmocr",
+      "failed": 0,
+      "latency_p50_ms": 12531.0,
+      "pages": 12,
+      "source": "exam_paper",
+      "word_recall": 0.9088
+    },
+    {
+      "edit_similarity": 0.5283,
+      "extractor": "olmocr",
+      "failed": 0,
+      "latency_p50_ms": 9385.1,
+      "pages": 5,
+      "source": "historical_document",
+      "word_recall": 0.5484
+    },
+    {
+      "edit_similarity": 0.5105,
+      "extractor": "olmocr",
+      "failed": 1,
+      "latency_p50_ms": 14919.8,
+      "pages": 12,
+      "source": "magazine",
+      "word_recall": 0.5351
+    },
+    {
+      "edit_similarity": 0.6495,
+      "extractor": "olmocr",
+      "failed": 0,
+      "latency_p50_ms": 25587.7,
+      "pages": 12,
+      "source": "newspaper",
+      "word_recall": 0.6269
+    },
+    {
+      "edit_similarity": 0.6161,
+      "extractor": "olmocr",
+      "failed": 0,
+      "latency_p50_ms": 7356.6,
+      "pages": 12,
+      "source": "note",
+      "word_recall": 0.9456
+    },
+    {
+      "edit_similarity": 0.3731,
+      "extractor": "olmocr",
+      "failed": 0,
+      "latency_p50_ms": 17490.3,
+      "pages": 12,
+      "source": "research_report",
+      "word_recall": 0.9794
+    },
+    {
+      "edit_similarity": 0.5565,
+      "extractor": "xberg",
+      "failed": 0,
+      "latency_p50_ms": 1227.0,
+      "pages": 12,
+      "source": "PPT2PDF",
+      "word_recall": 0.8303
+    },
+    {
+      "edit_similarity": 0.6499,
+      "extractor": "xberg",
+      "failed": 0,
+      "latency_p50_ms": 1722.5,
+      "pages": 12,
+      "source": "academic_literature",
+      "word_recall": 0.8938
+    },
+    {
+      "edit_similarity": 0.4707,
+      "extractor": "xberg",
+      "failed": 0,
+      "latency_p50_ms": 1775.7,
+      "pages": 12,
+      "source": "book",
+      "word_recall": 0.8637
+    },
+    {
+      "edit_similarity": 0.4332,
+      "extractor": "xberg",
+      "failed": 2,
+      "latency_p50_ms": 1290.8,
+      "pages": 12,
+      "source": "colorful_textbook",
+      "word_recall": 0.8007
+    },
+    {
+      "edit_similarity": 0.6021,
+      "extractor": "xberg",
+      "failed": 0,
+      "latency_p50_ms": 1382.6,
+      "pages": 12,
+      "source": "exam_paper",
+      "word_recall": 0.8622
+    },
+    {
+      "edit_similarity": 0.0301,
+      "extractor": "xberg",
+      "failed": 1,
+      "latency_p50_ms": 847.6,
+      "pages": 5,
+      "source": "historical_document",
+      "word_recall": 0.0954
+    },
+    {
+      "edit_similarity": 0.5667,
+      "extractor": "xberg",
+      "failed": 6,
+      "latency_p50_ms": 1924.1,
+      "pages": 12,
+      "source": "magazine",
+      "word_recall": 0.844
+    },
+    {
+      "edit_similarity": 0.6917,
+      "extractor": "xberg",
+      "failed": 1,
+      "latency_p50_ms": 7881.7,
+      "pages": 12,
+      "source": "newspaper",
+      "word_recall": 0.9524
+    },
+    {
+      "edit_similarity": 0.08,
+      "extractor": "xberg",
+      "failed": 0,
+      "latency_p50_ms": 610.7,
+      "pages": 12,
+      "source": "note",
+      "word_recall": 0.1023
+    },
+    {
+      "edit_similarity": 0.2627,
+      "extractor": "xberg",
+      "failed": 0,
+      "latency_p50_ms": 1805.4,
+      "pages": 12,
+      "source": "research_report",
+      "word_recall": 0.978
+    }
+  ],
+  "cpu": "x86_64",
+  "generated_utc": "2026-08-10T15:12:02+00:00",
+  "host": "lxc-pydev",
+  "min_block_chars": 20,
+  "ocr_languages": {
+    "en_ch_mixed": "eng+chi_sim",
+    "english": "eng",
+    "simplified_chinese": "chi_sim",
+    "traditional_chinese": "chi_tra"
+  },
+  "overall": [
+    {
+      "edit_similarity": 0.5918,
+      "extractor": "docling",
+      "failed": 0,
+      "latency_p50_ms": 4009.6,
+      "pages": 113,
+      "word_recall": 0.6896
+    },
+    {
+      "edit_similarity": 0.0,
+      "extractor": "markitdown",
+      "failed": 5,
+      "latency_p50_ms": 98.9,
+      "pages": 113,
+      "word_recall": 0.0
+    },
+    {
+      "edit_similarity": 0.6351,
+      "extractor": "mineru",
+      "failed": 0,
+      "latency_p50_ms": 5040.0,
+      "pages": 113,
+      "word_recall": 0.977
+    },
+    {
+      "edit_similarity": 0.5934,
+      "extractor": "olmocr",
+      "failed": 1,
+      "latency_p50_ms": 12115.9,
+      "pages": 113,
+      "word_recall": 0.8443
+    },
+    {
+      "edit_similarity": 0.4556,
+      "extractor": "xberg",
+      "failed": 10,
+      "latency_p50_ms": 1470.7,
+      "pages": 113,
+      "word_recall": 0.7601
+    }
+  ],
+  "pages_scored": 113,
+  "python": "3.14.5",
+  "semdex_git_sha": "7365f74",
+  "text_categories": [
+    "text_block",
+    "title"
+  ],
+  "text_layer_control_chars": {
+    "docling": 108,
+    "markitdown": 108,
+    "mineru": 108,
+    "olmocr": 105,
+    "xberg": 108
+  },
+  "vision_render_dpi": 150
+}

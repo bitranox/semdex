@@ -1,0 +1,23 @@
+[fixtures."sample.md"]
+phrases = ["Semdex Extraction Benchmark", "quick brown fox", "print('hello semdex')", "Rotek-42"]
+
+[fixtures."sample.txt"]
+phrases = ["Semdex Extraction Benchmark", "quick brown fox"]
+
+[fixtures."sample.html"]
+phrases = ["Semdex Extraction Benchmark", "quick brown fox", "print('hello semdex')", "Rotek-42"]
+
+[fixtures."sample.pdf"]
+phrases = ["Semdex Extraction Benchmark", "quick brown fox", "Rotek-42"]
+
+[fixtures."sample.docx"]
+phrases = ["Semdex Extraction Benchmark", "quick brown fox", "Rotek-42"]
+
+[fixtures."sample.pptx"]
+phrases = ["Semdex Extraction Benchmark", "quick brown fox"]
+
+[fixtures."sample.xlsx"]
+phrases = ["Semdex Extraction Benchmark", "quick brown fox", "Rotek-42"]
+
+[fixtures."scan.png"]
+phrases = ["Semdex Extraction Benchmark", "quick brown fox"]

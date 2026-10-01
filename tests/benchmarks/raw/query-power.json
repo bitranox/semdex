@@ -1,0 +1,129 @@
+{
+  "generated_utc": "2026-08-12T13:03:08+00:00",
+  "metric": "ndcg@10",
+  "ladder": [
+    500,
+    1000,
+    2000,
+    5000,
+    20000,
+    100000
+  ],
+  "note": "required_queries = n * (half_width / |mean_delta|)^2, from the paired bootstrap half-width shrinking as 1/sqrt(n). It assumes the OBSERVED effect is the true one, which for a comparison that came out unresolved is optimistic - a noisy estimate of a small effect lands above its true size as often as below, and the ones that look nearly resolvable are the ones most likely to be overstated. Read these as a floor.",
+  "corpora": [
+    {
+      "corpus": "cqadupstack",
+      "queries": 876,
+      "comparisons": 18,
+      "unresolved": 12,
+      "unresolved_share": 0.6667,
+      "median_effect": 0.0017,
+      "median_half_width": 0.0061,
+      "median_required_queries": 11279,
+      "never_resolvable": 1,
+      "resolved_at": {
+        "500": 0,
+        "1000": 0,
+        "2000": 2,
+        "5000": 2,
+        "20000": 8,
+        "100000": 10
+      }
+    },
+    {
+      "corpus": "fiqa",
+      "queries": 648,
+      "comparisons": 6,
+      "unresolved": 1,
+      "unresolved_share": 0.1667,
+      "median_effect": 0.2035,
+      "median_half_width": 0.0247,
+      "median_required_queries": 7597,
+      "never_resolvable": 0,
+      "resolved_at": {
+        "500": 0,
+        "1000": 0,
+        "2000": 0,
+        "5000": 0,
+        "20000": 1,
+        "100000": 1
+      }
+    },
+    {
+      "corpus": "mldr_de_3k_slice",
+      "queries": 200,
+      "comparisons": 373,
+      "unresolved": 173,
+      "unresolved_share": 0.4638,
+      "median_effect": 0.0352,
+      "median_half_width": 0.0352,
+      "median_required_queries": 1236,
+      "never_resolvable": 17,
+      "resolved_at": {
+        "500": 46,
+        "1000": 73,
+        "2000": 100,
+        "5000": 121,
+        "20000": 136,
+        "100000": 149
+      }
+    },
+    {
+      "corpus": "mldr_en_8k_slice",
+      "queries": 800,
+      "comparisons": 373,
+      "unresolved": 180,
+      "unresolved_share": 0.4826,
+      "median_effect": 0.0119,
+      "median_half_width": 0.014,
+      "median_required_queries": 3718,
+      "never_resolvable": 18,
+      "resolved_at": {
+        "500": 0,
+        "1000": 13,
+        "2000": 52,
+        "5000": 95,
+        "20000": 127,
+        "100000": 143
+      }
+    },
+    {
+      "corpus": "nfcorpus",
+      "queries": 323,
+      "comparisons": 96,
+      "unresolved": 39,
+      "unresolved_share": 0.4062,
+      "median_effect": 0.0157,
+      "median_half_width": 0.0132,
+      "median_required_queries": 1377,
+      "never_resolvable": 4,
+      "resolved_at": {
+        "500": 5,
+        "1000": 15,
+        "2000": 20,
+        "5000": 28,
+        "20000": 32,
+        "100000": 33
+      }
+    },
+    {
+      "corpus": "scifact",
+      "queries": 300,
+      "comparisons": 96,
+      "unresolved": 51,
+      "unresolved_share": 0.5312,
+      "median_effect": 0.0161,
+      "median_half_width": 0.0231,
+      "median_required_queries": 797,
+      "never_resolvable": 2,
+      "resolved_at": {
+        "500": 9,
+        "1000": 29,
+        "2000": 36,
+        "5000": 42,
+        "20000": 46,
+        "100000": 47
+      }
+    }
+  ]
+}

@@ -1,0 +1,772 @@
+# Claims for docs/benchmarks/05-vector-store.md
+#
+# Coverage is partial and is answered by reading this file beside the page, never by a green run.
+# Seeded: the real-vector ladder's endpoints, ranges and speed advantage; the quality-through-the-
+# store cost, doc recall, speed-up and control count; every frontier figure the tuning section
+# quotes (cell size, lancedb's nprobes and refine ladders, pgvector's and mariadb's ranges, the
+# matched-recall latencies, the build-time knobs and rebuild cost); the choosing section's exact-
+# scan latencies; and the memory section's lancedb regime change.
+#
+# Carried by prose the checker cannot express: "monotonically" (a direction across a ladder),
+# "flat from 20 upward", "less than a megabyte" (a spread, max minus min), and the advice
+# thresholds ("below roughly 50,000", "above about 100,000"), which are recommendations rather than
+# measurements. "Every point fetches 200 chunk hits" is the scorer's fetch depth and no raw file
+# records it. `lance_index_threshold` defaults to 100,000 in the shipped config, not in a raw file.
+#
+# Carried by git history, not by any current raw file: the retired driver-default run of
+# store-quality.json (commit 50d0a98) is what "this table used to say" quotes - 28 to 53 percent
+# of documents missed, up to 5.6 percent of nDCG, 0.7974, 0.564, the 1.5 ms and the 5 to 8 percent
+# latency the refine factor added, and the 0.0473 gap. Each was re-derived from that commit when
+# this file was seeded; none can be gated here because the current raw carries only the re-measured
+# cells.
+
+doc = "docs/benchmarks/05-vector-store.md"
+
+[sets]
+# The dimensions the real-vector ladder reaches after the 1024 rung, for a claim "from 1024 upwards".
+dims_from_1024 = [1024, 2048, 2560, 4096]
+# Build-time settings other than the driver default, on the two server stores.
+server_build_levels = ["m=8", "m=32", "m=8 ef_construction=32", "m=32 ef_construction=200"]
+
+# The real-vector ladder: one row per (dim, scale), each holding a sqlite_vec and a lancedb table.
+[rowsets.crossover]
+source = "dim-crossover-real.json"
+path = "results"
+
+# Retrieval quality measured THROUGH a real store, one row per (corpus, embedding, store).
+[rowsets.quality]
+source = "store-quality.json"
+path = "cells"
+
+# The ANN frontier sweep: one row per (store, query_level, build_level) on one cached cell.
+[rowsets.frontier]
+source = "ann-frontier.json"
+path = "points"
+
+# Resident and ingest memory per (backend, rows) at 384 dimensions.
+[rowsets.memory_stores]
+source = "memory.json"
+path = "stores"
+
+# ---------------------------------------------------------------- exact against ANN, on real embeddings
+
+[[claim]]
+id = "store-exact-p50-smallest"
+quote = "9.94 ms at 256 dimensions"
+published = "9.94"
+rows = "crossover"
+reduce = "value"
+field = "sqlite_vec.search_p50_ms"
+where = { dim = 256, scale = 25000 }
+why = "the exact scan's p50 at the ladder's smallest cell, 256 dimensions and 25,000 rows"
+
+[[claim]]
+id = "store-exact-p50-largest"
+quote = "becomes 790 ms at 4096 dimensions and 100,000 rows"
+published = "790"
+rows = "crossover"
+reduce = "value"
+field = "sqlite_vec.search_p50_ms"
+where = { dim = 4096, scale = 100000 }
+why = "the exact scan's p50 at the ladder's largest cell"
+
+[[claim]]
+id = "store-ann-p50-min"
+quote = "from 3.2 ms to 15.4 ms"
+published = "3.2"
+rows = "crossover"
+reduce = "min"
+field = "lancedb.search_p50_ms"
+where = { source = "cache" }
+why = "the smallest lancedb p50 anywhere on the ladder (the 256-dimension, 50,000-row cell)"
+
+[[claim]]
+id = "store-ann-p50-max"
+quote = "from 3.2 ms to 15.4 ms"
+published = "15.4"
+rows = "crossover"
+reduce = "max"
+field = "lancedb.search_p50_ms"
+where = { source = "cache" }
+why = "the largest lancedb p50 anywhere on the ladder (4096 dimensions, 100,000 rows)"
+
+[[claim]]
+id = "store-advantage-smallest-cell"
+quote = "so the advantage grows from about 3x to about"
+published = "3"
+rows = "crossover"
+reduce = "ratio"
+field = "sqlite_vec.search_p50_ms"
+against_field = "lancedb.search_p50_ms"
+where = { dim = 256, scale = 25000 }
+why = "exact p50 over ANN p50 on the same smallest cell, 9.94 over 3.24"
+
+[[claim]]
+id = "store-advantage-largest-cell"
+quote = "51x."
+published = "51"
+rows = "crossover"
+reduce = "ratio"
+field = "sqlite_vec.search_p50_ms"
+against_field = "lancedb.search_p50_ms"
+where = { dim = 4096, scale = 100000 }
+why = "exact p50 over ANN p50 on the same largest cell, 790.33 over 15.44"
+
+[[claim]]
+id = "store-recall-256-low"
+quote = "returns 0.45 to 0.51 of the exact top ten"
+published = "0.45"
+rows = "crossover"
+reduce = "min"
+field = "lancedb.recall_at_k"
+where = { dim = 256 }
+why = "the lowest lancedb recall against exact at 256 dimensions, over the three row counts"
+
+[[claim]]
+id = "store-recall-256-high"
+quote = "returns 0.45 to 0.51 of the exact top ten"
+published = "0.51"
+rows = "crossover"
+reduce = "max"
+field = "lancedb.recall_at_k"
+where = { dim = 256 }
+why = "the highest lancedb recall against exact at 256 dimensions"
+
+[[claim]]
+id = "store-recall-from-1024-low"
+quote = "keeps 0.74 to 0.83 of them from 1024 upwards"
+published = "0.74"
+rows = "crossover"
+reduce = "min"
+field = "lancedb.recall_at_k"
+where = { dim = "@dims_from_1024" }
+why = "the lowest lancedb recall against exact at 1024 dimensions or more, over every row count, matching the 256-dimension range one sentence earlier which also spans the row counts"
+
+[[claim]]
+id = "store-recall-from-1024-high"
+quote = "keeps 0.74 to 0.83 of them from 1024 upwards"
+published = "0.83"
+rows = "crossover"
+reduce = "max"
+field = "lancedb.recall_at_k"
+where = { dim = "@dims_from_1024" }
+why = "the highest lancedb recall against exact at 1024 dimensions or more"
+
+[[claim]]
+id = "store-lancedb-default-recall-qualifier"
+quote = "lifts it from 0.567 to 0.998 for about a third more latency"
+published = "0.567"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "driver default", build_level = "driver default" }
+why = "lancedb's recall against exact at the driver default on the frontier cell"
+
+[[claim]]
+id = "store-lancedb-refined-recall-qualifier"
+quote = "lifts it from 0.567 to 0.998 for about a third more latency"
+published = "0.998"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "nprobes=40 refine=10" }
+why = "lancedb's recall against exact at the strongest refine setting swept"
+
+# ---------------------------------------------------------------- what approximation costs in quality
+
+[[claim]]
+id = "quality-doc-recall-low"
+quote = "keeps 0.959 to 0.989 of the documents the exact scan"
+published = "0.959"
+rows = "quality"
+reduce = "min"
+field = "doc_recall_at_k"
+where = { store = "lancedb" }
+why = "the lowest document recall against exact over the four ANN cells at the shipped setting (German bge-base)"
+
+[[claim]]
+id = "quality-doc-recall-high"
+quote = "keeps 0.959 to 0.989 of the documents the exact scan"
+published = "0.989"
+rows = "quality"
+reduce = "max"
+field = "doc_recall_at_k"
+where = { store = "lancedb" }
+why = "the highest document recall against exact over the four ANN cells (English qwen3-8b)"
+
+[[claim]]
+id = "quality-ndcg-cost-largest"
+quote = "1.1 percent** of nDCG@10, while running 6.5 to 12 times faster"
+published = "1.1"
+rows = "quality"
+reduce = "percent_change"
+field = "ndcg@10"
+against_field = "exact_ndcg@10"
+where = { corpus = "mldr_de_3k_slice", embedding = "fastembed:bge-base", store = "lancedb" }
+scale = -1
+why = "the ANN cell's nDCG@10 against its own exact figure on the cell that loses most (German bge-base, -0.0049 on 0.4597); negated so the loss reads as the cost the page prints. The other three lose 0.3 and 0.06 percent, and the German qwen3 cell gains"
+
+[[claim]]
+id = "quality-speedup-low"
+quote = "1.1 percent** of nDCG@10, while running 6.5 to 12 times faster"
+published = "6.5"
+rows = "quality"
+reduce = "ratio"
+field = "search_p50_ms"
+where = { corpus = "mldr_en_8k_slice", embedding = "fastembed:bge-base", store = "sqlite_vec" }
+against = { corpus = "mldr_en_8k_slice", embedding = "fastembed:bge-base", store = "lancedb" }
+why = "exact p50 over ANN p50 on the cell where the index helps least, English bge-base at 768 dimensions"
+
+[[claim]]
+id = "quality-speedup-high"
+quote = "1.1 percent** of nDCG@10, while running 6.5 to 12 times faster"
+published = "12"
+rows = "quality"
+reduce = "ratio"
+field = "search_p50_ms"
+where = { corpus = "mldr_de_3k_slice", embedding = "ollama:qwen3-embedding-8b", store = "sqlite_vec" }
+against = { corpus = "mldr_de_3k_slice", embedding = "ollama:qwen3-embedding-8b", store = "lancedb" }
+why = "exact p50 over ANN p50 on the cell where the index helps most, German qwen3-8b at 4096 dimensions"
+
+[[claim]]
+id = "quality-german-4096-above-exact"
+quote = "it scores 0.0007 ABOVE the exact scan"
+published = "0.0007"
+rows = "quality"
+reduce = "value"
+field = "ndcg_delta_vs_exact"
+where = { corpus = "mldr_de_3k_slice", embedding = "ollama:qwen3-embedding-8b", store = "lancedb" }
+why = "the ANN cell's nDCG@10 minus the exact scan's on the German 4096-dimensional cell; positive, which the page reads as tie-ordering noise"
+
+[[claim]]
+id = "quality-balanced-english-ndcg"
+quote = "from 0.7974 to 0.8424 and doc recall from 0.564 to 0.982, for 1.5 ms"
+published = "0.8424"
+rows = "quality"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", embedding = "fastembed:bge-base", store = "lancedb" }
+why = "nDCG@10 through lancedb at the shipped setting on the English 768-dimensional cell; the 0.7974 it moved from is the retired run and lives in git history only"
+
+[[claim]]
+id = "quality-balanced-english-doc-recall"
+quote = "from 0.7974 to 0.8424 and doc recall from 0.564 to 0.982, for 1.5 ms"
+published = "0.982"
+rows = "quality"
+reduce = "value"
+field = "doc_recall_at_k"
+where = { corpus = "mldr_en_8k_slice", embedding = "fastembed:bge-base", store = "lancedb" }
+why = "document recall against exact through lancedb at the shipped setting on the same cell"
+
+[[claim]]
+id = "quality-exhaustive-controls-agree"
+quote = "decimal, in all four runs. Without that agreement"
+published = "four"
+rows = "quality"
+reduce = "count"
+where = { store = "sqlite_vec", ndcg_delta_vs_exact = 0.0 }
+why = "exhaustive-store cells whose nDCG@10 equals the kernel's exactly; all four sqlite_vec cells do"
+
+# ---------------------------------------------------------------- tuning: the frontier cell
+
+[[claim]]
+id = "frontier-cell-rows"
+quote = "English, 148,008 chunks, 768 dimensions, 800 queries"
+published = "148,008"
+rows = "frontier"
+reduce = "max"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice" }
+why = "the frontier cell's chunk count; max because every point carries the same value"
+
+[[claim]]
+id = "frontier-cell-dim"
+quote = "English, 148,008 chunks, 768 dimensions, 800 queries"
+published = "768"
+rows = "frontier"
+reduce = "max"
+field = "dim"
+where = { corpus = "mldr_en_8k_slice" }
+why = "the frontier cell's dimension, the same on every point"
+
+[[claim]]
+id = "frontier-cell-queries"
+quote = "English, 148,008 chunks, 768 dimensions, 800 queries"
+published = "800"
+rows = "frontier"
+reduce = "max"
+field = "n_queries"
+where = { corpus = "mldr_en_8k_slice" }
+why = "the frontier cell's query count, the same on every point"
+
+[[claim]]
+id = "frontier-lancedb-default-recall"
+quote = "keeps 0.567 of the exact top-10 and scores nDCG@10"
+published = "0.567"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "driver default", build_level = "driver default" }
+why = "lancedb's recall against exact at both driver defaults"
+
+[[claim]]
+id = "frontier-exact-ndcg"
+quote = "against the exact scan's 0.8447"
+published = "0.8447"
+rows = "quality"
+reduce = "value"
+field = "exact_ndcg@10"
+where = { corpus = "mldr_en_8k_slice", embedding = "fastembed:bge-base", store = "sqlite_vec" }
+why = "the kernel's exact nDCG@10 on the frontier cell, held in store-quality.json's English bge-base row over the same 800 queries"
+
+[[claim]]
+id = "frontier-refine5-recall"
+quote = "0.986 and nDCG 0.8412, which is 0.4 percent under exact, for 32.0 ms against 29.4"
+published = "0.986"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "nprobes=10 refine=5" }
+why = "lancedb's recall against exact at the setting semdex ships as balanced"
+
+[[claim]]
+id = "frontier-refine5-ndcg"
+quote = "0.986 and nDCG 0.8412, which is 0.4 percent under exact, for 32.0 ms against 29.4"
+published = "0.8412"
+rows = "frontier"
+reduce = "value"
+field = "ndcg@10"
+where = { store = "lancedb", query_level = "nprobes=10 refine=5" }
+why = "nDCG@10 at the same setting"
+
+[[claim]]
+id = "frontier-refine5-ndcg-under-exact"
+quote = "0.986 and nDCG 0.8412, which is 0.4 percent under exact, for 32.0 ms against 29.4"
+published = "0.4"
+rows = "frontier"
+reduce = "percent_change"
+field = "ndcg@10"
+where = { store = "lancedb", query_level = "nprobes=10 refine=5" }
+against_rows = "quality"
+against_field = "exact_ndcg@10"
+against = { corpus = "mldr_en_8k_slice", embedding = "fastembed:bge-base", store = "sqlite_vec" }
+scale = -1
+why = "the refined setting's nDCG@10 against the kernel's exact figure on the same cell and queries, negated so the shortfall reads as the page prints it"
+
+[[claim]]
+id = "frontier-refine5-p50"
+quote = "0.986 and nDCG 0.8412, which is 0.4 percent under exact, for 32.0 ms against 29.4"
+published = "32.0"
+rows = "frontier"
+reduce = "value"
+field = "search_p50_ms"
+where = { store = "lancedb", query_level = "nprobes=10 refine=5" }
+why = "p50 at the refined setting"
+
+[[claim]]
+id = "frontier-lancedb-default-p50"
+quote = "0.986 and nDCG 0.8412, which is 0.4 percent under exact, for 32.0 ms against 29.4"
+published = "29.4"
+rows = "frontier"
+reduce = "value"
+field = "search_p50_ms"
+where = { store = "lancedb", query_level = "driver default", build_level = "driver default" }
+why = "p50 at lancedb's driver default"
+
+[[claim]]
+id = "frontier-refine10-recall"
+quote = "`nprobes=40 refine_factor=10` recall is 0.998 and nDCG is"
+published = "0.998"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "nprobes=40 refine=10" }
+why = "lancedb's recall against exact at the strongest refine setting"
+
+[[claim]]
+id = "frontier-refine10-ndcg"
+quote = "0.8447 - identical to the exact scan to"
+published = "0.8447"
+rows = "frontier"
+reduce = "value"
+field = "ndcg@10"
+where = { store = "lancedb", query_level = "nprobes=40 refine=10" }
+why = "nDCG@10 at the strongest refine setting, which equals the kernel's exact figure to four decimals"
+
+[[claim]]
+id = "frontier-refine10-p50"
+quote = "four decimals** - for 38.6 ms"
+published = "38.6"
+rows = "frontier"
+reduce = "value"
+field = "search_p50_ms"
+where = { store = "lancedb", query_level = "nprobes=40 refine=10" }
+why = "p50 at the strongest refine setting"
+
+[[claim]]
+id = "frontier-refine10-latency-over-default"
+quote = "It is zero, at 31 percent more latency than the untuned default"
+published = "31"
+rows = "frontier"
+reduce = "percent_change"
+field = "search_p50_ms"
+where = { store = "lancedb", query_level = "nprobes=40 refine=10" }
+against = { store = "lancedb", query_level = "driver default", build_level = "driver default" }
+why = "p50 at nprobes=40 refine=10 against the driver default's, 38.61 against 29.41"
+
+[[claim]]
+id = "frontier-refine10-over-exact"
+quote = "and still 5x faster than the"
+published = "5"
+rows = "quality"
+reduce = "ratio"
+field = "search_p50_ms"
+where = { corpus = "mldr_en_8k_slice", embedding = "fastembed:bge-base", store = "sqlite_vec" }
+against_rows = "frontier"
+against = { store = "lancedb", query_level = "nprobes=40 refine=10" }
+why = "the exact scan's p50 on the cell over lancedb's at the strongest refine setting"
+
+[[claim]]
+id = "frontier-exact-scan-p50"
+quote = "208 ms exact scan."
+published = "208"
+rows = "quality"
+reduce = "value"
+field = "search_p50_ms"
+where = { corpus = "mldr_en_8k_slice", embedding = "fastembed:bge-base", store = "sqlite_vec" }
+why = "the exact scan's p50 on the frontier cell, from store-quality.json's re-measured English bge-base row"
+
+[[claim]]
+id = "frontier-nprobes-5-recall"
+quote = "Recall moves from 0.561 at 5 probes to 0.567 at 80"
+published = "0.561"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "nprobes=5" }
+why = "lancedb recall at nprobes=5"
+
+[[claim]]
+id = "frontier-nprobes-80-recall"
+quote = "Recall moves from 0.561 at 5 probes to 0.567 at 80"
+published = "0.567"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "nprobes=80" }
+why = "lancedb recall at nprobes=80, the top of the probe ladder"
+
+[[claim]]
+id = "frontier-refine-recall-points"
+quote = "is worth 42 points of recall"
+published = "42"
+rows = "frontier"
+reduce = "difference"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "nprobes=10 refine=5" }
+against = { store = "lancedb", query_level = "nprobes=10" }
+scale = 100
+why = "recall at nprobes=10 with refine_factor=5 minus recall at nprobes=10 alone, in hundredths, so the only change is the refine factor"
+
+# ---------------------------------------------------------------- the three stores tune very differently
+
+[[claim]]
+id = "frontier-pgvector-recall-low"
+quote = "`ef_search` moves recall from 0.358 to 0.992 while latency"
+published = "0.358"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "pgvector", query_level = "ef_search=10" }
+why = "pgvector recall at the smallest ef_search swept"
+
+[[claim]]
+id = "frontier-pgvector-recall-high"
+quote = "`ef_search` moves recall from 0.358 to 0.992 while latency"
+published = "0.992"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "pgvector", query_level = "ef_search=400" }
+why = "pgvector recall at the largest ef_search swept"
+
+[[claim]]
+id = "frontier-pgvector-p50-low"
+quote = "goes 1.1 ms to 17.4 ms, monotonically, with the default sitting sensibly in the middle at 0.806"
+published = "1.1"
+rows = "frontier"
+reduce = "value"
+field = "search_p50_ms"
+where = { store = "pgvector", query_level = "ef_search=10" }
+why = "pgvector p50 at ef_search=10"
+
+[[claim]]
+id = "frontier-pgvector-p50-high"
+quote = "goes 1.1 ms to 17.4 ms, monotonically, with the default sitting sensibly in the middle at 0.806"
+published = "17.4"
+rows = "frontier"
+reduce = "value"
+field = "search_p50_ms"
+where = { store = "pgvector", query_level = "ef_search=400" }
+why = "pgvector p50 at ef_search=400"
+
+[[claim]]
+id = "frontier-pgvector-default-recall"
+quote = "goes 1.1 ms to 17.4 ms, monotonically, with the default sitting sensibly in the middle at 0.806"
+published = "0.806"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "pgvector", query_level = "driver default", build_level = "driver default" }
+why = "pgvector recall at both driver defaults"
+
+[[claim]]
+id = "frontier-mariadb-recall-low"
+quote = "Recall stays between 0.677 and 0.684 across"
+published = "0.677"
+rows = "frontier"
+reduce = "min"
+field = "recall_vs_exact"
+where = { store = "mariadb", build_level = "driver default" }
+why = "the lowest mariadb recall over its ef_search ladder on the default index"
+
+[[claim]]
+id = "frontier-mariadb-recall-high"
+quote = "Recall stays between 0.677 and 0.684 across"
+published = "0.684"
+rows = "frontier"
+reduce = "max"
+field = "recall_vs_exact"
+where = { store = "mariadb", build_level = "driver default" }
+why = "the highest mariadb recall over the same ladder"
+
+[[claim]]
+id = "frontier-mariadb-p50-low"
+quote = "while latency rises from 63 ms to 76 ms"
+published = "63"
+rows = "frontier"
+reduce = "min"
+field = "search_p50_ms"
+where = { store = "mariadb", build_level = "driver default" }
+why = "the lowest mariadb p50 over its ef_search ladder, at the driver default"
+
+[[claim]]
+id = "frontier-mariadb-p50-high"
+quote = "while latency rises from 63 ms to 76 ms"
+published = "76"
+rows = "frontier"
+reduce = "max"
+field = "search_p50_ms"
+where = { store = "mariadb", build_level = "driver default" }
+why = "the highest mariadb p50 over the same ladder, at ef_search=40"
+
+[[claim]]
+id = "frontier-matched-recall-pgvector"
+quote = "`pgvector` needs 11.1 ms and `lancedb` needs 32.0 ms; `mariadb` cannot get there"
+published = "11.1"
+rows = "frontier"
+reduce = "value"
+field = "search_p50_ms"
+where = { store = "pgvector", query_level = "ef_search=200" }
+why = "pgvector's p50 at the first ef_search level whose recall clears 0.97 (0.978 at 200; 0.942 at 100 does not)"
+
+[[claim]]
+id = "frontier-matched-recall-lancedb"
+quote = "`pgvector` needs 11.1 ms and `lancedb` needs 32.0 ms; `mariadb` cannot get there"
+published = "32.0"
+rows = "frontier"
+reduce = "value"
+field = "search_p50_ms"
+where = { store = "lancedb", query_level = "nprobes=10 refine=5" }
+why = "lancedb's p50 at the first setting whose recall clears 0.97 (0.986; nothing without a refine factor does)"
+
+# ---------------------------------------------------------------- build-time parameters
+
+[[claim]]
+id = "build-pgvector-recall-flat-min"
+quote = "`pgvector` returns recall 0.806 at every `m` and"
+published = "0.806"
+rows = "frontier"
+reduce = "min"
+field = "recall_vs_exact"
+where = { store = "pgvector", query_level = "driver default" }
+why = "the lowest pgvector recall over its three build settings at the query default; min and max both print 0.806, which is what 'at every' means"
+
+[[claim]]
+id = "build-pgvector-recall-flat-max"
+quote = "`pgvector` returns recall 0.806 at every `m` and"
+published = "0.806"
+rows = "frontier"
+reduce = "max"
+field = "recall_vs_exact"
+where = { store = "pgvector", query_level = "driver default" }
+why = "the highest pgvector recall over the same three build settings"
+
+[[claim]]
+id = "build-mariadb-recall-low"
+quote = "`mariadb` moves 0.679 to 0.691"
+published = "0.679"
+rows = "frontier"
+reduce = "min"
+field = "recall_vs_exact"
+where = { store = "mariadb", query_level = "driver default" }
+why = "the lowest mariadb recall over its three build settings at the query default (the default index)"
+
+[[claim]]
+id = "build-mariadb-recall-high"
+quote = "`mariadb` moves 0.679 to 0.691"
+published = "0.691"
+rows = "frontier"
+reduce = "max"
+field = "recall_vs_exact"
+where = { store = "mariadb", query_level = "driver default" }
+why = "the highest mariadb recall over the same settings (m=8)"
+
+[[claim]]
+id = "build-lancedb-partitions-default"
+quote = "(0.567 default, 0.547 at 64, 0.520 at 512)"
+published = "0.567"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "driver default", build_level = "driver default" }
+why = "lancedb recall at the default partition count"
+
+[[claim]]
+id = "build-lancedb-partitions-64"
+quote = "(0.567 default, 0.547 at 64, 0.520 at 512)"
+published = "0.547"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", build_level = "partitions=64" }
+why = "lancedb recall at 64 partitions"
+
+[[claim]]
+id = "build-lancedb-partitions-512"
+quote = "(0.567 default, 0.547 at 64, 0.520 at 512)"
+published = "0.520"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", build_level = "partitions=512" }
+why = "lancedb recall at 512 partitions"
+
+[[claim]]
+id = "build-server-rebuild-min"
+quote = "350 to 550 seconds on the server stores"
+published = "350"
+rows = "frontier"
+reduce = "min"
+field = "build_s"
+where = { build_level = "@server_build_levels" }
+why = "the quickest non-default index build on the two server stores (pgvector m=32 ef_construction=200, 349.6 s)"
+
+[[claim]]
+id = "build-server-rebuild-max"
+quote = "350 to 550 seconds on the server stores"
+published = "550"
+rows = "frontier"
+reduce = "max"
+field = "build_s"
+where = { build_level = "@server_build_levels" }
+tolerance = 5
+why = "the slowest non-default index build on the two server stores (mariadb m=32, 551.4 s); the page rounds to the ten, hence the explicit tolerance"
+
+[[claim]]
+id = "build-one-cell-rows"
+quote = "One cell.** 148,008 chunks at 768 dimensions"
+published = "148,008"
+rows = "frontier"
+reduce = "max"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice" }
+why = "the frontier cell's chunk count, restated in the caveats"
+
+# ---------------------------------------------------------------- choosing
+
+[[claim]]
+id = "choosing-cell-rows"
+quote = "At 148,000 chunks the exact scan is 208 ms at 768 dimensions"
+published = "148,000"
+rows = "frontier"
+reduce = "max"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice" }
+tolerance = 10
+why = "the frontier cell's 148,008 chunks, rounded to the thousand in the choosing prose"
+
+[[claim]]
+id = "choosing-exact-scan-768"
+quote = "At 148,000 chunks the exact scan is 208 ms at 768 dimensions"
+published = "208"
+rows = "quality"
+reduce = "value"
+field = "search_p50_ms"
+where = { corpus = "mldr_en_8k_slice", embedding = "fastembed:bge-base", store = "sqlite_vec" }
+why = "the exact scan's p50 on the English 768-dimensional cell at that size"
+
+[[claim]]
+id = "choosing-exact-scan-4096"
+quote = "1.3 seconds at 4096, which is not an interactive latency"
+published = "1.3"
+rows = "quality"
+reduce = "value"
+field = "search_p50_ms"
+where = { corpus = "mldr_en_8k_slice", embedding = "ollama:qwen3-embedding-8b", store = "sqlite_vec" }
+scale = 0.001
+why = "the exact scan's p50 on the English 4096-dimensional cell, in seconds"
+
+[[claim]]
+id = "choosing-index-quality-cost"
+quote = "index is at most 1.1 percent of nDCG@10."
+published = "1.1"
+rows = "quality"
+reduce = "percent_change"
+field = "ndcg@10"
+against_field = "exact_ndcg@10"
+where = { corpus = "mldr_de_3k_slice", embedding = "fastembed:bge-base", store = "lancedb" }
+scale = -1
+why = "the largest nDCG@10 loss to the index over the four quality cells, restated in the choosing advice; the same derivation as quality-ndcg-cost-largest"
+
+# ---------------------------------------------------------------- memory
+
+[[claim]]
+id = "memory-lancedb-50k-resident"
+quote = "lighter (320 MB to 164 MB)"
+published = "320"
+rows = "memory_stores"
+reduce = "value"
+field = "resident_mb"
+where = { backend = "lancedb", rows = 50000 }
+why = "lancedb's serving footprint at 50,000 chunks, the last flat-scan rung"
+
+[[claim]]
+id = "memory-lancedb-100k-resident"
+quote = "lighter (320 MB to 164 MB)"
+published = "164"
+rows = "memory_stores"
+reduce = "value"
+field = "resident_mb"
+where = { backend = "lancedb", rows = 100000 }
+why = "lancedb's serving footprint at 100,000 chunks, the first rung served by the IVF index"
+
+[[claim]]
+id = "memory-lancedb-50k-query"
+quote = "faster (15.1 ms to 5.6 ms)"
+published = "15.1"
+rows = "memory_stores"
+reduce = "value"
+field = "query_ms"
+where = { backend = "lancedb", rows = 50000 }
+why = "lancedb's query p50 at 50,000 chunks under the flat scan"
+
+[[claim]]
+id = "memory-lancedb-100k-query"
+quote = "faster (15.1 ms to 5.6 ms)"
+published = "5.6"
+rows = "memory_stores"
+reduce = "value"
+field = "query_ms"
+where = { backend = "lancedb", rows = 100000 }
+why = "lancedb's query p50 at 100,000 chunks under the IVF index"

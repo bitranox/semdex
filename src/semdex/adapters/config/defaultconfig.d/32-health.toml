@@ -1,0 +1,105 @@
+# ==============================================================================
+# semdex - backend health, keep-alive, and restart ([health])
+# ==============================================================================
+#
+# Keeps the server-backed providers (ollama / OpenAI-compatible embedding and
+# summary servers) resident and reachable while `semdex serve` runs. Four knobs:
+#
+#   1. warmup        - one throwaway call per http provider at startup so the
+#                      model is on the GPU before the first real query.
+#   2. keep_alive    - ollama's VRAM residency window (passthrough).
+#   3. restart_*     - an operator command semdex runs when a backend is DOWN
+#                      (reactive: a provider self-heals on a hard failure).
+#   4. check_*       - an OPT-IN background loop that probes the endpoints and
+#                      restarts a down one proactively (before the next query).
+#
+# This is SEPARATE from the per-request transient retry ([embedding].retries /
+# [summary].retries), which rides out a brief blip inside one request. Health
+# covers a HARD failure: the model server itself went down.
+#
+# Absent section = every existing default: warm-up on (a no-op with no http
+# provider), keep_alive at ollama's default, restart disabled, loop off.
+#
+# Override any key via environment / .env, e.g. SEMDEX___HEALTH__KEEP_ALIVE=30m
+# ==============================================================================
+
+[health]
+
+# warmup - issue one probe call per http-backed provider at serve startup.
+#   Default: true - warm the model before the first real query.
+#   Effect: sends a throwaway embed/summarize per ollama/openai provider so the
+#     model is resident; it is best-effort (a failure is logged, never fatal) and
+#     a no-op when the dataset uses an in-process provider (fastembed/model2vec).
+#   When to change: set false to skip warm-up for a faster startup; the first live
+#     query then pays the cold-load cost.
+#   Consequences: none beyond a small amount of startup traffic.
+#   Recommendation: leave true for a GPU-backed ollama/openai deployment.
+# warmup = true
+
+# keep_alive - ollama keep_alive passthrough (how long ollama holds the model in VRAM).
+#   Default: unset -> ollama's own default (about 5 minutes after the last call).
+#   Effect: "30m" keeps the model 30 minutes; "0" unloads it immediately after each
+#     call; "-1" keeps it forever. Applies to the ollama embedding and summary
+#     providers only (an OpenAI-compatible server has no such control).
+#   WARNING: do NOT set "-1" on a SHARED GPU. It pins the model in VRAM, defeats
+#     ollama's model time-sharing, and can OOM when the embedding model, the
+#     summary model, and vision OCR all contend for one card.
+#   When to change: set a window like "30m" on a DEDICATED card to avoid repeated
+#     cold loads during a long reindex; leave unset (or use "0") on a shared card.
+#   Consequences: a longer window cuts cold-load latency but holds VRAM the whole
+#     time, starving other models on the same GPU.
+#   Recommendation: unset on a shared GPU; "30m" on a dedicated one.
+# keep_alive = "30m"
+
+# restart_command - shell command semdex runs when a backend is judged DOWN.
+#   Default: unset -> restart disabled; a down backend is surfaced (logged) but not
+#     restarted.
+#   Effect: run when a provider call fails hard, and by the active loop below. Two
+#     example hooks ship in scripts/restart-hooks/ (systemd and docker); semdex
+#     passes the failing endpoint to the script via environment variables the
+#     scripts document.
+#   TRUST BOUNDARY: this is an OPERATOR-set config value, run through the shell.
+#     Never point it at anything derived from user input.
+#   When to change: set it to your recovery command so a wedged model server is
+#     restarted automatically instead of failing every query until an admin acts.
+#   Consequences: a bad command can loop-restart a healthy-but-slow server; keep
+#     the command idempotent and quick.
+#   Recommendation: use one of scripts/restart-hooks/ as a starting point.
+# restart_command = "/path/to/scripts/restart-hooks/ollama-systemd.sh"
+
+# restart_timeout - max seconds the restart command may run.
+#   Default: 120.0.
+#   Effect: caps the restart hook; a longer run is killed and counts as a failed
+#     restart.
+#   When to change: raise it for a service that is slow to restart.
+#   Recommendation: leave at 120 unless your restart is known to be slower.
+# restart_timeout = 120.0
+
+# check_enabled - opt-in active background health-check loop.
+#   Default: false - only the reactive per-call self-heal runs.
+#   Effect: when true AND restart_command is set, serve runs a background thread
+#     that probes the configured embedding/summary endpoints every check_interval
+#     and restarts a down one. With check_enabled true but no restart_command, the
+#     loop still probes and logs but cannot restart.
+#   When to change: enable it for a long-lived server that may sit idle between
+#     queries, so a backend that dies while idle is recovered before the next query.
+#   Consequences: one extra background thread and periodic probe traffic.
+#   Recommendation: enable together with restart_command on an always-on server.
+# check_enabled = false
+
+# check_interval - seconds between health-check-loop polls.
+#   Default: 30.0.
+#   Effect: how often the loop probes each endpoint.
+#   When to change: lower it for faster detection of a dead backend; raise it to
+#     cut probe load on a busy shared server.
+#   Recommendation: 30 s suits most deployments.
+# check_interval = 30.0
+
+# recover_timeout - after a restart, max seconds to wait for the endpoint to come
+# back healthy (used by both the reactive self-heal and the active loop).
+#   Default: 120.0.
+#   Effect: bounds the post-restart recovery wait; once it elapses semdex stops
+#     waiting and lets the next call try again.
+#   When to change: raise it for a large model that is slow to load after a restart.
+#   Recommendation: match it to your model's cold-load time plus a margin.
+# recover_timeout = 120.0

@@ -1,0 +1,377 @@
+# Claims for docs/benchmarks/01-method.md
+#
+# Coverage is partial and is answered by reading this file beside the page, never by a green run.
+# Seeded: the metric-redundancy view counts, judgment densities and cell counts; the per-query
+# spread; the query-power medians, required counts, control shares and answered ties; and the
+# drift example's raw figures.
+#
+# Carried by prose the checker cannot express: "16.3 percent of comparisons at the very most" (one
+# metric pair's worst disagreement rate, which sits in a list nested inside each corpus row of
+# metric-redundancy.json), "two and a half times tighter" (0.0352 over 0.0140), "within a few
+# percent" (the holdout's half-width ratio, 1.996 against the predicted 2.0), "about a quarter
+# high" (predicted over actually-resolved ties, 1.24 summed over eight rounds), "under half" and
+# "two in five" (precision 0.47 and recall 0.59, claimed on 08-gaps.md), and "20 queries enough to
+# gate on", which is the CI slice in tests/benchmarks/baseline.json, outside the raw directory.
+
+doc = "docs/benchmarks/01-method.md"
+
+[sets]
+# The corpora with enough swept cells to carry a rank correlation: every one but cqadupstack (11
+# cells) and fiqa (4).
+metric_corpora_readable = ["miracl_de_100k_slice", "miracl_en_100k_slice", "mldr_de_3k_slice", "mldr_en_8k_slice", "nfcorpus", "scifact"]
+
+[rowsets.metric_corpora]
+source = "metric-redundancy.json"
+path = "corpora"
+
+[rowsets.power_corpora]
+source = "query-power.json"
+path = "corpora"
+
+[rowsets.mldr_cells]
+source = "chunk-sweep-mldr.json"
+path = "cells"
+
+[rowsets.hybrid_cells]
+source = "hybrid-dense-bm25.json"
+path = "cells"
+
+# The MSMARCO scale run is a bare list of (store, scale) rows.
+[rowsets.msmarco_scale]
+source = "msmarco-scale.json"
+
+# ---------------------------------------------------------------- how much the four columns tell you
+
+[[claim]]
+id = "method-views-low"
+quote = "The effective count runs 1.01 to"
+published = "1.01"
+rows = "metric_corpora"
+reduce = "min"
+field = "effective_views"
+where = { corpus = "@metric_corpora_readable" }
+why = "the lowest effective view count over the six corpora with enough cells (MIRACL German)"
+
+[[claim]]
+id = "method-views-high"
+quote = "1.12, where four independent metrics would give 4.00"
+published = "1.12"
+rows = "metric_corpora"
+reduce = "max"
+field = "effective_views"
+where = { corpus = "@metric_corpora_readable" }
+why = "the highest effective view count over the same six corpora (nfcorpus)"
+
+[[claim]]
+id = "method-cqadupstack-cells"
+quote = "cqadupstack, which has eleven cells"
+published = "eleven"
+rows = "metric_corpora"
+reduce = "value"
+field = "cells"
+where = { corpus = "cqadupstack" }
+why = "cqadupstack's swept cell count, the reading above 1.2 the page sets aside"
+
+[[claim]]
+id = "method-mldr-judged-per-query"
+quote = "Both MLDR slices ship precisely 1.00"
+published = "1.00"
+rows = "metric_corpora"
+reduce = "max"
+field = "judged_per_query"
+where = { corpus = ["mldr_de_3k_slice", "mldr_en_8k_slice"] }
+why = "relevant documents per query on the two MLDR slices; max and min are both exactly 1"
+
+[[claim]]
+id = "method-mldr-near-duplicate-pairs"
+quote = "all six metric pairs sit above the"
+published = "six"
+rows = "metric_corpora"
+reduce = "min"
+field = "near_duplicate_pairs"
+where = { corpus = ["mldr_de_3k_slice", "mldr_en_8k_slice"] }
+why = "metric pairs above the near-duplicate threshold on each MLDR slice; min over the two because both are 6, every pair of four metrics"
+
+[[claim]]
+id = "method-nfcorpus-judged-per-query"
+quote = "nfcorpus averages 38 relevant documents per query"
+published = "38"
+rows = "metric_corpora"
+reduce = "value"
+field = "judged_per_query"
+where = { corpus = "nfcorpus" }
+why = "relevant documents per query on nfcorpus, 38.19"
+
+[[claim]]
+id = "method-nfcorpus-views"
+quote = "still returns 1.12 views"
+published = "1.12"
+rows = "metric_corpora"
+reduce = "value"
+field = "effective_views"
+where = { corpus = "nfcorpus" }
+why = "nfcorpus's effective view count"
+
+# ---------------------------------------------------------------- what the intervals mean
+
+[[claim]]
+id = "method-per-query-sd-low"
+quote = "(0.24 to 0.47 across the cells)"
+published = "0.24"
+rows = "hybrid_cells"
+reduce = "min"
+field = "ndcg@10_sd"
+where = { profile = "recursive-t256-o0-gpt2" }
+why = "the smallest per-query nDCG@10 standard deviation any cell records, the German potion-base-8M dense cell of the retrieval-method sweep; the chunk sweeps' cells run 0.27 to 0.46"
+
+[[claim]]
+id = "method-per-query-sd-high"
+quote = "(0.24 to 0.47 across the cells)"
+published = "0.47"
+rows = "mldr_cells"
+reduce = "max"
+field = "ndcg@10_sd"
+where = { corpus = ["mldr_de_3k_slice", "mldr_en_8k_slice"] }
+why = "the largest per-query nDCG@10 standard deviation any cell records, on the MLDR chunk sweep"
+
+# ---------------------------------------------------------------- a tie is two different things
+
+[[claim]]
+id = "method-german-queries"
+quote = "200 queries, the smallest set on the page"
+published = "200"
+rows = "power_corpora"
+reduce = "min"
+field = "queries"
+where = { corpus = "mldr_de_3k_slice" }
+why = "MLDR German's query count, the smallest of the six corpora"
+
+[[claim]]
+id = "method-german-required"
+quote = "its median tie needs about 1,236 - roughly six times"
+published = "1,236"
+rows = "power_corpora"
+reduce = "value"
+field = "median_required_queries"
+where = { corpus = "mldr_de_3k_slice" }
+why = "the median query count MLDR German's ties would need"
+
+[[claim]]
+id = "method-german-required-multiple"
+quote = "its median tie needs about 1,236 - roughly six times"
+published = "six"
+rows = "power_corpora"
+reduce = "ratio"
+field = "median_required_queries"
+against_field = "queries"
+where = { corpus = "mldr_de_3k_slice" }
+why = "that median over the 200 queries it has, 6.2"
+
+[[claim]]
+id = "method-cqadupstack-queries"
+quote = "`cqadupstack` ships 876 queries, over four times as"
+published = "876"
+rows = "power_corpora"
+reduce = "value"
+field = "queries"
+where = { corpus = "cqadupstack" }
+why = "cqadupstack's query count"
+
+[[claim]]
+id = "method-cqadupstack-query-multiple"
+quote = "`cqadupstack` ships 876 queries, over four times as"
+published = "four"
+rows = "power_corpora"
+reduce = "ratio"
+field = "queries"
+where = { corpus = "cqadupstack" }
+against = { corpus = "mldr_de_3k_slice" }
+why = "876 over 200, 4.4"
+
+[[claim]]
+id = "method-cqadupstack-required"
+quote = "many, and its median tie needs 11,279"
+published = "11,279"
+rows = "power_corpora"
+reduce = "value"
+field = "median_required_queries"
+where = { corpus = "cqadupstack" }
+why = "the median query count cqadupstack's ties would need"
+
+[[claim]]
+id = "method-german-median-effect"
+quote = "largest here at 0.0352 median (fiqa's 0.2035 rests on one tie)"
+published = "0.0352"
+rows = "power_corpora"
+reduce = "max"
+field = "median_effect"
+where = { corpus = ["cqadupstack", "mldr_de_3k_slice", "mldr_en_8k_slice", "nfcorpus", "scifact"] }
+why = "the largest median effect over the five corpora whose median is taken over more than one tie; fiqa's 0.2035 is one unresolved comparison of six, which the sentence now says"
+
+[[claim]]
+id = "method-fiqa-median-effect"
+quote = "largest here at 0.0352 median (fiqa's 0.2035 rests on one tie)"
+published = "0.2035"
+rows = "power_corpora"
+reduce = "value"
+field = "median_effect"
+where = { corpus = "fiqa" }
+why = "fiqa's median effect, which is its one unresolved comparison"
+
+[[claim]]
+id = "method-fiqa-ties"
+quote = "largest here at 0.0352 median (fiqa's 0.2035 rests on one tie)"
+published = "one"
+rows = "power_corpora"
+reduce = "value"
+field = "unresolved"
+where = { corpus = "fiqa" }
+why = "fiqa's unresolved comparisons"
+
+[[claim]]
+id = "method-cqadupstack-median-effect"
+quote = "at 0.0017, twenty times smaller"
+published = "0.0017"
+rows = "power_corpora"
+reduce = "min"
+field = "median_effect"
+where = { corpus = ["cqadupstack", "fiqa", "mldr_de_3k_slice", "mldr_en_8k_slice", "nfcorpus", "scifact"] }
+why = "the smallest median effect over the six corpora, cqadupstack's"
+
+[[claim]]
+id = "method-effect-ratio"
+quote = "at 0.0017, twenty times smaller"
+published = "twenty"
+rows = "power_corpora"
+reduce = "ratio"
+field = "median_effect"
+where = { corpus = "mldr_de_3k_slice" }
+against = { corpus = "cqadupstack" }
+tolerance = 1
+why = "German's median effect over cqadupstack's, 20.7; the page rounds to the ten, hence the explicit tolerance"
+
+[[claim]]
+id = "method-english-query-multiple"
+quote = "with four times the queries, resolve slightly less often"
+published = "four"
+rows = "power_corpora"
+reduce = "ratio"
+field = "queries"
+where = { corpus = "mldr_en_8k_slice" }
+against = { corpus = "mldr_de_3k_slice" }
+why = "800 English queries over 200 German"
+
+[[claim]]
+id = "method-english-comparisons"
+quote = "are the same 373 comparisons over the same profiles"
+published = "373"
+rows = "power_corpora"
+reduce = "value"
+field = "comparisons"
+where = { corpus = "mldr_en_8k_slice" }
+why = "MLDR English's comparison count, equal to German's"
+
+[[claim]]
+id = "method-english-queries"
+quote = "English has 800"
+published = "800"
+rows = "power_corpora"
+reduce = "value"
+field = "queries"
+where = { corpus = "mldr_en_8k_slice" }
+why = "MLDR English's query count"
+
+[[claim]]
+id = "method-english-unresolved-share"
+quote = "and still returns 48.3 percent ties against"
+published = "48.3"
+rows = "power_corpora"
+reduce = "value"
+field = "unresolved_share"
+where = { corpus = "mldr_en_8k_slice" }
+scale = 100
+why = "MLDR English's unresolved share"
+
+[[claim]]
+id = "method-german-unresolved-share"
+quote = "German's 46.4. Its effects are three times smaller"
+published = "46.4"
+rows = "power_corpora"
+reduce = "value"
+field = "unresolved_share"
+where = { corpus = "mldr_de_3k_slice" }
+scale = 100
+why = "MLDR German's unresolved share"
+
+[[claim]]
+id = "method-english-effects-smaller"
+quote = "German's 46.4. Its effects are three times smaller"
+published = "three"
+rows = "power_corpora"
+reduce = "ratio"
+field = "median_effect"
+where = { corpus = "mldr_de_3k_slice" }
+against = { corpus = "mldr_en_8k_slice" }
+why = "German's median effect over English's, 3.0"
+
+[[claim]]
+id = "method-german-answered-ties"
+quote = "Seventeen German comparisons and eighteen English ones"
+published = "Seventeen"
+rows = "power_corpora"
+reduce = "value"
+field = "never_resolvable"
+where = { corpus = "mldr_de_3k_slice" }
+why = "MLDR German comparisons whose effect is indistinguishable from zero at any query count"
+
+[[claim]]
+id = "method-english-answered-ties"
+quote = "Seventeen German comparisons and eighteen English ones"
+published = "eighteen"
+rows = "power_corpora"
+reduce = "value"
+field = "never_resolvable"
+where = { corpus = "mldr_en_8k_slice" }
+why = "the same count on MLDR English"
+
+# ---------------------------------------------------------------- why the tables are generated
+
+[[claim]]
+id = "method-drift-mariadb"
+quote = "where the raw data says 0.6534/0.7933/0.8257"
+published = "0.6534"
+rows = "msmarco_scale"
+reduce = "value"
+field = "ndcg@10"
+where = { store = "mariadb", scale = 250000 }
+why = "mariadb's nDCG@10 on the MSMARCO 250,000-row run, the first of the three figures the retired text misquoted"
+
+[[claim]]
+id = "method-drift-pgvector"
+quote = "where the raw data says 0.6534/0.7933/0.8257"
+published = "0.7933"
+rows = "msmarco_scale"
+reduce = "value"
+field = "ndcg@10"
+where = { store = "pgvector", scale = 250000 }
+why = "pgvector's nDCG@10 on the same run"
+
+[[claim]]
+id = "method-drift-sqlite-vec"
+quote = "where the raw data says 0.6534/0.7933/0.8257"
+published = "0.8257"
+rows = "msmarco_scale"
+reduce = "value"
+field = "ndcg@10"
+where = { store = "sqlite_vec", scale = 250000 }
+why = "sqlite_vec's nDCG@10 on the same run"
+
+[[claim]]
+id = "method-drift-lancedb"
+quote = "same repository's own numbers said 0.783"
+published = "0.783"
+rows = "msmarco_scale"
+reduce = "value"
+field = "ndcg@10"
+where = { store = "lancedb", scale = 250000 }
+why = "lancedb's nDCG@10 on the same run, 0.7832, against the retired claim that it held 100 percent recall"

@@ -1,0 +1,59 @@
+# Content sanitizer ([sanitize]) - strip machine-content junk before chunking.
+#
+# When enabled, the composition wraps the extractor in a decorator that scans the
+# extracted TEXT (never the source file) for machine-content spans - minified JS/CSS,
+# base64/data blobs, dense non-prose runs - and, per `mode`, flags or strips them. This
+# is the quality counterpart to [chunker].enforce_max_tokens (which is the always-on
+# size safety net): the sanitizer removes the junk so it is never chunked or embedded at
+# all, rather than split into many junk chunks.
+#
+# All settings are optional; the block may be omitted entirely (sanitizer stays OFF).
+
+[sanitize]
+
+# enabled - turn the sanitizer on.
+#   Default: false (opt-in).
+#   Effect: false = the extractor output is unchanged. true = it is scanned and (per
+#     `mode`) flagged or stripped.
+#   When to change: enable it for web-scraped or mixed corpora where documents embed
+#     minified scripts/styles or base64 blobs (these otherwise become oversized chunks
+#     the embedder truncates). Leave off for clean, prose-only corpora.
+#   Recommendation: validate first - run a retrieval (nDCG) comparison with mode="strip"
+#     vs off on YOUR corpus and only then enable it; removing content can cost recall if
+#     the detectors misfire.
+# enabled = false
+
+# mode - what to do with a detected machine-content span.
+#   Default: "dry_run".
+#   Values: "dry_run" = detect and LOG only, text unchanged (safe preview: you see what
+#     WOULD be removed without losing anything). "strip" = also excise the spans.
+#   When to change: start with "dry_run", read the logs, then switch to "strip" once the
+#     detections look right for your content.
+# mode = "dry_run"
+
+# window_chars - detection granularity: the text is scored in windows of this many chars.
+#   Default: 400. Smaller = finer boundary detection (less residue at a prose/junk edge)
+#   but more per-window overhead; larger = coarser.
+# window_chars = 400
+
+# min_span_chars - only spans at least this long are acted on.
+#   Default: 400. A short code snippet inside real prose (below this) is left alone, so
+#   the sanitizer never nibbles at inline `code` or a one-line example.
+# min_span_chars = 400
+
+# whitespace_ratio_min / symbol_ratio_max / word_length_max - the three signals. A window
+#   is machine content when at least `min_detectors` of them trip:
+#   - whitespace_ratio below whitespace_ratio_min (default 0.08): minified code / base64
+#     has almost no spaces (prose is ~0.15).
+#   - symbol_ratio above symbol_ratio_max (default 0.35): code is dense with braces,
+#     operators, and punctuation.
+#   - mean whitespace-token length above word_length_max (default 15.0): base64 and
+#     minified blobs are huge unbroken runs (prose words average ~5).
+# whitespace_ratio_min = 0.08
+# symbol_ratio_max = 0.35
+# word_length_max = 15.0
+
+# min_detectors - how many of the three signals must trip (1-3).
+#   Default: 2. Raise to 3 for a stricter, lower-false-positive filter (only the most
+#   obvious junk); lower to 1 to catch more (higher false-positive risk).
+# min_detectors = 2

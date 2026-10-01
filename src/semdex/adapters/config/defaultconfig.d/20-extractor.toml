@@ -1,0 +1,97 @@
+# ==============================================================================
+# semdex - file-to-text/markdown extractor selection ([extractor])
+# ==============================================================================
+#
+# The extractor turns a source file into text/markdown before it is chunked and
+# embedded. The default handles plain text and markdown; the four doc converters
+# handle PDF/Office/images/OCR and each runs as its OWN Docker container reached
+# over HTTP, which keeps semdex free of their heavy (torch, OCR) dependencies.
+# All backends implement the same port, so switching is a config change plus the
+# matching optional extra. Reindex after changing the backend.
+#
+# Override any key via environment / .env, e.g. SEMDEX___EXTRACTOR__BACKEND=docling
+#
+# Backend comparison:
+#   backend     handles                     runs as            needs
+#   ----------  --------------------------  -----------------  ------------------------------
+#   text        .md / .txt (default)        in-process         nothing
+#   markitdown  Office/PDF/HTML/...          container (MCP)    semdex[markitdown] + endpoint
+#   xberg   18+ formats, OCR (CPU)       container (REST)   semdex[xberg] + endpoint
+#   docling     layout-aware PDF/DOCX (CPU)  container (REST)   semdex[docling] + endpoint
+#   mineru      high-fidelity PDF/OCR (GPU)  container (REST)   semdex[mineru] + endpoint + GPU
+# ==============================================================================
+
+[extractor]
+
+# backend - which extractor converts source files to text/markdown.
+#   Default: "text" (embedded reader for .md/.txt; no service, no extra).
+#   Effect: decides what file types you can index. "text" only reads plain text;
+#     the converters extract text from PDFs, Office docs, images (OCR), etc.
+#   When to change: choose a converter when your corpus has PDFs/Office/scanned docs.
+#     "xberg"/"docling" are CPU-friendly; "mineru" is highest-fidelity but needs a GPU;
+#     "markitdown" is a broad lightweight converter.
+#   Consequences: every converter needs its extra installed AND its container running
+#     (set endpoint); it adds a network hop and conversion latency per file. "text"
+#     silently reads a binary file as text - do not point it at PDFs.
+#   Recommendation: keep "text" for notes/markdown; "docling" or "xberg" for mixed
+#     document corpora on CPU; "mineru" only when you have a GPU and need top PDF fidelity.
+backend = "text"
+
+# endpoint - base URL of the extractor container.
+#   Default: unset. Required by every backend except "text" (which ignores it).
+#   Effect: where semdex sends files for conversion. Start the container first, e.g.:
+#     docling    -> docker run -p 5001:5001 quay.io/docling-project/docling-serve
+#     xberg      -> docker run -p 8000:8000 goldziher/kreuzberg:core   (v4, bundles Tesseract OCR)
+#     markitdown -> docker run -p 3001:3001 mcp/markitdown --http --host 0.0.0.0 --port 3001
+#     mineru     -> docker run --gpus all -p 8000:8000 <mineru-api-image>
+#   When to change: set it to your running container's URL; it can be another host
+#     (run the heavy converter on a GPU box and point several semdex instances at it).
+#   Consequences: file content is uploaded to this URL - keep the host on a trusted
+#     network (these servers have no auth). An HTTP backend with no endpoint errors clearly.
+#   Recommendation: set only when backend is a converter; co-locate on localhost for
+#     simplicity, or a dedicated converter host for shared/GPU use.
+# endpoint = "http://127.0.0.1:5001"
+
+# timeout - HTTP request timeout for the converter, in seconds.
+#   Default: 120.0 (generous - OCR and layout models can be slow).
+#   Effect: how long semdex waits for one file's conversion before failing it.
+#   When to change: raise it for very large PDFs / slow CPU-only OCR; lower it to fail
+#     fast on an unresponsive server.
+#   Consequences: too low aborts legitimate slow conversions; too high hangs on a stuck
+#     server. Ignored by the "text" backend. Must be > 0.
+#   Recommendation: 120 for CPU converters; raise toward 300 for big scanned PDFs; a
+#     lower value (e.g. 30) for small docs where fast failure is preferred.
+timeout = 120.0
+
+# max_file_bytes - upper bound (bytes) on a file the HTTP converters will upload.
+#   Default: 26214400 (25 MiB). The embedded "text" backend uses [index].max_file_bytes instead.
+#   Effect: a file larger than this is rejected (checked against its size) BEFORE it is
+#     read, so an oversized upload never loads into memory (bounded memory).
+#   When to change: raise it if you must convert very large PDFs; lower it to guard the
+#     converter/host from huge uploads.
+#   Consequences: too low silently skips large legitimate documents; too high risks
+#     memory/latency spikes on the converter. Must be > 0.
+#   Recommendation: 25 MiB suits most document corpora; raise to 50-100 MiB only if you
+#     genuinely index very large scanned PDFs and the converter can handle them.
+max_file_bytes = 26214400
+
+# force_ocr - run OCR even when a document already has a text layer (xberg backend only).
+#   Default: false. xberg auto-OCRs a PDF with no text layer, but returns only image
+#     METADATA for a plain scanned image unless OCR is forced; force_ocr = true runs OCR
+#     on EVERY input, including searchable PDFs and images.
+#   Effect: guarantees text out of scans/images. Ignored by text/markitdown/docling/mineru.
+#   When to change: set true when your corpus is scans/photos of text and you want that
+#     text; leave false when documents already carry a text layer (direct extraction is
+#     faster and higher-fidelity than re-OCR).
+#   Consequences: OCR is slower than reading a text layer and can add OCR errors on clean
+#     docs (usually lossless on simple content). Needs the xberg image, which bundles Tesseract.
+#   Recommendation: true for scanned/image corpora; false (default) for born-digital docs.
+force_ocr = false
+
+# ocr_language - Tesseract language for xberg OCR (xberg backend only).
+#   Default: unset (xberg's own default, English). Effect: which language model OCR uses.
+#   The xberg image bundles eng, spa, fra, deu, ita, por, chi-sim, chi-tra, jpn, ara, rus, hin.
+#   When to change: set it to your documents' language when they are not English.
+#   Consequences: a mismatched language degrades OCR accuracy; unset falls back to English.
+#   Recommendation: set it to match your corpus language when OCR is on and not English.
+# ocr_language = "eng"

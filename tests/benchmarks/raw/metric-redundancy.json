@@ -1,0 +1,493 @@
+{
+  "generated_utc": "2026-08-12T12:06:11+00:00",
+  "metrics": [
+    "ndcg@10",
+    "recall@10",
+    "mrr",
+    "p@1"
+  ],
+  "near_duplicate_rho": 0.95,
+  "note": "Measured across the swept configurations PER CORPUS. A metric pair is called near-duplicate at |rho| >= the threshold above; effective_views is the participation ratio of the correlation matrix eigenvalues, so 4.0 means four independent views and 1.0 means one.",
+  "corpora": [
+    {
+      "corpus": "cqadupstack",
+      "cells": 11,
+      "n_queries": 876,
+      "effective_views": 1.51,
+      "recall_mean": 0.3218,
+      "recall_span": 0.1878,
+      "near_duplicate_pairs": 2,
+      "pairs": [
+        {
+          "left": "ndcg@10",
+          "right": "recall@10",
+          "spearman": 0.9909,
+          "comparable_pairs": 55,
+          "disagreements": 1,
+          "disagreement_rate": 0.0182
+        },
+        {
+          "left": "ndcg@10",
+          "right": "mrr",
+          "spearman": 0.6239,
+          "comparable_pairs": 52,
+          "disagreements": 12,
+          "disagreement_rate": 0.2308
+        },
+        {
+          "left": "ndcg@10",
+          "right": "p@1",
+          "spearman": 0.569,
+          "comparable_pairs": 48,
+          "disagreements": 13,
+          "disagreement_rate": 0.2708
+        },
+        {
+          "left": "recall@10",
+          "right": "mrr",
+          "spearman": 0.6147,
+          "comparable_pairs": 52,
+          "disagreements": 13,
+          "disagreement_rate": 0.25
+        },
+        {
+          "left": "recall@10",
+          "right": "p@1",
+          "spearman": 0.569,
+          "comparable_pairs": 48,
+          "disagreements": 13,
+          "disagreement_rate": 0.2708
+        },
+        {
+          "left": "mrr",
+          "right": "p@1",
+          "spearman": 0.9554,
+          "comparable_pairs": 48,
+          "disagreements": 2,
+          "disagreement_rate": 0.0417
+        }
+      ],
+      "judged_per_query": 1.91
+    },
+    {
+      "corpus": "fiqa",
+      "cells": 4,
+      "n_queries": 648,
+      "effective_views": 1.04,
+      "recall_mean": 0.3399,
+      "recall_span": 0.2493,
+      "near_duplicate_pairs": 3,
+      "pairs": [
+        {
+          "left": "ndcg@10",
+          "right": "recall@10",
+          "spearman": 1.0,
+          "comparable_pairs": 6,
+          "disagreements": 0,
+          "disagreement_rate": 0.0
+        },
+        {
+          "left": "ndcg@10",
+          "right": "mrr",
+          "spearman": 1.0,
+          "comparable_pairs": 6,
+          "disagreements": 0,
+          "disagreement_rate": 0.0
+        },
+        {
+          "left": "ndcg@10",
+          "right": "p@1",
+          "spearman": 0.9487,
+          "comparable_pairs": 5,
+          "disagreements": 0,
+          "disagreement_rate": 0.0
+        },
+        {
+          "left": "recall@10",
+          "right": "mrr",
+          "spearman": 1.0,
+          "comparable_pairs": 6,
+          "disagreements": 0,
+          "disagreement_rate": 0.0
+        },
+        {
+          "left": "recall@10",
+          "right": "p@1",
+          "spearman": 0.9487,
+          "comparable_pairs": 5,
+          "disagreements": 0,
+          "disagreement_rate": 0.0
+        },
+        {
+          "left": "mrr",
+          "right": "p@1",
+          "spearman": 0.9487,
+          "comparable_pairs": 5,
+          "disagreements": 0,
+          "disagreement_rate": 0.0
+        }
+      ],
+      "judged_per_query": 2.63
+    },
+    {
+      "corpus": "miracl_de_100k_slice",
+      "cells": 48,
+      "n_queries": 304,
+      "effective_views": 1.01,
+      "recall_mean": 0.6009,
+      "recall_span": 0.7725,
+      "near_duplicate_pairs": 6,
+      "pairs": [
+        {
+          "left": "ndcg@10",
+          "right": "recall@10",
+          "spearman": 0.9955,
+          "comparable_pairs": 1120,
+          "disagreements": 21,
+          "disagreement_rate": 0.0187
+        },
+        {
+          "left": "ndcg@10",
+          "right": "mrr",
+          "spearman": 0.9982,
+          "comparable_pairs": 1121,
+          "disagreements": 11,
+          "disagreement_rate": 0.0098
+        },
+        {
+          "left": "ndcg@10",
+          "right": "p@1",
+          "spearman": 0.9946,
+          "comparable_pairs": 1103,
+          "disagreements": 19,
+          "disagreement_rate": 0.0172
+        },
+        {
+          "left": "recall@10",
+          "right": "mrr",
+          "spearman": 0.9934,
+          "comparable_pairs": 1120,
+          "disagreements": 31,
+          "disagreement_rate": 0.0277
+        },
+        {
+          "left": "recall@10",
+          "right": "p@1",
+          "spearman": 0.9891,
+          "comparable_pairs": 1103,
+          "disagreements": 38,
+          "disagreement_rate": 0.0345
+        },
+        {
+          "left": "mrr",
+          "right": "p@1",
+          "spearman": 0.9973,
+          "comparable_pairs": 1104,
+          "disagreements": 9,
+          "disagreement_rate": 0.0082
+        }
+      ],
+      "judged_per_query": 2.65
+    },
+    {
+      "corpus": "miracl_en_100k_slice",
+      "cells": 48,
+      "n_queries": 799,
+      "effective_views": 1.07,
+      "recall_mean": 0.9434,
+      "recall_span": 0.1403,
+      "near_duplicate_pairs": 3,
+      "pairs": [
+        {
+          "left": "ndcg@10",
+          "right": "recall@10",
+          "spearman": 0.9816,
+          "comparable_pairs": 1107,
+          "disagreements": 43,
+          "disagreement_rate": 0.0388
+        },
+        {
+          "left": "ndcg@10",
+          "right": "mrr",
+          "spearman": 0.9696,
+          "comparable_pairs": 1091,
+          "disagreements": 61,
+          "disagreement_rate": 0.0559
+        },
+        {
+          "left": "ndcg@10",
+          "right": "p@1",
+          "spearman": 0.9449,
+          "comparable_pairs": 1059,
+          "disagreements": 80,
+          "disagreement_rate": 0.0755
+        },
+        {
+          "left": "recall@10",
+          "right": "mrr",
+          "spearman": 0.9341,
+          "comparable_pairs": 1092,
+          "disagreements": 93,
+          "disagreement_rate": 0.0852
+        },
+        {
+          "left": "recall@10",
+          "right": "p@1",
+          "spearman": 0.8938,
+          "comparable_pairs": 1061,
+          "disagreements": 117,
+          "disagreement_rate": 0.1103
+        },
+        {
+          "left": "mrr",
+          "right": "p@1",
+          "spearman": 0.9879,
+          "comparable_pairs": 1056,
+          "disagreements": 19,
+          "disagreement_rate": 0.018
+        }
+      ],
+      "judged_per_query": 2.91
+    },
+    {
+      "corpus": "mldr_de_3k_slice",
+      "cells": 32,
+      "n_queries": 200,
+      "effective_views": 1.03,
+      "recall_mean": 0.4372,
+      "recall_span": 0.3,
+      "near_duplicate_pairs": 6,
+      "pairs": [
+        {
+          "left": "ndcg@10",
+          "right": "recall@10",
+          "spearman": 0.9848,
+          "comparable_pairs": 489,
+          "disagreements": 18,
+          "disagreement_rate": 0.0368
+        },
+        {
+          "left": "ndcg@10",
+          "right": "mrr",
+          "spearman": 0.9945,
+          "comparable_pairs": 496,
+          "disagreements": 9,
+          "disagreement_rate": 0.0181
+        },
+        {
+          "left": "ndcg@10",
+          "right": "p@1",
+          "spearman": 0.9823,
+          "comparable_pairs": 486,
+          "disagreements": 19,
+          "disagreement_rate": 0.0391
+        },
+        {
+          "left": "recall@10",
+          "right": "mrr",
+          "spearman": 0.9721,
+          "comparable_pairs": 489,
+          "disagreements": 27,
+          "disagreement_rate": 0.0552
+        },
+        {
+          "left": "recall@10",
+          "right": "p@1",
+          "spearman": 0.9569,
+          "comparable_pairs": 480,
+          "disagreements": 33,
+          "disagreement_rate": 0.0688
+        },
+        {
+          "left": "mrr",
+          "right": "p@1",
+          "spearman": 0.9907,
+          "comparable_pairs": 486,
+          "disagreements": 12,
+          "disagreement_rate": 0.0247
+        }
+      ],
+      "judged_per_query": 1.0
+    },
+    {
+      "corpus": "mldr_en_8k_slice",
+      "cells": 32,
+      "n_queries": 800,
+      "effective_views": 1.02,
+      "recall_mean": 0.8525,
+      "recall_span": 0.1787,
+      "near_duplicate_pairs": 6,
+      "pairs": [
+        {
+          "left": "ndcg@10",
+          "right": "recall@10",
+          "spearman": 0.9889,
+          "comparable_pairs": 492,
+          "disagreements": 14,
+          "disagreement_rate": 0.0285
+        },
+        {
+          "left": "ndcg@10",
+          "right": "mrr",
+          "spearman": 0.997,
+          "comparable_pairs": 495,
+          "disagreements": 6,
+          "disagreement_rate": 0.0121
+        },
+        {
+          "left": "ndcg@10",
+          "right": "p@1",
+          "spearman": 0.9889,
+          "comparable_pairs": 491,
+          "disagreements": 13,
+          "disagreement_rate": 0.0265
+        },
+        {
+          "left": "recall@10",
+          "right": "mrr",
+          "spearman": 0.9791,
+          "comparable_pairs": 492,
+          "disagreements": 20,
+          "disagreement_rate": 0.0407
+        },
+        {
+          "left": "recall@10",
+          "right": "p@1",
+          "spearman": 0.9729,
+          "comparable_pairs": 488,
+          "disagreements": 25,
+          "disagreement_rate": 0.0512
+        },
+        {
+          "left": "mrr",
+          "right": "p@1",
+          "spearman": 0.9938,
+          "comparable_pairs": 492,
+          "disagreements": 9,
+          "disagreement_rate": 0.0183
+        }
+      ],
+      "judged_per_query": 1.0
+    },
+    {
+      "corpus": "nfcorpus",
+      "cells": 47,
+      "n_queries": 323,
+      "effective_views": 1.12,
+      "recall_mean": 0.1589,
+      "recall_span": 0.0812,
+      "near_duplicate_pairs": 2,
+      "pairs": [
+        {
+          "left": "ndcg@10",
+          "right": "recall@10",
+          "spearman": 0.9651,
+          "comparable_pairs": 1066,
+          "disagreements": 66,
+          "disagreement_rate": 0.0619
+        },
+        {
+          "left": "ndcg@10",
+          "right": "mrr",
+          "spearman": 0.9486,
+          "comparable_pairs": 1074,
+          "disagreements": 99,
+          "disagreement_rate": 0.0922
+        },
+        {
+          "left": "ndcg@10",
+          "right": "p@1",
+          "spearman": 0.9165,
+          "comparable_pairs": 1040,
+          "disagreements": 120,
+          "disagreement_rate": 0.1154
+        },
+        {
+          "left": "recall@10",
+          "right": "mrr",
+          "spearman": 0.8924,
+          "comparable_pairs": 1069,
+          "disagreements": 148,
+          "disagreement_rate": 0.1384
+        },
+        {
+          "left": "recall@10",
+          "right": "p@1",
+          "spearman": 0.8525,
+          "comparable_pairs": 1037,
+          "disagreements": 169,
+          "disagreement_rate": 0.163
+        },
+        {
+          "left": "mrr",
+          "right": "p@1",
+          "spearman": 0.975,
+          "comparable_pairs": 1042,
+          "disagreements": 49,
+          "disagreement_rate": 0.047
+        }
+      ],
+      "judged_per_query": 38.19
+    },
+    {
+      "corpus": "scifact",
+      "cells": 32,
+      "n_queries": 300,
+      "effective_views": 1.09,
+      "recall_mean": 0.7918,
+      "recall_span": 0.1933,
+      "near_duplicate_pairs": 3,
+      "pairs": [
+        {
+          "left": "ndcg@10",
+          "right": "recall@10",
+          "spearman": 0.9932,
+          "comparable_pairs": 487,
+          "disagreements": 11,
+          "disagreement_rate": 0.0226
+        },
+        {
+          "left": "ndcg@10",
+          "right": "mrr",
+          "spearman": 0.9958,
+          "comparable_pairs": 492,
+          "disagreements": 7,
+          "disagreement_rate": 0.0142
+        },
+        {
+          "left": "ndcg@10",
+          "right": "p@1",
+          "spearman": 0.8869,
+          "comparable_pairs": 468,
+          "disagreements": 47,
+          "disagreement_rate": 0.1004
+        },
+        {
+          "left": "recall@10",
+          "right": "mrr",
+          "spearman": 0.9894,
+          "comparable_pairs": 487,
+          "disagreements": 14,
+          "disagreement_rate": 0.0287
+        },
+        {
+          "left": "recall@10",
+          "right": "p@1",
+          "spearman": 0.8798,
+          "comparable_pairs": 463,
+          "disagreements": 50,
+          "disagreement_rate": 0.108
+        },
+        {
+          "left": "mrr",
+          "right": "p@1",
+          "spearman": 0.8926,
+          "comparable_pairs": 468,
+          "disagreements": 42,
+          "disagreement_rate": 0.0897
+        }
+      ],
+      "judged_per_query": 1.13
+    }
+  ]
+}

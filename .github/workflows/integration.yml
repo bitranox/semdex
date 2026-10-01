@@ -1,0 +1,171 @@
+# This workflow is PROJECT-OWNED and is NOT distributed by the CI template's
+# distribute.sh. Unlike the default_*.yml workflows in this directory, it is
+# not template-managed - it coexists with them the same way codeql.yml does.
+# Do not fold this file into default_cicd_public.yml or hand it to the template.
+#
+# It runs the heavy local_only integration + benchmark tests (real embedding
+# models, Docker-based extractor containers, SQL vector-store backends) that
+# are deliberately excluded from the push/PR CI gate because they pull
+# multi-GB images and download models. It is manual + weekly only.
+
+name: Integration & Benchmarks
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    # Weekly, Monday 06:00 UTC.
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+env:
+  UV_LINK_MODE: "copy"
+
+jobs:
+  matrix-benchmark:
+    # Retrieval quality/latency benchmark across corpora (NFCorpus, CQADupStack).
+    # Downloads corpora via ir_datasets/datasets on first use - heavy, hence weekly/manual only.
+    name: Retrieval benchmark matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SEMDEX_BENCH_CORPORA: nfcorpus,cqadupstack
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          prune-cache: false
+
+      - name: Install dev + benchmark deps
+        run: |
+          uv pip install -e ".[dev,bench,pg,mariadb,model2vec,chunk,chunk-semantic,embed,ollama,docling,xberg,markitdown,mineru,sqlite,lance]" --system
+
+      - name: Run retrieval benchmark matrix
+        run: python -m pytest -p no:cacheprovider -o addopts="" -s tests/test_e2e_matrix.py
+
+      - name: Upload benchmark report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: benchmark-report-retrieval
+          path: benchmark-report.md
+          if-no-files-found: warn
+
+  regression-gate:
+    # Reproducible regression check: runs a FIXED slice (small nfcorpus subsample +
+    # text/markitdown extractors) so its metrics are comparable to the committed
+    # baseline (tests/benchmarks/baseline.json), then diffs against it. Fails when a
+    # cell stops working or a quality metric drops past tolerance. The fixed knobs
+    # below MUST match the config the baseline was seeded with, or the comparison is
+    # apples-to-oranges; see docs/BENCHMARKS.md ("Regression detection").
+    name: Benchmark regression gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      SEMDEX_BENCH_CORPORA: nfcorpus
+      SEMDEX_BENCH_MAX_DOCS: "150"
+      SEMDEX_BENCH_MAX_QUERIES: "20"
+      SEMDEX_BENCH_EXTRACTORS: text,markitdown
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          prune-cache: false
+
+      - name: Install dev + benchmark deps
+        run: |
+          uv pip install -e ".[dev,bench,pg,mariadb,model2vec,chunk,chunk-semantic,embed,ollama,docling,xberg,markitdown,mineru,sqlite,lance]" --system
+
+      - name: Run the fixed regression slice
+        run: >-
+          python -m pytest -p no:cacheprovider -o addopts="" -s
+          tests/test_e2e_matrix.py
+          tests/test_e2e_extractor_matrix.py::test_extractor_fixture_matrix
+
+      - name: Compare against baseline (fails on regression)
+        run: python scripts/benchmark_compare.py benchmark-results.json
+
+      - name: Upload machine-readable results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: benchmark-results-json
+          path: benchmark-results.json
+          if-no-files-found: warn
+
+  real-adapters:
+    # Exercises real (non-stub) adapters behind the ports: sentence-transformers
+    # and local embeddings, real chunkers, and the pgvector/mariadb SQL vector
+    # stores against live containers. ollama-real self-skips without a server.
+    name: Real adapters (embedding, chunker, SQL vector stores)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          prune-cache: false
+
+      - name: Install dev + adapter deps
+        run: |
+          uv pip install -e ".[dev,bench,pg,mariadb,model2vec,chunk,chunk-semantic,embed,ollama,docling,xberg,markitdown,mineru,sqlite,lance]" --system
+
+      - name: Run real adapter tests
+        run: >-
+          python -m pytest -p no:cacheprovider -o addopts=""
+          tests/test_embedding_local.py tests/test_embedding_sentence_transformers.py
+          tests/test_chunker_local.py tests/test_vectorstore_pgvector.py tests/test_vectorstore_mariadb.py
+
+  doc-extractors:
+    # Exercises the HTTP document-extractor backends (docling/xberg/mineru),
+    # each its own Docker container pulled and started by the tests - the
+    # multi-GB image pulls this job is for. OmniDocBench stays off (research-only,
+    # gated behind SEMDEX_BENCH_OMNIDOCBENCH, not set here).
+    name: Document extractor matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SEMDEX_BENCH_EXTRACT_CORPORA: fixtures,olmocr
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          prune-cache: false
+
+      - name: Install dev + extractor deps
+        run: |
+          uv pip install -e ".[dev,bench,pg,mariadb,model2vec,chunk,chunk-semantic,embed,ollama,docling,xberg,markitdown,mineru,sqlite,lance]" --system
+
+      - name: Run document extractor tests
+        run: >-
+          python -m pytest -p no:cacheprovider -o addopts=""
+          tests/test_extractor_docker.py tests/test_e2e_extractor_matrix.py
+
+      - name: Upload benchmark report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: benchmark-report-extractor
+          path: benchmark-report.md
+          if-no-files-found: warn
