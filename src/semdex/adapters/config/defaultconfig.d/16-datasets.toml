@@ -1,0 +1,193 @@
+# ==============================================================================
+# semdex - datasets ([[dataset]])
+# ==============================================================================
+#
+# A dataset is a named binding of a store backend + collection + embedding +
+# source roots. The MCP server loads the list of datasets and each tool call
+# selects one by name; a plain CLI run without a dataset uses the flat [index] /
+# [vector_store] / [embedding] settings instead. There are NO default datasets -
+# every entry below is commented out; add [[dataset]] blocks to define your own.
+#
+# "Private vs shared" is not a setting here - it is purely which store/DB a
+# dataset points at and (for a database server) what that database GRANTed to
+# your credentials. semdex builds no auth of its own; the database is the trust
+# boundary for server-backed datasets.
+#
+# Override a value via environment / .env, e.g. for the first dataset's dsn:
+#   SEMDEX___DATASET__0__DSN=postgresql://...
+#
+# Keys per [[dataset]]:
+#   name               (required) unique; how a tool call selects this dataset.
+#   backend            store backend: json | sqlite_vec | lancedb | pgvector | mariadb
+#                      (default "json"). Embedded backends use store_dir; server
+#                      backends (pgvector/mariadb) use dsn.
+#   store_dir          embedded backends: directory holding this dataset's store.
+#   dsn                server backends: connection string. REQUIRED for pgvector/
+#                      mariadb. Contains a password - do NOT commit it inline; load
+#                      it at runtime from the environment (the override above) or a
+#                      keyfile. A committed secret is git history and needs rotation.
+#   collection         collection name within the store (default "default").
+#   embedding_provider fastembed | model2vec | ollama | openai |
+#                      sentence_transformers | placeholder (default "fastembed").
+#                      The collection is pinned to this model; changing it means
+#                      re-embedding. "openai" targets any OpenAI-compatible
+#                      /v1/embeddings server (hosted OpenAI, ollama's /v1, llama.cpp).
+#   embedding_model    model id for the provider (default: the provider's own).
+#   embedding_endpoint base URL for the HTTP providers. For "ollama" the host root
+#                      (semdex appends /api/embed); for "openai" the base URL ending
+#                      in /v1 (semdex appends /embeddings).
+#   embedding_timeout  per-request HTTP timeout (s) for ollama/openai (default 60);
+#                      raise it for a slow CPU-only embed server.
+#   embedding_query_prefix    instruction prefix for the QUERY, for a model trained to
+#   embedding_passage_prefix  receive one (ollama/openai/sentence_transformers only). Both
+#                      default to empty. Qwen3-Embedding wants a query prefix and NO passage
+#                      prefix; E5 wants "query: " / "passage: ". Changing the PASSAGE prefix
+#                      changes every stored vector, so reindex that dataset; changing only the
+#                      query prefix does not. See [embedding].query_prefix.
+#   embedding_num_batch  ollama's physical batch in tokens (default 2048, which is
+#                      BELOW the 4096 context it usually serves). ollama silently
+#                      embeds any longer input from its first 2048 tokens only, so
+#                      set it to at least the served context when this dataset's
+#                      chunks can exceed 2048 tokens. See [embedding].num_batch.
+#   embedding_api_key  Bearer token for the "openai" provider (hosted OpenAI / a
+#                      secured gateway; local ollama/llama.cpp need none). SECRET:
+#                      load from the environment, never commit the literal inline.
+#   sources            source roots this dataset indexes (filesystem paths now).
+#   partition          "table" | "database"; overrides [vector_store].default_partition
+#                      for THIS dataset (see 15-vectorstore.toml for the trade-offs).
+#                      Unset = inherit the default (private -> table, shared -> database).
+#   read_only          true = the server does not offer an index/reindex tool for this
+#                      dataset (default false). Advisory only; the DB GRANT is the real
+#                      enforcer for a server backend.
+#   writable           true = a KNOWLEDGE dataset the MCP client writes to directly via
+#                      the remember/forget tools (default false).
+#                      Effect: it has NO connector and is never reconciled/reindexed; the
+#                        agent deposits content, keyed by semdex://<name>/<id>. search and
+#                        fan-out work on it like any collection.
+#                      When to set: to give an agent a place to store and recall its own
+#                        notes/facts, SEPARATE from the source-mirrored datasets (files,
+#                        mail) - keep it on its own database so its data never mixes with
+#                        indexed sources.
+#                      Constraints: mutually exclusive with sources (a writable dataset has
+#                        no source roots) and with read_only. Intended on a database backend
+#                        whose DSN GRANT decides who may write (the real enforcer); the flag
+#                        is only the advisory signal.
+#                      Recommendation: leave false for anything that indexes external files/
+#                        mail; set true only for an agent-owned knowledge base.
+#   summarize          true = enable the opt-in per-document summary tier for THIS
+#                        dataset (default false). Each source gets one LLM summary
+#                        at index/reindex time, attached to every search hit as
+#                        "summary" so an agent can triage without opening the source.
+#                        The provider/api_key/prompt/timeout/clip come from the global
+#                        [summary] section (see 31-summary.toml) - that must select a
+#                        provider other than "none" for this flag to do anything.
+#                        Cost: one LLM call per document; use on curated datasets, not
+#                        huge corpora.
+#   summary_model      override [summary].model for THIS dataset (unset = inherit).
+#   summary_endpoint   override [summary].endpoint for THIS dataset (unset = inherit).
+#   extractor          dataset-wide default extraction backend (default "text"):
+#                        text | markitdown | xberg | docling | mineru | olmocr |
+#                        openai_vision. "text" reads plain text/markdown as-is and lets
+#                        each file's TYPE pick a default (office/pdf -> markitdown, images
+#                        -> the route's on_scan OCR). Set a non-"text" default to force one
+#                        converter on EVERY file in the dataset. The net backend per file =
+#                        subtree ([[dataset.route]]) x filetype x scan-detection.
+#   scan_min_chars     scan cutoff (chars, default 24, > 0): a PDF whose base extraction
+#                        yields fewer real characters is treated as a SCAN and re-extracted
+#                        with the route's on_scan backend. Raise it if thin text-layer PDFs
+#                        slip through as "not a scan"; lower it if good PDFs needlessly OCR.
+#
+# Per-subtree overrides - repeat [[dataset.route]] under a [[dataset]] (singular
+# key "route"; longest matching subtree wins; a file under no route uses the
+# dataset default):
+#   subtree            path prefix RELATIVE to the dataset's source roots ("" = all).
+#   extractor          base backend for files in this subtree (overrides the dataset default).
+#   on_scan            vision/OCR backend a SCAN in this subtree escalates to. An image is
+#                        ALWAYS a scan; a PDF is a scan when base extraction < scan_min_chars.
+#                        Leave unset to never escalate (an image with no on_scan is an error).
+#
+# Backend endpoints - repeat [[dataset.extractor_config]] to say WHERE each named
+# backend runs (routes name WHICH backend; this says where it lives + how to call it):
+#   backend            which backend this entry configures (one entry per backend).
+#   endpoint           base URL. HTTP doc-converters (markitdown/xberg/docling/mineru) and
+#                        the vision servers (olmocr = vLLM/olmOCR, openai_vision = any
+#                        OpenAI-vision /v1) each need one.
+#   model              vision-OCR model id (olmocr/openai_vision); unset = adapter default.
+#   api_key            Bearer token for a HOSTED vision server (openai_vision). SECRET: load
+#                        from the environment, never commit inline. Local vLLM needs none.
+#   force_ocr          xberg: force OCR even when a text layer exists (default false).
+#   ocr_language       xberg: OCR language hint (e.g. "deu", "eng").
+#   mineru_backend     MinerU pipeline selector (e.g. "vlm-transformers" for its VLM mode);
+#                        unset = MinerU's classic pipeline.
+#
+# --- Example: a private, local, embedded dataset (your notes on disk) ----------
+# [[dataset]]
+# name = "notes"
+# backend = "sqlite_vec"
+# store_dir = "~/.semdex/notes"
+# collection = "notes"
+# sources = ["~/notes", "~/journal"]
+#
+# --- Example: a private dataset on your own database (per-user, table-partitioned)
+# [[dataset]]
+# name = "docs"
+# backend = "pgvector"
+# dsn = "postgresql://me@db.internal:5432/semdex_me"   # password via SEMDEX___DATASET__1__DSN
+# collection = "docs"
+# sources = ["~/documents"]
+# partition = "table"
+#
+# --- Example: a SHARED dataset (one database per shared dataset, read-only) -----
+# [[dataset]]
+# name = "handbook"
+# backend = "pgvector"
+# dsn = "postgresql://me@db.internal:5432/semdex_shared_handbook"
+# collection = "handbook"
+# partition = "database"
+# read_only = true
+#
+# --- Example: a WRITABLE knowledge dataset the agent deposits into (own database)
+# [[dataset]]
+# name = "agent_memory"
+# backend = "pgvector"
+# dsn = "postgresql://agent@db.internal:5432/semdex_agent_memory"  # DSN GRANT allows writes
+# collection = "memory"
+# writable = true          # remember/forget tools; no sources; never reconciled
+#
+# --- Example: per-directory extractor routing (subtree x filetype x scan) -------
+# A mixed archive: plain notes read as text, the "papers" tree runs MinerU but
+# escalates a scanned PDF (or any image) to olmOCR, and loose scans anywhere use
+# openai_vision. Endpoints for the named backends are given once each.
+# [[dataset]]
+# name = "archive"
+# backend = "sqlite_vec"
+# store_dir = "~/.semdex/archive"
+# sources = ["~/archive"]
+# extractor = "text"        # dataset default: text-as-is, office/pdf -> markitdown
+# scan_min_chars = 24       # a PDF under this many extracted chars is a scan
+#
+# [[dataset.route]]
+# subtree = "papers"        # ~/archive/papers/**
+# extractor = "mineru"      # rich PDFs -> MinerU
+# on_scan = "olmocr"        # ... but a scanned page escalates to olmOCR (vision)
+#
+# [[dataset.route]]
+# subtree = "scans"         # ~/archive/scans/** (images are always scans)
+# on_scan = "openai_vision"
+#
+# [[dataset.extractor_config]]
+# backend = "mineru"
+# endpoint = "http://mineru-host:8000"
+# mineru_backend = "vlm-transformers"
+#
+# [[dataset.extractor_config]]
+# backend = "olmocr"
+# endpoint = "http://vllm-host:8100/v1"   # vLLM serving olmOCR
+# model = "olmocr"
+#
+# [[dataset.extractor_config]]
+# backend = "openai_vision"
+# endpoint = "https://api.openai.com/v1"
+# model = "gpt-4o-mini"
+# api_key = ""              # SECRET: set SEMDEX___DATASET__N__EXTRACTOR_CONFIG__M__API_KEY
+# ==============================================================================

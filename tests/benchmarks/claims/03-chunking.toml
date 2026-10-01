@@ -1,0 +1,4191 @@
+# Every figure quoted in the PROSE of docs/benchmarks/03-chunking.md, paired with the derivation
+# that reproduces it from tests/benchmarks/raw/*.json. Checked by scripts/check_bench_claims.py and
+# gated by tests/test_bench_claims_current.py. The format is documented in README.md beside this
+# file; the short version is: quote the sentence, print the figure exactly as the page prints it,
+# and say which rows are reduced how.
+
+doc = "docs/benchmarks/03-chunking.md"
+
+[sets]
+# The corpora whose documents are long enough to carry a chunking claim. gen_bench_tables applies
+# the same filter to every chunking table, so a claim about a headline count has to apply it too.
+fit_corpora = ["gerdalir_de_12k_slice", "mldr_de_3k_slice", "mldr_en_8k_slice"]
+mldr = ["mldr_de_3k_slice", "mldr_en_8k_slice"]
+resplitters = ["markdown", "fast"]
+# The plain semantic profiles, cut with chonkie's default breakpoint model. The exporter stores that
+# level as null, which a TOML filter cannot name, so a claim about the default names the cells.
+default_breakpoint_cells = [
+  "mldr_de_3k_slice__semantic-t256-o0-gpt2__ollama-qwen3-embedding-4b",
+  "mldr_de_3k_slice__semantic-t512-o0-gpt2__ollama-qwen3-embedding-4b",
+  "mldr_de_3k_slice__semantic-t256-o0-gpt2__ollama-qwen3-embedding-8b",
+  "mldr_de_3k_slice__semantic-t512-o0-gpt2__ollama-qwen3-embedding-8b",
+  "mldr_en_8k_slice__semantic-t256-o0-gpt2__ollama-qwen3-embedding-4b",
+  "mldr_en_8k_slice__semantic-t512-o0-gpt2__ollama-qwen3-embedding-4b",
+  "mldr_en_8k_slice__semantic-t256-o0-gpt2__ollama-qwen3-embedding-8b",
+  "mldr_en_8k_slice__semantic-t512-o0-gpt2__ollama-qwen3-embedding-8b",
+  "mldr_en_8k_slice__semantic-t256-o0-gpt2__ollama-bge-m3",
+]
+
+[rowsets.effects]
+source = "chunk-knob-effects.json"
+path = "effects"
+orient = true
+
+[rowsets.chunk_sets]
+source = "chunk-dimension-audit.json"
+path = "chunk_sets"
+
+[rowsets.span_integrity]
+source = "span-integrity.json"
+path = "integrity"
+
+[rowsets.span_retrieval]
+source = "span-integrity.json"
+path = "retrieval"
+
+[rowsets.throughput]
+source = "chunker-throughput.json"
+path = "rows"
+
+[rowsets.gpu_embedding]
+source = "embedding-qwen3-gpu.json"
+
+[rowsets.embedder_truncation]
+source = "embedder-truncation-audit.json"
+path = "rows"
+
+# ---------------------------------------------------------------- which corpora, and how big
+
+[[claim]]
+id = "mldr-en-chunks-per-doc"
+quote = "MLDR English (18.5 chunks"
+published = "18.5"
+rows = "chunk_sets"
+reduce = "value"
+field = "chunks_per_doc"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "chunks per document on the reference profile the fitness filter judges a corpus on"
+
+[[claim]]
+id = "mldr-en-queries"
+quote = "per document, 800 queries)"
+published = "800"
+rows = "chunk_sets"
+reduce = "value"
+field = "n_queries"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "the query count the corpus was scored with"
+
+[[claim]]
+id = "mldr-de-chunks-per-doc"
+quote = "MLDR German (67.3, 200)"
+published = "67.3"
+rows = "chunk_sets"
+reduce = "value"
+field = "chunks_per_doc"
+where = { corpus = "mldr_de_3k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "same reference profile as the English figure beside it"
+
+[[claim]]
+id = "mldr-de-queries"
+quote = "MLDR German (67.3, 200)"
+published = "200"
+rows = "chunk_sets"
+reduce = "value"
+field = "n_queries"
+where = { corpus = "mldr_de_3k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "the second number in the parenthesis is the query count"
+
+[[claim]]
+id = "gerdalir-chunks-per-doc"
+quote = "(36.0, 12,298)"
+published = "36.0"
+rows = "chunk_sets"
+reduce = "value"
+field = "chunks_per_doc"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "same reference profile again"
+
+[[claim]]
+id = "gerdalir-queries"
+quote = "(36.0, 12,298)"
+published = "12,298"
+rows = "chunk_sets"
+reduce = "value"
+field = "n_queries"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "the query count that narrows every GerDaLIR interval"
+
+# ---------------------------------------------------------------- the headline
+
+[[claim]]
+id = "headline-max-tokens-resolved"
+quote = "resolves in 109 of its 152 comparisons"
+published = "109"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, corpus = "@fit_corpora" }
+why = "resolved chunk-size comparisons on the corpora that can carry a chunking claim"
+
+[[claim]]
+id = "headline-whitespace-losses"
+quote = "loses all 21 of the comparisons that resolve against it"
+published = "21"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, unfavoured_level = "whitespace", corpus = "@fit_corpora" }
+why = "resolved strategy comparisons whose losing side is whitespace"
+
+[[claim]]
+id = "headline-mldr-overlap-downward"
+quote = "22 of the 34 that resolve favour LESS"
+published = "22"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, corpus = "@mldr", favoured_end = "low" }
+why = "resolved MLDR overlap comparisons favouring the LOWER level, both languages; re-pointed to the per-comparison bullet below, since the paragraph above now judges ladders end to end"
+
+[[claim]]
+id = "headline-mldr-overlap-resolved"
+quote = "22 of the 34 that resolve favour LESS"
+published = "34"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, corpus = "@mldr" }
+why = "every resolved MLDR overlap comparison, whichever way it fell; re-pointed alongside headline-mldr-overlap-downward"
+
+[[claim]]
+id = "headline-overlap-chance-basis"
+quote = "Of the 530 overlap comparisons that resolve"
+published = "530"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, corpus = "@fit_corpora" }
+why = "resolved overlap comparisons, the basis the chance ceiling and the material floor both apply to"
+
+[[claim]]
+id = "headline-overlap-material-floor"
+quote = "136 sit under the half-point material floor"
+published = "136"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, material = false, corpus = "@fit_corpora" }
+why = "resolved overlap comparisons that fall under the 0.005 nDCG@10 material floor"
+
+[[claim]]
+id = "headline-strategy-material-floor"
+quote = "The strategy axis loses 5 comparisons to that floor"
+published = "5"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, material = false, corpus = "@fit_corpora" }
+why = "resolved strategy comparisons that fall under the material floor"
+
+[[claim]]
+id = "headline-size-material-floor"
+quote = "and the size axis loses 3"
+published = "3"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, material = false, corpus = "@fit_corpora" }
+why = "resolved chunk-size comparisons that fall under the material floor"
+
+[[claim]]
+id = "headline-gerdalir-overlap-ladders-more-128"
+quote = "four top out at 128 tokens"
+published = "four"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 128, material = true, favoured_end = "high", embedding = ["fastembed:bge-base", "ollama:bge-m3", "ollama:qwen3-embedding-4b", "ollama:qwen3-embedding-8b"] }
+why = "GerDaLIR's four recursive cap256 ladders whose own top is 128 tokens, each material and favouring more at that top; restricted to those four embedders because the other two (model2vec) also carry a 0-to-128 row as an intermediate rung on their way to 256, which would otherwise double count"
+
+[[claim]]
+id = "headline-gerdalir-overlap-ladders-more-128-guard"
+quote = "four top out at 128 tokens"
+published = "128"
+rows = "effects"
+reduce = "max"
+field = "to_level"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, embedding = ["fastembed:bge-base", "ollama:bge-m3", "ollama:qwen3-embedding-4b", "ollama:qwen3-embedding-8b"] }
+why = "guards headline-gerdalir-overlap-ladders-more-128: that claim's embedding allowlist counts four rows but cannot notice if one of those four later gains a rung above 128; this pins the highest to_level any comparison of theirs ever reaches at exactly 128, over all 180 of their recursive cap256 overlap comparisons, so a rung added above 128 fails here rather than silently changing what 'four' counts"
+
+[[claim]]
+id = "headline-gerdalir-overlap-ladders-more-256"
+quote = "two, both `model2vec`, run to 256"
+published = "two"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 256, material = true, favoured_end = "high" }
+why = "the two model2vec embedders whose recursive cap256 sweep runs all the way to 256 tokens; only they carry a 0-to-256 row, so to_level=256 selects exactly them"
+
+[[claim]]
+id = "headline-gerdalir-overlap-ladders-undecided-hint"
+quote = "Its other twelve ladders"
+published = "twelve"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = ["fast", "markdown"], "held_fixed.max_tokens" = 256, from_level = 0, to_level = 51 }
+why = "the six embedders on each of the fast and markdown resplitters, whose two-rung ladder tops out at 51 tokens; none is material, per the summary table's ladder verdict"
+
+[[claim]]
+id = "headline-mldr-overlap-ladders-less-cap256"
+quote = "three of its `recursive` cap256 ladders"
+published = "three"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 51, material = true, favoured_end = "low" }
+why = "MLDR English's recursive cap256 ladders whose own top is 51 tokens (bge-base, potion-retrieval-32M, bge-m3), material and favouring less; bge-small's own top for this held-fixed set is 15, a different ladder claimed separately"
+
+[[claim]]
+id = "headline-mldr-overlap-ladders-less-cap512"
+quote = "one of its cap512 ladders"
+published = "one"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 512, from_level = 0, to_level = 15, material = true, favoured_end = "low" }
+why = "MLDR English's cap512 ladders, all topping at 15 tokens; only qwen3-embedding-4b is material and favours less there"
+
+[[claim]]
+id = "headline-mldr-overlap-ladders-more-hint256"
+quote = "three of its two-rung `fast` and `markdown`"
+published = "three"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "@mldr", from_level = 0, to_level = 51, material = true, favoured_end = "high" }
+why = "every MLDR ladder tops at either 15 or 51 tokens, so to_level=51 alone selects exactly the fast/markdown/recursive cap256 groups across both languages; the three material-and-more rows here are all fast or markdown (potion-base-8M twice on English, bge-m3 once on German), none is recursive. That last part is contingent, not structural: the filter above also admits recursive cap256 rows at this rung, and today none of them is material-and-more, but no sentence in the prose states that zero so the claims checker (which requires a claim's published figure to appear literally in its own quote) cannot pin it with a companion guard here; a future recursive row crossing the floor upward would silently fold into 'three' and this claim would still pass"
+
+
+[[claim]]
+id = "mldr-cap512-overlap-comparisons"
+quote = "and of their 36 overlap comparisons four resolve"
+published = "36"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "@mldr", "held_fixed.max_tokens" = 512 }
+why = "the overlap comparisons the four re-measured cap512 sets supply on the two MLDR corpora"
+
+[[claim]]
+id = "mldr-cap512-overlap-resolved"
+quote = "and of their 36 overlap comparisons four resolve"
+published = "four"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "@mldr", "held_fixed.max_tokens" = 512, resolved = true }
+why = "how many of those resolve; the prose spells the count as a word, so the claim carries the digit"
+
+[[claim]]
+id = "mldr-cap512-overlap-resolved-delta"
+quote = "`bge-base` on German at 10 against 15 tokens, +0.0114,"
+published = "+0.0114"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "mldr_de_3k_slice", embedding = "fastembed:bge-base", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 512, from_level = 10, to_level = 15 }
+why = "the one cap512 overlap comparison on MLDR that resolves; the checker orients every pair low to high"
+
+
+[[claim]]
+id = "mldr-cap512-qwen3-en-o10"
+quote = "(0 against 10 tokens, -0.0059; 0 against 15, -0.0052)"
+published = "-0.0059"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "mldr_en_8k_slice", embedding = "ollama:qwen3-embedding-4b", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 512, from_level = 0, to_level = 10 }
+why = "qwen3-4b on English, no overlap against 10 tokens at cap512"
+
+[[claim]]
+id = "mldr-cap512-qwen3-en-o15"
+quote = "(0 against 10 tokens, -0.0059; 0 against 15, -0.0052)"
+published = "-0.0052"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "mldr_en_8k_slice", embedding = "ollama:qwen3-embedding-4b", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 512, from_level = 0, to_level = 15 }
+why = "qwen3-4b on English, no overlap against 15 tokens at cap512"
+
+[[claim]]
+id = "mldr-cap512-qwen3-de-o10"
+quote = "German (0 against 10 tokens, +0.0157)"
+published = "+0.0157"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "mldr_de_3k_slice", embedding = "ollama:qwen3-embedding-4b", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 512, from_level = 0, to_level = 10 }
+why = "qwen3-4b on German, no overlap against 10 tokens at cap512; the one that favours more"
+
+[[claim]]
+id = "mldr-overlap-less-recursive-cap256"
+quote = "20 are `recursive` at cap256"
+published = "20"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "@mldr", resolved = true, favoured_end = "low", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256 }
+why = "the resolved MLDR overlap comparisons that favour less overlap and sit at recursive cap256"
+
+[[claim]]
+id = "headline-overlap-resolved"
+quote = "the 530 resolved overlap comparisons"
+published = "530"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, corpus = "@fit_corpora" }
+why = "resolved overlap comparisons over all three fit corpora"
+
+# ---------------------------------------------------------------- what the knob names get wrong
+
+[[claim]]
+id = "overlap-percent-at-cap256"
+quote = "3.9 percent overlap at cap256"
+published = "3.9"
+rows = "chunk_sets"
+reduce = "percent_change"
+field = "true_cap"
+against_field = "nominal_cap"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o10-gpt2" }
+why = "ten prepended tokens as a share of the nominal cap, read off the measured true cap"
+
+[[claim]]
+id = "overlap-percent-at-cap512"
+quote = "and 2.0 percent at cap512"
+published = "2.0"
+rows = "chunk_sets"
+reduce = "percent_change"
+field = "true_cap"
+against_field = "nominal_cap"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t512-o10-gpt2" }
+why = "the same ten tokens against the larger cap"
+
+[[claim]]
+id = "resplitter-chunk-count-rise"
+quote = "by up to 6.2 percent at 51 tokens on GerDaLIR"
+published = "6.2"
+rows = "chunk_sets"
+reduce = "percent_change"
+field = "rows"
+where = { corpus = "gerdalir_de_12k_slice", profile = "fast-t256-o51-gpt2" }
+against = { corpus = "gerdalir_de_12k_slice", profile = "fast-t256-o0-gpt2" }
+why = "the larger of the two re-splitters (fast beats markdown's 4.2 percent), hence 'up to'"
+
+# ---------------------------------------------------------------- chunk size
+
+[[claim]]
+id = "max-tokens-resolved"
+quote = "Of the 152 comparisons, 109"
+published = "109"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, corpus = "@fit_corpora" }
+why = "same count as the headline, restated in the section"
+
+[[claim]]
+id = "max-tokens-total"
+quote = "Of the 152 comparisons, 109"
+published = "152"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", corpus = "@fit_corpora" }
+why = "every chunk-size comparison on the fit corpora"
+
+[[claim]]
+id = "max-tokens-largest-effect"
+quote = "up to 0.110 nDCG@10 on English from 64 to 512 tokens for the default embedder"
+published = "0.110"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "max_tokens", resolved = true, corpus = "mldr_en_8k_slice", embedding = "fastembed:bge-base", "held_fixed.strategy" = "recursive" }
+why = "the largest resolved chunk-size effect for bge-base on MLDR English, the 64-to-512 step of the recursive ladder"
+
+[[claim]]
+id = "max-tokens-largest-effect-gerdalir"
+quote = "and up to 0.158 the other way on GerDaLIR"
+published = "0.158"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "max_tokens", resolved = true, corpus = "gerdalir_de_12k_slice" }
+why = "the largest resolved chunk-size effect on GerDaLIR, potion-base-8M from 64 up to 256 tokens, which favours the larger chunk"
+
+[[claim]]
+id = "cap256-chunks"
+quote = "cap256 produces 148,008 chunks on MLDR English against 68,090 at"
+published = "148,008"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "chunk rows written for the cap256 profile"
+
+[[claim]]
+id = "cap512-chunks"
+quote = "cap256 produces 148,008 chunks on MLDR English against 68,090 at"
+published = "68,090"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t512-o0-gpt2" }
+why = "chunk rows written for the cap512 profile"
+
+
+[[claim]]
+id = "mldr-en-cap512-o10-matches-o0"
+quote = "(68,090 on English, 95,669 on"
+published = "68,090"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t512-o10-gpt2" }
+why = "the re-cut overlap-10 set must hold exactly the overlap-0 count; the published figure IS that count"
+
+[[claim]]
+id = "mldr-en-cap512-o15-matches-o0"
+quote = "(68,090 on English, 95,669 on"
+published = "68,090"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t512-o15-gpt2" }
+why = "same for the overlap-15 set"
+
+[[claim]]
+id = "mldr-de-cap512-o10-matches-o0"
+quote = "(68,090 on English, 95,669 on"
+published = "95,669"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_de_3k_slice", profile = "recursive-t512-o10-gpt2" }
+why = "the German overlap-10 set against its overlap-0 count"
+
+[[claim]]
+id = "mldr-de-cap512-o15-matches-o0"
+quote = "(68,090 on English, 95,669 on"
+published = "95,669"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_de_3k_slice", profile = "recursive-t512-o15-gpt2" }
+why = "the German overlap-15 set against its overlap-0 count"
+
+[[claim]]
+id = "cap256-storage-multiple"
+quote = "so roughly 2.2x the storage"
+published = "2.2"
+rows = "chunk_sets"
+reduce = "ratio"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+against = { corpus = "mldr_en_8k_slice", profile = "recursive-t512-o0-gpt2" }
+why = "vectors at cap256 over vectors at cap512, which is what storage and the exact scan track"
+
+# ---------------------------------------------------------------- overlap
+
+[[claim]]
+id = "gerdalir-recursive-overlap-resolved"
+quote = "`recursive` alone 484 of 560 resolve"
+published = "484"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive" }
+why = "resolved GerDaLIR overlap comparisons holding recursive fixed"
+
+[[claim]]
+id = "gerdalir-recursive-overlap-total"
+quote = "`recursive` alone 484 of 560 resolve"
+published = "560"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive" }
+why = "all of them, resolved or not"
+
+
+[[claim]]
+id = "gerdalir-overlap-0-to-128-largest"
+quote = "`potion-base-8M` +0.0324 becomes -0.0120"
+published = "+0.0324"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 0, to_level = 128 }
+why = "the best of those same six embedders"
+
+[[claim]]
+id = "mldr-en-resplitter-overlap-gain"
+quote = "worth about +0.008 each"
+published = "+0.008"
+tolerance = 0.001
+rows = "effects"
+reduce = "mean"
+field = "mean_delta"
+where = { axis = "overlap_tokens", resolved = true, corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "@resplitters" }
+why = "the three resolved markdown/fast comparisons on English average +0.0064; the page says 'about', hence the widened tolerance"
+
+[[claim]]
+id = "gerdalir-one-comparison"
+quote = "GerDaLIR gives +0.0141 and MLDR English"
+published = "+0.0141"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", embedding = "model2vec:potion-retrieval-32M", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 51 }
+why = "the single comparison the page holds still: one corpus, one embedder, one cap, one rung"
+
+[[claim]]
+id = "mldr-en-one-comparison"
+quote = "gives -0.0103, and both resolve"
+published = "-0.0103"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "mldr_en_8k_slice", embedding = "model2vec:potion-retrieval-32M", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 51 }
+why = "the same comparison on the other corpus"
+
+[[claim]]
+id = "corpus-disagreement-gap"
+quote = "separated by 0.024 nDCG@10"
+published = "0.024"
+rows = "effects"
+reduce = "difference"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", embedding = "model2vec:potion-retrieval-32M", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 51 }
+against = { axis = "overlap_tokens", corpus = "mldr_en_8k_slice", embedding = "model2vec:potion-retrieval-32M", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 51 }
+why = "the distance between those two answers at one identical setting"
+
+[[claim]]
+id = "gerdalir-recursive-chunk-count"
+quote = "431,721 chunks on GerDaLIR at every level"
+published = "431,721"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o77-gpt2" }
+why = "read at the TOP of the ladder, where a re-splitting strategy would have grown"
+
+[[claim]]
+id = "token-mass-at-26"
+quote = "by 12.1 percent at 26 tokens"
+published = "12.1"
+rows = "chunk_sets"
+reduce = "percent_change"
+field = "tokens_total"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o26-gpt2" }
+against = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "stored token mass against the no-overlap profile"
+
+[[claim]]
+id = "token-mass-at-51"
+quote = "23.6 at 51, 35.6 at 77, 58.5 at 128 and 96.0 at 256"
+published = "23.6"
+rows = "chunk_sets"
+reduce = "percent_change"
+field = "tokens_total"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o51-gpt2" }
+against = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "same, one rung up"
+
+[[claim]]
+id = "token-mass-at-77"
+quote = "23.6 at 51, 35.6 at 77, 58.5 at 128 and 96.0 at 256"
+published = "35.6"
+rows = "chunk_sets"
+reduce = "percent_change"
+field = "tokens_total"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o77-gpt2" }
+against = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "same, at the rung the sweep originally stopped at"
+
+[[claim]]
+id = "split-answer-rate-at-cap256"
+quote = "while 1.3 percent of answers are split at"
+published = "1.3"
+rows = "span_integrity"
+reduce = "ratio"
+field = "answers_split"
+against_field = "n_questions"
+scale = 100
+where = { corpus = "germanquad", strategy = "recursive", max_tokens = 256, overlap_tokens = 0 }
+why = "share of answers a boundary cuts at cap256 with no overlap, on the largest span corpus"
+
+[[claim]]
+id = "overlap-integrity-gain-at-64"
+quote = "overlap 32 recovers 7.2 points of answer integrity"
+published = "7.2"
+rows = "span_integrity"
+reduce = "difference"
+field = "span_intact"
+scale = 100
+where = { corpus = "germanquad", strategy = "recursive", max_tokens = 64, overlap_tokens = 32 }
+against = { corpus = "germanquad", strategy = "recursive", max_tokens = 64, overlap_tokens = 0 }
+why = "the largest overlap tested at that chunk size, against none"
+
+[[claim]]
+id = "overlap-delivery-gain-at-64"
+quote = "and 12.6 points of"
+published = "12.6"
+rows = "span_retrieval"
+reduce = "difference"
+field = "span_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 64, overlap_tokens = 32 }
+against = { corpus = "germanquad", max_tokens = 64, overlap_tokens = 0 }
+why = "the composed measurement: queries that retrieve a chunk holding the whole answer"
+
+# ---------------------------------------------------------------- strategy
+
+[[claim]]
+id = "strategy-total"
+quote = "systematic rather than random. Of 313"
+published = "313"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", corpus = "@fit_corpora" }
+why = "every strategy comparison on the fit corpora"
+
+[[claim]]
+id = "strategy-resolved"
+quote = "comparisons, 114 resolve, and each corpus has its own answer"
+published = "114"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "@fit_corpora" }
+why = "how many of them separated"
+
+[[claim]]
+id = "gerdalir-recursive-wins"
+quote = "is undefeated**: 36 wins, no losses, 18 ties"
+published = "36"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "gerdalir_de_12k_slice", favoured_level = "recursive" }
+why = "resolved GerDaLIR strategy comparisons recursive came out ahead in"
+
+[[claim]]
+id = "gerdalir-recursive-ties"
+quote = "is undefeated**: 36 wins, no losses, 18 ties"
+published = "18"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = false, corpus = "gerdalir_de_12k_slice", levels = "recursive" }
+why = "unresolved comparisons with recursive on either side of the pair"
+
+[[claim]]
+id = "mldr-en-semantic-wins"
+quote = "`semantic` leads**: 9 wins, 2 losses, 18 ties"
+published = "9"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", favoured_level = "semantic" }
+why = "resolved English strategy comparisons semantic came out ahead in"
+
+[[claim]]
+id = "mldr-en-semantic-ties"
+quote = "`semantic` leads**: 9 wins, 2 losses, 18 ties"
+published = "18"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = false, corpus = "mldr_en_8k_slice", levels = "semantic" }
+why = "unresolved comparisons with semantic on either side"
+
+[[claim]]
+id = "whitespace-losses-restated"
+quote = "than its partner.** 21 losses, 8 on GerDaLIR and 13 on MLDR English, no wins"
+published = "21"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, unfavoured_level = "whitespace", corpus = "@fit_corpora" }
+why = "the headline count restated in the section"
+
+[[claim]]
+id = "whitespace-chunk-count"
+quote = "and 64 words produces 312,780"
+published = "312,780"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t64-o0-gpt2" }
+why = "the size artefact: whitespace words are not tokenizer tokens, so nominal 256 cuts far less"
+
+[[claim]]
+id = "gerdalir-markdown-losses"
+quote = "where it loses 31 and wins 3"
+published = "31"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "gerdalir_de_12k_slice", unfavoured_level = "markdown" }
+why = "resolved GerDaLIR comparisons markdown lost"
+
+[[claim]]
+id = "gerdalir-markdown-wins"
+quote = "where it loses 31 and wins 3"
+published = "3"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "gerdalir_de_12k_slice", favoured_level = "markdown" }
+why = "and the ones it won"
+
+[[claim]]
+id = "mldr-en-markdown-wins"
+quote = "the other way, 19 wins to 4 losses"
+published = "19"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", favoured_level = "markdown" }
+why = "markdown on a corpus that carries the structure it looks for"
+
+[[claim]]
+id = "mldr-en-markdown-losses"
+quote = "the other way, 19 wins to 4 losses"
+published = "4"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", unfavoured_level = "markdown" }
+why = "and the ones it lost there"
+
+[[claim]]
+id = "recursive-over-markdown-at-overlap-0"
+quote = "it is +0.0074 at overlap 0"
+published = "+0.0074"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "strategy", corpus = "gerdalir_de_12k_slice", embedding = "fastembed:bge-base", from_level = "markdown", to_level = "recursive", "held_fixed.overlap_tokens" = 0 }
+why = "oriented markdown to recursive, so the sign reads as recursive's margin"
+
+[[claim]]
+id = "recursive-over-markdown-at-overlap-51"
+quote = "and +0.0110 at overlap 51"
+published = "+0.0110"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "strategy", corpus = "gerdalir_de_12k_slice", embedding = "fastembed:bge-base", from_level = "markdown", to_level = "recursive", "held_fixed.overlap_tokens" = 51 }
+why = "the same pair with overlap on, which is what makes the margin grow"
+
+
+
+# ---------------------------------------------------------------- the breakpoint model
+
+[[claim]]
+id = "breakpoint-granularity-e5"
+quote = "yields 278,215 chunks under"
+published = "278,215"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2-bpe5-large" }
+why = "chunk count under the coarser breakpoint model"
+
+[[claim]]
+id = "breakpoint-granularity-bge"
+quote = "e5-large and 428,748 under bge-m3"
+published = "428,748"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2-bpbge-m3" }
+why = "and under the finer one, at identical token mass"
+
+[[claim]]
+id = "breakpoint-granularity-factor"
+quote = "a factor of 1.54"
+published = "1.54"
+rows = "chunk_sets"
+reduce = "ratio"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2-bpbge-m3" }
+against = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2-bpe5-large" }
+why = "the ratio of those two chunk counts"
+
+[[claim]]
+id = "breakpoint-resolved"
+quote = "these comparisons resolve, 43"
+published = "43"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", resolved = true, corpus = "@fit_corpora" }
+why = "resolved breakpoint-model comparisons"
+
+[[claim]]
+id = "breakpoint-total"
+quote = "of 205, so for the most part"
+published = "205"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", corpus = "@fit_corpora" }
+why = "all of them, which is what makes the fifth a fifth"
+
+[[claim]]
+id = "breakpoint-bge-m3-wins"
+quote = "wins 17 and loses none, `jina-v3`"
+published = "17"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", resolved = true, favoured_level = "bge-m3", corpus = "@fit_corpora" }
+why = "resolved comparisons bge-m3 came out ahead in"
+
+[[claim]]
+id = "breakpoint-jina-wins"
+quote = "`jina-v3` wins 16 and loses none"
+published = "16"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", resolved = true, favoured_level = "jina-v3", corpus = "@fit_corpora" }
+why = "same for jina-v3"
+
+[[claim]]
+id = "breakpoint-potion-losses"
+quote = "nothing and loses all 15 of its resolved"
+published = "15"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", resolved = true, unfavoured_level = "potion-multilingual-128M", corpus = "@fit_corpora" }
+why = "the multilingual model that lost every comparison that separated"
+
+# ---------------------------------------------------------------- does the boundary cut the answer
+
+[[claim]]
+id = "small-overlap-integrity-gain"
+quote = "sweep tested recovers 2.2 points"
+published = "2.2"
+rows = "span_integrity"
+reduce = "difference"
+field = "span_intact"
+scale = 100
+where = { corpus = "germanquad", strategy = "recursive", max_tokens = 64, overlap_tokens = 10 }
+against = { corpus = "germanquad", strategy = "recursive", max_tokens = 64, overlap_tokens = 0 }
+why = "the ten-token overlap the retrieval sweep also tested, at the smallest chunk size"
+
+[[claim]]
+id = "overlap-integrity-gain-at-256"
+quote = "worth 0.6 points"
+published = "0.6"
+rows = "span_integrity"
+reduce = "difference"
+field = "span_intact"
+scale = 100
+where = { corpus = "germanquad", strategy = "recursive", max_tokens = 256, overlap_tokens = 64 }
+against = { corpus = "germanquad", strategy = "recursive", max_tokens = 256, overlap_tokens = 0 }
+why = "the largest overlap tested at cap256 against none, matching how the 7.2 figure was taken"
+
+[[claim]]
+id = "answers-split-at-256"
+quote = "only 29 of 2204 answers were split"
+published = "29"
+rows = "span_integrity"
+reduce = "value"
+field = "answers_split"
+where = { corpus = "germanquad", strategy = "recursive", max_tokens = 256, overlap_tokens = 0 }
+why = "how few answers a boundary cuts at that size, which is why the remedy buys little"
+
+[[claim]]
+id = "germanquad-questions"
+quote = "only 29 of 2204 answers were split"
+published = "2204"
+rows = "span_integrity"
+reduce = "value"
+field = "n_questions"
+where = { corpus = "germanquad", strategy = "recursive", max_tokens = 256, overlap_tokens = 0 }
+why = "the denominator"
+
+[[claim]]
+id = "retrieval-max-tokens-resolved"
+quote = "on MLDR, where all 91 of the"
+published = "91"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, favoured_end = "low", corpus = "@mldr" }
+why = "the retrieval chunk-size result this section is contrasted with; it must agree with the count the size section publishes"
+
+[[claim]]
+id = "germanquad-doc-hit"
+quote = "at 64 tokens, 87.4 percent of queries retrieve a chunk"
+published = "87.4"
+rows = "span_retrieval"
+reduce = "value"
+field = "doc_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 64, overlap_tokens = 0 }
+why = "what document-level scoring counts"
+
+[[claim]]
+id = "germanquad-span-hit"
+quote = "and only 36.1 percent retrieve a chunk containing the answer"
+published = "36.1"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 64, overlap_tokens = 0 }
+why = "what it actually delivers"
+
+[[claim]]
+id = "blind-spot-from-split"
+quote = "only 13.8 of those 51.3 points"
+published = "13.8"
+rows = "span_retrieval"
+reduce = "value"
+field = "blind_from_split"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 64, overlap_tokens = 0 }
+why = "the part of the gap chunking owns"
+
+[[claim]]
+id = "blind-spot-total"
+quote = "only 13.8 of those 51.3 points"
+published = "51.3"
+rows = "span_retrieval"
+reduce = "value"
+field = "blind_spot"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 64, overlap_tokens = 0 }
+why = "the whole gap between counted and delivered"
+
+[[claim]]
+id = "blind-spot-from-ranking"
+quote = "the other 37.5 are"
+published = "37.5"
+rows = "span_retrieval"
+reduce = "value"
+field = "blind_from_ranking"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 64, overlap_tokens = 0 }
+why = "the part belonging to the embedder and to k"
+
+[[claim]]
+id = "germanquad-span-hit-with-overlap"
+quote = "go from 36.1 to 48.7 percent"
+published = "48.7"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 64, overlap_tokens = 32 }
+why = "the same measurement with overlap on"
+
+[[claim]]
+id = "xquad-questions"
+quote = "the same 1190 questions"
+published = "1190"
+rows = "span_retrieval"
+reduce = "value"
+field = "n_questions"
+where = { corpus = "xquad.de", max_tokens = 64, overlap_tokens = 0 }
+why = "the translated question set; the English side answers 1185 of them, so the page's figure is the German count"
+
+[[claim]]
+id = "xquad-en-blind-spot"
+quote = "4.2 points of blind spot in English against 27.7 in German"
+published = "4.2"
+rows = "span_retrieval"
+reduce = "value"
+field = "blind_spot"
+scale = 100
+where = { corpus = "xquad.en", max_tokens = 64, overlap_tokens = 0 }
+why = "the English half of the translated pair"
+
+[[claim]]
+id = "xquad-de-blind-spot"
+quote = "4.2 points of blind spot in English against 27.7 in German"
+published = "27.7"
+rows = "span_retrieval"
+reduce = "value"
+field = "blind_spot"
+scale = 100
+where = { corpus = "xquad.de", max_tokens = 64, overlap_tokens = 0 }
+why = "the German half, same questions"
+
+[[claim]]
+id = "span512-germanquad-span-256"
+quote = "from 66.8"
+published = "66.8"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 256, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, span_hit on germanquad at 256"
+
+[[claim]]
+id = "span512-germanquad-span-512"
+quote = "percent at 256 tokens to 74.2 at 512"
+published = "74.2"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 512, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, span_hit on germanquad at 512"
+
+[[claim]]
+id = "span512-germanquad-doc-256"
+quote = "document hit falls from 85.9 to 82.4"
+published = "85.9"
+rows = "span_retrieval"
+reduce = "value"
+field = "doc_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 256, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, doc_hit on germanquad at 256"
+
+[[claim]]
+id = "span512-germanquad-doc-512"
+quote = "document hit falls from 85.9 to 82.4"
+published = "82.4"
+rows = "span_retrieval"
+reduce = "value"
+field = "doc_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 512, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, doc_hit on germanquad at 512"
+
+[[claim]]
+id = "span512-xquad-de-span-256"
+quote = "it rises from 78.7 to 82.5"
+published = "78.7"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "xquad.de", max_tokens = 256, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, span_hit on xquad.de at 256"
+
+[[claim]]
+id = "span512-xquad-de-span-512"
+quote = "it rises from 78.7 to 82.5"
+published = "82.5"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "xquad.de", max_tokens = 512, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, span_hit on xquad.de at 512"
+
+[[claim]]
+id = "span512-xquad-de-doc-256"
+quote = "document hit falls from 84.2 to 82.9"
+published = "84.2"
+rows = "span_retrieval"
+reduce = "value"
+field = "doc_hit"
+scale = 100
+where = { corpus = "xquad.de", max_tokens = 256, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, doc_hit on xquad.de at 256"
+
+[[claim]]
+id = "span512-xquad-de-doc-512"
+quote = "document hit falls from 84.2 to 82.9"
+published = "82.9"
+rows = "span_retrieval"
+reduce = "value"
+field = "doc_hit"
+scale = 100
+where = { corpus = "xquad.de", max_tokens = 512, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, doc_hit on xquad.de at 512"
+
+[[claim]]
+id = "span512-xquad-en-256"
+quote = "it reads 99.0 at 256 and 98.9 at 512 on both counts"
+published = "99.0"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "xquad.en", max_tokens = 256, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, span_hit on xquad.en at 256"
+
+[[claim]]
+id = "span512-xquad-en-512"
+quote = "it reads 99.0 at 256 and 98.9 at 512 on both counts"
+published = "98.9"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "xquad.en", max_tokens = 512, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, span_hit on xquad.en at 512"
+
+[[claim]]
+id = "span512-germanquad-blind-256"
+quote = "shrinks from 19.2 points to 8.1"
+published = "19.2"
+rows = "span_retrieval"
+reduce = "value"
+field = "blind_spot"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 256, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, blind_spot on germanquad at 256"
+
+[[claim]]
+id = "span512-germanquad-blind-512"
+quote = "shrinks from 19.2 points to 8.1"
+published = "8.1"
+rows = "span_retrieval"
+reduce = "value"
+field = "blind_spot"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 512, overlap_tokens = 0 }
+why = "the composed-span 512 row against its 256 sibling, blind_spot on germanquad at 512"
+
+[[claim]]
+id = "xquad-en-split-component"
+quote = "0.6 and 3.1. That is the English-centric embedder"
+published = "0.6"
+rows = "span_retrieval"
+reduce = "value"
+field = "blind_from_split"
+scale = 100
+where = { corpus = "xquad.en", max_tokens = 64, overlap_tokens = 0 }
+why = "the chunking component of the English gap, which is what makes the rest a ranking effect"
+
+[[claim]]
+id = "xquad-de-split-component"
+quote = "0.6 and 3.1. That is the English-centric embedder"
+published = "3.1"
+rows = "span_retrieval"
+reduce = "value"
+field = "blind_from_split"
+scale = 100
+where = { corpus = "xquad.de", max_tokens = 64, overlap_tokens = 0 }
+why = "and of the German one"
+
+# ---------------------------------------------------------------- what it costs to chunk
+#
+# The four rates below are the "Repeated rate" column of the hand-written table comparing the old
+# single timed pass with the repeated measurement. The old columns are a record of a superseded run
+# and are not in the raw data, so they cannot be claimed here.
+
+[[claim]]
+id = "throughput-whitespace"
+quote = "96,472"
+published = "96,472"
+rows = "throughput"
+reduce = "value"
+field = "docs_per_s"
+where = { corpus = "nfcorpus (long docs)", strategy = "whitespace", threads = 1 }
+why = "single-threaded rate on the long-document corpus"
+
+[[claim]]
+id = "throughput-recursive"
+quote = "54,870"
+published = "54,870"
+rows = "throughput"
+reduce = "value"
+field = "docs_per_s"
+where = { corpus = "nfcorpus (long docs)", strategy = "recursive", threads = 1 }
+why = "same, for the strategy the page recommends"
+
+[[claim]]
+id = "throughput-fast"
+quote = "26,007"
+published = "26,007"
+rows = "throughput"
+reduce = "value"
+field = "docs_per_s"
+where = { corpus = "nfcorpus (long docs)", strategy = "fast", threads = 1 }
+why = "same, for fast"
+
+[[claim]]
+id = "throughput-markdown"
+quote = "21,194"
+published = "21,194"
+rows = "throughput"
+reduce = "value"
+field = "docs_per_s"
+where = { corpus = "nfcorpus (long docs)", strategy = "markdown", threads = 1 }
+why = "same, for markdown"
+
+[[claim]]
+id = "throughput-late"
+quote = "At 2.9 docs/s it needs"
+published = "2.9"
+rows = "throughput"
+reduce = "value"
+field = "docs_per_s"
+where = { corpus = "nfcorpus (long docs)", strategy = "late", threads = 1 }
+why = "the one strategy slower than the pipeline it feeds"
+
+[[claim]]
+id = "fastest-embedding-rate"
+quote = "51.3 docs/s warm"
+published = "51.3"
+rows = "gpu_embedding"
+reduce = "value"
+field = "gpu_docs_per_s_warm"
+where = { model = "qwen3-embedding:4b" }
+why = "the fastest embedding rate this repo has measured, which every cost ratio here is against"
+
+[[claim]]
+id = "late-cost-multiple"
+quote = "so it costs about 18 times the pipeline"
+published = "18"
+rows = "gpu_embedding"
+reduce = "ratio"
+field = "gpu_docs_per_s_warm"
+where = { model = "qwen3-embedding:4b" }
+against_rows = "throughput"
+against_field = "docs_per_s"
+against = { corpus = "nfcorpus (long docs)", strategy = "late", threads = 1 }
+why = "embedding rate over late's chunking rate: how many times longer the chunker takes than the step it feeds"
+
+[[claim]]
+id = "token-mass-at-128"
+quote = "23.6 at 51, 35.6 at 77, 58.5 at 128 and 96.0 at 256"
+published = "58.5"
+rows = "chunk_sets"
+reduce = "percent_change"
+field = "tokens_total"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o128-gpt2" }
+against = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "the cost at the new top of the ladder, against the no-overlap profile"
+
+[[claim]]
+id = "alt-overlap-forest-resolved"
+quote = "for chunk overlap, 530 of 980 comparisons resolved"
+published = "530"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, corpus = "@fit_corpora" }
+why = "the forest plot's alt text carries published counts too, and nothing gated them before"
+
+[[claim]]
+id = "alt-overlap-forest-total"
+quote = "for chunk overlap, 530 of 980 comparisons resolved"
+published = "980"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "@fit_corpora" }
+why = "same caption, the denominator"
+
+[[claim]]
+id = "alt-strategy-forest-resolved"
+quote = "between chunking strategies, 114 of 313 comparisons resolved"
+published = "114"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "@fit_corpora" }
+why = "the strategy plot's caption, unchanged by the overlap rungs but unguarded until now"
+
+[[claim]]
+id = "alt-strategy-forest-total"
+quote = "between chunking strategies, 114 of 313 comparisons resolved"
+published = "313"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", corpus = "@fit_corpora" }
+why = "same caption, the denominator"
+
+[[claim]]
+id = "base8m-step-205-218"
+quote = "optimum: its highest resolved step is 192 to 205 tokens, and its last four steps are +0.0010,"
+published = "+0.0010"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 205, to_level = 218, embedding = "model2vec:potion-base-8M" }
+why = "the first of the four steps that stop resolving"
+
+[[claim]]
+id = "base8m-step-218-230"
+quote = "+0.0000, -0.0001 and +0.0003, none of them resolved. `model2vec:potion-retrieval-32M` does not, its"
+published = "+0.0000"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 218, to_level = 230, embedding = "model2vec:potion-base-8M" }
+why = "and the second"
+
+[[claim]]
+id = "base8m-step-230-243"
+quote = "+0.0000, -0.0001 and +0.0003, none of them resolved. `model2vec:potion-retrieval-32M` does not, its"
+published = "-0.0001"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 230, to_level = 243, embedding = "model2vec:potion-base-8M" }
+why = "and the third, which is negative"
+
+[[claim]]
+id = "base8m-step-243-256"
+quote = "+0.0000, -0.0001 and +0.0003, none of them resolved. `model2vec:potion-retrieval-32M` does not, its"
+published = "+0.0003"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 243, to_level = 256, embedding = "model2vec:potion-base-8M" }
+why = "and the last, at the cap"
+
+[[claim]]
+id = "retr32m-step-243-256"
+quote = "final step from 243 to 256 tokens being +0.0005 and resolved. The direct comparison across the top"
+published = "+0.0005"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 243, to_level = 256, embedding = "model2vec:potion-retrieval-32M" }
+why = "the final step that DOES resolve, which is why this ladder has no measured top"
+
+[[claim]]
+id = "top-pair-retrieval-32M"
+quote = "+0.0040 [+0.0022, +0.0057] and resolves, while `potion-base-8M` gains +0.0013 [-0.0005, +0.0031]"
+published = "+0.0040"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 205, to_level = 256, embedding = "model2vec:potion-retrieval-32M" }
+why = "the direct pair across the top of the range, not a sum of steps"
+
+[[claim]]
+id = "top-pair-base-8M"
+quote = "+0.0040 [+0.0022, +0.0057] and resolves, while `potion-base-8M` gains +0.0013 [-0.0005, +0.0031]"
+published = "+0.0013"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 205, to_level = 256, embedding = "model2vec:potion-base-8M" }
+why = "the same pair for the embedder that does not resolve it"
+
+[[claim]]
+id = "gain-0-77-retrieval-32M"
+quote = "more stored tokens and buys +0.0225 and +0.0226, while 128 to 256 costs a further 37.5 points of"
+published = "+0.0225"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = "model2vec:potion-retrieval-32M" }
+why = "what the cheap part of the ladder buys"
+
+[[claim]]
+id = "gain-0-77-base-8M"
+quote = "more stored tokens and buys +0.0225 and +0.0226, while 128 to 256 costs a further 37.5 points of"
+published = "+0.0226"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = "model2vec:potion-base-8M" }
+why = "same, the other static model"
+
+[[claim]]
+id = "gain-128-256-retrieval-32M"
+quote = "stored token mass and buys +0.0117 and +0.0096. The whole ladder is +0.0429 and +0.0420 from 0 to"
+published = "+0.0117"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 128, to_level = 256, embedding = "model2vec:potion-retrieval-32M" }
+why = "what the expensive top half buys"
+
+[[claim]]
+id = "gain-128-256-base-8M"
+quote = "stored token mass and buys +0.0117 and +0.0096. The whole ladder is +0.0429 and +0.0420 from 0 to"
+published = "+0.0096"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 128, to_level = 256, embedding = "model2vec:potion-base-8M" }
+why = "same, the other static model"
+
+[[claim]]
+id = "gain-0-256-retrieval-32M"
+quote = "stored token mass and buys +0.0117 and +0.0096. The whole ladder is +0.0429 and +0.0420 from 0 to"
+published = "+0.0429"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 256, embedding = "model2vec:potion-retrieval-32M" }
+why = "the whole ladder end to end"
+
+[[claim]]
+id = "gain-0-256-base-8M"
+quote = "stored token mass and buys +0.0117 and +0.0096. The whole ladder is +0.0429 and +0.0420 from 0 to"
+published = "+0.0420"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 256, embedding = "model2vec:potion-base-8M" }
+why = "same, the other static model"
+
+[[claim]]
+id = "rec-gain-0-77-retrieval-32M"
+quote = "`model2vec` models +0.0226 and +0.0225, all resolved"
+published = "+0.0225"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = "model2vec:potion-retrieval-32M" }
+why = "the recommendation restates it, so it can drift independently"
+
+[[claim]]
+id = "rec-gain-0-256-retrieval-32M"
+quote = "keep paying to the cap, +0.0429 for 96.0 percent more"
+published = "+0.0429"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 256, embedding = "model2vec:potion-retrieval-32M" }
+why = "and the total it is compared against"
+
+[[claim]]
+id = "token-mass-at-256"
+quote = "256, for 96.0 percent more stored tokens."
+published = "96.0"
+rows = "chunk_sets"
+reduce = "percent_change"
+field = "tokens_total"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o256-gpt2" }
+against = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "the cost at the cap, where overlap can go no higher"
+
+[[claim]]
+id = "summary-overlap-resolved"
+quote = "Of 980 comparisons, 530 resolve, and they sort by CORPUS:"
+published = "530"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, corpus = "@fit_corpora" }
+why = "the summary bullet restates the headline counts, and nothing gated it"
+
+[[claim]]
+id = "summary-overlap-total"
+quote = "Of 980 comparisons, 530 resolve, and they sort by CORPUS:"
+published = "980"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "@fit_corpora" }
+why = "same bullet, the denominator"
+
+[[claim]]
+id = "summary-gerdalir-upward"
+quote = "all 496 resolved comparisons favour MORE overlap"
+published = "496"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, corpus = "gerdalir_de_12k_slice", favoured_end = "high" }
+why = "and its GerDaLIR count, which was stale and ungated; re-pointed since the bullet now also names the ladder-level verdict"
+
+[[claim]]
+id = "summary-gerdalir-ladders-agree"
+quote = "its six `recursive` cap256 ladders"
+published = "six"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 128, material = true, favoured_end = "high" }
+why = "all six GerDaLIR recursive cap256 ladders are material and favour more at 128 tokens: the four whose own top IS 128, plus the two model2vec ladders for which 128 is an intermediate rung on the way to 256, also material and favouring more there"
+
+[[claim]]
+id = "trunc-none-at-102"
+quote = "at 102 the count is 0"
+published = "0"
+rows = "embedder_truncation"
+reduce = "value"
+field = "truncated"
+where = { chunk_set = "gerdalir_de_12k_slice__recursive-t256-o102-gpt2", embedder = "model2vec:potion-base-8M" }
+why = "the last rung at which the embedder cap clips nothing"
+
+[[claim]]
+id = "trunc-first-at-115"
+quote = "at 115 it is 1 chunk of 431,721"
+published = "1"
+rows = "embedder_truncation"
+reduce = "value"
+field = "truncated"
+where = { chunk_set = "gerdalir_de_12k_slice__recursive-t256-o115-gpt2", embedder = "model2vec:potion-base-8M" }
+why = "and the first at which it clips anything, at one chunk"
+
+[[claim]]
+id = "trunc-worst-at-256"
+quote = "30, costing 0.0007 percent of the tokens"
+published = "30"
+rows = "embedder_truncation"
+reduce = "value"
+field = "truncated"
+where = { chunk_set = "gerdalir_de_12k_slice__recursive-t256-o256-gpt2", embedder = "model2vec:potion-base-8M" }
+why = "the worst case anywhere on the ladder, at 100 percent overlap"
+
+[[claim]]
+id = "trunc-mass-at-256"
+quote = "30, costing 0.0007 percent of the tokens"
+published = "0.0007"
+rows = "embedder_truncation"
+reduce = "value"
+field = "token_mass_lost_pct"
+where = { chunk_set = "gerdalir_de_12k_slice__recursive-t256-o256-gpt2", embedder = "model2vec:potion-base-8M" }
+why = "and what that costs, which is what decides whether it confounds anything"
+
+# ---------------------------------------------------------------- query length: the shape of the queries
+
+[rowsets.query_shape]
+source = "query-length-effect.json"
+path = "query_shape"
+
+[rowsets.qlen_bins]
+source = "query-length-effect.json"
+path = "by_query_length_bins"
+
+[rowsets.qlen_causal]
+source = "query-length-effect.json"
+path = "truncated_queries"
+
+[rowsets.mldr_cells]
+source = "chunk-sweep-mldr.json"
+path = "cells"
+
+[rowsets.gerdalir_cells]
+source = "chunk-sweep-gerdalir.json"
+path = "cells"
+
+[[claim]]
+id = "gerdalir-query-median-words-intro"
+quote = "decisions, a median of 104 words each and a quarter of them over 169"
+published = "104"
+rows = "query_shape"
+reduce = "value"
+field = "median_words"
+where = { corpus = "gerdalir_de_12k_slice" }
+why = "median whitespace word count of GerDaLIR's queries"
+
+[[claim]]
+id = "gerdalir-query-p75-words-intro"
+quote = "decisions, a median of 104 words each and a quarter of them over 169"
+published = "169"
+rows = "query_shape"
+reduce = "value"
+field = "p75_words"
+where = { corpus = "gerdalir_de_12k_slice" }
+why = "the 75th percentile of GerDaLIR query length, so a quarter of queries are longer"
+
+[[claim]]
+id = "mldr-en-query-median-words-intro"
+quote = "one-sentence questions with a median of 13 words"
+published = "13"
+rows = "query_shape"
+reduce = "value"
+field = "median_words"
+where = { corpus = "mldr_en_8k_slice" }
+why = "median word count of MLDR English's queries"
+
+[[claim]]
+id = "gerdalir-query-median-words-overlap"
+quote = "passages, a median of 104 words and a quarter of them over 169"
+published = "104"
+rows = "query_shape"
+reduce = "value"
+field = "median_words"
+where = { corpus = "gerdalir_de_12k_slice" }
+why = "the same median, restated where the overlap split is introduced"
+
+[[claim]]
+id = "gerdalir-query-p75-words-overlap"
+quote = "passages, a median of 104 words and a quarter of them over 169"
+published = "169"
+rows = "query_shape"
+reduce = "value"
+field = "p75_words"
+where = { corpus = "gerdalir_de_12k_slice" }
+why = "the same 75th percentile, restated"
+
+[[claim]]
+id = "gerdalir-chars-per-token-query"
+quote = "at this corpus's 2.5 characters"
+published = "2.5"
+rows = "chunk_sets"
+reduce = "value"
+field = "chars_per_token"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "gpt2 characters per token on GerDaLIR, which makes a 104-word query longer than a 256-token chunk"
+
+[[claim]]
+id = "mldr-en-query-median-words-overlap"
+quote = "of 13 words and none over 38"
+published = "13"
+rows = "query_shape"
+reduce = "value"
+field = "median_words"
+where = { corpus = "mldr_en_8k_slice" }
+why = "MLDR English's median query length, restated"
+
+[[claim]]
+id = "mldr-en-query-max-words"
+quote = "of 13 words and none over 38"
+published = "38"
+rows = "query_shape"
+reduce = "value"
+field = "max_words"
+where = { corpus = "mldr_en_8k_slice" }
+why = "MLDR English's longest query, the ceiling of the short-query bin"
+
+# ---------------------------------------------------------------- query length: the binned split
+
+[[claim]]
+id = "headline-short-quarter-unresolved-embedders"
+quote = "128 tokens of overlap gain nothing for 5 of the 6 embedders and lose, resolved, for the default one"
+published = "5"
+rows = "qlen_bins"
+reduce = "count"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, bin = "Q1", resolved = false }
+tolerance = 0.5
+why = "GerDaLIR embedders whose shortest-quarter delta at 0 to 128 tokens does not resolve"
+
+[[claim]]
+id = "headline-long-quarter-gain-min"
+quote = "while on the longest quarter they gain +0.03 to +0.06 for every embedder"
+published = "+0.03"
+rows = "qlen_bins"
+reduce = "min"
+field = "mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, bin = "Q4" }
+why = "the smallest longest-quarter gain at 0 to 128 tokens across the six embedders"
+
+[[claim]]
+id = "headline-long-quarter-gain-max"
+quote = "while on the longest quarter they gain +0.03 to +0.06 for every embedder"
+published = "+0.06"
+rows = "qlen_bins"
+reduce = "max"
+field = "mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, bin = "Q4" }
+why = "the largest longest-quarter gain at 0 to 128 tokens"
+
+[[claim]]
+id = "short-quarter-bge-base-loss"
+quote = "embedders and lose a resolved 0.024 for `fastembed:bge-base`, the default"
+published = "0.024"
+rows = "qlen_bins"
+reduce = "value"
+field = "mean_delta"
+transform = "abs"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, bin = "Q1", embedding = "fastembed:bge-base" }
+why = "bge-base's shortest-quarter delta at 0 to 128 tokens, a loss"
+
+[[claim]]
+id = "short-quarter-unresolved-embedders-restated"
+quote = "words, which is still five times an MLDR question, 128 tokens of overlap gain nothing for 5 of the 6"
+published = "5"
+rows = "qlen_bins"
+reduce = "count"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, bin = "Q1", resolved = false }
+tolerance = 0.5
+why = "restated in the overlap section"
+
+[[claim]]
+id = "long-quarter-gain-min-restated"
+quote = "they gain +0.03 to +0.06 for all six"
+published = "+0.03"
+rows = "qlen_bins"
+reduce = "min"
+field = "mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, bin = "Q4" }
+why = "restated in the overlap section"
+
+[[claim]]
+id = "long-quarter-gain-max-restated"
+quote = "they gain +0.03 to +0.06 for all six"
+published = "+0.06"
+rows = "qlen_bins"
+reduce = "max"
+field = "mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, bin = "Q4" }
+why = "restated in the overlap section"
+
+[[claim]]
+id = "mldr-length-subset-size"
+quote = "Restricted to the 1,184 GerDaLIR queries no longer than MLDR's"
+published = "1,184"
+rows = "qlen_bins"
+reduce = "value"
+field = "n_shared"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, bin = "<= 38 words", embedding = "fastembed:bge-base" }
+why = "GerDaLIR queries of at most 38 words, the short-query bin's membership"
+
+[[claim]]
+id = "mldr-length-subset-bge-base"
+quote = "-0.025 resolved for `bge-base`"
+published = "-0.025"
+rows = "qlen_bins"
+reduce = "value"
+field = "mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, bin = "<= 38 words", embedding = "fastembed:bge-base" }
+why = "bge-base's 0 to 128 delta on GerDaLIR's MLDR-length queries"
+
+# ---------------------------------------------------------------- query length: the causal re-score
+
+[[claim]]
+id = "causal-retrieval-32m-full-128"
+quote = "worth +0.0312 with the queries as shipped and -0.0047, resolved, with them cut to 20 words"
+published = "+0.0312"
+rows = "qlen_causal"
+reduce = "value"
+field = "full_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "model2vec:potion-retrieval-32M" }
+why = "0 to 128 overlap delta with the queries as shipped"
+
+[[claim]]
+id = "causal-retrieval-32m-cut-128"
+quote = "worth +0.0312 with the queries as shipped and -0.0047, resolved, with them cut to 20 words"
+published = "-0.0047"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "model2vec:potion-retrieval-32M" }
+why = "the same delta with every query cut to its first 20 words"
+
+[[claim]]
+id = "causal-base-8m-cut-128"
+quote = "`potion-base-8M` +0.0324 becomes -0.0120"
+published = "-0.0120"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "model2vec:potion-base-8M" }
+why = "potion-base-8M's 0 to 128 delta at 20-word queries"
+
+[[claim]]
+id = "causal-bge-base-full-128"
+quote = "for `bge-base` +0.0055 becomes -0.0176"
+published = "+0.0055"
+rows = "qlen_causal"
+reduce = "value"
+field = "full_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "fastembed:bge-base" }
+why = "bge-base's 0 to 128 delta with the queries as shipped"
+
+[[claim]]
+id = "causal-bge-base-cut-128"
+quote = "for `bge-base` +0.0055 becomes -0.0176"
+published = "-0.0176"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "fastembed:bge-base" }
+why = "bge-base's 0 to 128 delta at 20-word queries"
+
+[[claim]]
+id = "causal-base-8m-full-256"
+quote = "the two static models go from +0.0420 and +0.0429 to -0.0173 and -0.0108"
+published = "+0.0420"
+rows = "qlen_causal"
+reduce = "value"
+field = "full_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 256, embedding = "model2vec:potion-base-8M" }
+why = "potion-base-8M, 0 to 256, queries as shipped"
+
+[[claim]]
+id = "causal-retrieval-32m-full-256"
+quote = "the two static models go from +0.0420 and +0.0429 to -0.0173 and -0.0108"
+published = "+0.0429"
+rows = "qlen_causal"
+reduce = "value"
+field = "full_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 256, embedding = "model2vec:potion-retrieval-32M" }
+why = "potion-retrieval-32M, 0 to 256, queries as shipped"
+
+[[claim]]
+id = "causal-base-8m-cut-256"
+quote = "the two static models go from +0.0420 and +0.0429 to -0.0173 and -0.0108"
+published = "-0.0173"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 256, embedding = "model2vec:potion-base-8M" }
+why = "potion-base-8M, 0 to 256, 20-word queries"
+
+[[claim]]
+id = "causal-retrieval-32m-cut-256"
+quote = "the two static models go from +0.0420 and +0.0429 to -0.0173 and -0.0108"
+published = "-0.0108"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 256, embedding = "model2vec:potion-retrieval-32M" }
+why = "potion-retrieval-32M, 0 to 256, 20-word queries"
+
+[[claim]]
+id = "causal-bge-m3-full-128"
+quote = "`bge-m3` goes from +0.0136 to +0.0039 at 0 to 128"
+published = "+0.0136"
+rows = "qlen_causal"
+reduce = "value"
+field = "full_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "ollama:bge-m3" }
+why = "bge-m3, 0 to 128, queries as shipped"
+
+[[claim]]
+id = "causal-bge-m3-cut-128"
+quote = "`bge-m3` goes from +0.0136 to +0.0039 at 0 to 128"
+published = "+0.0039"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "ollama:bge-m3" }
+why = "bge-m3, 0 to 128, 20-word queries: a resolved sliver survives the cut"
+
+[[claim]]
+id = "causal-bge-m3-full-51"
+quote = "from +0.0068 to +0.0049 at 0 to 51"
+published = "+0.0068"
+rows = "qlen_causal"
+reduce = "value"
+field = "full_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 51, embedding = "ollama:bge-m3" }
+why = "bge-m3, 0 to 51, queries as shipped"
+
+[[claim]]
+id = "causal-bge-m3-cut-51"
+quote = "from +0.0068 to +0.0049 at 0 to 51"
+published = "+0.0049"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 51, embedding = "ollama:bge-m3" }
+why = "bge-m3, 0 to 51, 20-word queries"
+
+[[claim]]
+id = "causal-qwen3-4b-full-128"
+quote = "`qwen3-embedding-4b` from +0.0164 to +0.0046, resolved"
+published = "+0.0164"
+rows = "qlen_causal"
+reduce = "value"
+field = "full_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "ollama:qwen3-embedding-4b" }
+why = "qwen3-embedding-4b, 0 to 128, queries as shipped"
+
+[[claim]]
+id = "causal-qwen3-4b-cut-128"
+quote = "`qwen3-embedding-4b` from +0.0164 to +0.0046, resolved"
+published = "+0.0046"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "ollama:qwen3-embedding-4b" }
+why = "qwen3-embedding-4b, 0 to 128, 20-word queries"
+
+[[claim]]
+id = "causal-qwen3-4b-cut-51"
+quote = "to an unresolved +0.0021 at 0 to 51"
+published = "+0.0021"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 51, embedding = "ollama:qwen3-embedding-4b" }
+why = "qwen3-embedding-4b, 0 to 51, 20-word queries, unresolved"
+
+[[claim]]
+id = "causal-qwen3-8b-cut-51"
+quote = "an unresolved +0.0018 at 0 to 51 and -0.0030 at 0 to 128"
+published = "+0.0018"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 51, embedding = "ollama:qwen3-embedding-8b" }
+why = "qwen3-embedding-8b, 0 to 51, 20-word queries, unresolved"
+
+[[claim]]
+id = "causal-qwen3-8b-cut-128"
+quote = "an unresolved +0.0018 at 0 to 51 and -0.0030 at 0 to 128"
+published = "-0.0030"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "ollama:qwen3-embedding-8b" }
+why = "qwen3-embedding-8b, 0 to 128, 20-word queries, unresolved"
+
+# ---------------------------------------------------------------- per-embedder gains at 30 percent overlap
+
+[[claim]]
+id = "gain-0-77-bge-base"
+quote = "from 0 to 77 tokens `bge-base` gains +0.0052"
+published = "+0.0052"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = "fastembed:bge-base" }
+why = "the default embedder's gain at the recommended overlap"
+
+[[claim]]
+id = "gain-0-77-bge-m3"
+quote = "`bge-m3` +0.0102, `qwen3-embedding-8b` +0.0114, `qwen3-embedding-4b` +0.0137"
+published = "+0.0102"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = "ollama:bge-m3" }
+why = "bge-m3's gain at the recommended overlap"
+
+[[claim]]
+id = "gain-0-77-qwen3-8b"
+quote = "`bge-m3` +0.0102, `qwen3-embedding-8b` +0.0114, `qwen3-embedding-4b` +0.0137"
+published = "+0.0114"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = "ollama:qwen3-embedding-8b" }
+why = "qwen3-embedding-8b's gain at the recommended overlap"
+
+[[claim]]
+id = "gain-0-77-qwen3-4b"
+quote = "`bge-m3` +0.0102, `qwen3-embedding-8b` +0.0114, `qwen3-embedding-4b` +0.0137"
+published = "+0.0137"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = "ollama:qwen3-embedding-4b" }
+why = "qwen3-embedding-4b's gain at the recommended overlap"
+
+[[claim]]
+id = "gain-0-77-base-8m"
+quote = "`model2vec` models +0.0226 and +0.0225, all resolved"
+published = "+0.0226"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = "model2vec:potion-base-8M" }
+why = "potion-base-8M's gain at the recommended overlap"
+
+[[claim]]
+id = "rec-gain-0-77-bge-base"
+quote = "worth +0.0052 for `bge-base` and up to"
+published = "+0.0052"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = "fastembed:bge-base" }
+why = "the recommendation quotes the default embedder's gain"
+
+[[claim]]
+id = "rec-gain-0-77-static-max"
+quote = "+0.0226 for the static models on GerDaLIR for 35.6 percent more stored tokens"
+published = "+0.0226"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = ["model2vec:potion-base-8M", "model2vec:potion-retrieval-32M"] }
+why = "the larger of the two static models' gains at the recommended overlap"
+
+[[claim]]
+id = "table-gain-0-77-bge-base"
+quote = "Worth +0.0052 (`bge-base`) to +0.0226 (static models) nDCG@10"
+published = "+0.0052"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = "fastembed:bge-base" }
+why = "the settings table quotes the same range"
+
+[[claim]]
+id = "table-gain-0-77-static-max"
+quote = "Worth +0.0052 (`bge-base`) to +0.0226 (static models) nDCG@10"
+published = "+0.0226"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 77, embedding = ["model2vec:potion-base-8M", "model2vec:potion-retrieval-32M"] }
+why = "the settings table quotes the same range"
+
+# ---------------------------------------------------------------- the size section, rewritten
+
+[[claim]]
+id = "max-tokens-recursive-share"
+quote = "not one measurement. 74 are `recursive`"
+published = "74"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, corpus = "@fit_corpora", "held_fixed.strategy" = "recursive" }
+why = "resolved chunk-size comparisons on recursive"
+
+[[claim]]
+id = "max-tokens-semantic-share"
+quote = "overlap rungs of the cap512 sets, on both MLDR corpora. 23 are"
+published = "23"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, corpus = "@fit_corpora", "held_fixed.strategy" = "semantic" }
+why = "resolved chunk-size comparisons on semantic, which the size-guard decides"
+
+[[claim]]
+id = "max-tokens-whitespace-share"
+quote = "The remaining 12 are the `whitespace` ladder"
+published = "12"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, corpus = "@fit_corpora", "held_fixed.strategy" = "whitespace" }
+why = "resolved chunk-size comparisons on the whitespace ladder"
+
+[[claim]]
+id = "semantic-hint256-chunks"
+quote = "385,414 chunks against 373,893"
+published = "385,414"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2" }
+why = "semantic at hint256 on MLDR English"
+
+[[claim]]
+id = "semantic-hint512-chunks"
+quote = "385,414 chunks against 373,893"
+published = "373,893"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t512-o0-gpt2" }
+why = "semantic at hint512 on MLDR English, nearly the same chunking"
+
+[[claim]]
+id = "semantic-hint256-median"
+quote = "median 46 tokens against 45"
+published = "46"
+rows = "chunk_sets"
+reduce = "value"
+field = "token_p50"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2" }
+why = "median chunk length under semantic hint256"
+
+[[claim]]
+id = "semantic-hint512-median"
+quote = "median 46 tokens against 45"
+published = "45"
+rows = "chunk_sets"
+reduce = "value"
+field = "token_p50"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t512-o0-gpt2" }
+why = "median chunk length under semantic hint512"
+
+[[claim]]
+id = "ws-ladder-retrieval-64"
+quote = "runs 0.8201 at 64 words, 0.8068 at 96, 0.7842 at 128 and"
+published = "0.8201"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t64-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "whitespace at 64 words, potion-retrieval-32M, MLDR English"
+
+[[claim]]
+id = "ws-ladder-retrieval-96"
+quote = "runs 0.8201 at 64 words, 0.8068 at 96, 0.7842 at 128 and"
+published = "0.8068"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t96-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "whitespace at 96 words"
+
+[[claim]]
+id = "ws-ladder-retrieval-128"
+quote = "runs 0.8201 at 64 words, 0.8068 at 96, 0.7842 at 128 and"
+published = "0.7842"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t128-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "whitespace at 128 words"
+
+[[claim]]
+id = "ws-ladder-retrieval-256"
+quote = "0.7425 at 256; `potion-base-8M` runs"
+published = "0.7425"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t256-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "whitespace at 256 words"
+
+[[claim]]
+id = "ws-ladder-base-64"
+quote = "`potion-base-8M` runs 0.7418, 0.7263, 0.6939 and 0.6484"
+published = "0.7418"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t64-o0-gpt2", embedding = "model2vec:potion-base-8M" }
+why = "whitespace at 64 words, potion-base-8M"
+
+[[claim]]
+id = "ws-ladder-base-96"
+quote = "`potion-base-8M` runs 0.7418, 0.7263, 0.6939 and 0.6484"
+published = "0.7263"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t96-o0-gpt2", embedding = "model2vec:potion-base-8M" }
+why = "whitespace at 96 words, potion-base-8M"
+
+[[claim]]
+id = "ws-ladder-base-128"
+quote = "`potion-base-8M` runs 0.7418, 0.7263, 0.6939 and 0.6484"
+published = "0.6939"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t128-o0-gpt2", embedding = "model2vec:potion-base-8M" }
+why = "whitespace at 128 words, potion-base-8M"
+
+[[claim]]
+id = "ws-ladder-base-256"
+quote = "`potion-base-8M` runs 0.7418, 0.7263, 0.6939 and 0.6484"
+published = "0.6484"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t256-o0-gpt2", embedding = "model2vec:potion-base-8M" }
+why = "whitespace at 256 words, potion-base-8M"
+
+[[claim]]
+id = "size-matched-recursive-retrieval"
+quote = "0.7842 against 0.7921 for"
+published = "0.7921"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "recursive at cap256 beside whitespace at 128 words, same embedder"
+
+[[claim]]
+id = "size-matched-recursive-base"
+quote = "0.6939 against 0.7096 for `potion-base-8M`"
+published = "0.7096"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2", embedding = "model2vec:potion-base-8M" }
+why = "recursive at cap256 beside whitespace at 128 words, potion-base-8M"
+
+[[claim]]
+id = "ws-64-words-in-tokens"
+quote = "(about 93 tokens) beside `recursive` at cap128"
+published = "93"
+rows = "chunk_sets"
+reduce = "ratio"
+field = "chars_per_token"
+against = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+scale = 64
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t64-o0-gpt2" }
+why = "64 whitespace words in gpt2 tokens: the ratio of chars per whitespace word to chars per gpt2 token, times 64"
+
+[[claim]]
+id = "ws-128-words-in-tokens"
+quote = "is about 186 tokens, and there it sits beside"
+published = "186"
+rows = "chunk_sets"
+reduce = "ratio"
+field = "chars_per_token"
+against = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+scale = 128
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t128-o0-gpt2" }
+why = "128 whitespace words in gpt2 tokens, the size-matched control for cap256"
+
+[[claim]]
+id = "ws-256-words-english-ratio"
+quote = "whose chunk holds 1.5 to 3 times the text"
+published = "1.5"
+rows = "chunk_sets"
+reduce = "ratio"
+field = "chars_per_token"
+against = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t256-o0-gpt2" }
+why = "text per whitespace word over text per gpt2 token on English"
+
+[[claim]]
+id = "ws-256-words-german-ratio"
+quote = "whose chunk holds 1.5 to 3 times the text"
+published = "3"
+rows = "chunk_sets"
+reduce = "ratio"
+field = "chars_per_token"
+against = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+where = { corpus = "gerdalir_de_12k_slice", profile = "whitespace-t256-o0-gpt2" }
+why = "the same ratio on German, where gpt2 tokens are short"
+
+[[claim]]
+id = "ws-256-words-english-tokens"
+quote = "so \"256\" is about 370 tokens of English and"
+published = "370"
+tolerance = 5
+rows = "chunk_sets"
+reduce = "ratio"
+field = "chars_per_token"
+against = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+scale = 256
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t256-o0-gpt2" }
+why = "256 whitespace words in gpt2 tokens, English"
+
+[[claim]]
+id = "ws-256-words-german-tokens"
+quote = "760 of German, and \"64\" is about 93 tokens"
+published = "760"
+tolerance = 5
+rows = "chunk_sets"
+reduce = "ratio"
+field = "chars_per_token"
+against = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+scale = 256
+where = { corpus = "gerdalir_de_12k_slice", profile = "whitespace-t256-o0-gpt2" }
+why = "256 whitespace words in gpt2 tokens, German"
+
+[[claim]]
+id = "ws-256-words-strategy-intro"
+quote = "and `whitespace` at 256 words produces about 370"
+published = "370"
+tolerance = 5
+rows = "chunk_sets"
+reduce = "ratio"
+field = "chars_per_token"
+against = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+scale = 256
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t256-o0-gpt2" }
+why = "the same figure where the strategy section opens"
+
+# ---------------------------------------------------------------- strategy section, rewritten
+
+[[claim]]
+id = "semantic-vs-recursive-cap512-min"
+quote = "beat 461-token chunks by 0.0462 to 0.0895"
+published = "0.0462"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 512, favoured_level = "semantic", unfavoured_level = "recursive" }
+why = "the smallest resolved semantic-over-recursive margin at cap512 on MLDR English"
+
+[[claim]]
+id = "semantic-vs-recursive-cap512-max"
+quote = "beat 461-token chunks by 0.0462 to 0.0895"
+published = "0.0895"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 512, favoured_level = "semantic", unfavoured_level = "recursive" }
+why = "the largest such margin"
+
+[[claim]]
+id = "semantic-median-strategy-intro"
+quote = "`semantic` at hint256 produces a median chunk of 46 tokens against"
+published = "46"
+rows = "chunk_sets"
+reduce = "value"
+field = "token_p50"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2" }
+why = "semantic's realized median on MLDR English"
+
+[[claim]]
+id = "recursive-median-strategy-intro"
+quote = "`recursive`'s 214, and `whitespace` at 256 words produces about 370"
+published = "214"
+rows = "chunk_sets"
+reduce = "value"
+field = "token_p50"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "recursive's realized median on MLDR English"
+
+[[claim]]
+id = "gerdalir-recursive-over-markdown"
+quote = "of that is against `markdown` (19) and `fast` (14)"
+published = "19"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "gerdalir_de_12k_slice", favoured_level = "recursive", unfavoured_level = "markdown" }
+why = "recursive's resolved wins over markdown on GerDaLIR"
+
+[[claim]]
+id = "gerdalir-recursive-over-fast"
+quote = "of that is against `markdown` (19) and `fast` (14)"
+published = "14"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "gerdalir_de_12k_slice", favoured_level = "recursive", unfavoured_level = "fast" }
+why = "recursive's resolved wins over fast on GerDaLIR"
+
+[[claim]]
+id = "whitespace-losses-gerdalir"
+quote = "21 losses, 8 on GerDaLIR and 13 on MLDR English, no wins"
+published = "8"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "gerdalir_de_12k_slice", unfavoured_level = "whitespace" }
+why = "whitespace's resolved losses on GerDaLIR, the cells the audit left standing"
+
+[[claim]]
+id = "whitespace-losses-mldr-en"
+quote = "21 losses, 8 on GerDaLIR and 13 on MLDR English, no wins"
+published = "13"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", unfavoured_level = "whitespace" }
+why = "whitespace's resolved losses on MLDR English"
+
+[[claim]]
+id = "whitespace-german-clipped-chunks-min"
+quote = "the audit measured 72 to 93 percent"
+published = "72"
+rows = "embedder_truncation"
+reduce = "min"
+field = "truncated_pct"
+where = { chunk_set = ["gerdalir_de_12k_slice__whitespace-t256-o0-gpt2", "mldr_de_3k_slice__whitespace-t256-o0-gpt2"] }
+why = "the smallest share of clipped chunks across the German whitespace cells and the four CPU embedders"
+
+[[claim]]
+id = "whitespace-german-clipped-chunks-max"
+quote = "the audit measured 72 to 93 percent"
+published = "93"
+rows = "embedder_truncation"
+reduce = "max"
+field = "truncated_pct"
+where = { chunk_set = ["gerdalir_de_12k_slice__whitespace-t256-o0-gpt2", "mldr_de_3k_slice__whitespace-t256-o0-gpt2"] }
+why = "the largest share of clipped chunks"
+
+[[claim]]
+id = "whitespace-german-mass-lost-min"
+quote = "clipped and 17 to 24 percent of the text never"
+published = "17"
+rows = "embedder_truncation"
+reduce = "min"
+field = "token_mass_lost_pct"
+where = { chunk_set = ["gerdalir_de_12k_slice__whitespace-t256-o0-gpt2", "mldr_de_3k_slice__whitespace-t256-o0-gpt2"] }
+why = "the smallest share of token mass the embedder never saw"
+
+[[claim]]
+id = "whitespace-german-mass-lost-max"
+quote = "clipped and 17 to 24 percent of the text never"
+published = "24"
+rows = "embedder_truncation"
+reduce = "max"
+field = "token_mass_lost_pct"
+where = { chunk_set = ["gerdalir_de_12k_slice__whitespace-t256-o0-gpt2", "mldr_de_3k_slice__whitespace-t256-o0-gpt2"] }
+why = "the largest share of token mass the embedder never saw"
+
+[[claim]]
+id = "late-wins-mldr-en"
+quote = "Scored, it wins 4 and loses none on"
+published = "4"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", favoured_level = "late" }
+why = "late's resolved wins on MLDR English"
+
+[[claim]]
+id = "late-retrieval-32m-mldr-en"
+quote = "For `potion-retrieval-32M` it runs 0.7945 on"
+published = "0.7945"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "late-t256-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "late's cell for potion-retrieval-32M on MLDR English"
+
+[[claim]]
+id = "late-mass-lost"
+quote = "cost these cells at the embedder: 0.02 percent of the token mass"
+published = "0.02"
+rows = "embedder_truncation"
+reduce = "max"
+field = "token_mass_lost_pct"
+where = { chunk_set = ["mldr_en_8k_slice__late-t256-o0-gpt2", "mldr_de_3k_slice__late-t256-o0-gpt2"] }
+why = "the worst clipping across the late cells"
+
+[[claim]]
+id = "breakpoint-bge-m3-chunks"
+quote = "cuts MLDR English into 428,748 chunks"
+published = "428,748"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2-bpbge-m3" }
+why = "chunk count under the bge-m3 breakpoint model"
+
+[[claim]]
+id = "breakpoint-e5-chunks"
+quote = "and `e5-large`, which wins twice, into 278,215"
+published = "278,215"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2-bpe5-large" }
+why = "chunk count under the e5-large breakpoint model"
+
+# ---------------------------------------------------------------- span, cost, settings
+
+[[claim]]
+id = "span-512-chunks-per-context"
+quote = "at 2.12 chunks per context a boundary almost never lands inside an answer"
+published = "2.12"
+rows = "span_integrity"
+reduce = "value"
+field = "chunks_per_context"
+where = { corpus = "germanquad", strategy = "recursive", max_tokens = 512, overlap_tokens = 0 }
+why = "germanquad contexts at 512 tokens"
+
+[[claim]]
+id = "semantic-vectors-cost"
+quote = "`semantic` at hint256 emits 385,414 chunks where `recursive` emits 148,008"
+published = "385,414"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2" }
+why = "the vector count semantic costs on MLDR English"
+
+[[claim]]
+id = "semantic-vectors-ratio-cost"
+quote = "embedding pass it feeds, the store, the index and every exact scan are 2.6 times larger"
+published = "2.6"
+rows = "chunk_sets"
+reduce = "ratio"
+field = "rows"
+against = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2" }
+why = "semantic's chunk count over recursive's"
+
+[[claim]]
+id = "table-span-hit-64"
+quote = "(36, 57, 67, 74 percent at 64, 128, 256, 512 tokens on German long documents)"
+published = "36"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 64, overlap_tokens = 0 }
+why = "delivered-answer rate at 64 tokens, k=5"
+
+[[claim]]
+id = "table-span-hit-128"
+quote = "(36, 57, 67, 74 percent at 64, 128, 256, 512 tokens on German long documents)"
+published = "57"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 128, overlap_tokens = 0 }
+why = "delivered-answer rate at 128 tokens"
+
+[[claim]]
+id = "table-span-hit-256"
+quote = "(36, 57, 67, 74 percent at 64, 128, 256, 512 tokens on German long documents)"
+published = "67"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 256, overlap_tokens = 0 }
+why = "delivered-answer rate at 256 tokens"
+
+[[claim]]
+id = "table-span-hit-512"
+quote = "(36, 57, 67, 74 percent at 64, 128, 256, 512 tokens on German long documents)"
+published = "74"
+rows = "span_retrieval"
+reduce = "value"
+field = "span_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 512, overlap_tokens = 0 }
+why = "delivered-answer rate at 512 tokens, the row the composed-span 512 run added"
+
+[[claim]]
+id = "table-span-512-doc-hit-cost"
+quote = "trades 3.6 points of document hits for 7.4 points of delivered answers"
+published = "3.6"
+rows = "span_retrieval"
+reduce = "difference"
+field = "doc_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 256, overlap_tokens = 0 }
+against = { corpus = "germanquad", max_tokens = 512, overlap_tokens = 0 }
+why = "document hit at 256 minus at 512 on GermanQuAD, what the ranking gives up"
+
+[[claim]]
+id = "table-span-512-span-hit-gain"
+quote = "trades 3.6 points of document hits for 7.4 points of delivered answers"
+published = "7.4"
+rows = "span_retrieval"
+reduce = "difference"
+field = "span_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 512, overlap_tokens = 0 }
+against = { corpus = "germanquad", max_tokens = 256, overlap_tokens = 0 }
+why = "delivered-answer rate at 512 minus at 256 on GermanQuAD"
+
+# ---------------------------------------------------------------- the recursive size ladder (item 20)
+
+[[claim]]
+id = "headline-max-tokens-total"
+quote = "resolves in 109 of its 152 comparisons"
+published = "152"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", corpus = "@fit_corpora" }
+why = "every chunk-size comparison on the fit corpora, the headline denominator"
+
+[[claim]]
+id = "headline-max-tokens-smaller"
+quote = "152 comparisons: 91 favour the smaller chunk"
+published = "91"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, favoured_end = "low", corpus = "@fit_corpora" }
+why = "resolved chunk-size comparisons that came out for the smaller chunk"
+
+[[claim]]
+id = "headline-max-tokens-smaller-all-mldr"
+quote = "152 comparisons: 91 favour the smaller chunk"
+published = "91"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, favoured_end = "low", corpus = "@mldr" }
+why = "the same count restricted to MLDR; equal to the headline count, so every smaller-chunk verdict is an MLDR one"
+
+[[claim]]
+id = "headline-max-tokens-larger"
+quote = "every one of those is on MLDR; 18 favour the larger"
+published = "18"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, favoured_end = "high", corpus = "@fit_corpora" }
+why = "resolved chunk-size comparisons that came out for the larger chunk"
+
+[[claim]]
+id = "headline-max-tokens-larger-all-gerdalir"
+quote = "each of the 18 steps"
+published = "18"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, favoured_end = "high", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive" }
+why = "the larger-chunk verdicts restricted to GerDaLIR recursive; equal to the headline count, so every one is a GerDaLIR recursive step"
+
+[[claim]]
+id = "headline-gerdalir-size-steps-all-resolve"
+quote = "each of the 18 steps"
+published = "18"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive" }
+why = "every GerDaLIR recursive size comparison, resolved or not; equal to the resolved count, so all of them resolved"
+
+[[claim]]
+id = "headline-max-tokens-largest"
+quote = "up to 0.158 nDCG@10. `whitespace`"
+published = "0.158"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "max_tokens", resolved = true, corpus = "@fit_corpora" }
+why = "the largest resolved chunk-size effect anywhere, potion-base-8M on GerDaLIR from 64 up to 256 tokens"
+
+[[claim]]
+id = "size-smaller-all-mldr"
+quote = "resolve. 91 favour the smaller chunk, and all 91 are on MLDR"
+published = "91"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, favoured_end = "low", corpus = "@mldr" }
+why = "the headline smaller-chunk count restated in the section, restricted to MLDR"
+
+[[claim]]
+id = "size-larger-all-gerdalir"
+quote = "18 favour the larger, and all 18"
+published = "18"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, favoured_end = "high", corpus = "gerdalir_de_12k_slice" }
+why = "the headline larger-chunk count restated in the section, restricted to GerDaLIR"
+
+[[claim]]
+id = "size-recursive-share-restated"
+quote = "Read the 109 by strategy"
+published = "109"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, corpus = "@fit_corpora" }
+why = "the resolved count the by-strategy breakdown partitions"
+
+[[claim]]
+id = "ladder-en-bge-base-64"
+quote = "`bge-base` runs 0.9017, 0.8905, 0.8447 and 0.7917 at 64, 128, 256 and 512 tokens"
+published = "0.9017"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t64-o0-gpt2", embedding = "fastembed:bge-base" }
+why = "recursive at 64 tokens, bge-base, MLDR English"
+
+[[claim]]
+id = "ladder-en-bge-base-128"
+quote = "`bge-base` runs 0.9017, 0.8905, 0.8447 and 0.7917 at 64, 128, 256 and 512 tokens"
+published = "0.8905"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t128-o0-gpt2", embedding = "fastembed:bge-base" }
+why = "recursive at 128 tokens"
+
+[[claim]]
+id = "ladder-en-bge-base-256"
+quote = "`bge-base` runs 0.9017, 0.8905, 0.8447 and 0.7917 at 64, 128, 256 and 512 tokens"
+published = "0.8447"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2", embedding = "fastembed:bge-base" }
+why = "recursive at 256 tokens"
+
+[[claim]]
+id = "ladder-en-bge-base-512"
+quote = "`bge-base` runs 0.9017, 0.8905, 0.8447 and 0.7917 at 64, 128, 256 and 512 tokens"
+published = "0.7917"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t512-o0-gpt2", embedding = "fastembed:bge-base" }
+why = "recursive at 512 tokens"
+
+[[claim]]
+id = "ladder-en-qwen3-8b-64"
+quote = "`qwen3-embedding-8b` runs 0.9242, 0.9114, 0.8925 and 0.8682"
+published = "0.9242"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t64-o0-gpt2", embedding = "ollama:qwen3-embedding-8b" }
+why = "recursive at 64 tokens, qwen3-8b, MLDR English"
+
+[[claim]]
+id = "ladder-en-qwen3-8b-128"
+quote = "`qwen3-embedding-8b` runs 0.9242, 0.9114, 0.8925 and 0.8682"
+published = "0.9114"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t128-o0-gpt2", embedding = "ollama:qwen3-embedding-8b" }
+why = "recursive at 128 tokens"
+
+[[claim]]
+id = "ladder-en-qwen3-8b-256"
+quote = "`qwen3-embedding-8b` runs 0.9242, 0.9114, 0.8925 and 0.8682"
+published = "0.8925"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2", embedding = "ollama:qwen3-embedding-8b" }
+why = "recursive at 256 tokens"
+
+[[claim]]
+id = "ladder-en-qwen3-8b-512"
+quote = "`qwen3-embedding-8b` runs 0.9242, 0.9114, 0.8925 and 0.8682"
+published = "0.8682"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t512-o0-gpt2", embedding = "ollama:qwen3-embedding-8b" }
+why = "recursive at 512 tokens"
+
+[[claim]]
+id = "ladder-en-potion-32m-64"
+quote = "`potion-retrieval-32M` runs 0.8304,"
+published = "0.8304"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t64-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "recursive at 64 tokens, potion-retrieval-32M, MLDR English"
+
+[[claim]]
+id = "ladder-en-potion-32m-128"
+quote = "0.8129, 0.7921 and 0.7406. 64 beats 128"
+published = "0.8129"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t128-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "recursive at 128 tokens"
+
+[[claim]]
+id = "ladder-en-potion-32m-256"
+quote = "0.8129, 0.7921 and 0.7406. 64 beats 128"
+published = "0.7921"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "recursive at 256 tokens"
+
+[[claim]]
+id = "ladder-en-potion-32m-512"
+quote = "0.8129, 0.7921 and 0.7406. 64 beats 128"
+published = "0.7406"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t512-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "recursive at 512 tokens"
+
+[[claim]]
+id = "step-64-128-en-potion-8m"
+quote = "for `potion-base-8M` (+0.0386),"
+published = "+0.0386"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "max_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = 0, from_level = 64, to_level = 128, embedding = "model2vec:potion-base-8M" }
+why = "the 64-against-128 step for potion-base-8M, negated so it reads as the smaller chunk's gain"
+
+[[claim]]
+id = "step-64-128-en-potion-32m"
+quote = "`potion-retrieval-32M` (+0.0175) and `qwen3-embedding-8b` (+0.0128)"
+published = "+0.0175"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "max_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = 0, from_level = 64, to_level = 128, embedding = "model2vec:potion-retrieval-32M" }
+why = "the 64-against-128 step for potion-retrieval-32M, the smaller chunk's gain"
+
+[[claim]]
+id = "step-64-128-en-qwen3-8b"
+quote = "`potion-retrieval-32M` (+0.0175) and `qwen3-embedding-8b` (+0.0128)"
+published = "+0.0128"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "max_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = 0, from_level = 64, to_level = 128, embedding = "ollama:qwen3-embedding-8b" }
+why = "the 64-against-128 step for qwen3-8b, the one contextual embedder whose step resolves"
+
+[[claim]]
+id = "step-64-128-en-unresolved-min"
+quote = "the step is positive, +0.0094 to +0.0114, and does not resolve"
+published = "+0.0094"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "max_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = 0, from_level = 64, to_level = 128, resolved = false }
+why = "the smallest of the three unresolved 64-against-128 steps (bge-base, bge-m3, qwen3-4b), as the smaller chunk's gain"
+
+[[claim]]
+id = "step-64-128-en-unresolved-max"
+quote = "the step is positive, +0.0094 to +0.0114, and does not resolve"
+published = "+0.0114"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "max_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = 0, from_level = 64, to_level = 128, resolved = false }
+why = "the largest of the three unresolved steps"
+
+[[claim]]
+id = "step-64-128-en-unresolved-count"
+quote = "does not resolve on 800"
+published = "800"
+rows = "chunk_sets"
+reduce = "value"
+field = "n_queries"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t64-o0-gpt2" }
+why = "the query count the unresolved steps were bootstrapped on"
+
+[[claim]]
+id = "step-64-128-en-contextual-min"
+quote = "(+0.009 to +0.013 against +0.018 to"
+published = "+0.009"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "max_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = 0, from_level = 64, to_level = 128, embedding = ["ollama:bge-m3", "ollama:qwen3-embedding-4b", "ollama:qwen3-embedding-8b"] }
+why = "the smallest 64-against-128 step among the three contextual embedders"
+
+[[claim]]
+id = "step-64-128-en-contextual-max"
+quote = "(+0.009 to +0.013 against +0.018 to"
+published = "+0.013"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "max_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = 0, from_level = 64, to_level = 128, embedding = ["ollama:bge-m3", "ollama:qwen3-embedding-4b", "ollama:qwen3-embedding-8b"] }
+why = "the largest 64-against-128 step among the three contextual embedders"
+
+[[claim]]
+id = "step-64-128-en-static-min"
+quote = "(+0.009 to +0.013 against +0.018 to"
+published = "+0.018"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "max_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = 0, from_level = 64, to_level = 128, embedding = ["model2vec:potion-base-8M", "model2vec:potion-retrieval-32M"] }
+why = "the smaller of the two static models' 64-against-128 steps"
+
+[[claim]]
+id = "step-64-128-en-static-max"
+quote = "+0.039), and their step from 256 down to 128"
+published = "+0.039"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "max_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = 0, from_level = 64, to_level = 128, embedding = ["model2vec:potion-base-8M", "model2vec:potion-retrieval-32M"] }
+why = "the larger of the two static models' 64-against-128 steps"
+
+[[claim]]
+id = "gerdalir-size-steps-count"
+quote = "Its 18 `recursive` comparisons"
+published = "18"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive" }
+why = "every GerDaLIR recursive size comparison"
+
+[[claim]]
+id = "gerdalir-step-64-128-min"
+quote = "64 to 128 costs"
+published = "64"
+rows = "effects"
+reduce = "min"
+field = "from_level"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive" }
+why = "the lowest GerDaLIR rung, 64 tokens"
+
+[[claim]]
+id = "gerdalir-step-64-128-cost-min"
+quote = "0.065 to 0.099 nDCG@10 and 128 to 256 a further 0.021 to 0.059"
+published = "0.065"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 64, to_level = 128 }
+why = "the smallest 64-to-128 gain on GerDaLIR, positive because the larger chunk wins"
+
+[[claim]]
+id = "gerdalir-step-64-128-cost-max"
+quote = "0.065 to 0.099 nDCG@10 and 128 to 256 a further 0.021 to 0.059"
+published = "0.099"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 64, to_level = 128 }
+why = "the largest 64-to-128 gain on GerDaLIR"
+
+[[claim]]
+id = "gerdalir-step-128-256-cost-min"
+quote = "0.065 to 0.099 nDCG@10 and 128 to 256 a further 0.021 to 0.059"
+published = "0.021"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 128, to_level = 256 }
+why = "the smallest 128-to-256 gain on GerDaLIR"
+
+[[claim]]
+id = "gerdalir-step-128-256-cost-max"
+quote = "0.065 to 0.099 nDCG@10 and 128 to 256 a further 0.021 to 0.059"
+published = "0.059"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 128, to_level = 256 }
+why = "the largest 128-to-256 gain on GerDaLIR"
+
+[[claim]]
+id = "ladder-gerdalir-qwen3-8b-64"
+quote = "`qwen3-embedding-8b` runs 0.4383, 0.5031 and 0.5278 at 64, 128 and 256"
+published = "0.4383"
+rows = "gerdalir_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t64-o0-gpt2", embedding = "ollama:qwen3-embedding-8b" }
+why = "recursive at 64 tokens, qwen3-8b, GerDaLIR"
+
+[[claim]]
+id = "ladder-gerdalir-qwen3-8b-128"
+quote = "`qwen3-embedding-8b` runs 0.4383, 0.5031 and 0.5278 at 64, 128 and 256"
+published = "0.5031"
+rows = "gerdalir_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t128-o0-gpt2", embedding = "ollama:qwen3-embedding-8b" }
+why = "recursive at 128 tokens"
+
+[[claim]]
+id = "ladder-gerdalir-qwen3-8b-256"
+quote = "`qwen3-embedding-8b` runs 0.4383, 0.5031 and 0.5278 at 64, 128 and 256"
+published = "0.5278"
+rows = "gerdalir_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2", embedding = "ollama:qwen3-embedding-8b" }
+why = "recursive at 256 tokens"
+
+[[claim]]
+id = "ladder-gerdalir-bge-base-64"
+quote = "`bge-base` runs 0.1627, 0.2302 and 0.2564"
+published = "0.1627"
+rows = "gerdalir_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t64-o0-gpt2", embedding = "fastembed:bge-base" }
+why = "recursive at 64 tokens, bge-base, GerDaLIR"
+
+[[claim]]
+id = "ladder-gerdalir-bge-base-128"
+quote = "`bge-base` runs 0.1627, 0.2302 and 0.2564"
+published = "0.2302"
+rows = "gerdalir_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t128-o0-gpt2", embedding = "fastembed:bge-base" }
+why = "recursive at 128 tokens"
+
+[[claim]]
+id = "ladder-gerdalir-bge-base-256"
+quote = "`bge-base` runs 0.1627, 0.2302 and 0.2564"
+published = "0.2564"
+rows = "gerdalir_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2", embedding = "fastembed:bge-base" }
+why = "recursive at 256 tokens"
+
+[[claim]]
+id = "gerdalir-query-median-restated"
+quote = "are citing passages with a median of 104 words"
+published = "104"
+rows = "query_shape"
+reduce = "value"
+field = "median_words"
+where = { corpus = "gerdalir_de_12k_slice" }
+why = "GerDaLIR's median query length, restated in the size section"
+
+[[claim]]
+id = "mldr-query-median-restated"
+quote = "MLDR's are questions with a median of 13"
+published = "13"
+rows = "query_shape"
+reduce = "value"
+field = "median_words"
+where = { corpus = "mldr_en_8k_slice" }
+why = "MLDR English's median query length, restated in the size section"
+
+[[claim]]
+id = "ws-64-beside-recursive-128-potion-32m-ws"
+quote = "0.8201 against 0.8129 and 0.7418 against 0.7450"
+published = "0.8201"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t64-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "whitespace at 64 words, the size-matched control's left side"
+
+[[claim]]
+id = "ws-64-beside-recursive-128-potion-32m-rec"
+quote = "0.8201 against 0.8129 and 0.7418 against 0.7450"
+published = "0.8129"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t128-o0-gpt2", embedding = "model2vec:potion-retrieval-32M" }
+why = "recursive at cap128, the size-matched control's right side"
+
+[[claim]]
+id = "ws-64-beside-recursive-128-potion-8m-ws"
+quote = "0.8201 against 0.8129 and 0.7418 against 0.7450"
+published = "0.7418"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t64-o0-gpt2", embedding = "model2vec:potion-base-8M" }
+why = "whitespace at 64 words, potion-base-8M"
+
+[[claim]]
+id = "ws-64-beside-recursive-128-potion-8m-rec"
+quote = "0.8201 against 0.8129 and 0.7418 against 0.7450"
+published = "0.7450"
+rows = "mldr_cells"
+reduce = "value"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t128-o0-gpt2", embedding = "model2vec:potion-base-8M" }
+why = "recursive at cap128, potion-base-8M"
+
+[[claim]]
+id = "cap64-overshoot-token-max"
+quote = "single chunk of 65 tokens among its 660,625"
+published = "65"
+rows = "chunk_sets"
+reduce = "value"
+field = "token_max"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t64-o0-gpt2" }
+why = "the longest chunk in the MLDR English cap64 set, one over its nominal cap"
+
+[[claim]]
+id = "cap64-overshoot-count"
+quote = "single chunk of 65 tokens among its 660,625"
+published = "660,625"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t64-o0-gpt2" }
+why = "chunk rows in the MLDR English cap64 set"
+
+[[claim]]
+id = "gerdalir-cap64-exact"
+quote = "the GerDaLIR cap64 set and both cap128 sets sit exactly on their caps"
+published = "64"
+tolerance = 0.5
+rows = "chunk_sets"
+reduce = "value"
+field = "token_max"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t64-o0-gpt2" }
+why = "the GerDaLIR cap64 set's longest chunk is exactly 64 tokens"
+
+[[claim]]
+id = "cap128-en-exact"
+quote = "the GerDaLIR cap64 set and both cap128 sets sit exactly on their caps"
+published = "128"
+tolerance = 0.5
+rows = "chunk_sets"
+reduce = "value"
+field = "token_max"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t128-o0-gpt2" }
+why = "the MLDR English cap128 set's longest chunk is exactly 128 tokens"
+
+[[claim]]
+id = "cap128-gerdalir-exact"
+quote = "the GerDaLIR cap64 set and both cap128 sets sit exactly on their caps"
+published = "128"
+tolerance = 0.5
+rows = "chunk_sets"
+reduce = "value"
+field = "token_max"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t128-o0-gpt2" }
+why = "the GerDaLIR cap128 set's longest chunk is exactly 128 tokens"
+
+[[claim]]
+id = "recursive-cap128-chunks-en"
+quote = "`recursive` at 128 tokens produces 316,836 chunks on MLDR English and at 64 tokens 660,625"
+published = "316,836"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t128-o0-gpt2" }
+why = "chunk rows written for the cap128 profile"
+
+[[claim]]
+id = "recursive-cap64-chunks-en"
+quote = "`recursive` at 128 tokens produces 316,836 chunks on MLDR English and at 64 tokens 660,625"
+published = "660,625"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t64-o0-gpt2" }
+why = "chunk rows written for the cap64 profile"
+
+[[claim]]
+id = "recursive-cap64-over-cap256"
+quote = "at 64 tokens 660,625, 4.5"
+published = "4.5"
+rows = "chunk_sets"
+reduce = "ratio"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t64-o0-gpt2" }
+against = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "cap64 rows over cap256 rows on MLDR English"
+
+[[claim]]
+id = "recursive-cap64-chunks-gerdalir"
+quote = "on GerDaLIR the cap64 set is 2,137,255 chunks"
+published = "2,137,255"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t64-o0-gpt2" }
+why = "chunk rows written for the GerDaLIR cap64 profile"
+
+[[claim]]
+id = "ws-vs-recursive-cap128-potion-8m"
+quote = "against 128 tokens (`potion-base-8M` loses by 0.0511, `potion-retrieval-32M` by 0.0287)"
+published = "0.0511"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 128, from_level = "recursive", to_level = "whitespace", embedding = "model2vec:potion-base-8M" }
+why = "whitespace at 128 words against recursive at 128 tokens, potion-base-8M; positive is recursive's margin"
+
+[[claim]]
+id = "ws-vs-recursive-cap128-potion-32m"
+quote = "against 128 tokens (`potion-base-8M` loses by 0.0511, `potion-retrieval-32M` by 0.0287)"
+published = "0.0287"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 128, from_level = "recursive", to_level = "whitespace", embedding = "model2vec:potion-retrieval-32M" }
+why = "the same pair for potion-retrieval-32M"
+
+[[claim]]
+id = "ws-vs-recursive-cap64-potion-8m"
+quote = "words against 64 tokens (`potion-base-8M` loses by 0.0418"
+published = "0.0418"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 64, from_level = "recursive", to_level = "whitespace", embedding = "model2vec:potion-base-8M" }
+why = "whitespace at 64 words against recursive at 64 tokens, potion-base-8M"
+
+[[claim]]
+id = "recursive-cap64-median"
+quote = "against a `recursive` cap64 chunk's median of 47"
+published = "47"
+rows = "chunk_sets"
+reduce = "value"
+field = "token_p50"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t64-o0-gpt2" }
+why = "median chunk length of the MLDR English cap64 set"
+
+[[claim]]
+id = "ws-64-words-in-tokens-strategy"
+quote = "760 of German, and \"64\" is about 93 tokens"
+published = "93"
+rows = "chunk_sets"
+reduce = "ratio"
+field = "chars_per_token"
+against = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+scale = 64
+where = { corpus = "mldr_en_8k_slice", profile = "whitespace-t64-o0-gpt2" }
+why = "64 whitespace words in gpt2 tokens, restated in the strategy section"
+
+[[claim]]
+id = "ws-losses-at-256-words-en"
+quote = "On English, 10 of the 13 losses are at 256"
+published = "10"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", unfavoured_level = "whitespace", "held_fixed.max_tokens" = 256 }
+why = "whitespace's resolved English losses at the 256-word setting"
+
+[[claim]]
+id = "ws-losses-en-restated"
+quote = "On English, 10 of the 13 losses are at 256"
+published = "13"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", unfavoured_level = "whitespace" }
+why = "whitespace's resolved English losses at every setting"
+
+[[claim]]
+id = "span-gerdalir-larger-18"
+quote = "and the same way as GerDaLIR's 18, which favour"
+published = "18"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, favoured_end = "high", corpus = "gerdalir_de_12k_slice" }
+why = "the GerDaLIR larger-chunk verdicts the span result agrees with"
+
+[[claim]]
+id = "set-questions-128-vs-256-min"
+quote = "on questions it costs 0.02 to 0.05 nDCG@10 against 128"
+published = "0.02"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "max_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = 0, from_level = 128, to_level = 256 }
+why = "the smallest 128-against-256 gain on MLDR English, as the smaller chunk's gain"
+
+[[claim]]
+id = "set-questions-128-vs-256-max"
+quote = "on questions it costs 0.02 to 0.05 nDCG@10 against 128"
+published = "0.05"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "negate"
+where = { axis = "max_tokens", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = 0, from_level = 128, to_level = 256 }
+why = "the largest 128-against-256 gain on MLDR English"
+
+[[claim]]
+id = "set-passages-128-vs-256-min"
+quote = "on passages 128 costs 0.02 to 0.06 against 256"
+published = "0.02"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 128, to_level = 256 }
+why = "the smallest 128-to-256 gain on GerDaLIR"
+
+[[claim]]
+id = "set-passages-128-vs-256-max"
+quote = "on passages 128 costs 0.02 to 0.06 against 256"
+published = "0.06"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 128, to_level = 256 }
+why = "the largest 128-to-256 gain on GerDaLIR"
+
+[[claim]]
+id = "set-passages-64-vs-128-min"
+quote = "a further 0.065 to 0.099 down to 64"
+published = "0.065"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 64, to_level = 128 }
+why = "the smallest 64-to-128 gain on GerDaLIR, restated in the settings table"
+
+[[claim]]
+id = "set-passages-64-vs-128-max"
+quote = "a further 0.065 to 0.099 down to 64"
+published = "0.099"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 64, to_level = 128 }
+why = "the largest 64-to-128 gain on GerDaLIR, restated in the settings table"
+
+[[claim]]
+id = "set-passages-256-vs-128-loss-min"
+quote = "every embedder loses 0.02 to 0.06 from 256 down to 128 on GerDaLIR"
+published = "0.02"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 128, to_level = 256 }
+why = "the smallest 128-to-256 gain on GerDaLIR, read as the loss from cutting 256 down to 128"
+
+[[claim]]
+id = "set-passages-256-vs-128-loss-max"
+quote = "every embedder loses 0.02 to 0.06 from 256 down to 128 on GerDaLIR"
+published = "0.06"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 128, to_level = 256 }
+why = "the largest 128-to-256 gain on GerDaLIR"
+
+
+# ---------------------------------------------------------------- figures added with the 145 cells scored on 2026-09-27
+
+[[claim]]
+id = "mldr-overlap-less-recursive-cap256-en"
+quote = "20 are `recursive` at cap256 (16 on"
+published = "16"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, favoured_end = "low", corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256 }
+why = "the English share of the recursive cap256 comparisons that favour less overlap"
+
+[[claim]]
+id = "mldr-overlap-less-recursive-cap256-de"
+quote = "English, 4 on German) and two are `qwen3-embedding-4b` at cap512 on English"
+published = "4"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, favoured_end = "low", corpus = "mldr_de_3k_slice", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256 }
+why = "the German share of the same"
+
+[[claim]]
+id = "mldr-overlap-more-total"
+quote = "The other twelve"
+published = "twelve"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, favoured_end = "high", corpus = "@mldr" }
+why = "resolved MLDR overlap comparisons favouring MORE overlap; 34 minus the 22 that favour less"
+
+[[claim]]
+id = "mldr-en-resplitter-overlap-resolved"
+quote = "the seven `markdown` and `fast` comparisons that"
+published = "seven"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, corpus = "mldr_en_8k_slice", "held_fixed.strategy" = "@resplitters" }
+why = "resolved English overlap comparisons on the two re-splitting strategies; every one favours more"
+
+[[claim]]
+id = "mldr-en-qwen3-4b-overlap-10-15"
+quote = "10 against 15 and 10 against 26 tokens (+0.0050, +0.0072)"
+published = "+0.0050"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "mldr_en_8k_slice", embedding = "ollama:qwen3-embedding-4b", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 10, to_level = 15 }
+why = "qwen3-embedding-4b on recursive cap256 English, 10 to 15 tokens of overlap"
+
+[[claim]]
+id = "mldr-en-qwen3-4b-overlap-10-26"
+quote = "10 against 15 and 10 against 26 tokens (+0.0050, +0.0072)"
+published = "+0.0072"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "mldr_en_8k_slice", embedding = "ollama:qwen3-embedding-4b", "held_fixed.strategy" = "recursive", "held_fixed.max_tokens" = 256, from_level = 10, to_level = 26 }
+why = "same embedder and profile, 10 to 26 tokens"
+
+[[claim]]
+id = "mldr-de-fast-bge-m3-overlap-0-51"
+quote = "against 51 tokens (+0.0325)"
+published = "+0.0325"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "overlap_tokens", corpus = "mldr_de_3k_slice", embedding = "ollama:bge-m3", "held_fixed.strategy" = "fast", "held_fixed.max_tokens" = 256, from_level = 0, to_level = 51 }
+why = "fast on MLDR German with bge-m3, 0 to 51 tokens of overlap, the one German re-splitter comparison that resolves"
+
+[[claim]]
+id = "size-recursive-overlap-rung-share"
+quote = "twenty of"
+published = "twenty"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", resolved = true, corpus = "@mldr", "held_fixed.strategy" = "recursive", "held_fixed.overlap_tokens" = [10, 15] }
+why = "resolved recursive 256-against-512 comparisons at the 10- and 15-token overlap rungs, both MLDR corpora"
+
+[[claim]]
+id = "mldr-en-semantic-losses"
+quote = "`semantic` leads**: 9 wins, 2 losses, 18 ties"
+published = "2"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", unfavoured_level = "semantic" }
+why = "resolved English strategy comparisons semantic lost, both to recursive for the qwen3 models at cap256"
+
+[[claim]]
+id = "mldr-en-semantic-over-recursive-cap256-potion-8m"
+quote = "`potion-base-8M` (+0.0228), and loses its only two comparisons"
+published = "+0.0228"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", embedding = "model2vec:potion-base-8M", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic" }
+why = "semantic over recursive at cap256 for the one small model that resolves"
+
+[[claim]]
+id = "mldr-en-semantic-loss-to-recursive-cap256"
+quote = "by 0.0162 each"
+published = "0.0162"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic", unfavoured_level = "semantic" }
+why = "the size of semantic's two cap256 losses to recursive; both qwen3 models lose by the same 0.0162, so the max equals each"
+
+[[claim]]
+id = "mldr-de-strategy-resolved"
+quote = "**On MLDR German nine comparisons separate"
+published = "nine"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "mldr_de_3k_slice" }
+why = "resolved strategy comparisons on MLDR German"
+
+[[claim]]
+id = "mldr-de-semantic-losses"
+quote = "and `semantic` loses seven of"
+published = "seven"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "mldr_de_3k_slice", unfavoured_level = "semantic" }
+why = "of those nine, the ones semantic lost"
+
+[[claim]]
+id = "mldr-de-semantic-loss-bge-small"
+quote = "to `recursive` for `bge-small` (0.0414)"
+published = "0.0414"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", corpus = "mldr_de_3k_slice", embedding = "fastembed:bge-small", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic" }
+why = "recursive over semantic on German for bge-small"
+
+[[claim]]
+id = "mldr-de-semantic-loss-qwen3-4b"
+quote = "for both qwen3 models (0.0522 and 0.0529)"
+published = "0.0522"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", corpus = "mldr_de_3k_slice", embedding = "ollama:qwen3-embedding-4b", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic" }
+why = "recursive over semantic on German for qwen3-embedding-4b"
+
+[[claim]]
+id = "mldr-de-semantic-loss-qwen3-8b"
+quote = "for both qwen3 models (0.0522 and 0.0529)"
+published = "0.0529"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", corpus = "mldr_de_3k_slice", embedding = "ollama:qwen3-embedding-8b", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic" }
+why = "recursive over semantic on German for qwen3-embedding-8b"
+
+[[claim]]
+id = "mldr-de-semantic-loss-resplitters-min"
+quote = "to `fast` and `markdown` for the qwen3 models by 0.048 to 0.053"
+published = "0.048"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", resolved = true, corpus = "mldr_de_3k_slice", unfavoured_level = "semantic", favoured_level = "@resplitters" }
+why = "the smallest of semantic's German losses to a re-splitter"
+
+[[claim]]
+id = "mldr-de-semantic-loss-resplitters-max"
+quote = "to `fast` and `markdown` for the qwen3 models by 0.048 to 0.053"
+published = "0.053"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", resolved = true, corpus = "mldr_de_3k_slice", unfavoured_level = "semantic", favoured_level = "@resplitters" }
+why = "and the largest"
+
+[[claim]]
+id = "mldr-de-fast-over-recursive-o51"
+quote = "The other two are `fast` over `recursive` (0.0360)"
+published = "0.0360"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", corpus = "mldr_de_3k_slice", embedding = "ollama:bge-m3", "held_fixed.overlap_tokens" = 51, from_level = "fast", to_level = "recursive" }
+why = "fast over recursive on German with bge-m3 at 51 tokens of overlap"
+
+[[claim]]
+id = "mldr-de-fast-over-markdown-o51"
+quote = "and over `markdown` (0.0202)"
+published = "0.0202"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", corpus = "mldr_de_3k_slice", embedding = "ollama:bge-m3", "held_fixed.overlap_tokens" = 51, from_level = "fast", to_level = "markdown" }
+why = "fast over markdown on German with bge-m3 at 51 tokens of overlap"
+
+[[claim]]
+id = "mldr-en-markdown-over-fast"
+quote = "and 14 of the wins are over `fast`"
+published = "14"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", favoured_level = "markdown", unfavoured_level = "fast" }
+why = "markdown's resolved wins over fast on MLDR English, across the overlap rungs"
+
+[[claim]]
+id = "mldr-en-markdown-over-fast-min"
+quote = "for four embedders, by +0.005 to +0.012"
+published = "+0.005"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", favoured_level = "markdown", unfavoured_level = "fast" }
+why = "the smallest of those margins (0.0051)"
+
+[[claim]]
+id = "mldr-en-markdown-over-fast-max"
+quote = "for four embedders, by +0.005 to +0.012"
+published = "+0.012"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", resolved = true, corpus = "mldr_en_8k_slice", favoured_level = "markdown", unfavoured_level = "fast" }
+why = "and the largest (0.0118)"
+
+[[claim]]
+id = "breakpoint-resolved-mldr-de"
+quote = "36 of the 43 times on MLDR German"
+published = "36"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", resolved = true, corpus = "mldr_de_3k_slice" }
+why = "resolved breakpoint-model comparisons on MLDR German"
+
+[[claim]]
+id = "breakpoint-e5-wins"
+quote = "`e5-large`, which wins twice"
+published = "twice"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", resolved = true, favoured_level = "e5-large", corpus = "@fit_corpora" }
+why = "resolved breakpoint-model comparisons e5-large came out ahead in"
+
+[[claim]]
+id = "breakpoint-default-comparisons"
+quote = "profile at hint256 on MLDR English with each of the five, 45 comparisons"
+published = "45"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", to_cell = "@default_breakpoint_cells" }
+why = "comparisons whose one side is a plain semantic profile, cut with chonkie's default breakpoint model; the exporter records that level as null, so the claim names the nine plain cells"
+
+[[claim]]
+id = "breakpoint-default-losses-de"
+quote = "loses every one of the 11 that resolve"
+published = "11"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", resolved = true, corpus = "mldr_de_3k_slice", to_cell = "@default_breakpoint_cells", favoured_end = "low" }
+why = "resolved German comparisons against the default in which the named model (the low end after orientation) won; all 12 German resolutions"
+
+[[claim]]
+id = "breakpoint-default-losses-de-min"
+quote = "hints, by 0.039 to 0.066"
+published = "0.039"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "breakpoint_model", resolved = true, corpus = "mldr_de_3k_slice", to_cell = "@default_breakpoint_cells", favoured_level = ["bge-m3", "jina-v3"] }
+why = "the smallest margin bge-m3 or jina-v3 beat the default by on German (0.0394)"
+
+[[claim]]
+id = "breakpoint-default-losses-de-max"
+quote = "hints, by 0.039 to 0.066"
+published = "0.066"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "breakpoint_model", resolved = true, corpus = "mldr_de_3k_slice", to_cell = "@default_breakpoint_cells", favoured_level = ["bge-m3", "jina-v3"] }
+why = "and the largest (0.0658)"
+
+[[claim]]
+id = "breakpoint-default-ties-en"
+quote = "On MLDR English it ties 24 of 25"
+published = "24"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", resolved = false, corpus = "mldr_en_8k_slice", to_cell = "@default_breakpoint_cells" }
+why = "unresolved English comparisons against the default"
+
+[[claim]]
+id = "breakpoint-default-win-en"
+quote = "hint512 for `qwen3-embedding-8b` (+0.0173)"
+published = "+0.0173"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+where = { axis = "breakpoint_model", resolved = true, corpus = "mldr_en_8k_slice", to_cell = "@default_breakpoint_cells" }
+why = "the one English comparison against the default that resolves: e5-large to the default at hint512 for qwen3-embedding-8b, positive because the default (the high end after orientation) won"
+
+# ---------------------------------------------------------------- heading markup on MLDR English
+
+# The paired marked-minus-unmarked effect per strategy and embedder, and the twin slice's own facts.
+# The twin is a re-rendering of mldr_en_8k_slice, not a corpus of its own, so it never joins
+# fit_corpora; it speaks only through these two rowsets.
+[rowsets.mdstruct]
+source = "markdown-structure-effect.json"
+path = "effects"
+
+[rowsets.mdstruct_slice]
+source = "markdown-structure-effect.json"
+path = "slice"
+
+[[claim]]
+id = "mdstruct-headline-resolved"
+quote = "`markdown` scored lower for all six embedders, resolved for two, both qwen3 models"
+published = "two"
+rows = "mdstruct"
+reduce = "count"
+where = { strategy = "markdown", resolved = true }
+why = "marked-minus-unmarked markdown pairs whose interval excludes zero; the sign of all six is pinned by mdstruct-markdown-max"
+
+[[claim]]
+id = "mdstruct-headline-six"
+quote = "`markdown` scored lower for all six embedders, resolved for two, both qwen3 models"
+published = "six"
+rows = "mdstruct"
+reduce = "count"
+where = { strategy = "markdown" }
+why = "one markdown row per embedder; that all six are below zero is mdstruct-markdown-max's job"
+
+[[claim]]
+id = "mdstruct-alt-pairs"
+quote = "for 24 strategy and embedder pairs on the MLDR English twin"
+published = "24"
+rows = "mdstruct"
+reduce = "count"
+where = { n_shared = 800 }
+why = "every marked/unmarked pair the chart draws; each is scored over the twins' 800 shared queries"
+
+[[claim]]
+id = "mdstruct-alt-resolved"
+quote = "on the MLDR English twin, 4 of them resolved"
+published = "4"
+rows = "mdstruct"
+reduce = "count"
+where = { resolved = true }
+why = "pairs whose 95 percent interval excludes zero, all strategies"
+
+[[claim]]
+id = "mdstruct-rule-max-chars"
+quote = "a line of at most 79 characters with no terminal punctuation"
+published = "79"
+rows = "mdstruct_slice"
+reduce = "value"
+field = "rule.max_chars"
+where = { corpus = "mldr_en_8k_md_slice" }
+why = "the longest line the heading rule accepts, from the builder's recorded rule"
+
+[[claim]]
+id = "mdstruct-marked-lines"
+quote = "55,203 headings in 7,585 of the 8,000 documents"
+published = "55,203"
+rows = "mdstruct_slice"
+reduce = "value"
+field = "marked_lines"
+where = { corpus = "mldr_en_8k_md_slice" }
+why = "lines the rule marked as headings across the twin slice"
+
+[[claim]]
+id = "mdstruct-marked-docs"
+quote = "55,203 headings in 7,585 of the 8,000 documents"
+published = "7,585"
+rows = "mdstruct_slice"
+reduce = "value"
+field = "marked_docs"
+where = { corpus = "mldr_en_8k_md_slice" }
+why = "documents with at least one marked heading"
+
+[[claim]]
+id = "mdstruct-total-docs"
+quote = "55,203 headings in 7,585 of the 8,000 documents"
+published = "8,000"
+rows = "mdstruct_slice"
+reduce = "value"
+field = "total"
+where = { corpus = "mldr_en_8k_md_slice" }
+why = "documents in the slice, marked or not"
+
+[[claim]]
+id = "mdstruct-sample-size"
+quote = "In a seeded sample of 200 marked lines,"
+published = "200"
+rows = "mdstruct_slice"
+reduce = "value"
+field = "sample_judged"
+where = { corpus = "mldr_en_8k_md_slice" }
+why = "marked lines a reviewer judged, from the seeded heading sample"
+
+[[claim]]
+id = "mdstruct-sample-wrong"
+quote = "3 were judged not to be headings"
+published = "3"
+rows = "mdstruct_slice"
+reduce = "value"
+field = "sample_judged_wrong"
+where = { corpus = "mldr_en_8k_md_slice" }
+why = "sampled lines judged not to be headings"
+
+[[claim]]
+id = "mdstruct-queries"
+quote = "the same documents, the same 800 queries"
+published = "800"
+rows = "mdstruct"
+reduce = "max"
+field = "n_shared"
+where = { strategy = "markdown" }
+why = "queries every pair shares; the paired script refuses twins whose query ids differ"
+
+[[claim]]
+id = "mdstruct-embedders"
+quote = "for the six embedders the strategy table carries"
+published = "six"
+rows = "mdstruct"
+reduce = "count"
+where = { strategy = "markdown" }
+why = "one markdown row per embedder"
+
+[[claim]]
+id = "mdstruct-markdown-max"
+quote = "from -0.0029 (`bge-m3`) to -0.0179 (`qwen3-embedding-4b`) nDCG@10"
+published = "-0.0029"
+rows = "mdstruct"
+reduce = "max"
+field = "mean_delta"
+where = { strategy = "markdown" }
+why = "the smallest markdown loss; as the MAX over all six markdown rows it also pins that every one is negative (bge-m3)"
+
+[[claim]]
+id = "mdstruct-markdown-min"
+quote = "from -0.0029 (`bge-m3`) to -0.0179 (`qwen3-embedding-4b`) nDCG@10"
+published = "-0.0179"
+rows = "mdstruct"
+reduce = "min"
+field = "mean_delta"
+where = { strategy = "markdown" }
+why = "the largest markdown loss (qwen3-embedding-4b)"
+
+[[claim]]
+id = "mdstruct-markdown-resolved"
+quote = "Of the six, two resolve, the qwen3 models"
+published = "two"
+rows = "mdstruct"
+reduce = "count"
+where = { strategy = "markdown", resolved = true, embedding = ["ollama:qwen3-embedding-4b", "ollama:qwen3-embedding-8b"] }
+why = "resolved markdown pairs restricted to the two qwen3 models; mdstruct-headline-resolved pins that no other embedder resolves"
+
+[[claim]]
+id = "mdstruct-markdown-8b"
+quote = "at -0.0179 and -0.0091 (`qwen3-embedding-8b`)"
+published = "-0.0091"
+rows = "mdstruct"
+reduce = "value"
+field = "mean_delta"
+where = { strategy = "markdown", embedding = "ollama:qwen3-embedding-8b", resolved = true }
+why = "the second resolved markdown loss"
+
+[[claim]]
+id = "mdstruct-markdown-4b"
+quote = "at -0.0179 and -0.0091 (`qwen3-embedding-8b`)"
+published = "-0.0179"
+rows = "mdstruct"
+reduce = "value"
+field = "mean_delta"
+where = { strategy = "markdown", embedding = "ollama:qwen3-embedding-4b", resolved = true }
+why = "the first resolved markdown loss"
+
+[[claim]]
+id = "mdstruct-recursive-resolved"
+quote = "one of its six rows resolves, `potion-retrieval-32M` at -0.0010"
+published = "one"
+rows = "mdstruct"
+reduce = "count"
+where = { strategy = "recursive", resolved = true }
+why = "resolved recursive pairs"
+
+[[claim]]
+id = "mdstruct-recursive-value"
+quote = "resolves, `potion-retrieval-32M` at -0.0010, well under the material floor"
+published = "-0.0010"
+rows = "mdstruct"
+reduce = "value"
+field = "mean_delta"
+where = { strategy = "recursive", resolved = true }
+why = "the one resolved recursive pair, potion-retrieval-32M; a fifth of the 0.005 floor"
+
+[[claim]]
+id = "mdstruct-recursive-lo"
+quote = "between -0.0021 and +0.0011."
+published = "-0.0021"
+rows = "mdstruct"
+reduce = "min"
+field = "mean_delta"
+where = { strategy = "recursive", resolved = false }
+why = "lowest of the five unresolved recursive pairs (bge-m3)"
+
+[[claim]]
+id = "mdstruct-recursive-hi"
+quote = "between -0.0021 and +0.0011."
+published = "+0.0011"
+rows = "mdstruct"
+reduce = "max"
+field = "mean_delta"
+where = { strategy = "recursive", resolved = false }
+why = "highest of the five unresolved recursive pairs (potion-base-8M)"
+
+[[claim]]
+id = "mdstruct-fast-resolved"
+quote = "rules, resolves once, positive and under the floor"
+published = "once"
+rows = "mdstruct"
+reduce = "count"
+where = { strategy = "fast", resolved = true }
+why = "resolved fast pairs"
+
+[[claim]]
+id = "mdstruct-fast-value"
+quote = "(+0.0036 for `potion-retrieval-32M`)"
+published = "+0.0036"
+rows = "mdstruct"
+reduce = "value"
+field = "mean_delta"
+where = { strategy = "fast", resolved = true, embedding = "model2vec:potion-retrieval-32M" }
+why = "the one resolved fast pair"
+
+[[claim]]
+id = "mdstruct-fast-lo"
+quote = "other five rows lie between -0.0042 and +0.0027"
+published = "-0.0042"
+rows = "mdstruct"
+reduce = "min"
+field = "mean_delta"
+where = { strategy = "fast", resolved = false }
+why = "lowest unresolved fast pair (qwen3-embedding-4b)"
+
+[[claim]]
+id = "mdstruct-fast-hi"
+quote = "other five rows lie between -0.0042 and +0.0027"
+published = "+0.0027"
+rows = "mdstruct"
+reduce = "max"
+field = "mean_delta"
+where = { strategy = "fast", resolved = false }
+why = "highest unresolved fast pair (bge-m3)"
+
+[[claim]]
+id = "mdstruct-semantic-unresolved"
+quote = "resolve for any of its six embedders"
+published = "six"
+rows = "mdstruct"
+reduce = "count"
+where = { strategy = "semantic", resolved = false }
+why = "unresolved semantic pairs: all six, so none resolves"
+
+[[claim]]
+id = "mdstruct-semantic-lo"
+quote = "its rows lie between -0.0048 and +0.0013"
+published = "-0.0048"
+rows = "mdstruct"
+reduce = "min"
+field = "mean_delta"
+where = { strategy = "semantic" }
+why = "lowest semantic pair (potion-base-8M)"
+
+[[claim]]
+id = "mdstruct-semantic-hi"
+quote = "its rows lie between -0.0048 and +0.0013"
+published = "+0.0013"
+rows = "mdstruct"
+reduce = "max"
+field = "mean_delta"
+where = { strategy = "semantic" }
+why = "highest semantic pair (qwen3-embedding-8b)"
+
+[[claim]]
+id = "mdstruct-markdown-marked-heading-start-share"
+quote = "28.8 percent of its chunks begin at a heading, and it makes 160,677 chunks against 149,082"
+published = "28.8"
+rows = "mdstruct"
+reduce = "value"
+field = "marked_heading_start_share"
+scale = 100
+where = { strategy = "markdown", embedding = "fastembed:bge-base" }
+why = "marked_heading_start_share as a percentage for the markdown twin pair; a chunk fact, identical across embedders"
+
+[[claim]]
+id = "mdstruct-markdown-marked-rows"
+quote = "28.8 percent of its chunks begin at a heading, and it makes 160,677 chunks against 149,082"
+published = "160,677"
+rows = "mdstruct"
+reduce = "value"
+field = "marked_rows"
+where = { strategy = "markdown", embedding = "fastembed:bge-base" }
+why = "marked_rows for the markdown twin pair; a chunk fact, identical across embedders, read off one row"
+
+[[claim]]
+id = "mdstruct-markdown-unmarked-rows"
+quote = "28.8 percent of its chunks begin at a heading, and it makes 160,677 chunks against 149,082"
+published = "149,082"
+rows = "mdstruct"
+reduce = "value"
+field = "unmarked_rows"
+where = { strategy = "markdown", embedding = "fastembed:bge-base" }
+why = "unmarked_rows for the markdown twin pair; a chunk fact, identical across embedders, read off one row"
+
+[[claim]]
+id = "mdstruct-markdown-marked-token-p50"
+quote = "with a median of 195 tokens against 208"
+published = "195"
+rows = "mdstruct"
+reduce = "value"
+field = "marked_token_p50"
+where = { strategy = "markdown", embedding = "fastembed:bge-base" }
+why = "marked_token_p50 for the markdown twin pair; a chunk fact, identical across embedders, read off one row"
+
+[[claim]]
+id = "mdstruct-markdown-unmarked-token-p50"
+quote = "with a median of 195 tokens against 208"
+published = "208"
+rows = "mdstruct"
+reduce = "value"
+field = "unmarked_token_p50"
+where = { strategy = "markdown", embedding = "fastembed:bge-base" }
+why = "unmarked_token_p50 for the markdown twin pair; a chunk fact, identical across embedders, read off one row"
+
+[[claim]]
+id = "mdstruct-recursive-marked-heading-start-share"
+quote = "section, so 1.0 percent of its chunks begin at a heading"
+published = "1.0"
+rows = "mdstruct"
+reduce = "value"
+field = "marked_heading_start_share"
+scale = 100
+where = { strategy = "recursive", embedding = "fastembed:bge-base" }
+why = "marked_heading_start_share as a percentage for the recursive twin pair; a chunk fact, identical across embedders"
+
+[[claim]]
+id = "mdstruct-recursive-unmarked-rows"
+quote = "its count moves from 148,008 to 148,189, and its median stays at 214"
+published = "148,008"
+rows = "mdstruct"
+reduce = "value"
+field = "unmarked_rows"
+where = { strategy = "recursive", embedding = "fastembed:bge-base" }
+why = "unmarked_rows for the recursive twin pair; a chunk fact, identical across embedders, read off one row"
+
+[[claim]]
+id = "mdstruct-recursive-marked-rows"
+quote = "its count moves from 148,008 to 148,189, and its median stays at 214"
+published = "148,189"
+rows = "mdstruct"
+reduce = "value"
+field = "marked_rows"
+where = { strategy = "recursive", embedding = "fastembed:bge-base" }
+why = "marked_rows for the recursive twin pair; a chunk fact, identical across embedders, read off one row"
+
+[[claim]]
+id = "mdstruct-recursive-marked-token-p50"
+quote = "its count moves from 148,008 to 148,189, and its median stays at 214"
+published = "214"
+rows = "mdstruct"
+reduce = "value"
+field = "marked_token_p50"
+where = { strategy = "recursive", embedding = "fastembed:bge-base" }
+why = "marked_token_p50 for the recursive twin pair; a chunk fact, identical across embedders, read off one row"
+
+[[claim]]
+id = "mdstruct-fast-marked-heading-start-share"
+quote = "13.6 percent of its chunks at a heading with almost no change in count"
+published = "13.6"
+rows = "mdstruct"
+reduce = "value"
+field = "marked_heading_start_share"
+scale = 100
+where = { strategy = "fast", embedding = "fastembed:bge-base" }
+why = "marked_heading_start_share as a percentage for the fast twin pair; a chunk fact, identical across embedders"
+
+[[claim]]
+id = "mdstruct-fast-marked-rows"
+quote = "(150,546 against 150,311)"
+published = "150,546"
+rows = "mdstruct"
+reduce = "value"
+field = "marked_rows"
+where = { strategy = "fast", embedding = "fastembed:bge-base" }
+why = "marked_rows for the fast twin pair; a chunk fact, identical across embedders, read off one row"
+
+[[claim]]
+id = "mdstruct-fast-unmarked-rows"
+quote = "(150,546 against 150,311)"
+published = "150,311"
+rows = "mdstruct"
+reduce = "value"
+field = "unmarked_rows"
+where = { strategy = "fast", embedding = "fastembed:bge-base" }
+why = "unmarked_rows for the fast twin pair; a chunk fact, identical across embedders, read off one row"
+
+[[claim]]
+id = "mdstruct-fast-marked-token-p50"
+quote = "or median (208 either way)"
+published = "208"
+rows = "mdstruct"
+reduce = "value"
+field = "marked_token_p50"
+where = { strategy = "fast", embedding = "fastembed:bge-base" }
+why = "marked_token_p50 for the fast twin pair; a chunk fact, identical across embedders, read off one row"
+
+[[claim]]
+id = "mdstruct-semantic-marked-heading-start-share"
+quote = "`semantic` starts 2.7 percent there and keeps its 46-token median"
+published = "2.7"
+rows = "mdstruct"
+reduce = "value"
+field = "marked_heading_start_share"
+scale = 100
+where = { strategy = "semantic", embedding = "fastembed:bge-base" }
+why = "marked_heading_start_share as a percentage for the semantic twin pair; a chunk fact, identical across embedders"
+
+[[claim]]
+id = "mdstruct-semantic-marked-token-p50"
+quote = "`semantic` starts 2.7 percent there and keeps its 46-token median"
+published = "46"
+rows = "mdstruct"
+reduce = "value"
+field = "marked_token_p50"
+where = { strategy = "semantic", embedding = "fastembed:bge-base" }
+why = "marked_token_p50 for the semantic twin pair; a chunk fact, identical across embedders, read off one row"
+
+[[claim]]
+id = "mdstruct-markdown-row-growth"
+quote = "on the original, 7.8 percent more"
+published = "7.8"
+rows = "mdstruct"
+reduce = "percent_change"
+field = "marked_rows"
+against_field = "unmarked_rows"
+where = { strategy = "markdown", embedding = "fastembed:bge-base" }
+why = "marked against unmarked markdown chunk count, (160,677 - 149,082) / 149,082"
+
+[[claim]]
+id = "mdstruct-what-to-set"
+quote = "the markup cost `markdown` up to 0.018 nDCG@10"
+published = "0.018"
+rows = "mdstruct"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { strategy = "markdown" }
+why = "the largest markdown loss to heading markup, qwen3-embedding-4b's -0.0179"
+
+[[claim]]
+id = "breakpoint-default-ties-en-total"
+quote = "On MLDR English it ties 24 of 25"
+published = "25"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", corpus = "mldr_en_8k_slice", to_cell = "@default_breakpoint_cells" }
+why = "every English comparison against the default, the denominator of the ties"
+
+[[claim]]
+id = "mdstruct-markdown-ci-hi-bge-base"
+quote = "its upper end rounds to +0.0000 for `bge-base` and `potion-retrieval-32M`"
+published = "+0.0000"
+rows = "mdstruct"
+reduce = "value"
+field = "ci_hi"
+where = { strategy = "markdown", embedding = "fastembed:bge-base" }
+why = "upper end of bge-base's markdown interval; stored at four places as 0.0, unresolved because the unrounded end is not below zero"
+
+[[claim]]
+id = "mdstruct-markdown-ci-hi-potion-retrieval"
+quote = "its upper end rounds to +0.0000 for `bge-base` and `potion-retrieval-32M`"
+published = "+0.0000"
+rows = "mdstruct"
+reduce = "value"
+field = "ci_hi"
+where = { strategy = "markdown", embedding = "model2vec:potion-retrieval-32M" }
+why = "upper end of potion-retrieval-32M's markdown interval, the same rounding"
+
+[[claim]]
+id = "mdstruct-markdown-unresolved-four"
+quote = "four the interval spans zero, and"
+published = "four"
+rows = "mdstruct"
+reduce = "count"
+where = { strategy = "markdown", resolved = false }
+why = "markdown pairs whose interval does not exclude zero"
+
+[[claim]]
+id = "mdstruct-recursive-unmarked-token-p50"
+quote = "its count moves from 148,008 to 148,189, and its median stays at 214"
+published = "214"
+rows = "mdstruct"
+reduce = "value"
+field = "unmarked_token_p50"
+where = { strategy = "recursive", embedding = "fastembed:bge-base" }
+why = "the unmarked recursive median, the 'either way' of the sentence"
+
+[[claim]]
+id = "mdstruct-fast-unmarked-token-p50"
+quote = "or median (208 either way)"
+published = "208"
+rows = "mdstruct"
+reduce = "value"
+field = "unmarked_token_p50"
+where = { strategy = "fast", embedding = "fastembed:bge-base" }
+why = "the unmarked fast median"
+
+[[claim]]
+id = "mdstruct-semantic-unmarked-token-p50"
+quote = "`semantic` starts 2.7 percent there and keeps its 46-token median"
+published = "46"
+rows = "mdstruct"
+reduce = "value"
+field = "unmarked_token_p50"
+where = { strategy = "semantic", embedding = "fastembed:bge-base" }
+why = "the unmarked semantic median: 'keeps' means marked and unmarked are both 46"
+
+[[claim]]
+id = "mdstruct-shape-semantic-median"
+quote = "`semantic` at hint256, whose median chunk is 46 tokens"
+published = "46"
+rows = "mdstruct"
+reduce = "value"
+field = "unmarked_token_p50"
+where = { strategy = "semantic", embedding = "fastembed:bge-base" }
+why = "semantic's median on the original MLDR English slice, which is the unmarked twin"
+
+[[claim]]
+id = "mdstruct-shape-qwen3-count"
+quote = "loses to `recursive` for exactly the two qwen3 models, 0.0162 apiece and resolved"
+published = "two"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic", resolved = true, unfavoured_level = "semantic" }
+why = "every resolved cap256 loss of semantic to recursive on MLDR English, no embedder filter, so 'exactly' is pinned; the two are the qwen3 models (mdstruct-shape-qwen3-names)"
+
+[[claim]]
+id = "mdstruct-shape-qwen3-names"
+quote = "loses to `recursive` for exactly the two qwen3 models, 0.0162 apiece and resolved"
+published = "two"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic", resolved = true, unfavoured_level = "semantic", embedding = ["ollama:qwen3-embedding-4b", "ollama:qwen3-embedding-8b"] }
+why = "the same count restricted to the two qwen3 models; equal to the unrestricted one, so those are the two"
+
+[[claim]]
+id = "mdstruct-shape-qwen3-margin"
+quote = "loses to `recursive` for exactly the two qwen3 models, 0.0162 apiece and resolved"
+published = "0.0162"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic", resolved = true, unfavoured_level = "semantic" }
+why = "the smaller of the two margins; mldr-en-semantic-loss-to-recursive-cap256 pins the larger, both 0.0162"
+
+[[claim]]
+id = "strategy-cap256-semantic-recursive-ties"
+quote = "at cap256 it ties `recursive` for four of seven embedders"
+published = "four"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic", resolved = false }
+why = "unresolved cap256 semantic-recursive comparisons on MLDR English, one per embedder (default breakpoint model; the strategy axis pairs no other)"
+
+[[claim]]
+id = "strategy-cap256-semantic-recursive-total"
+quote = "at cap256 it ties `recursive` for four of seven embedders"
+published = "seven"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic" }
+why = "every cap256 semantic-recursive comparison on MLDR English, one per embedder"
+
+[[claim]]
+id = "what-to-set-semantic-recursive-ties"
+quote = "ties `recursive` at 256 for four of seven embedders, wins for one"
+published = "four"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic", resolved = false }
+why = "the What to set restatement of strategy-cap256-semantic-recursive-ties"
+
+[[claim]]
+id = "what-to-set-semantic-recursive-total"
+quote = "ties `recursive` at 256 for four of seven embedders, wins for one"
+published = "seven"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic" }
+why = "the What to set restatement of strategy-cap256-semantic-recursive-total"
+
+[[claim]]
+id = "what-to-set-semantic-recursive-win"
+quote = "ties `recursive` at 256 for four of seven embedders, wins for one"
+published = "one"
+rows = "effects"
+reduce = "count"
+where = { axis = "strategy", corpus = "mldr_en_8k_slice", "held_fixed.max_tokens" = 256, from_level = "recursive", to_level = "semantic", resolved = true, favoured_level = "semantic" }
+why = "the one cap256 comparison semantic wins on MLDR English (potion-base-8M)"

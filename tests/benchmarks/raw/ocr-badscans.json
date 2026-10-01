@@ -1,0 +1,14 @@
+{
+  "_about": "olmOCR-bench Old-Scans split (old_scans.jsonl: 98 degraded-scan PDFs, 526 content unit-tests) scored per engine. Measured on px-semdex-test (CT 60300, proxmox06, RTX 4070 Ti SUPER). VLM served via vLLM 0.24.0; mineru/docling via their HTTP containers; tesseract 5.5.0 via pdftoppm 300dpi. old_scans_math deferred (needs Playwright/KaTeX). Latency not comparable here (Ivy-Bridge CPU, no AVX2); this table is quality only.",
+  "split": "old_scans",
+  "n_pdfs": 98,
+  "n_content_tests": 526,
+  "results": [
+    {"engine": "olmocr", "kind": "vlm", "model": "olmOCR-2-7B-1025-FP8", "content_pass": 0.437, "content_passed": 230, "present": 0.398, "order": 0.305, "absent": 0.929, "baseline": 0.985},
+    {"engine": "mineru", "kind": "incumbent", "model": "alexsuntop/mineru:3.1.0", "content_pass": 0.384, "content_passed": 202, "present": 0.315, "order": 0.277, "absent": 0.929, "baseline": 0.978},
+    {"engine": "lightonocr", "kind": "vlm", "model": "LightOnOCR-1B-1025", "content_pass": 0.350, "content_passed": 184, "present": 0.319, "order": 0.215, "absent": 0.814, "baseline": 1.000},
+    {"engine": "tesseract", "kind": "incumbent", "model": "tesseract 5.5.0", "content_pass": 0.211, "content_passed": 111, "present": 0.140, "order": 0.107, "absent": 0.757, "baseline": 0.813},
+    {"engine": "docling", "kind": "incumbent", "model": "docling-serve:latest", "content_pass": 0.179, "content_passed": 94, "present": 0.072, "order": 0.034, "absent": 0.971, "baseline": 0.925}
+  ],
+  "pending_engines": ["dots.ocr (built for transformers 4.51; the working vLLM 0.24.0 ships transformers 5.13, so its remote-code processor registration breaks - needs a dedicated older-vLLM env)", "deepseek-ocr (deepseek_vl_v2, same-era custom arch - needs a dedicated older-vLLM env)"]
+}

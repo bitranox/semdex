@@ -1,0 +1,30 @@
+[
+  {
+    "model": "qwen3-embedding:4b",
+    "provider": "ollama",
+    "dim": 2560,
+    "quantization": "Q4_K_M",
+    "corpus": "nfcorpus",
+    "slice": "150 docs / 20 queries",
+    "ndcg@10": 0.6672,
+    "recall@10": 0.151,
+    "mrr": 0.975,
+    "p@1": 0.95,
+    "gpu_docs_per_s_warm": 51.3,
+    "device": "RTX 4070 Ti SUPER (GPU-backed ollama host)"
+  },
+  {
+    "model": "qwen3-embedding:8b",
+    "provider": "ollama",
+    "dim": 4096,
+    "quantization": "Q4_K_M",
+    "corpus": "nfcorpus",
+    "slice": "150 docs / 20 queries",
+    "ndcg@10": 0.6449,
+    "recall@10": 0.148,
+    "mrr": 0.9563,
+    "p@1": 0.95,
+    "gpu_docs_per_s_warm": 39.5,
+    "device": "RTX 4070 Ti SUPER (GPU-backed ollama host)"
+  }
+]

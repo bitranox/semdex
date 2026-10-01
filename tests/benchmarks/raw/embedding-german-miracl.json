@@ -1,0 +1,108 @@
+{
+  "corpus": "miracl/de/dev (native German, human-judged)",
+  "methodology": "2000-doc judged pool (30 queries + their judged docs + distractor fill), cosine over one-vector-per-passage. Ungated one-off reference (needs a GPU ollama host + the 15.9M-doc corpus); NOT comparable in absolute nDCG to the English NFCorpus model matrix - compare models WITHIN this table.",
+  "n_queries": 30,
+  "n_docs": 2000,
+  "results": [
+    {
+      "label": "ollama:qwen3-embedding-8b",
+      "dim": 4096,
+      "ndcg@10": 0.9911,
+      "recall@10": 0.9889,
+      "mrr": 1.0,
+      "p@1": 1.0,
+      "embed_s": 102.6,
+      "docs_per_s": 19.5
+    },
+    {
+      "label": "ollama:qwen3-embedding-4b",
+      "dim": 2560,
+      "ndcg@10": 0.9899,
+      "recall@10": 0.9889,
+      "mrr": 1.0,
+      "p@1": 1.0,
+      "embed_s": 74.6,
+      "docs_per_s": 26.8
+    },
+    {
+      "label": "ollama:nomic-embed-text",
+      "dim": 768,
+      "ndcg@10": 0.8346,
+      "recall@10": 0.8378,
+      "mrr": 0.8833,
+      "p@1": 0.8667,
+      "embed_s": 20.5,
+      "docs_per_s": 97.4
+    },
+    {
+      "label": "ollama:mxbai-embed-large",
+      "dim": 1024,
+      "ndcg@10": 0.8252,
+      "recall@10": 0.8608,
+      "mrr": 0.8556,
+      "p@1": 0.8333,
+      "embed_s": 25.5,
+      "docs_per_s": 78.3
+    },
+    {
+      "label": "fastembed:bge-base",
+      "dim": 768,
+      "ndcg@10": 0.7466,
+      "recall@10": 0.7597,
+      "mrr": 0.8,
+      "p@1": 0.7667,
+      "embed_s": 382.6,
+      "docs_per_s": 5.2
+    },
+    {
+      "label": "fastembed:bge-small",
+      "dim": 384,
+      "ndcg@10": 0.742,
+      "recall@10": 0.7578,
+      "mrr": 0.8,
+      "p@1": 0.7667,
+      "embed_s": 152.5,
+      "docs_per_s": 13.1
+    },
+    {
+      "label": "st:all-MiniLM-L6-v2",
+      "dim": 384,
+      "ndcg@10": 0.6835,
+      "recall@10": 0.7033,
+      "mrr": 0.7242,
+      "p@1": 0.7,
+      "embed_s": 14.8,
+      "docs_per_s": 135.4
+    },
+    {
+      "label": "ollama:all-minilm",
+      "dim": 384,
+      "ndcg@10": 0.6835,
+      "recall@10": 0.7033,
+      "mrr": 0.7242,
+      "p@1": 0.7,
+      "embed_s": 9.6,
+      "docs_per_s": 207.8
+    },
+    {
+      "label": "model2vec:potion-retrieval-32M",
+      "dim": 512,
+      "ndcg@10": 0.623,
+      "recall@10": 0.6593,
+      "mrr": 0.6759,
+      "p@1": 0.6333,
+      "embed_s": 0.1,
+      "docs_per_s": 17017.4
+    },
+    {
+      "label": "model2vec:potion-base-8M",
+      "dim": 256,
+      "ndcg@10": 0.4395,
+      "recall@10": 0.4726,
+      "mrr": 0.4993,
+      "p@1": 0.4667,
+      "embed_s": 0.1,
+      "docs_per_s": 22062.0
+    }
+  ]
+}

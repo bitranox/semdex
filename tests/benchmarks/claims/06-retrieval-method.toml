@@ -1,0 +1,187 @@
+# Claims for docs/benchmarks/06-retrieval-method.md
+#
+# Coverage is partial and is answered by reading this file beside the page, never by a green run.
+# Seeded: the dense-to-hybrid counts and range, the chunking effect it is held against, the
+# German fusion loss, the reranking depth, counts and worst case, the weakest baseline, and the
+# chunks-per-document span the reranker's single-chunk evidence is set against.
+#
+# Carried by prose the checker cannot express: "every resolved one is positive" and "all eight
+# resolved ones are negative" (a sign over a set; the generated tables list each with its
+# interval), "BM25 alone beats every CPU embedding model" (a ranking), "hybrid is not resolved as an
+# improvement over dense" on German qwen3-8b (a single row's verdict, in the generated table), and
+# "at a baseline of 0.90" (an approximation over the English first stages, 0.84 to 0.91).
+#
+# The reranking gain's correlation with the baseline, -0.674, is reproducible from the raw files
+# (Pearson r over the twelve base-to-rerank pairs, gain from chunk-knob-effects.json against the
+# base method's nDCG@10 in rerank-cross-encoder.json; r = -0.6740 when this file was seeded) but a
+# correlation joins two rowsets row by row, which this checker's one-row-a-side reducers cannot.
+#
+# Not recorded in any raw file, so unclaimable: the reranker's sanity check (38 of 40 queries,
+# mean scores +0.158 against +0.000), the reranker throughput that ruled out the larger model (3.3
+# against 13.5 pairs per second, also quoted on 08-gaps.md), and the RRF constant 60, which is the
+# scorer's default (`scripts/score_hybrid_sweep.py`, `SEMDEX_HYBRID_RRF_K`) and the use case's
+# (`_DEFAULT_RRF_K`) rather than a measurement.
+
+doc = "docs/benchmarks/06-retrieval-method.md"
+
+[sets]
+fit_corpora = ["gerdalir_de_12k_slice", "mldr_de_3k_slice", "mldr_en_8k_slice"]
+chunk_axes = ["max_tokens", "overlap_tokens", "strategy"]
+
+[rowsets.effects]
+source = "chunk-knob-effects.json"
+path = "effects"
+orient = true
+
+# One row per (corpus, embedding, method); the reranked rows carry the reranker's name and the
+# baselines carry "none".
+[rowsets.rerank_cells]
+source = "rerank-cross-encoder.json"
+path = "cells"
+
+# One row per chunk set the audit scanned, with its realized chunks per document.
+[rowsets.chunk_sets]
+source = "chunk-dimension-audit.json"
+path = "chunk_sets"
+
+# ---------------------------------------------------------------- does adding lexical retrieval help
+
+[[claim]]
+id = "method-dense-to-hybrid-count"
+quote = "anywhere in this set.** Of ten"
+published = "ten"
+rows = "effects"
+reduce = "count"
+where = { axis = "method", from_level = "dense", to_level = "hybrid" }
+why = "the dense-to-hybrid level pair on the method axis, over both fit corpora and all five embedders"
+
+[[claim]]
+id = "method-dense-to-hybrid-resolved"
+quote = "dense-to-hybrid comparisons, nine resolve and every resolved one is positive, from +0.019 to"
+published = "nine"
+rows = "effects"
+reduce = "count"
+where = { axis = "method", from_level = "dense", to_level = "hybrid", resolved = true }
+why = "how many of those ten separate at 95 percent"
+
+[[claim]]
+id = "method-dense-to-hybrid-smallest"
+quote = "dense-to-hybrid comparisons, nine resolve and every resolved one is positive, from +0.019 to"
+published = "+0.019"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+where = { axis = "method", from_level = "dense", to_level = "hybrid", resolved = true }
+why = "the smallest resolved dense-to-hybrid gain, oriented dense to hybrid so the sign is fusion's margin (English qwen3-8b)"
+
+[[claim]]
+id = "method-dense-to-hybrid-largest"
+quote = "+0.249 nDCG@10. For comparison"
+published = "+0.249"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+where = { axis = "method", from_level = "dense", to_level = "hybrid", resolved = true }
+why = "the largest resolved dense-to-hybrid gain (German potion-base-8M)"
+
+[[claim]]
+id = "method-largest-chunking-effect"
+quote = "0.16, and that one reverses sign between corpora"
+published = "0.16"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "@chunk_axes", resolved = true, corpus = "@fit_corpora" }
+why = "the largest resolved effect any chunking knob produces on the corpora that can carry a chunking claim, unsigned; the recursive ladder's 64-to-256-token step for potion-base-8M on GerDaLIR, 0.158"
+
+[[claim]]
+id = "method-fusion-loss-german-weakest"
+quote = "fusing BM25 with the weakest model costs 0.168 nDCG@10"
+published = "0.168"
+rows = "effects"
+reduce = "value"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "method", from_level = "bm25", to_level = "hybrid", corpus = "mldr_de_3k_slice", embedding = "model2vec:potion-base-8M" }
+why = "bm25 to hybrid on German with the weakest dense model, -0.1683 oriented bm25 to hybrid, unsigned because the sentence states it as a cost"
+
+# ---------------------------------------------------------------- reranking with a cross-encoder
+
+[[claim]]
+id = "rerank-depth"
+quote = "Each method's top 20 documents are reranked"
+published = "20"
+rows = "rerank_cells"
+reduce = "max"
+field = "rerank_depth"
+where = { reranker = "BAAI/bge-reranker-base" }
+why = "the shortlist depth every reranked cell was measured at; max because all twelve carry the same value"
+
+[[claim]]
+id = "rerank-comparisons"
+quote = "Of twelve comparisons, eight resolve and"
+published = "twelve"
+rows = "effects"
+reduce = "count"
+where = { axis = "method", to_level = { field = "from_level", suffix = "+rerank" } }
+why = "each base method against its OWN reranked variant: three methods, two embedders, two corpora"
+
+[[claim]]
+id = "rerank-resolved"
+quote = "Of twelve comparisons, eight resolve and"
+published = "eight"
+rows = "effects"
+reduce = "count"
+where = { axis = "method", to_level = { field = "from_level", suffix = "+rerank" }, resolved = true }
+why = "how many of those twelve separate at 95 percent; that all eight are negative is carried by the generated table"
+
+[[claim]]
+id = "rerank-worst-loss"
+quote = "resolved ones are negative**, to -0.113"
+published = "-0.113"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+where = { axis = "method", to_level = { field = "from_level", suffix = "+rerank" }, resolved = true }
+why = "the most negative resolved reranking delta, oriented base to reranked so the sign is the reranker's effect (English qwen3-8b dense)"
+
+[[claim]]
+id = "rerank-weakest-baseline"
+quote = "(0.4597). At a baseline of 0.90"
+published = "0.4597"
+rows = "rerank_cells"
+reduce = "min"
+field = "ndcg@10"
+where = { reranker = "none" }
+why = "the weakest first stage in the reranking set (German bge-base dense at depth 20), the only baseline reranking improved"
+
+[[claim]]
+id = "rerank-chunks-per-doc-english"
+quote = "across a document of 18.5 to 67 chunks on average"
+published = "18.5"
+rows = "chunk_sets"
+reduce = "value"
+field = "chunks_per_doc"
+where = { corpus = "mldr_en_8k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "realized chunks per document on MLDR English at the profile every method cell shares"
+
+[[claim]]
+id = "rerank-chunks-per-doc-german"
+quote = "across a document of 18.5 to 67 chunks on average"
+published = "67"
+rows = "chunk_sets"
+reduce = "value"
+field = "chunks_per_doc"
+where = { corpus = "mldr_de_3k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "realized chunks per document on MLDR German at the same profile"
+
+[[claim]]
+id = "rerank-depth-caveat"
+quote = "one shortlist depth, 20."
+published = "20"
+rows = "rerank_cells"
+reduce = "max"
+field = "rerank_depth"
+where = { reranker = "BAAI/bge-reranker-base" }
+why = "the shortlist depth, restated in the caveats"

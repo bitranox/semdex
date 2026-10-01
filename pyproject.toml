@@ -1,0 +1,495 @@
+[project]
+name = "semdex"
+version = "1.5.4"
+description = "Read-only, file-watching semantic-search MCP server and CLI over local files"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "rich-click>=1.9.9",
+    "lib_cli_exit_tools>=2.3.4",
+    "lib_log_rich>=6.3.7",
+    "lib_layered_config>=6.1.1",
+    "btx_lib_mail>=2.0.0",
+    "pydantic>=2.13.5",
+    "orjson>=3.12.0",
+    # Cross-OS user cache dir for the fastembed model cache (persistent default,
+    # not the reboot-wiped system temp dir fastembed uses out of the box).
+    "platformdirs>=4.12.2",
+    # Default embedding provider: light ONNX embeddings (no torch), offline after
+    # the first model download. Composition falls back to the deterministic
+    # placeholder if a model cannot be loaded.
+    "fastembed>=0.8.1",
+    # CAPPED, not a floor bump: onnxruntime 1.29.0 embeds 8.5x slower on CPU than 1.28.0
+    # (measured A/B interleaved on real GerDaLIR chunks, 886 vs 104 ms/row, bge-base).
+    # It arrives transitively through fastembed, so only an explicit cap holds it back.
+    # Re-open the cap when a release measures at parity with 1.28.0 on the same probe.
+    "onnxruntime>=1.28.0,<1.29.0",
+]
+license = { text = "MIT" }
+authors = [{ name = "bitranox", email = "bitranox@gmail.com" }]
+keywords = ["cli", "template", "config", "logging", "layered-config", "rich-click"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "License :: OSI Approved :: MIT License",
+  "Environment :: Console",
+  "Operating System :: OS Independent",
+  "Typing :: Typed",
+]
+
+# System packages required for CI runners (read by GitHub Actions workflow template)
+# Format: "apt_package_name" for Ubuntu, future: {"apt": "...", "brew": "...", "choco": "..."}
+[tool.ci]
+system-dependencies-ubuntu = []
+system-dependencies-macos = []
+system-dependencies-windows-pip = []
+system-dependencies-windows-choco = []
+os = ["ubuntu-latest", "windows-latest", "macos-latest"]
+
+[project.urls]
+Homepage = "https://github.com/bitranox/semdex"
+Repository = "https://github.com/bitranox/semdex.git"
+Issues = "https://github.com/bitranox/semdex/issues"
+
+[project.optional-dependencies]
+# Real local semantic embeddings (offline, multilingual). Heavy (pulls torch);
+# opt-in for maximum model choice. fastembed (core) is the light default; the
+# deterministic token-hash placeholder is the offline fallback.
+embed = [
+  "sentence-transformers>=6.1.0",
+]
+# Static embeddings: the lightest real provider (no torch, ~30MB model).
+model2vec = [
+  "model2vec>=0.9.0",
+]
+# Embeddings from a local ollama server's native /api/embed (no ML deps).
+ollama = [
+  "httpx>=0.28.1",
+]
+# Embeddings from any OpenAI-compatible /v1/embeddings server (hosted OpenAI,
+# ollama's /v1, or llama.cpp's llama-server). Only an HTTP client, no ML deps.
+openai = [
+  "httpx>=0.28.1",
+]
+# Embeddings from Google's native Gemini cloud API (gemini-embedding-001,
+# batchEmbedContents). Paid, api_key required (env-only). Only an HTTP client, no
+# ML deps; the model runs in Google's cloud.
+gemini = [
+  "httpx>=0.28.1",
+]
+# Embeddings from Cohere's native cloud API (embed-v4, /v2/embed). Paid, api_key
+# required (env-only). Only an HTTP client, no ML deps; the model runs in Cohere's
+# cloud.
+cohere = [
+  "httpx>=0.28.1",
+]
+# Opt-in per-document summary tier: an LLM condenses each source into a short
+# summary attached to every search hit (ollama /api/chat or any OpenAI-compatible
+# /v1/chat/completions server). Only an HTTP client, no ML deps; the chat model
+# runs as its own server. Default off ([summary].provider = none).
+summary = [
+  "httpx>=0.28.1",
+]
+# Pluggable chunking: chonkie (recursive default) + semantic-text-splitter
+# (markdown/fast). Light; covers every strategy except semantic/late.
+chunk = [
+  "chonkie>=1.7.0",
+  "semantic-text-splitter>=0.33.0",
+]
+# The embedding-driven chunkers (semantic/SDPM + late); heavier (pulls a model).
+chunk-semantic = [
+  "chonkie[semantic]>=1.7.0",
+]
+# Retrieval/extraction benchmark corpora (local_only bench; downloaded at eval
+# time, never committed). ir_datasets covers NFCorpus/CQADupStack; datasets (HF)
+# is for FreshStack. Metrics are computed inline (no pytrec_eval/beir/torch).
+bench = [
+  "ir_datasets>=0.6.3",
+  "datasets>=5.0.1",
+  # Lexical retrieval for the dense-vs-BM25-vs-hybrid comparison (scripts/score_hybrid_sweep.py).
+  # PyStemmer supplies the snowball stemmers; the analyzer language follows the corpus, because an
+  # English analyzer on German text understates BM25 and biases the comparison toward dense.
+  "bm25s>=0.3.11",
+  "PyStemmer>=3.1.0",
+]
+# Benchmark chart generation only (scripts/gen_bench_charts.py regenerates docs/benchmarks/img/*.png from
+# the raw JSON). Not needed to RUN semdex or to check chart freshness - the drift test is pure.
+charts = [
+  "matplotlib>=3.11.2",
+]
+# Embedded single-file KNN vector store (light C extension, no server).
+sqlite = [
+  "sqlite-vec>=0.1.9",
+]
+# Embedded columnar ANN vector store (pulls pyarrow; heavier, opt-in).
+lance = [
+  "lancedb>=0.39.0",
+]
+# Postgres + pgvector server backend.
+pg = [
+  "pgvector>=0.5.0",
+  "psycopg[binary]>=3.3.6",
+]
+# MariaDB 11.8 native VECTOR backend (PyMySQL is pure-Python: no C build dep).
+mariadb = [
+  "pymysql>=1.2.3",
+]
+# HTTP document-extractor backends. Each runs as its OWN Docker container reached
+# over HTTP, so semdex carries only a small HTTP/MCP client - never the
+# converter's heavy (torch, OCR) dependencies. Point [extractor].endpoint at the
+# running container.
+docling = [
+  "httpx>=0.28.1",
+]
+xberg = [
+  "httpx>=0.28.1",
+]
+mineru = [
+  "httpx>=0.28.1",
+]
+markitdown = [
+  "httpx>=0.28.1",
+  # mcp 2.x, which is the condition the old `<2.0` cap here was waiting on: that cap
+  # existed because fastmcp imported the pre-2.0 `McpError`, and fastmcp 4.0.1 (the
+  # mcp-server extra below) requires mcp 2.x instead. Leaving the cap while raising
+  # fastmcp made this file contradict itself, and the resolved environment then
+  # type-checked and tested the markitdown adapter against an SDK it was not written for.
+  "mcp>=2.2.0",
+  # mcp 2.x is built on httpx2 rather than httpx, and the two client types are not
+  # interchangeable. The adapter imports it directly, so it is declared here.
+  "httpx2>=2.13.1",
+]
+# Vision-LLM OCR extractor (olmocr / openai_vision): renders scans/PDF pages with
+# pymupdf and OCRs them via an OpenAI-vision /v1/chat/completions server. httpx +
+# pymupdf; the vision model runs as its own server (vLLM/olmOCR), not in semdex.
+vision = [
+  "httpx>=0.28.1",
+  "pymupdf>=1.28.2",
+]
+# MCP server delivery surface: the `semdex serve` command exposes the search /
+# reindex use cases over stdio (local) and Streamable HTTP (network) via FastMCP.
+# Opt-in - the core CLI does not need it. Separate from the `markitdown`/`mcp`
+# client dep above (that is a converter client; this is the server).
+mcp-server = [
+  "fastmcp>=4.0.10",
+]
+# Live filesystem watching: watchfiles (Rust-backed, native OS events + polling
+# fallback). Enables auto-reindex on change while `semdex serve` runs.
+watch = [
+  "watchfiles>=1.3.0",
+]
+dev = [
+  "sqlite-vec>=0.1.9",
+  "httpx>=0.28.1",
+  # mcp 2.x, matching the markitdown extra; see the note there for why the old cap went.
+  "mcp>=2.2.0",
+  "watchfiles>=1.3.0",
+  "pymupdf>=1.28.2",
+  "model2vec>=0.9.0",
+  "chonkie>=1.7.0",
+  "semantic-text-splitter>=0.33.0",
+  # Optional-backend deps mirrored here so pyright (which type-checks against `.[dev]` in CI)
+  # can resolve the pg/mariadb/bench/lance imports in the SQL adapters, bench scripts, and their
+  # tests. Without them CI reported reportMissingImports (psycopg/ir_datasets) + downstream
+  # reportUnknownMemberType, while local make test passed because the extras were installed.
+  "pgvector>=0.5.0",
+  "psycopg[binary]>=3.3.6",
+  "pymysql>=1.2.3",
+  "ir_datasets>=0.6.3",
+  "datasets>=5.0.1",
+  "lancedb>=0.39.0",
+  # MCP server (mcp-server extra) mirrored into dev so CI's `.[dev]` pyright run
+  # can type-check the adapters/mcp/ modules and their tests.
+  "fastmcp>=4.0.10",
+  "pytest>=9.1.1",
+  "pytest-asyncio>=1.4.0",  # in-memory async testing of the FastMCP server (Client(server))
+  "pytest-cov>=7.1.0",
+  "hypothesis>=6.168.3",
+  "ruff>=0.16.10",
+  "pyright[nodejs]>=1.1.414",
+  "bandit>=1.9.4",
+  # 1.5.1 was yanked upstream (unintended breaking changes), so 1.5.0 is the newest usable
+  # release; a >=1.5.1 floor has ZERO candidates and makes this extra unresolvable.
+  "build>=1.6.1",
+  "twine>=7.0.0",
+  # codecov-cli is disabled, not dropped: it requires click<8.3.0, which drags click back to
+  # 8.2.1 - the version with CVE-2026-7246 (command injection in click.edit(), fixed in 8.3.3).
+  # Nothing else here caps click, so with this line active the audit gate goes red on every
+  # clean install. Leaving it off costs nothing: CI uploads coverage via codecov/codecov-action,
+  # not this CLI, and "bmk codecov" resolves codecovcli from PATH and only warns when absent.
+  # Re-enable once codecov-cli relaxes its click<8.3.0 pin.
+  # "codecov-cli>=11.2.8",
+  "pip-audit>=2.10.1",
+  "textual>=8.2.8",
+  "import-linter>=2.15",
+  "rtoml>=0.13.0",
+  "httpx2>=2.13.1",
+  # Transitive CVE pins
+  "click>=8.5.0",                # CVE-2026-7246
+  "jaraco-context>=6.1.2",       # CVE-2025-23949
+  "python-multipart>=0.0.32",    # CVE-2025-24486
+  "wheel>=0.48.0",               # CVE-2025-24049
+  "pynacl>=1.6.2",               # CVE-2025-69277
+  "urllib3>=2.8.0",              # CVE-2025-66471, CVE-2025-66418
+  "virtualenv>=21.14.2",         # CVE-2025-22702
+  "httpx2>=2.13.1",              # mcp 2.x's HTTP client; see the markitdown extra
+]
+
+[project.scripts]
+semdex = "semdex.entry:main"
+
+[build-system]
+requires = ["hatchling>=1.32.4"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/semdex"]
+include = [
+    "src/semdex/py.typed",
+    "src/semdex/adapters/config/defaultconfig.toml",
+    "src/semdex/adapters/config/defaultconfig.d/*.toml",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+# Benchmark fixtures are measurement INPUT, not source. Formatting them changes what the
+# extractors are scored on: a whole-tree `ruff format` rewrote the Python block inside
+# sample.md from single to double quotes, which silently broke the phrase expectation in
+# expected.toml and dropped md coverage to 75 percent for every extractor, including the
+# verbatim `text` one that cannot lose content.
+exclude = ["tests/fixtures"]
+# ruff ignores `exclude` for a path named explicitly on the command line unless this is set,
+# and the bmk gate does name paths.
+force-exclude = true
+
+[tool.ruff.lint]
+select = [
+  "E", "W",     # pycodestyle
+  "F",           # pyflakes
+  "I",           # isort
+  "N",           # pep8-naming
+  "UP",          # pyupgrade
+  "B",           # bugbear
+  "A",           # builtins shadowing
+  "C4",          # comprehension simplification
+  "SIM",         # simplification
+  "TCH",         # type-checking imports
+  "RUF",         # ruff-specific
+  "G",           # logging format (catches f-string in logger)
+  "T20",         # print statements
+  "PTH",         # pathlib preference
+  "PLC", "PLE",  # pylint conventions/errors
+  "S",           # flake8-bandit security checks
+  "PERF",        # performance anti-patterns
+  "ERA",         # eradicate dead/commented-out code
+  "FBT",         # boolean trap (boolean positional args)
+  "PLR",         # pylint refactor
+  "PLW",         # pylint warnings
+]
+ignore = [
+  "RUF002",    # ambiguous unicode characters in docstrings (en-dash) - typography choice
+  "RUF022",    # unsorted __all__ - kept in logical grouping order
+  "PLC0415",   # deferred imports inside functions - circular import prevention
+  "TC001",     # stdlib imports at runtime - needed, not just for type hints
+  "TC002",     # third-party imports at runtime - needed, not just for type hints
+  "TC003",     # stdlib imports - same as TC001
+  "TC006",     # cast() type expressions - existing code uses unquoted
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+# Notebooks: unused imports are often intentional for side effects
+"notebooks/*.ipynb" = ["F401"]
+# Tests: assert is standard, test fixtures have passwords, magic values are clearer inline, temp paths are fine
+"tests/*.py" = ["T20", "S101", "S105", "S106", "S108", "FBT001", "FBT003", "PLR0913", "PLR2004", "S603", "S607"]
+# scripts/: standalone CLI dev tools - print IS their user-facing output, subprocess is intended
+# Benchmark harness scripts also share the throwaway-container / many-param / assert / long-main
+# patterns of tests/ (assert is a type-narrowing aid, benchmark main() functions are naturally long)
+"scripts/*.py" = ["T20", "S603", "S607", "S101", "S106", "PLR2004", "PLR0913", "PLR0915", "PERF203"]
+# CLI: Click framework injects boolean params; commands have many options
+"src/semdex/adapters/cli/**/*.py" = ["FBT001", "FBT002", "PLR0913"]
+# Protocols/adapters/wiring: many-param signatures by design
+"src/semdex/application/*.py" = ["PLR0913"]
+"src/semdex/adapters/config/*.py" = ["PLR0913"]
+"src/semdex/adapters/email/*.py" = ["PLR0913"]
+"src/semdex/adapters/embedding/*.py" = ["PLR0913"]
+"src/semdex/adapters/summarizer/*.py" = ["PLR0913"]
+"src/semdex/adapters/watch/*.py" = ["PLR0913"]
+"src/semdex/adapters/memory/*.py" = ["PLR0913"]
+"src/semdex/composition/*.py" = ["PLR0913"]
+# sqlite-vec: S608 - the only interpolated SQL part is a trusted integer collection
+# id (table names cannot be parameterized), values use ?. FBT003 - sqlite3's
+# enable_load_extension takes a positional bool (stdlib API, cannot be keyword).
+"src/semdex/adapters/vectorstore/sqlitevec.py" = ["S608", "FBT003"]
+# pgvector / mariadb: S608 - dynamic part is a trusted integer collection id
+# (table names cannot be parameterized); all values are bound parameters.
+"src/semdex/adapters/vectorstore/pgvector.py" = ["S608"]
+"src/semdex/adapters/vectorstore/mariadb.py" = ["S608"]
+
+[tool.bandit]
+# B608 (hardcoded SQL via string building): the SQL backends interpolate ONLY validated
+# integer collection/table ids into `chunks_<id>` identifiers (identifiers cannot be
+# parametrized); every user-supplied VALUE is bound via parametrized queries. Same accepted
+# pattern the ruff S608 per-file-ignores above cover and the Code Quality notes document.
+skips = ["B608"]
+
+[tool.pyright]
+typeCheckingMode = "strict"
+extraPaths = [
+  "src",
+  # tests/test_repair_plan.py imports scripts/repair_oversized_chunks.py after a
+  # runtime sys.path.insert, which pyright cannot follow; without this the import
+  # is unresolvable and every value derived from it degrades to Unknown (12 strict
+  # errors). Declaring the path types the module properly instead of suppressing.
+  "scripts",
+]
+# The benchmark fixture generator uses generate-time-only libs (reportlab/python-docx
+# /pptx/openpyxl/Pillow) that are not project deps and have no stubs; it is a dev
+# utility, not shipped code, so keep it out of strict type checking. Same for the chart
+# generator: it needs matplotlib (the `charts` extra), absent in the CI type-check env, so
+# its matplotlib imports fail reportMissingImports. Dev utility, not shipped code - excluded.
+exclude = [
+  "**/node_modules",
+  "**/__pycache__",
+  "**/.*",
+  "tests/fixtures",
+  "scripts/gen_bench_charts.py",
+]
+
+[tool.pytest.ini_options]
+# --ignore=tests/fixtures: the benchmark fixture generator (tests/fixtures/extract/
+# _generate.py) imports generate-time-only libs (reportlab/python-docx/...) that are
+# not project deps, so --doctest-modules must not try to import it.
+# --ignore=scripts: benchmark_compare.py is a standalone CI tool, not shipped code or a
+# test; --doctest-modules should not import it during the unit-test run.
+addopts = ["--doctest-modules", "--ignore=tests/fixtures", "--ignore=scripts"]
+doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE"]
+# The MCP server is tested in-memory with an async fastmcp.Client; auto mode runs
+# `async def test_*` without a per-test decorator.
+asyncio_mode = "auto"
+pythonpath = ["src"]
+markers = [
+  "os_agnostic: test runs on every supported operating system",
+  "os_windows: test exercises Windows-only behavior",
+  "os_macos: test exercises macOS-only behavior",
+  "os_posix: test exercises behavior requiring POSIX semantics",
+  "os_linux: test exercises Linux-only behavior",
+  "local_only: tests that require the local dev environment (external resources, script composition); skipped in CI",
+  "integration: tests requiring external resources (SMTP, databases, APIs); run via 'bmk ti' or 'mktesti.sh'",
+]
+
+[tool.coverage.run]
+branch = true
+parallel = false
+# Use a temp directory for the coverage database to avoid SQLite locking
+# issues on network-mounted filesystems. The {envtmpdir} placeholder is
+# not supported by coverage.py, so we use an environment variable with
+# fallback to a cross-platform temp location via the pytest_configure
+# hook in tests/conftest.py. CI also sets COVERAGE_FILE via workflow env.
+#
+# For local development, the pytest hook automatically redirects to
+# tempfile.gettempdir() before pytest-cov creates its Coverage() object.
+# This static fallback catches edge cases where coverage is run directly.
+data_file = "/tmp/.coverage.semdex"
+source = ["src/semdex"]
+
+[tool.coverage.report]
+omit = [
+  "tests/*",
+]
+fail_under = 80
+show_missing = true
+
+[tool.coverage.json]
+output = "coverage.json"
+pretty_print = true
+
+[tool.clean]
+# Patterns to remove when running `make clean`
+patterns = [
+  "**/__pycache__",
+  ".hypothesis",
+  ".import_linter_cache",
+  ".pytest_cache",
+  ".ruff_cache",
+  ".pyright",
+  ".mypy_cache",
+  ".tox",
+  ".nox",
+  ".eggs",
+  "*.egg-info",
+  "build",
+  "dist",
+  "htmlcov",
+  ".coverage",
+  "coverage.xml",
+  "codecov.sh",
+  ".cache",
+  "result",
+  ".data_arch_violations.json",
+]
+
+[tool.git]
+# Default git remote for push/release commands
+default-remote = "origin"
+
+[tool.scripts.test]
+# Configuration for CI/CD test runner
+pytest-verbosity = "-vv"
+coverage-report-file = "coverage.xml"
+src-path = "src"
+
+[tool.importlinter]
+root_package = "semdex"
+exclude_type_checking_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Domain is pure (no adapter dependencies)"
+type = "forbidden"
+source_modules = [
+  "semdex.domain",
+]
+forbidden_modules = [
+  "semdex.adapters",
+  "semdex.composition",
+]
+
+[[tool.importlinter.contracts]]
+name = "Clean Architecture layers"
+type = "layers"
+layers = [
+  # Composition wires adapters - can import everything
+  "semdex.composition",
+  # Adapters implement ports - can import application and domain
+  "semdex.adapters",
+  # Application defines ports - can import domain
+  "semdex.application",
+  # Domain is pure - bottom layer
+  "semdex.domain",
+]
+
+[tool.pip-audit]
+# Known vulnerabilities to ignore (environment-level packages, not project dependencies)
+# PYSEC-2022-42969: py library ReDoS — py 1.11.0 is installed in the development
+#   environment but is not a dependency of this project; no fix available.
+ignore-vulns = [
+  "PYSEC-2022-42969",  # py 1.11.0 — ReDoS, env-only, no fix available
+  "CVE-2025-8869",     # pip 24.3.1 — env-only, not a project dependency
+  "CVE-2026-1703",     # pip 24.3.1 — env-only, not a project dependency
+  "CVE-2026-25990",    # pillow 12.0.0 — env-only, fix in 12.1.1
+]
+
+[tool.bashate]
+# bashate style settings for .sh files (E003 excluded: indent handled by shfmt)
+max-line-length = 120
+ignores = ["E003"]

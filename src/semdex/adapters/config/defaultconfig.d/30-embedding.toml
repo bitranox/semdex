@@ -1,0 +1,227 @@
+# ==============================================================================
+# semdex - embedding provider selection ([embedding])
+# ==============================================================================
+#
+# The embedding provider turns text into vectors. Query text and indexed passages
+# must be embedded by the SAME provider+model, or search returns nothing useful.
+# Collections are keyed by (model, dimension), so changing provider or model makes
+# a NEW collection - reindex after changing these. All providers implement the same
+# port, so switching is a config change plus the matching optional extra.
+#
+# Override any key via environment / .env, e.g. SEMDEX___EMBEDDING__PROVIDER=model2vec
+#
+# Provider comparison:
+#   provider              weight                  quality          when to choose
+#   --------------------  ----------------------  ---------------  --------------------------------
+#   fastembed (default)   light, no torch, ~130MB good             best out-of-box; enables semantic/late chunking
+#   model2vec             tiny, no torch, ~30MB    fair            huge corpora / constrained CPU / RAM
+#   ollama                none in semdex (server)  model-dependent you already run an ollama host (native /api/embed)
+#   openai                none in semdex (server)  model-dependent any OpenAI-compatible server: hosted OpenAI, ollama /v1, llama.cpp
+#   gemini                none in semdex (cloud)   strong          Google's paid cloud API; strong multilingual/German (api_key)
+#   cohere                none in semdex (cloud)   strong          Cohere's paid cloud API; strong multilingual/German (api_key)
+#   sentence_transformers heavy (pulls torch)      best/most models max quality, a GPU, a specific model
+#   placeholder           none                     poor (lexical)  offline / air-gapped / deterministic tests
+#
+# ollama vs openai: both offload embedding to a server and keep ML off this box.
+# "ollama" speaks ollama's native POST /api/embed; "openai" speaks the standard
+# POST /v1/embeddings, which hosted OpenAI, ollama's own /v1, AND llama.cpp's
+# llama-server all expose. Prefer "openai" for a non-ollama server (llama.cpp) or
+# hosted OpenAI; "ollama" stays the native path for an ollama host.
+#
+# gemini and cohere are native PAID cloud APIs (not open-source, not
+# OpenAI-compatible): "gemini" calls Google's batchEmbedContents, "cohere" calls
+# Cohere's /v2/embed. Both REQUIRE an api_key (env-only) and are strong on
+# multilingual/German content - choose them for cross-lingual retrieval quality
+# without hosting a model, accepting the per-token cost and sending text to the
+# vendor. Both send a DOCUMENT task type for passages and a QUERY task type for
+# queries automatically (asymmetric retrieval); nothing to configure.
+# ==============================================================================
+
+[embedding]
+
+# provider - which embedding backend to use.
+#   Default: "fastembed" (a core dependency, so it works with no extra install).
+#   Effect: selects the adapter; a real provider gives semantic search (matches
+#     meaning, not just shared words), the "placeholder" gives lexical-only search.
+#   When to change: pick "model2vec" to shrink footprint/RAM on large corpora or
+#     weak hosts; "ollama"/"openai" to offload embedding to a server and keep ML off
+#     this box; "sentence_transformers" for maximum model choice/quality on a GPU;
+#     "placeholder" only for fully offline/air-gapped runs or reproducible tests.
+#   Consequences: "fastembed"/"model2vec" download a model on first use (then offline);
+#     "ollama"/"openai" need a reachable server (set endpoint); "openai" against hosted
+#     OpenAI also needs api_key; "sentence_transformers" pulls torch (large install);
+#     "placeholder" cannot answer reworded queries.
+#   Fallback: if "fastembed" cannot load (e.g. offline first run) semdex logs a
+#     warning and degrades to "placeholder" so indexing never crashes. The other
+#     providers fail loudly if misconfigured (they are an explicit choice).
+#   Recommendation: keep "fastembed" for most deployments; "model2vec" for very
+#     large/low-resource; "sentence_transformers" only when you need a specific model.
+provider = "fastembed"
+
+# model - model id for the selected provider.
+#   Default: unset -> each provider uses its own default (fastembed:
+#     BAAI/bge-small-en-v1.5, model2vec: minishlab/potion-base-8M, ollama:
+#     nomic-embed-text, openai: text-embedding-3-small, gemini:
+#     gemini-embedding-001 (3072-dim), cohere: embed-v4.0 (1536-dim)). The
+#     --embedding-model CLI flag overrides this.
+#   Effect: picks the concrete model; different models trade size/speed for quality
+#     and have different vector dimensions (a new collection).
+#   When to change: to use a larger/multilingual model, a domain-tuned model, or a
+#     model you already host. Must be a model the chosen provider understands.
+#   Consequences: a bigger model = better recall but more RAM/CPU/latency and a
+#     larger store; changing it requires a reindex (dimension/space changes).
+#   Recommendation: leave unset unless you have a specific model need; for non-English
+#     content pick a multilingual model for that provider.
+#   ollama model picks (pull the tag on your ollama host first, e.g.
+#     `ollama pull qwen3-embedding:4b`):
+#     - qwen3-embedding:4b / :8b - top MTEB-multilingual open models, GPU-tier
+#       (large Matryoshka dimension; the biggest quality upgrade if you have VRAM).
+#     - mxbai-embed-large (1024-dim) / nomic-embed-text (768-dim) - solid mid-tier,
+#       run acceptably on CPU.
+#     - all-minilm (384-dim) - light, same model as sentence_transformers all-MiniLM.
+#     See docs/benchmarks/04-embedding.md for the measured ranking.
+# model = "BAAI/bge-small-en-v1.5"
+
+# endpoint - base URL of the embedding server.
+#   Default: unset. fastembed/model2vec/placeholder ignore it. "ollama" then uses
+#     http://127.0.0.1:11434 (semdex appends /api/embed). "openai" then uses
+#     https://api.openai.com/v1 (semdex appends /embeddings). "gemini" then uses
+#     https://generativelanguage.googleapis.com/v1beta (semdex appends
+#     /models/<model>:batchEmbedContents). "cohere" then uses
+#     https://api.cohere.com/v2 (semdex appends /embed).
+#   Effect: used by the HTTP/cloud providers ("ollama", "openai", "gemini",
+#     "cohere") - where semdex sends embed requests.
+#   Convention: for "openai" this is the OpenAI *base URL* ending in /v1; semdex
+#     appends /embeddings. A local ollama /v1 is "http://127.0.0.1:11434/v1"; a
+#     llama.cpp llama-server is "http://HOST:8080/v1". For "ollama" it is the host
+#     root (no /api path) - semdex appends /api/embed. For "gemini"/"cohere" leave
+#     it unset to reach the vendor's public endpoint; override only for a proxy.
+#   When to change: point at a remote/other-port host, or select a local server.
+#   Consequences: the request contains your text; keep the host on a trusted
+#     network - and for "gemini"/"cohere" the text leaves your box to the vendor.
+#   Recommendation: set with provider = "ollama" or "openai"; leave unset for
+#     "gemini"/"cohere".
+# endpoint = "http://127.0.0.1:11434/v1"
+
+# timeout - per-request HTTP timeout in seconds for "ollama"/"openai".
+#   Default: unset -> 60 s (the loader default).
+#   Effect: caps how long one embed request may take before failing with an
+#     EmbeddingError; used only by the HTTP providers.
+#   When to change: raise it for a slow CPU-only embed server or a large model
+#     (a big batch on a CPU llama.cpp/ollama host can exceed 60 s).
+#   Consequences: too low fails a legitimately slow embed; too high delays the
+#     error when a server is genuinely stuck.
+#   Recommendation: leave unset on a GPU host; set to 120-300 for a CPU-only server.
+# timeout = 120.0
+
+# num_batch - ollama's PHYSICAL batch size in tokens ("ollama" only).
+#   Default: unset -> ollama's own default of 2048.
+#   Effect: the largest single input ollama can actually process. This is a
+#     CORRECTNESS setting, not a throughput one. ollama serves most embedding
+#     models with a 4096-token context but only a 2048-token physical batch, and
+#     an input in that gap is neither truncatable nor processable: ollama silently
+#     re-runs it truncated to the batch and answers HTTP 200, so a longer text is
+#     embedded from its first 2048 tokens with NO warning and the tail is lost.
+#     In a request carrying many inputs that recovery can fail outright and the
+#     whole call returns 400 - a client error, so retries never apply and the run
+#     dies. Measured on ollama 0.31.1: an identical 4096-token input logs "input
+#     (4096 tokens) is too large to process. increase the physical batch size
+#     (current batch size: 2048)" without this option and succeeds with it.
+#   When to change: set it whenever you embed texts longer than 2048 tokens with
+#     "ollama" - i.e. any chunk size above ~2048 tokens, and always for the
+#     semantic chunker, whose breakpoint model embeds whole merged sentence groups.
+#   Consequences: a larger batch needs more VRAM per slot; too small silently
+#     truncates long inputs (a quality loss that never surfaces as an error).
+#     Verify it landed: ollama logs "llama_context: n_batch = <value>" on model load.
+#   Recommendation: set it to at least the served context length (4096 for
+#     bge-m3 / qwen3-embedding); leave unset only if every input stays under 2048
+#     tokens. Ignored by every non-ollama provider.
+# num_batch = 4096
+
+# query_prefix / passage_prefix - instruction prefixes for a model trained to
+# receive one ("ollama", "openai" and "sentence_transformers" only).
+#   Default: both unset -> the text is sent exactly as it is.
+#   Effect: prepended to each text before it is embedded. These providers send raw
+#     text to a server that applies no template of its own, so an instruction-tuned
+#     model receives an instruction ONLY if the client sends it. Without a prefix a
+#     query and a passage reach the server as identical text, which is a valid way
+#     to run such a model (it is at least self-consistent) but not the one it was
+#     trained for, and it costs retrieval quality the model's published numbers
+#     assume you are getting.
+#   Which models want what:
+#     Qwen3-Embedding  query_prefix = "Instruct: <task>\nQuery:"   passage: NONE
+#                      The model card's own wording is "No need to add instruction
+#                      for retrieval documents", and note there is no space after
+#                      "Query:". The default task description is
+#                      "Given a web search query, retrieve relevant passages that
+#                      answer the query".
+#     E5 family        query_prefix = "query: "   passage_prefix = "passage: "
+#     BGE (en)         query_prefix = "Represent this sentence for searching relevant passages: "
+#   When to change: set it whenever the model you serve documents one. Check the
+#     model card; a model that wants no instruction is harmed by adding one.
+#   Consequences: these change the VECTORS, so queries and passages must be
+#     embedded under the same setting - change either and REINDEX, or search
+#     compares vectors built under two different conventions and quietly degrades.
+#     Setting a prefix for "fastembed", "model2vec", "gemini" or "cohere" is an
+#     ERROR rather than a no-op: those apply their own query/passage handling, so a
+#     prefix there would double-apply or vanish.
+#   Recommendation: match the model card. For qwen3-embedding via ollama, set
+#     query_prefix and leave passage_prefix empty.
+# query_prefix = "Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery:"
+# passage_prefix = ""
+
+# retries - total attempts per embed request for "ollama"/"openai".
+#   Default: unset -> 4 (the loader default).
+#   Effect: how many times ONE embed request is tried before its error surfaces,
+#     retrying only a TRANSIENT blip - a dropped connection, a 5xx, or a 429 -
+#     with exponential backoff (1s, 2s, 4s, ... capped at 30s). A 4xx (bad request)
+#     or a malformed response is never retried. Used only by the HTTP providers.
+#   When to change: raise it for a flaky network or a busy shared embed server that
+#     occasionally drops a connection mid-run (a single blip would otherwise abort a
+#     long index pass); set it to 1 to disable retries and fail fast.
+#   Consequences: more attempts survive brief outages but delay the final error when
+#     a server is genuinely down (each attempt also waits out its backoff).
+#   Recommendation: leave unset (4) for most deployments; raise it for a long
+#     unattended embed pass over an unreliable link.
+# retries = 4
+
+# api_key - auth credential for a secured embedding provider.
+#   Default: unset (no auth header - correct for local ollama/llama.cpp).
+#   Effect: for "openai" it is sent as "Authorization: Bearer <key>" to the
+#     /v1/embeddings server. For "cohere" it is the "Authorization: Bearer <key>"
+#     for /v2/embed. For "gemini" it is sent as the "x-goog-api-key" header. Used
+#     only by these three providers.
+#   When to change: REQUIRED for "gemini" and "cohere" (paid cloud APIs) and for
+#     hosted OpenAI or a secured gateway; leave unset for a local, unauthenticated
+#     ollama/llama.cpp server.
+#   SECRET: do NOT write the literal here. Set it from the environment, e.g.
+#     SEMDEX___EMBEDDING__API_KEY=... (or your .env), so it never lands in a
+#     committed/tracked config file.
+#   Recommendation: env-only; keep this line commented.
+# api_key = ""  # set via SEMDEX___EMBEDDING__API_KEY, never inline
+
+# threads - onnxruntime thread count for the fastembed provider.
+#   Default: unset -> use all CPUs. Setting it explicitly (to any value) also
+#     silences onnxruntime's harmless "pthread_setaffinity_np failed" warnings that
+#     appear in cgroup-restricted environments (Docker / LXC / Kubernetes).
+#   Effect: caps CPU parallelism for embedding; used only by "fastembed".
+#   When to change: lower it to limit CPU use on a shared/constrained host, or set it
+#     to any explicit value to quiet the affinity warnings in a container.
+#   Consequences: fewer threads = less CPU contention but slower bulk indexing.
+#   Recommendation: leave unset on a dedicated box; set to the container's CPU quota
+#     (e.g. 4) when running under a cgroup CPU limit.
+# threads = 4
+
+# batch - passages per embed_passages call at index time.
+#   Default: unset -> a source's chunks are embedded in ONE call (today's behavior).
+#   Effect: caps how many passages go per embed_passages call during INDEXING; the vectors are
+#     identical either way, and query embedding is unaffected.
+#   When to change: bound peak memory or request size on a constrained embed server, or keep a
+#     slow CPU/HTTP batch under a timeout. The "ollama" loaders already sub-batch internally, so
+#     this mainly caps the in-process providers (fastembed / model2vec / sentence_transformers).
+#   Consequences: a smaller batch trades a little throughput (more calls, more per-call overhead)
+#     for lower peak memory and smaller requests; unset, or a value >= a source's chunk count,
+#     keeps the single-call path.
+#   Recommendation: leave unset on a dedicated box; set it (e.g. 256) when embedding very large
+#     documents on a memory-constrained host or a rate-limited embed server.
+# batch = 256

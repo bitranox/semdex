@@ -1,0 +1,318 @@
+# Claims for docs/benchmarks/02-extraction.md
+#
+# Coverage is partial and is answered by reading this file beside the page, never by a green run.
+# Seeded: the OmniDocBench recalls per extractor, the text-layer control, xberg's per-type and
+# per-language cliff, docling's language split, the per-page latencies, the render DPI, the page
+# and type counts, and the OCR headline pass rate.
+#
+# Carried by tests/benchmarks/baseline.json, outside the raw directory: every figure in the
+# latency section (docling's 2005.5 to 2008.9 ms, mineru's 32000.0 ms, and the "10,000 PDFs is
+# about an hour" arithmetic on xberg's 392.3 ms PDF cell) and the coverage grid's 100 percent
+# cells; `test_bench_tables_current` gates the generated tables they sit beside.
+#
+# Carried by prose the checker cannot express: "three orders of magnitude" (a spread across the
+# latency grid), "failed on none of the 113 pages" (a zero the generated table prints), "roughly
+# half the content pass rate" (tesseract's 0.211 over olmocr's 0.437, 0.48), and "1,651 real
+# document pages", which is OmniDocBench's own size and not recorded in the raw sample file.
+
+doc = "docs/benchmarks/02-extraction.md"
+
+# The OmniDocBench file keeps three tables (overall, by_language, by_source) and its run facts at
+# the top level; the top level is a one-row rowset for the page count, DPI and text-layer control.
+[rowsets.omnidoc]
+source = "extraction-omnidocbench.json"
+
+[rowsets.omnidoc_overall]
+source = "extraction-omnidocbench.json"
+path = "overall"
+
+[rowsets.omnidoc_by_language]
+source = "extraction-omnidocbench.json"
+path = "by_language"
+
+[rowsets.omnidoc_by_source]
+source = "extraction-omnidocbench.json"
+path = "by_source"
+
+[rowsets.ocr]
+source = "ocr-badscans.json"
+path = "results"
+
+# ---------------------------------------------------------------- fidelity on real documents
+
+[[claim]]
+id = "extraction-mineru-recall"
+quote = "`mineru` recovers 97.7 percent of the annotated text"
+published = "97.7"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "mineru" }
+scale = 100
+why = "mineru's word recall over all 113 scored pages"
+
+[[claim]]
+id = "extraction-pages"
+quote = "and failed on none of the 113 pages"
+published = "113"
+rows = "omnidoc"
+reduce = "value"
+field = "pages_scored"
+where = { vision_render_dpi = 150 }
+why = "the number of OmniDocBench pages scored"
+
+[[claim]]
+id = "extraction-olmocr-recall"
+quote = "`olmocr` reaches 84.4 percent"
+published = "84.4"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "olmocr" }
+scale = 100
+why = "olmocr's word recall over all scored pages"
+
+[[claim]]
+id = "extraction-xberg-recall"
+quote = "OCR at all manage 76.0 and 69.0 percent"
+published = "76.0"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "xberg" }
+scale = 100
+why = "xberg's word recall over all scored pages, the better of the two CPU converters"
+
+[[claim]]
+id = "extraction-docling-recall"
+quote = "OCR at all manage 76.0 and 69.0 percent"
+published = "69.0"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "docling" }
+scale = 100
+why = "docling's word recall over all scored pages"
+
+[[claim]]
+id = "extraction-markitdown-text-layer-control"
+quote = "that does have a text layer returns 108 characters from it"
+published = "108"
+rows = "omnidoc"
+reduce = "value"
+field = "text_layer_control_chars.markitdown"
+where = { pages_scored = 113 }
+why = "characters markitdown returns from the text-layer control PDF through the same harness, the check that its zero is the tool and not the run"
+
+[[claim]]
+id = "extraction-xberg-english"
+quote = "It scores 0.86 on English printed"
+published = "0.86"
+rows = "omnidoc_by_language"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "xberg", language = "english" }
+why = "xberg's word recall on the English pages"
+
+[[claim]]
+id = "extraction-xberg-newspaper"
+quote = "pages, 0.95 on newspapers and 0.98 on research reports, then 0.10 on handwritten notes and 0.10 on"
+published = "0.95"
+rows = "omnidoc_by_source"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "xberg", source = "newspaper" }
+why = "xberg's word recall on the newspaper pages"
+
+[[claim]]
+id = "extraction-xberg-research-report"
+quote = "pages, 0.95 on newspapers and 0.98 on research reports, then 0.10 on handwritten notes and 0.10 on"
+published = "0.98"
+rows = "omnidoc_by_source"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "xberg", source = "research_report" }
+why = "xberg's word recall on the research-report pages"
+
+[[claim]]
+id = "extraction-xberg-note"
+quote = "then 0.10 on handwritten notes"
+published = "0.10"
+rows = "omnidoc_by_source"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "xberg", source = "note" }
+why = "xberg's word recall on the handwritten-note pages"
+
+[[claim]]
+id = "extraction-xberg-historical"
+quote = "then 0.10 on handwritten notes and 0.10 on"
+published = "0.10"
+rows = "omnidoc_by_source"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "xberg", source = "historical_document" }
+why = "xberg's word recall on the five historical-document pages, 0.0954; the sentence continues 'historical documents' on the next line"
+
+# ---------------------------------------------------------------- language
+
+[[claim]]
+id = "extraction-docling-chinese"
+quote = "`docling` is markedly better on Chinese (0.87) than on English (0.49)"
+published = "0.87"
+rows = "omnidoc_by_language"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "docling", language = "simplified_chinese" }
+why = "docling's word recall on the simplified-Chinese pages, the larger Chinese group (49 pages; traditional Chinese has 5 and scores 0.82)"
+
+[[claim]]
+id = "extraction-docling-english"
+quote = "`docling` is markedly better on Chinese (0.87) than on English (0.49)"
+published = "0.49"
+rows = "omnidoc_by_language"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "docling", language = "english" }
+why = "docling's word recall on the English pages"
+
+[[claim]]
+id = "extraction-xberg-chinese"
+quote = "`xberg` is the reverse (0.76 against 0.86)"
+published = "0.76"
+rows = "omnidoc_by_language"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "xberg", language = "simplified_chinese" }
+why = "xberg's word recall on the simplified-Chinese pages"
+
+[[claim]]
+id = "extraction-xberg-english-restated"
+quote = "`xberg` is the reverse (0.76 against 0.86)"
+published = "0.86"
+rows = "omnidoc_by_language"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "xberg", language = "english" }
+why = "xberg's word recall on the English pages, restated beside its Chinese figure"
+
+# ---------------------------------------------------------------- what this cost
+
+[[claim]]
+id = "extraction-latency-markitdown"
+quote = "Per page: `markitdown` 0.1 s, `xberg` 1.5 s, `docling`"
+published = "0.1"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "latency_p50_ms"
+where = { extractor = "markitdown" }
+scale = 0.001
+why = "markitdown's per-page p50 on OmniDocBench, in seconds"
+
+[[claim]]
+id = "extraction-latency-xberg"
+quote = "Per page: `markitdown` 0.1 s, `xberg` 1.5 s, `docling`"
+published = "1.5"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "latency_p50_ms"
+where = { extractor = "xberg" }
+scale = 0.001
+why = "xberg's per-page p50, in seconds"
+
+[[claim]]
+id = "extraction-latency-docling"
+quote = "4.0 s, `mineru` 5.0 s, `olmocr` 12.1 s."
+published = "4.0"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "latency_p50_ms"
+where = { extractor = "docling" }
+scale = 0.001
+why = "docling's per-page p50, in seconds"
+
+[[claim]]
+id = "extraction-latency-mineru"
+quote = "4.0 s, `mineru` 5.0 s, `olmocr` 12.1 s."
+published = "5.0"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "latency_p50_ms"
+where = { extractor = "mineru" }
+scale = 0.001
+why = "mineru's per-page p50, in seconds"
+
+[[claim]]
+id = "extraction-latency-olmocr"
+quote = "4.0 s, `mineru` 5.0 s, `olmocr` 12.1 s."
+published = "12.1"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "latency_p50_ms"
+where = { extractor = "olmocr" }
+scale = 0.001
+why = "olmocr's per-page p50, in seconds"
+
+[[claim]]
+id = "extraction-render-dpi"
+quote = "these numbers were taken at 150."
+published = "150"
+rows = "omnidoc"
+reduce = "value"
+field = "vision_render_dpi"
+where = { pages_scored = 113 }
+why = "the resolution the vision backends were rendered at"
+
+# ---------------------------------------------------------------- what this does not establish
+
+[[claim]]
+id = "extraction-caveat-pages"
+quote = "**113 pages sampled across ten document types**"
+published = "113"
+rows = "omnidoc"
+reduce = "value"
+field = "pages_scored"
+where = { vision_render_dpi = 150 }
+why = "the page count, restated in the caveats"
+
+[[claim]]
+id = "extraction-caveat-document-types"
+quote = "**113 pages sampled across ten document types**"
+published = "ten"
+rows = "omnidoc_by_source"
+reduce = "count"
+where = { extractor = "mineru" }
+why = "one by-source row per document type for one extractor"
+
+[[claim]]
+id = "extraction-caveat-historical-pages"
+quote = "(five historical documents)"
+published = "five"
+rows = "omnidoc_by_source"
+reduce = "value"
+field = "pages"
+where = { extractor = "mineru", source = "historical_document" }
+why = "the page count of the thinnest document type"
+
+[[claim]]
+id = "extraction-caveat-dpi"
+quote = "(150 DPI). Both would likely score higher at 200"
+published = "150"
+rows = "omnidoc"
+reduce = "value"
+field = "vision_render_dpi"
+where = { pages_scored = 113 }
+why = "the render resolution, restated in the caveats"
+
+# ---------------------------------------------------------------- OCR on degraded scans
+
+[[claim]]
+id = "extraction-ocr-best-pass-rate"
+quote = "Even the best engine passes 44 percent of the content tests"
+published = "44"
+rows = "ocr"
+reduce = "max"
+field = "content_pass"
+where = { kind = ["vlm", "incumbent"] }
+scale = 100
+why = "the highest content pass rate across every engine scored on the old-scans split (olmocr, 0.437)"

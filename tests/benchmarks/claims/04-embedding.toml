@@ -1,0 +1,256 @@
+# Claims for docs/benchmarks/04-embedding.md
+#
+# Coverage is partial and is answered by reading this file beside the page, never by a green run.
+# Seeded: the headline effect sizes and query counts, the memory spread, the dimension cost, the
+# multilingual ranking figures and the qwen3 instruction-prefix result. Carried by prose the
+# checker cannot express: "resolves in four comparisons out of five" (a ratio of two counts; the
+# generated summary table prints the 82 percent), "leads on both languages" and "falls to last on
+# German" (rankings; the generated multilingual table carries them), and the ollama num_batch
+# figures, which are ollama's defaults rather than measurements.
+
+doc = "docs/benchmarks/04-embedding.md"
+
+[sets]
+# The corpora whose documents are long enough to carry a chunking claim, per
+# chunk-dimension-audit.json. The same set the generated summary table is restricted to.
+fit_corpora = ["gerdalir_de_12k_slice", "mldr_de_3k_slice", "mldr_en_8k_slice"]
+chunk_axes = ["max_tokens", "overlap_tokens", "strategy"]
+
+[rowsets.effects]
+source = "chunk-knob-effects.json"
+path = "effects"
+orient = true
+
+[rowsets.query_shape]
+source = "query-length-effect.json"
+path = "query_shape"
+
+[rowsets.mldr_cells]
+source = "chunk-sweep-mldr.json"
+path = "cells"
+
+[rowsets.memory_embedders]
+source = "memory.json"
+path = "embedders"
+
+[rowsets.crossover]
+source = "dim-crossover-real.json"
+path = "results"
+
+[rowsets.multilingual_cells]
+source = "embedding-multilingual-mldr.json"
+path = "cells"
+
+# The qwen3 instruction files are one measurement each: `arms` holds the three configurations'
+# scores as one table, `paired` the per-query differences between them.
+[rowsets.qwen3_4b_arms]
+source = "qwen3-instruction.json"
+path = "arms"
+
+[rowsets.qwen3_4b_paired]
+source = "qwen3-instruction.json"
+path = "paired"
+
+[rowsets.qwen3_8b_arms]
+source = "qwen3-instruction-8b.json"
+path = "arms"
+
+[rowsets.qwen3_8b_paired]
+source = "qwen3-instruction-8b.json"
+path = "paired"
+
+# ---------------------------------------------------------------- the model matters more than the chunking
+
+[[claim]]
+id = "embedding-gerdalir-query-count"
+quote = "because a corpus carrying 12,298 queries joined the sweep"
+published = "12,298"
+rows = "query_shape"
+reduce = "value"
+field = "n_queries"
+where = { corpus = "gerdalir_de_12k_slice" }
+why = "GerDaLIR's query count, the corpus whose size makes the chunking axes resolve"
+
+[[claim]]
+id = "embedding-mldr-de-query-count"
+quote = "that size settles arguments a 200-query one cannot"
+published = "200"
+rows = "mldr_cells"
+reduce = "max"
+field = "n_queries"
+where = { corpus = "mldr_de_3k_slice" }
+why = "MLDR German's query count; max because every cell of the corpus carries the same value"
+
+[[claim]]
+id = "embedding-material-near-resolved"
+quote = "Its material count sits within 6 of its resolved count"
+published = "6"
+rows = "effects"
+reduce = "count"
+where = { axis = "embedding", resolved = true, material = false, corpus = "@fit_corpora" }
+why = "resolved embedding-axis comparisons that fall under the material floor; this row's comparisons are already restricted to the fit corpora by the same generator that restricts every other row of chunk_knob_summary"
+
+[[claim]]
+id = "embedding-largest-chunking-effect"
+quote = "chunking effect is 0.158 nDCG@10 against 0.508 for the largest resolved model effect"
+published = "0.158"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "@chunk_axes", resolved = true, corpus = "@fit_corpora" }
+why = "the largest resolved effect any chunking knob produces on the corpora that can carry a chunking claim; it is the recursive ladder's 64-to-256-token step for potion-base-8M on GerDaLIR, which favours the larger chunk"
+
+[[claim]]
+id = "embedding-largest-model-effect"
+quote = "chunking effect is 0.158 nDCG@10 against 0.508 for the largest resolved model effect"
+published = "0.508"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = "embedding", resolved = true, corpus = "@fit_corpora" }
+why = "the largest resolved effect on the embedding axis over the same corpora, qwen3-8b against potion-base-8M on MLDR German"
+
+# ---------------------------------------------------------------- what each provider costs in memory
+
+[[claim]]
+id = "embedding-memory-spread"
+quote = "is a factor of 46, and it is the constraint"
+published = "46"
+rows = "memory_embedders"
+reduce = "ratio"
+field = "resident_mb"
+where = { provider = "sentence_transformers" }
+against = { provider = "placeholder" }
+why = "the heaviest in-process provider's resident memory over the lightest's"
+
+[[claim]]
+id = "embedding-memory-sentence-transformers"
+quote = "holds 1,434 MB; `model2vec` holds 111 MB, under a tenth of that"
+published = "1,434"
+rows = "memory_embedders"
+reduce = "value"
+field = "resident_mb"
+where = { provider = "sentence_transformers" }
+why = "sentence_transformers resident with the model loaded"
+
+[[claim]]
+id = "embedding-memory-model2vec"
+quote = "holds 1,434 MB; `model2vec` holds 111 MB, under a tenth of that"
+published = "111"
+rows = "memory_embedders"
+reduce = "value"
+field = "resident_mb"
+where = { provider = "model2vec" }
+why = "model2vec resident with the model loaded; 111 over 1,434 is 7.8 percent, which is what 'under a tenth' means"
+
+# ---------------------------------------------------------------- dimension is not the same question as model
+
+[[claim]]
+id = "embedding-dimension-storage-ratio"
+quote = "15 times the storage and 19 times the search time of a 256-dimensional one"
+published = "15"
+rows = "crossover"
+reduce = "ratio"
+field = "sqlite_vec.store_mb"
+where = { dim = 4096, scale = 100000, source = "cache" }
+against = { dim = 256, scale = 100000, source = "cache" }
+why = "exact-store size at 4096 over 256 dimensions on the same 100,000 real vectors; 16 would be the dimension ratio, and the measured store grows slightly less than that"
+
+[[claim]]
+id = "embedding-dimension-search-ratio"
+quote = "15 times the storage and 19 times the search time of a 256-dimensional one"
+published = "19"
+rows = "crossover"
+reduce = "ratio"
+field = "sqlite_vec.search_p50_ms"
+where = { dim = 4096, scale = 100000, source = "cache" }
+against = { dim = 256, scale = 100000, source = "cache" }
+why = "exact-scan p50 at 4096 over 256 dimensions on the same rows, which grows slightly faster than the dimension"
+
+# ---------------------------------------------------------------- language
+
+[[claim]]
+id = "embedding-e5-large-dimension"
+quote = "`e5-large` at 1024 dimensions all but matches it on"
+published = "1024"
+rows = "multilingual_cells"
+reduce = "max"
+field = "dim"
+where = { embedding = "openai:e5-large" }
+why = "the dimension every e5-large cell was scored at"
+
+[[claim]]
+id = "embedding-e5-large-best-english"
+quote = "English, 0.881 against 0.884, then falls to last on German"
+published = "0.881"
+rows = "multilingual_cells"
+reduce = "max"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", embedding = "openai:e5-large" }
+why = "e5-large's best profile on MLDR English, the figure the generated ranking table prints"
+
+[[claim]]
+id = "embedding-qwen3-8b-best-english"
+quote = "English, 0.881 against 0.884, then falls to last on German"
+published = "0.884"
+rows = "multilingual_cells"
+reduce = "max"
+field = "ndcg@10"
+where = { corpus = "mldr_en_8k_slice", embedding = "ollama:qwen3-embedding-8b" }
+why = "qwen3-8b's best profile on MLDR English, the leader e5-large all but matches"
+
+# ---------------------------------------------------------------- the instruction prefix
+
+[[claim]]
+id = "embedding-qwen3-4b-query-prefix-delta"
+quote = "moves nDCG@10 by +0.0459 on the 4B and +0.0363 on the 8B"
+published = "+0.0459"
+rows = "qwen3_4b_paired"
+reduce = "value"
+field = "query_vs_plain/ndcg@10.mean_delta"
+where = { "query_vs_plain/ndcg@10.resolved" = true }
+why = "the 4B's paired per-query gain from prefixing the query alone; the filter also asserts it resolved, which the sentence claims"
+
+[[claim]]
+id = "embedding-qwen3-8b-query-prefix-delta"
+quote = "moves nDCG@10 by +0.0459 on the 4B and +0.0363 on the 8B"
+published = "+0.0363"
+rows = "qwen3_8b_paired"
+reduce = "value"
+field = "query_vs_plain/ndcg@10.mean_delta"
+where = { "query_vs_plain/ndcg@10.resolved" = true }
+why = "the same for the 8B"
+
+[[claim]]
+id = "embedding-qwen3-instruction-queries"
+quote = "test over the same 323 queries"
+published = "323"
+rows = "qwen3_4b_arms"
+reduce = "value"
+field = "query.queries"
+where = { "plain.queries" = 323 }
+why = "the query count of the prefixed arm; the filter pins the plain arm to the same count, so the two arms the test pairs are the same queries"
+
+[[claim]]
+id = "embedding-qwen3-4b-relative-gain"
+quote = "In relative terms that is 12.9 and 9.6 percent"
+published = "12.9"
+rows = "qwen3_4b_arms"
+reduce = "percent_change"
+field = "query.ndcg@10"
+against_field = "plain.ndcg@10"
+where = { "plain.queries" = 323 }
+why = "the 4B's query-prefix arm against its plain arm, as a percentage of the plain arm's nDCG@10"
+
+[[claim]]
+id = "embedding-qwen3-8b-relative-gain"
+quote = "In relative terms that is 12.9 and 9.6 percent"
+published = "9.6"
+rows = "qwen3_8b_arms"
+reduce = "percent_change"
+field = "query.ndcg@10"
+against_field = "plain.ndcg@10"
+where = { "plain.queries" = 323 }
+why = "the same for the 8B"

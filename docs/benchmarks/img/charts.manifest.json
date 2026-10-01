@@ -1,0 +1,19 @@
+{
+  "ann_frontier": "d5d9a95bf22b98dbe112fc69c9e0d70e2b1fab13286a103e01b8dddbdfae4a22",
+  "chunk_knob_effects": "f2783ef3d518893275b04846008e571a6e527b4a79d37af3a63655dc4a05fcef",
+  "chunker_quality": "b3cbbef3ec9c46293ab15a4121c14451a9df099eff271b3435babf3c5dee63b3",
+  "chunker_throughput": "c40d76492b21636168ce6bae25d20f147737fd487a88c0df18986ac31e6bad2e",
+  "embedding_german_ranking": "222758d8a689d3980160bb74579bafd8b65711e4661f92ac33ff21431b862f06",
+  "embedding_model_ranking": "dfc1b675f744202f48b0eae967d49435130ca13c7509d0ab10ab45dfcf502ac7",
+  "end_to_end_quality": "0c92a11f09b9d4d2d98cbab0dbc5745e6427cb726cdf6c3a740dd32305ff4c4e",
+  "extraction_real": "21c627c76a65012a615e0bf6239759b1bcc15b4aedbe16860582d158bda8851e",
+  "extractor_latency": "9413251ee08e6aaacf984f2777f4e872532d89fc91e923d0e6588579adce0e0b",
+  "markdown_structure": "506d7532b00682b84c0de28ea3173d668e65bb943f9ce913031ff2fd4f91a61c",
+  "ocr_badscans": "8245ec099666c5d0a76a377615eb575c710a2071b2708b38f5aa04ec6825ea73",
+  "product_k_budget": "1f224085a351aeb6d31230d5d396dc676bf0e00025296f4c26cd3de14d18842a",
+  "span_integrity": "af54985cf36b7b0c649e73bfb47d6c3784fc713a2a18f5b76f8380ccee3d4745",
+  "store_dim_crossover": "7d6414c2d86ce34ecbc22d061912efe62f1af96d520c9e776b29dba44887b9d8",
+  "store_dim_real": "80fa33f42e4c467ae420f1a6fb20f2814961af2e4f3b0cec7d9d62d097486ef2",
+  "store_memory": "697a825194a82d0739cdbb3b2248d98ccaeedad388289edd8cbcc8fdc215983e",
+  "store_scale_trends": "bd505a4b07b26727c06d16d7dff3129e849a2e67c0e27d407a3c50021cfdd275"
+}

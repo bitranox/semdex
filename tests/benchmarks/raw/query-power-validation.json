@@ -1,0 +1,100 @@
+{
+  "generated_utc": "2026-08-12T13:22:16+00:00",
+  "corpus": "mldr_en_8k_slice",
+  "metric": "ndcg@10",
+  "full_queries": 800,
+  "subsample_queries": 200,
+  "expected_half_width_ratio": 2.0,
+  "comparisons": 373,
+  "note": "A holdout test of the queries-needed formula: predict from a subsample of the size of the German set, check against the full set the prediction never saw.",
+  "rounds": [
+    {
+      "seed": 0,
+      "half_width_ratio": 1.974,
+      "unresolved_at_subsample": 217,
+      "predicted_resolve": 78,
+      "actually_resolved": 50,
+      "predicted_and_did": 31,
+      "resolved_but_not_predicted": 19,
+      "precision": 0.397,
+      "recall": 0.62
+    },
+    {
+      "seed": 1,
+      "half_width_ratio": 1.852,
+      "unresolved_at_subsample": 235,
+      "predicted_resolve": 64,
+      "actually_resolved": 65,
+      "predicted_and_did": 31,
+      "resolved_but_not_predicted": 34,
+      "precision": 0.484,
+      "recall": 0.477
+    },
+    {
+      "seed": 2,
+      "half_width_ratio": 1.976,
+      "unresolved_at_subsample": 224,
+      "predicted_resolve": 82,
+      "actually_resolved": 54,
+      "predicted_and_did": 37,
+      "resolved_but_not_predicted": 17,
+      "precision": 0.451,
+      "recall": 0.685
+    },
+    {
+      "seed": 3,
+      "half_width_ratio": 2.024,
+      "unresolved_at_subsample": 207,
+      "predicted_resolve": 83,
+      "actually_resolved": 51,
+      "predicted_and_did": 35,
+      "resolved_but_not_predicted": 16,
+      "precision": 0.422,
+      "recall": 0.686
+    },
+    {
+      "seed": 4,
+      "half_width_ratio": 2.031,
+      "unresolved_at_subsample": 237,
+      "predicted_resolve": 64,
+      "actually_resolved": 61,
+      "predicted_and_did": 26,
+      "resolved_but_not_predicted": 35,
+      "precision": 0.406,
+      "recall": 0.426
+    },
+    {
+      "seed": 5,
+      "half_width_ratio": 2.006,
+      "unresolved_at_subsample": 240,
+      "predicted_resolve": 86,
+      "actually_resolved": 71,
+      "predicted_and_did": 41,
+      "resolved_but_not_predicted": 30,
+      "precision": 0.477,
+      "recall": 0.577
+    },
+    {
+      "seed": 6,
+      "half_width_ratio": 2.077,
+      "unresolved_at_subsample": 249,
+      "predicted_resolve": 71,
+      "actually_resolved": 74,
+      "predicted_and_did": 38,
+      "resolved_but_not_predicted": 36,
+      "precision": 0.535,
+      "recall": 0.514
+    },
+    {
+      "seed": 7,
+      "half_width_ratio": 2.027,
+      "unresolved_at_subsample": 222,
+      "predicted_resolve": 71,
+      "actually_resolved": 57,
+      "predicted_and_did": 43,
+      "resolved_but_not_predicted": 14,
+      "precision": 0.606,
+      "recall": 0.754
+    }
+  ]
+}

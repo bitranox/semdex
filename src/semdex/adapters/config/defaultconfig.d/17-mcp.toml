@@ -1,0 +1,205 @@
+# ==============================================================================
+# semdex - MCP server ([mcp])
+# ==============================================================================
+#
+# `semdex serve` exposes the search / reindex use cases to MCP clients (Claude
+# Desktop, IDE agents, other LLM tooling). It is a delivery surface only: the
+# same use cases the CLI drives, reached over a transport. The server itself is
+# source-type-blind - it passes opaque uris through.
+#
+# Two transports:
+#   stdio - the client SPAWNS `semdex serve` as a subprocess and talks over
+#           stdin/stdout. Local only; there is no network socket, so auth does
+#           not apply (the trust boundary is the process the client launched).
+#   http  - Streamable HTTP; the server listens on host:port and many clients can
+#           connect over the network. (SSE is deprecated and not offered.) This is
+#           the transport that needs auth.
+#
+# Override any key via environment / .env, e.g. SEMDEX___MCP__TRANSPORT=http
+#
+# NEVER put a token or client secret inline in this file (it is committed /
+# world-readable). The bearer token(s) and the OAuth client secret load at
+# runtime from the environment variables NAMED below - only the names live here.
+#
+# Auth mode comparison (http transport):
+#   auth    protects with                     needs                        use when
+#   ------  --------------------------------  ---------------------------  --------------------------
+#   none    nothing                           -                            localhost / proxy-fronted
+#   bearer  static token(s) from an env var   SEMDEX_MCP_BEARER_TOKENS     simple shared-secret access
+#   oauth   OAuth 2.1 (JWT verify / proxy)    jwks_uri + issuer (+ proxy)  an existing IdP / SSO
+# ==============================================================================
+
+[mcp]
+
+# transport - how MCP clients reach the server.
+#   Default: "stdio" (local subprocess; no network socket).
+#   Effect: "stdio" talks over stdin/stdout to the client that spawned it; "http"
+#     listens on host:port (Streamable HTTP) for network clients.
+#   When to change: set "http" to run a long-lived, shared server that multiple
+#     clients or a remote agent connect to. Keep "stdio" for a single local client
+#     that launches semdex itself (the simplest, most secure setup).
+#   Consequences: "stdio" ignores host/port/auth entirely (the launching process is
+#     the trust boundary). "http" opens a socket, so host/port and auth all matter -
+#     an unauthenticated http server on a reachable interface is open to anyone.
+#   Recommendation: "stdio" for a personal desktop/IDE client; "http" only when you
+#     genuinely need a shared or remote endpoint, and then set auth accordingly.
+transport = "stdio"
+
+# host - interface the http transport binds to (http only; ignored by stdio).
+#   Default: "127.0.0.1" (localhost only - unreachable from other machines).
+#   Effect: which network interface the server accepts connections on.
+#   When to change: set "0.0.0.0" ONLY to expose the server beyond localhost, and
+#     ONLY behind a trusted reverse proxy that terminates TLS and enforces auth.
+#   Consequences: "0.0.0.0" makes the server reachable from the network; combined
+#     with auth = "none" that is an open, unauthenticated endpoint. Leave it at
+#     localhost unless a proxy sits in front.
+#   Recommendation: keep "127.0.0.1"; put a reverse proxy in front for remote access
+#     rather than binding "0.0.0.0" directly.
+host = "127.0.0.1"
+
+# port - TCP port the http transport listens on (http only; ignored by stdio).
+#   Default: 8080. The Streamable HTTP endpoint is served at /mcp on this port.
+#   Effect: the port network clients connect to.
+#   When to change: set a free port that does not collide with another service, or
+#     one your reverse proxy / firewall expects.
+#   Consequences: must be 1-65535 and free; a taken port fails to bind at startup.
+#   Recommendation: any free high port; align it with your proxy config.
+port = 8080
+
+# rrf_k - Reciprocal Rank Fusion constant for the fan-out search_datasets tool.
+#   Default: 60 (the standard value from the RRF literature).
+#   Background: the fan-out tool searches several datasets and must combine their
+#     separate ranked result lists into one. It fuses by RANK, not by raw
+#     similarity score, because two datasets on different embedding models produce
+#     cosine scores on different scales that cannot be compared. Each hit at
+#     position `rank` in a dataset's list contributes `1 / (rrf_k + rank)` to its
+#     fused score; a hit surfaced by several datasets sums its contributions.
+#   Effect: `rrf_k` controls how sharply the top of each list is weighted. A LARGER
+#     value flattens the curve (rank 1 and rank 5 differ less), so results from many
+#     datasets mix more evenly; a SMALLER value sharpens the lead of each list's top
+#     hits, so a strong single-dataset hit dominates.
+#   When to change: rarely. Lower it (e.g. 20) if you want each dataset's very top
+#     hit to win more decisively; raise it (e.g. 100) to blend datasets more evenly.
+#   Consequences: only affects the multi-dataset `search_datasets` tool; the
+#     single-dataset `search` tool never uses it. Must be > 0.
+#   Recommendation: keep 60 unless measurements on your data say otherwise.
+rrf_k = 60
+
+# auth - how the http endpoint authenticates clients (http only; stdio ignores it).
+#   Default: "none".
+#   Values:
+#     "none"   - no authentication. Safe ONLY when the endpoint is unreachable by
+#                untrusted clients: stdio, localhost-bound http, or http behind a
+#                proxy that authenticates for you.
+#     "bearer" - static bearer token(s). The server accepts any request carrying a
+#                token listed in the env var named by `bearer_token_env` (below).
+#                Simplest shared-secret scheme; rotate tokens by changing the env.
+#     "oauth"  - OAuth 2.1. The server verifies JWTs against your identity provider
+#                (jwks_uri + issuer, optionally audience). If the upstream OAuth
+#                endpoints + client id are also set, it runs as an OAuth proxy so
+#                clients can complete the interactive flow through semdex.
+#   Effect: chooses the FastMCP auth provider the http server is built with.
+#   When to change: "bearer" for a quick authenticated endpoint you control end to
+#     end; "oauth" when an IdP / SSO already issues tokens you want to trust.
+#   Consequences: "bearer" with no tokens in the env, or "oauth" with no jwks_uri /
+#     issuer, is a misconfiguration and the serve command errors clearly rather than
+#     starting an unprotected or broken server. Never inline the secret here.
+#   Recommendation: "none" for stdio / localhost; "bearer" for a small trusted set of
+#     clients; "oauth" when you already run an identity provider.
+auth = "none"
+
+# bearer_token_env - NAME of the environment variable holding the bearer token(s)
+#   (used only when auth = "bearer").
+#   Default: "SEMDEX_MCP_BEARER_TOKENS". The variable's value is a comma-separated
+#     list of accepted tokens, e.g. export SEMDEX_MCP_BEARER_TOKENS="tok-a,tok-b".
+#   Effect: the serve command reads this env var at startup and accepts requests
+#     bearing any listed token.
+#   When to change: point it at a differently named secret your deployment already
+#     provides; the tokens themselves always live in the environment, never here.
+#   Consequences: with auth = "bearer" and the variable empty/unset, serve errors
+#     (it refuses to start an endpoint that would accept no one, or everyone).
+#   Recommendation: keep the default name; supply the tokens via the environment /
+#     a .env that is NOT committed, and rotate by changing that value.
+bearer_token_env = "SEMDEX_MCP_BEARER_TOKENS"
+
+# oauth_jwks_uri / oauth_issuer / oauth_audience - JWT verification settings
+#   (used only when auth = "oauth"). jwks_uri and issuer are REQUIRED for oauth;
+#   audience is optional.
+#   Default: unset.
+#   Effect: the server fetches signing keys from `oauth_jwks_uri` and accepts JWTs
+#     issued by `oauth_issuer` (and, if set, scoped to `oauth_audience`).
+#   When to change: set all applicable values to match your identity provider.
+#   Consequences: auth = "oauth" without jwks_uri + issuer is a misconfiguration and
+#     serve errors at startup.
+#   Recommendation: copy these from your IdP's OpenID configuration document.
+# oauth_jwks_uri = "https://idp.example.com/.well-known/jwks.json"
+# oauth_issuer = "https://idp.example.com/"
+# oauth_audience = "semdex-mcp"
+
+# oauth_authorize_url / oauth_token_url / oauth_client_id / oauth_base_url -
+#   OAuth PROXY settings (used only when auth = "oauth"). Set these ONLY if you want
+#   semdex to proxy the interactive OAuth flow (so a client can log in through
+#   semdex). If they are left unset, semdex only VERIFIES tokens minted elsewhere.
+#   Default: unset (verify-only, no proxy).
+#   Effect: when the authorize/token URLs + client id are set, the server registers
+#     an OAuth proxy pointed at your provider; `oauth_base_url` is semdex's OWN public
+#     URL (the redirect target the provider calls back).
+#   When to change: set them to run the interactive login flow through semdex; leave
+#     them unset when clients already obtain tokens directly from the IdP.
+#   Consequences: the client secret is NOT set here - it loads from the env var named
+#     by `oauth_client_secret_env` (below). `oauth_base_url` is REQUIRED whenever the
+#     other three proxy fields are set: fastmcp's OAuthProxy has no per-request
+#     fallback for a missing base_url (it fails later with a bare AssertionError and
+#     builds redirect/consent URLs as the literal "None/..."), so serve refuses to
+#     start proxy mode without it rather than starting a broken one.
+#   Recommendation: prefer verify-only (unset) unless you specifically need semdex to
+#     broker the login; if you do, always set `oauth_base_url` alongside the other
+#     three proxy fields.
+# oauth_authorize_url = "https://idp.example.com/oauth/authorize"
+# oauth_token_url = "https://idp.example.com/oauth/token"
+# oauth_client_id = "semdex-mcp"
+# oauth_base_url = "https://semdex.example.com"
+
+# oauth_client_secret_env - NAME of the environment variable holding the OAuth proxy
+#   client secret (used only when auth = "oauth" AND the proxy settings above are set).
+#   Default: "SEMDEX_MCP_OAUTH_CLIENT_SECRET".
+#   Effect: the serve command reads this env var for the upstream client secret when
+#     building the OAuth proxy.
+#   When to change: point it at a differently named secret your deployment provides.
+#   Consequences: like every other secret, the value lives in the environment, never
+#     in this file.
+#   Recommendation: keep the default name; supply the secret via the environment.
+oauth_client_secret_env = "SEMDEX_MCP_OAUTH_CLIENT_SECRET"
+
+# oauth_revocation_url - upstream token-REVOCATION endpoint (OAuth proxy only; used
+#   only when auth = "oauth" AND the proxy settings above are set).
+#   Default: unset (the proxy never advertises or forwards revocation).
+#   Effect: when set, the proxy enables its own revocation endpoint and forwards a
+#     client's revoke request to this upstream URL, so logging out through semdex
+#     also invalidates the token at the identity provider.
+#   When to change: set it to your IdP's revocation endpoint (from its OpenID
+#     configuration document) if you want semdex-brokered logout to reach upstream.
+#   Consequences: left unset, revocation support is simply not offered; nothing
+#     else in the proxy depends on it.
+#   Recommendation: set it whenever the IdP publishes one; otherwise leave unset.
+# oauth_revocation_url = "https://idp.example.com/oauth/revoke"
+
+# mask_error_details - hide an unexpected tool exception's message/traceback from
+#   MCP clients.
+#   Default: true.
+#   Effect: when a tool raises an exception nobody anticipated (a bug, an
+#     unhandled edge case), the client sees only a generic error instead of the
+#     original message and traceback. A deliberately raised tool error (for
+#     example "unknown dataset 'x'; known datasets: ...") is NOT affected by this
+#     setting - it is FastMCP's own error type and always reaches the client
+#     verbatim, since we chose to report it.
+#   When to change: set false only for local debugging, to see an unexpected
+#     failure's real message while developing; never in a deployment reachable by
+#     other people.
+#   Consequences: true can make debugging a live deployment harder (the operator
+#     must read server-side logs instead of the client's error text); false risks
+#     leaking internal details (paths, stack traces, library internals) to every
+#     MCP client, including a possibly untrusted one over the http transport.
+#   Recommendation: keep true; read the server's own logs to diagnose a masked
+#     error.
+mask_error_details = true

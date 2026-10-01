@@ -1,0 +1,163 @@
+# ==============================================================================
+# semdex - vector store backend selection ([vector_store])
+# ==============================================================================
+#
+# The vector store persists chunk vectors and answers similarity search. All
+# backends implement the same ports, so switching is a config change plus the
+# matching optional extra. The store is separate from the embedding: you can pair
+# any backend with any embedding provider. Switching backends does NOT migrate
+# existing data - reindex into the new backend.
+#
+# Override any key via environment / .env, e.g. SEMDEX___VECTOR_STORE__BACKEND=sqlite_vec
+#
+# Backend comparison:
+#   backend     kind                        scales to    search        needs
+#   ----------  --------------------------  -----------  ------------  ---------------------------
+#   json        embedded orjson file        small        exact O(n)    nothing (default)
+#   sqlite_vec  embedded single-file KNN    small/medium  exact         semdex[sqlite]
+#   lancedb     embedded columnar ANN       large         approximate   semdex[lance]
+#   pgvector    Postgres + pgvector server  large/shared  approximate   semdex[pg] + dsn
+#   mariadb     MariaDB 11.8 native VECTOR  large/shared  approximate   semdex[mariadb] + dsn
+# ==============================================================================
+
+[vector_store]
+
+# backend - where chunk vectors are stored and searched.
+#   Default: "json" (a single orjson file loaded fully into memory; zero dependencies).
+#   Effect: chooses persistence and search algorithm. "json"/"sqlite_vec" do exact
+#     nearest-neighbour (correct, linear); "lancedb"/"pgvector"/"mariadb" use an ANN
+#     index (sub-linear, approximate) for large corpora; the server backends also allow
+#     many clients to share one index.
+#   When to change: move off "json" once the corpus grows (json loads every vector into
+#     RAM and scans them all). "sqlite_vec"/"lancedb" stay embedded (no server);
+#     "pgvector"/"mariadb" centralize the index on a database server for scale/sharing.
+#   Consequences: "json" RAM and search time grow linearly with the corpus; the ANN
+#     backends trade a little recall for speed; the server backends need a running
+#     database and a dsn. Each non-default backend needs its optional extra installed.
+#   Recommendation: "json" for personal/small note stores; "sqlite_vec" or "lancedb"
+#     for a large single-machine index; "pgvector"/"mariadb" for large or multi-client
+#     deployments where a central DB already exists.
+backend = "json"
+
+# dsn - database connection string for the server backends (pgvector / mariadb).
+#   Default: unset. Required by "pgvector" and "mariadb"; ignored by the embedded
+#     backends (they use the store directory instead).
+#   Effect: tells semdex which database/host/credentials to connect to.
+#   When to change: set it when using a server backend; it can point at a remote DB.
+#   Consequences: contains credentials - keep it out of tracked files (prefer an env
+#     var / .env: SEMDEX___VECTOR_STORE__DSN=...). A server backend with no dsn errors clearly.
+#   Recommendation: pgvector -> "postgresql://user:pass@host:5432/semdex";
+#     mariadb -> "mysql://user:pass@host:3306/semdex". Load the password from the
+#     environment rather than hardcoding it here.
+# dsn = "postgresql://user:pass@host:5432/semdex"
+
+# lance_index_threshold - rows before the "lancedb" backend builds its ANN index
+#   (IVF-PQ, cosine). Only the lancedb backend reads it.
+#   Default: 100000. Below the threshold LanceDB searches with a flat scan (exact);
+#     the compaction step (below) builds the index once the table crosses the threshold.
+#   Effect: controls when search switches from an exact O(n) scan to approximate ANN.
+#   When to change: lower it (e.g. 20000) if searches feel slow well before 100K rows;
+#     raise it if you prefer exact results for longer and can afford the scan time.
+#   Consequences: the index build is a one-time cost paid by the first compaction after
+#     the threshold (seconds to minutes, size-dependent); after it, search is sub-linear
+#     but approximate (a little recall may be traded for speed). Too low wastes a build
+#     on a corpus where scanning was faster anyway.
+#   Recommendation: keep the default unless measurements on your corpus say otherwise
+#     (see docs/benchmarks/05-vector-store.md for the measured crossover).
+lance_index_threshold = 100000
+
+# compact_after_records / compact_after_seconds - how often the indexer folds an ANN
+#   store's unindexed tail back into its index (lancedb only; other backends ignore both).
+#   Background: for speed, upsert only APPENDS rows. LanceDB keeps rows added since the
+#     last fold in an unindexed "tail" that it brute-force scans on every query - cheap
+#     while the tail is small. Folding (LanceDB `optimize`) is deferred so a bulk load
+#     does not re-optimize on every source.
+#   Default: 50000 records / 300 seconds. During indexing the tail is folded once
+#     `compact_after_records` new chunks have accumulated OR `compact_after_seconds` have
+#     elapsed while new chunks arrive (whichever first), and always once more at the end.
+#   Effect: bounds how large the brute-force-scanned tail gets, trading query latency
+#     against re-index frequency. A non-positive value disables that trigger.
+#   When to change: lower `compact_after_records` (e.g. 10000) for lower query latency on
+#     a store that is written continuously; raise it to re-index less often during a very
+#     large one-shot load. Lower `compact_after_seconds` if writes trickle in slowly and
+#     you want the tail folded on a time basis rather than waiting for the record count.
+#   DOWNSIDE (important): folding only happens when something drives it. The `index`
+#     command always folds at the end, but a program that upserts through the store
+#     WITHOUT ever compacting (a custom writer, or a future watcher that forgets to)
+#     leaves the tail growing without bound - every query then silently degrades to a
+#     full O(n) scan, exactly the failure this policy exists to prevent. If you write
+#     outside the index use case, call `store.compact(collection=...)` yourself.
+#   Recommendation: keep the defaults; they self-manage the tail during normal indexing.
+compact_after_records = 50000
+compact_after_seconds = 300.0
+
+# default_partition - how a dataset's collections are separated within the backend, for
+#   datasets that do not set their own `partition`. Applies to every backend (it is a
+#   deployment choice - which database/file a dataset's DSN or store dir names - NOT a
+#   store-adapter code path).
+#   Values:
+#     "table"    - many collections share one store/database: a `chunks_<id>` table per
+#                  collection (server backends), or many collections in one store file
+#                  (embedded). Fewest connections, simplest provisioning (a plain
+#                  CREATE TABLE, no elevated privilege).
+#     "database" - one database per dataset (server backends) or one store file/dir per
+#                  dataset (embedded).
+#   Default: "table".
+#   Effect: decides the isolation boundary between datasets on the same backend.
+#   When to change: set "database" when datasets need INDEPENDENT database-native
+#     treatment - per-dataset GRANTs (e.g. a shared dataset readable by a group, read-only
+#     vs read-write decided by the grant), per-dataset backup / DROP / snapshot, and a
+#     contained blast-radius. A per-dataset `partition` in the dataset's own config
+#     overrides this default either way.
+#   Consequences:
+#     "table"    - only coarse database-level grants (all collections in the database share
+#                  one access scope), a shared metadata table lists every collection, and a
+#                  problem (bad migration, lock storm, corruption) affects the whole database.
+#     "database" - per-dataset grants/backup/isolation, at the cost of one extra connection
+#                  per dataset in a long-lived server and the CREATEDB privilege (or admin
+#                  provisioning) to create each database. Embedded backends are unaffected -
+#                  "database" there is just a separate file/dir, which is how store_dir
+#                  already works.
+#   Recommendation (the hybrid default policy): keep "table" for a user's OWN private
+#     datasets - they already sit inside that user's own per-user database, so the user
+#     boundary isolates them and table-per-collection costs nothing; use "database" for
+#     SHARED datasets, where the per-group grants and independent backups earn their keep.
+default_partition = "table"
+
+# ann_recall - approximate-nearest-neighbour recall/latency preset for the ANN backends.
+#   Default: "balanced" - each ANN driver's own default, EXCEPT lancedb, where the measured
+#     frontier showed that default keeping only 0.567 of the exact top-10 and giving up 0.0474
+#     nDCG@10 for nothing. There "balanced" sets nprobes=10 refine_factor=5, which measures 0.986
+#     recall for about 9 percent more latency. Choose "fast" to get the bare driver behaviour
+#     back. Options: "fast" | "balanced" | "accurate".
+#   Effect: a QUERY-TIME knob (no reindex) mapped per backend to its native search parameter -
+#     lancedb `nprobes`/`refine_factor`, pgvector and mariadb HNSW `ef_search`. Higher recall
+#     reads more candidates per query (slower, but finds more of the true nearest neighbours);
+#     lower trades recall for latency. The EXACT backends (json / sqlite_vec) ignore it - they
+#     already scan everything.
+#   When to change: "accurate" when a large ANN index drops relevant hits (recall matters more
+#     than a few ms per query); "fast" for the lowest latency on a big index where approximate
+#     is good enough. Leave "balanced" until a measured recall/latency need appears.
+#   Consequences: purely a search-time trade - it never rebuilds the index and never changes what
+#     is stored, so you can flip it freely and re-measure. A per-dataset `ann_recall` (in the
+#     dataset's own config) overrides this default, so a fan-out search queries each dataset at
+#     its own recall.
+#   Recommendation: keep "balanced"; move to "accurate"/"fast" only from a measured recall-vs-
+#     latency need on YOUR corpus. The measured frontier for all three ANN backends, including
+#     what each preset scores, is in docs/benchmarks/05-vector-store.md.
+ann_recall = "balanced"
+
+# [vector_store.<backend>] - optional RAW per-backend ANN overrides for power users. A set value
+#   WINS over the ann_recall preset for that backend; an unset key keeps the preset. These are
+#   the live QUERY-TIME parameters. Build-time index params (HNSW `m`/`ef_construction`, lancedb
+#   `num_partitions`) are applied too, but changing one only takes effect on a rebuilt index, and
+#   none of them moved recall measurably on the reference corpus. Leave all of these unset unless
+#   you are tuning a backend to measured numbers.
+#   Override via env, e.g. SEMDEX___VECTOR_STORE__PGVECTOR__EF_SEARCH=200
+# [vector_store.lancedb]
+# nprobes = 20         # IVF cells probed per search (higher = better recall, slower)
+# refine_factor = 10   # re-rank the top candidates with exact distance (0 = off)
+# [vector_store.pgvector]
+# ef_search = 100      # HNSW candidate-list size (SET hnsw.ef_search; higher = better recall)
+# [vector_store.mariadb]
+# ef_search = 100      # MHNSW candidate-list size (mhnsw_ef_search; higher = better recall)

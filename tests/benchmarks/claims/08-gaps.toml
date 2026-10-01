@@ -1,0 +1,1427 @@
+# Claims for docs/benchmarks/08-gaps.md
+#
+# Coverage is partial and is answered by reading this file beside the page, never by a green run.
+# The gaps page restates figures from every other page, so most derivations here repeat one in
+# that page's claim file; the `why` names the reading, not the twin. Seeded: the reranking depth
+# and the store-cell sizes (1, 2); the span blind spot, corpus count, k and size ceiling (4); the
+# frontier figures (5); the OmniDocBench recalls, page counts and DPI (6); the recursive
+# throughput (7); the qwen3 instruction result (8); the memory ladder, sqlite_vec flatness, json
+# per-chunk cost and lancedb regime change (9); the electricity and list-price ranges, the
+# tokenizer spread and the idle draws (10); the metric-redundancy counts and views (11); the
+# query-power medians, required counts, control shares, holdout precision and recall, the ladder
+# counts and GerDaLIR's query multiple and overlap resolutions (12); and the chunking corrections
+# restated in 13.
+#
+# Carried by prose the checker cannot express: directions ("every strategy got SLOWER", "keeps
+# gaining down to its smallest rung"), rankings, "about a quarter" (13.8 of 51.3 points), "two and
+# a half times tighter" (0.0352 over 0.0140), "fourfold" and "twofold" (whose denominators are the
+# retired single-pass run), "83.7 percent" (one minus the worst Recall@10-against-P@1 disagreement
+# rate, 0.163 on nfcorpus, which sits in a list nested inside each corpus row), the 1.24x holdout
+# optimism (predicted over actually-resolved ties summed across eight rounds; 1.24 when seeded,
+# 1.27 as a mean of per-round ratios) and "a half-width around 0.059" (the per-cell interval
+# half-width averaged over the German cells, not the paired 0.0352), and "somewhere near 440,000
+# chunks" (the generator's linear extrapolation of the json footprint to 8 GB).
+#
+# Carried by tests/benchmarks/baseline.json and the comparator, outside the raw directory (entries
+# 2 and 3): the 150-document, 20-query gated slice, its 26 per-query cells, the +/-0.099
+# half-width, the 0.03 and 0.005 thresholds, and the exact-store disagreement (pgvector differs
+# from json on 4 of 20 queries at 0.6303, mariadb on 2 at 0.6054; json, sqlite_vec and lancedb
+# agree on all 20 at 0.6207). The counts and the two current scores were re-derived from the
+# baseline when this file was seeded; the earlier 0.6230 and 0.6182 are its history.
+#
+# Carried by git history only: the retired single-pass throughput run (13,749 docs/s, 0.53 s,
+# 113 s, "within 7 percent"; bed889b), the retired driver-default store run ("up to 5.6 percent";
+# 50d0a98). Not recorded anywhere: the reranker throughput (3.3 against 13.5 pairs per second),
+# the RRF constant (a code default), the 200-chunk query depth, the 214 W wall reading, and the
+# "about a fifth" of GerDaLIR queries over the window, which the page itself calls a one-off count.
+# The cap512 re-cut figures (16 to 22 percent, 10 to 16 percent, "seven largest") describe the
+# polluted sets the re-measure replaced; those sets were deleted, so the figures survive only in
+# git history and the page quotes them as history.
+
+doc = "docs/benchmarks/08-gaps.md"
+
+[sets]
+fit_corpora = ["gerdalir_de_12k_slice", "mldr_de_3k_slice", "mldr_en_8k_slice"]
+# The metric-redundancy corpora with enough swept cells to carry a rank correlation: every corpus
+# but cqadupstack (11 cells) and fiqa (4), which the page calls too thin to read.
+metric_corpora_readable = ["miracl_de_100k_slice", "miracl_en_100k_slice", "mldr_de_3k_slice", "mldr_en_8k_slice", "nfcorpus", "scifact"]
+metric_corpora_all = ["cqadupstack", "fiqa", "miracl_de_100k_slice", "miracl_en_100k_slice", "mldr_de_3k_slice", "mldr_en_8k_slice", "nfcorpus", "scifact"]
+german_whitespace_sets = ["gerdalir_de_12k_slice__whitespace-t256-o0-gpt2", "mldr_de_3k_slice__whitespace-t256-o0-gpt2"]
+late_sets = ["mldr_en_8k_slice__late-t256-o0-gpt2", "mldr_de_3k_slice__late-t256-o0-gpt2"]
+
+[rowsets.effects]
+source = "chunk-knob-effects.json"
+path = "effects"
+orient = true
+
+[rowsets.rerank_cells]
+source = "rerank-cross-encoder.json"
+path = "cells"
+
+[rowsets.quality]
+source = "store-quality.json"
+path = "cells"
+
+[rowsets.frontier]
+source = "ann-frontier.json"
+path = "points"
+
+[rowsets.span_integrity]
+source = "span-integrity.json"
+path = "integrity"
+
+[rowsets.span_retrieval]
+source = "span-integrity.json"
+path = "retrieval"
+
+# The OmniDocBench file keeps three tables (overall, by_language, by_source) and its run facts at
+# the top level; the top level is a one-row rowset for the page count and the render DPI.
+[rowsets.omnidoc]
+source = "extraction-omnidocbench.json"
+
+[rowsets.omnidoc_overall]
+source = "extraction-omnidocbench.json"
+path = "overall"
+
+[rowsets.omnidoc_by_language]
+source = "extraction-omnidocbench.json"
+path = "by_language"
+
+[rowsets.omnidoc_by_source]
+source = "extraction-omnidocbench.json"
+path = "by_source"
+
+[rowsets.throughput]
+source = "chunker-throughput.json"
+path = "rows"
+
+[rowsets.qwen3_4b_arms]
+source = "qwen3-instruction.json"
+path = "arms"
+
+[rowsets.qwen3_4b_paired]
+source = "qwen3-instruction.json"
+path = "paired"
+
+[rowsets.qwen3_8b_arms]
+source = "qwen3-instruction-8b.json"
+path = "arms"
+
+[rowsets.qwen3_8b_paired]
+source = "qwen3-instruction-8b.json"
+path = "paired"
+
+[rowsets.memory_stores]
+source = "memory.json"
+path = "stores"
+
+[rowsets.energy_cpu]
+source = "energy.json"
+path = "rows"
+
+[rowsets.energy_gpu]
+source = "energy-gpu.json"
+path = "rows"
+
+[rowsets.cloud]
+source = "cloud-prices.json"
+path = "providers"
+
+[rowsets.cloud_sample]
+source = "cloud-prices.json"
+path = "tokens_per_document"
+
+[rowsets.metric_corpora]
+source = "metric-redundancy.json"
+path = "corpora"
+
+[rowsets.power_corpora]
+source = "query-power.json"
+path = "corpora"
+
+[rowsets.power_validation]
+source = "query-power-validation.json"
+path = "rounds"
+
+[rowsets.chunk_sets]
+source = "chunk-dimension-audit.json"
+path = "chunk_sets"
+
+[rowsets.embedder_truncation]
+source = "embedder-truncation-audit.json"
+path = "rows"
+
+[rowsets.query_shape]
+source = "query-length-effect.json"
+path = "query_shape"
+
+[rowsets.qlen_causal]
+source = "query-length-effect.json"
+path = "truncated_queries"
+
+# ---------------------------------------------------------------- 1. retrieval method
+
+[[claim]]
+id = "gaps-rerank-depth"
+quote = "`bge-reranker-base` over the top 20."
+published = "20"
+rows = "rerank_cells"
+reduce = "max"
+field = "rerank_depth"
+where = { reranker = "BAAI/bge-reranker-base" }
+why = "the shortlist depth every reranked cell was measured at"
+
+# ---------------------------------------------------------------- 2. the composed store measurement
+
+[[claim]]
+id = "gaps-store-cells-english-chunks"
+quote = "at 148,000 and 201,824 chunks"
+published = "148,000"
+rows = "quality"
+reduce = "max"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice" }
+tolerance = 10
+why = "the English cell's 148,008 chunks, rounded to the thousand on this page"
+
+[[claim]]
+id = "gaps-store-cells-german-chunks"
+quote = "at 148,000 and 201,824 chunks"
+published = "201,824"
+rows = "quality"
+reduce = "max"
+field = "rows"
+where = { corpus = "mldr_de_3k_slice" }
+why = "the German cell's chunk count, the same on every store row of that corpus"
+
+# ---------------------------------------------------------------- 4. chunk quality at span level
+
+[[claim]]
+id = "gaps-span-blind-spot"
+quote = "up to 51 percent of queries scored as document hits deliver no whole answer"
+published = "51"
+rows = "span_retrieval"
+reduce = "max"
+field = "blind_spot"
+where = { k = 5 }
+scale = 100
+why = "the largest blind spot in the composed measurement over every corpus and chunk size (GermanQuAD at 64 tokens, 51.3 percent)"
+
+[[claim]]
+id = "gaps-span-corpora"
+quote = "**Four corpora, all Wikipedia-style prose, three languages.**"
+published = "Four"
+rows = "span_integrity"
+reduce = "count"
+where = { strategy = "recursive", max_tokens = 256, overlap_tokens = 0 }
+why = "one integrity row per corpus at the recommended profile: GermanQuAD, XQuAD German, English and Spanish"
+
+[[claim]]
+id = "gaps-span-k"
+quote = "k=5 with `fastembed:bge-base`"
+published = "5"
+rows = "span_retrieval"
+reduce = "max"
+field = "k"
+where = { corpus = "germanquad" }
+why = "the retrieval depth of the composed measurement, the same on every row"
+
+[[claim]]
+id = "gaps-span-size-ceiling"
+quote = "and it now reaches 512 tokens"
+published = "512"
+rows = "span_retrieval"
+reduce = "max"
+field = "max_tokens"
+where = { k = 5 }
+why = "the largest chunk size the composed half was run at"
+
+[[claim]]
+id = "gaps-span-512-gain-low"
+quote = "delivered-answer rate rises 3.9 to 7.4 points from 256 to 512"
+published = "3.9"
+rows = "span_retrieval"
+reduce = "difference"
+field = "span_hit"
+scale = 100
+where = { corpus = "xquad.de", max_tokens = 512, overlap_tokens = 0 }
+against = { corpus = "xquad.de", max_tokens = 256, overlap_tokens = 0 }
+why = "the smaller of the two German gains, XQuAD German"
+
+[[claim]]
+id = "gaps-span-512-gain-high"
+quote = "delivered-answer rate rises 3.9 to 7.4 points from 256 to 512"
+published = "7.4"
+rows = "span_retrieval"
+reduce = "difference"
+field = "span_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 512, overlap_tokens = 0 }
+against = { corpus = "germanquad", max_tokens = 256, overlap_tokens = 0 }
+why = "the larger of the two German gains, GermanQuAD"
+
+[[claim]]
+id = "gaps-span-512-doc-cost-low"
+quote = "1.3 to 3.6, so the reader's floor"
+published = "1.3"
+rows = "span_retrieval"
+reduce = "difference"
+field = "doc_hit"
+scale = 100
+where = { corpus = "xquad.de", max_tokens = 256, overlap_tokens = 0 }
+against = { corpus = "xquad.de", max_tokens = 512, overlap_tokens = 0 }
+why = "the smaller document-hit loss, XQuAD German; the page prints '1.3 to 3.6' on the next line"
+
+[[claim]]
+id = "gaps-span-512-doc-cost-high"
+quote = "1.3 to 3.6, so the reader's floor"
+published = "3.6"
+rows = "span_retrieval"
+reduce = "difference"
+field = "doc_hit"
+scale = 100
+where = { corpus = "germanquad", max_tokens = 256, overlap_tokens = 0 }
+against = { corpus = "germanquad", max_tokens = 512, overlap_tokens = 0 }
+why = "the larger document-hit loss, GermanQuAD"
+
+# ---------------------------------------------------------------- 5. the ANN frontier
+
+[[claim]]
+id = "gaps-frontier-lancedb-default-recall"
+quote = "lancedb's default keeps 0.567 of the exact top-10"
+published = "0.567"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "driver default", build_level = "driver default" }
+why = "lancedb's recall against exact at both driver defaults"
+
+[[claim]]
+id = "gaps-frontier-lancedb-refined-recall"
+quote = "takes that to 0.998 and makes its nDCG@10 equal the exact scan"
+published = "0.998"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "nprobes=40 refine=10" }
+why = "lancedb's recall against exact at the strongest refine setting"
+
+[[claim]]
+id = "gaps-frontier-nprobes-5"
+quote = "(0.561 at 5 probes, 0.567 at 80)"
+published = "0.561"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "nprobes=5" }
+why = "lancedb recall at nprobes=5"
+
+[[claim]]
+id = "gaps-frontier-nprobes-80"
+quote = "(0.561 at 5 probes, 0.567 at 80)"
+published = "0.567"
+rows = "frontier"
+reduce = "value"
+field = "recall_vs_exact"
+where = { store = "lancedb", query_level = "nprobes=80" }
+why = "lancedb recall at nprobes=80"
+
+[[claim]]
+id = "gaps-frontier-cell-rows"
+quote = "**One cell**, 148,008 chunks at 768 dimensions"
+published = "148,008"
+rows = "frontier"
+reduce = "max"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice" }
+why = "the frontier cell's chunk count"
+
+[[claim]]
+id = "gaps-frontier-cell-dim"
+quote = "**One cell**, 148,008 chunks at 768 dimensions"
+published = "768"
+rows = "frontier"
+reduce = "max"
+field = "dim"
+where = { corpus = "mldr_en_8k_slice" }
+why = "the frontier cell's dimension"
+
+[[claim]]
+id = "gaps-frontier-mariadb-recall-low"
+quote = "Recall sits at 0.677 to 0.684 across `ef_search`"
+published = "0.677"
+rows = "frontier"
+reduce = "min"
+field = "recall_vs_exact"
+where = { store = "mariadb", build_level = "driver default" }
+why = "the lowest mariadb recall over its ef_search ladder on the default index"
+
+[[claim]]
+id = "gaps-frontier-mariadb-recall-high"
+quote = "Recall sits at 0.677 to 0.684 across `ef_search`"
+published = "0.684"
+rows = "frontier"
+reduce = "max"
+field = "recall_vs_exact"
+where = { store = "mariadb", build_level = "driver default" }
+why = "the highest mariadb recall over the same ladder"
+
+[[claim]]
+id = "gaps-frontier-mariadb-p50-low"
+quote = "10 to 200 while latency rises from 63 ms to 76 ms"
+published = "63"
+rows = "frontier"
+reduce = "min"
+field = "search_p50_ms"
+where = { store = "mariadb", build_level = "driver default" }
+why = "the lowest mariadb p50 over its ef_search ladder"
+
+[[claim]]
+id = "gaps-frontier-mariadb-p50-high"
+quote = "10 to 200 while latency rises from 63 ms to 76 ms"
+published = "76"
+rows = "frontier"
+reduce = "max"
+field = "search_p50_ms"
+where = { store = "mariadb", build_level = "driver default" }
+why = "the highest mariadb p50 over the same ladder"
+
+# ---------------------------------------------------------------- 6. extraction fidelity
+
+[[claim]]
+id = "gaps-omnidoc-mineru-recall"
+quote = "`mineru` recovers 97.7 percent of the annotated text"
+published = "97.7"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "mineru" }
+scale = 100
+why = "mineru's word recall over all 113 scored pages"
+
+[[claim]]
+id = "gaps-omnidoc-olmocr-recall"
+quote = "84.4, against 76.0 for `xberg` and 69.0 for `docling`"
+published = "84.4"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "olmocr" }
+scale = 100
+why = "olmocr's word recall over all scored pages"
+
+[[claim]]
+id = "gaps-omnidoc-xberg-recall"
+quote = "84.4, against 76.0 for `xberg` and 69.0 for `docling`"
+published = "76.0"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "xberg" }
+scale = 100
+why = "xberg's word recall over all scored pages"
+
+[[claim]]
+id = "gaps-omnidoc-docling-recall"
+quote = "84.4, against 76.0 for `xberg` and 69.0 for `docling`"
+published = "69.0"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "docling" }
+scale = 100
+why = "docling's word recall over all scored pages"
+
+[[claim]]
+id = "gaps-omnidoc-xberg-english"
+quote = "`xberg` scores 0.86 on English"
+published = "0.86"
+rows = "omnidoc_by_language"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "xberg", language = "english" }
+why = "xberg's word recall on the English pages"
+
+[[claim]]
+id = "gaps-omnidoc-xberg-handwritten"
+quote = "print and 0.10 on handwritten notes"
+published = "0.10"
+rows = "omnidoc_by_source"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "xberg", source = "note" }
+why = "xberg's word recall on the handwritten-note pages"
+
+[[claim]]
+id = "gaps-omnidoc-markitdown-zero"
+quote = "`markitdown` scores zero on every page"
+published = "zero"
+rows = "omnidoc_overall"
+reduce = "value"
+field = "word_recall"
+where = { extractor = "markitdown" }
+why = "markitdown's word recall over all scored pages, which is exactly 0 because it has no OCR"
+
+[[claim]]
+id = "gaps-omnidoc-pages"
+quote = "**113 pages across ten document types**"
+published = "113"
+rows = "omnidoc"
+reduce = "value"
+field = "pages_scored"
+where = { vision_render_dpi = 150 }
+why = "the number of OmniDocBench pages scored, from the file's run facts"
+
+[[claim]]
+id = "gaps-omnidoc-document-types"
+quote = "**113 pages across ten document types**"
+published = "ten"
+rows = "omnidoc_by_source"
+reduce = "count"
+where = { extractor = "mineru" }
+why = "one by-source row per document type for one extractor"
+
+[[claim]]
+id = "gaps-omnidoc-historical-pages"
+quote = "`historical_document` on five."
+published = "five"
+rows = "omnidoc_by_source"
+reduce = "value"
+field = "pages"
+where = { extractor = "mineru", source = "historical_document" }
+why = "the page count of the thinnest document type"
+
+[[claim]]
+id = "gaps-omnidoc-dpi"
+quote = "(150 DPI)"
+published = "150"
+rows = "omnidoc"
+reduce = "value"
+field = "vision_render_dpi"
+where = { pages_scored = 113 }
+why = "the resolution the vision backends were rendered at"
+
+# ---------------------------------------------------------------- 7. chunker throughput
+
+[[claim]]
+id = "gaps-throughput-recursive"
+quote = "(13,749 -> 54,870"
+published = "54,870"
+rows = "throughput"
+reduce = "value"
+field = "docs_per_s"
+where = { corpus = "nfcorpus (long docs)", strategy = "recursive", threads = 1 }
+why = "recursive's repeated single-thread throughput on the long-document body; the 13,749 it replaced is the retired single-pass run"
+
+# ---------------------------------------------------------------- 8. qwen3's instruction prefix
+
+[[claim]]
+id = "gaps-qwen3-instruction-queries"
+quote = "paired over the same 323"
+published = "323"
+rows = "qwen3_4b_arms"
+reduce = "value"
+field = "query.queries"
+where = { "plain.queries" = 323 }
+why = "the query count every arm of the instruction measurement shares"
+
+[[claim]]
+id = "gaps-qwen3-4b-query-prefix-delta"
+quote = "It is worth +0.0459"
+published = "+0.0459"
+rows = "qwen3_4b_paired"
+reduce = "value"
+field = "query_vs_plain/ndcg@10.mean_delta"
+where = { "query_vs_plain/ndcg@10.resolved" = true }
+why = "the 4B model's paired nDCG@10 gain from the query-side instruction"
+
+[[claim]]
+id = "gaps-qwen3-8b-query-prefix-delta"
+quote = "nDCG@10 on the 4B and +0.0363 on the 8B, both resolved, which is 12.9 and 9.6 percent relative."
+published = "+0.0363"
+rows = "qwen3_8b_paired"
+reduce = "value"
+field = "query_vs_plain/ndcg@10.mean_delta"
+where = { "query_vs_plain/ndcg@10.resolved" = true }
+why = "the 8B model's paired nDCG@10 gain from the query-side instruction"
+
+[[claim]]
+id = "gaps-qwen3-4b-relative-gain"
+quote = "nDCG@10 on the 4B and +0.0363 on the 8B, both resolved, which is 12.9 and 9.6 percent relative."
+published = "12.9"
+rows = "qwen3_4b_arms"
+reduce = "percent_change"
+field = "query.ndcg@10"
+against_field = "plain.ndcg@10"
+where = { "plain.queries" = 323 }
+why = "the 4B query-prefixed arm's nDCG@10 against its plain arm"
+
+[[claim]]
+id = "gaps-qwen3-8b-relative-gain"
+quote = "nDCG@10 on the 4B and +0.0363 on the 8B, both resolved, which is 12.9 and 9.6 percent relative."
+published = "9.6"
+rows = "qwen3_8b_arms"
+reduce = "percent_change"
+field = "query.ndcg@10"
+against_field = "plain.ndcg@10"
+where = { "plain.queries" = 323 }
+why = "the 8B query-prefixed arm's nDCG@10 against its plain arm"
+
+# ---------------------------------------------------------------- 9. store and embedder memory
+
+[[claim]]
+id = "gaps-memory-ladder-low"
+quote = "across a 1,000 to 100,000 chunk ladder"
+published = "1,000"
+rows = "memory_stores"
+reduce = "min"
+field = "rows"
+where = { backend = "sqlite_vec" }
+why = "the smallest rung of the memory ladder"
+
+[[claim]]
+id = "gaps-memory-ladder-high"
+quote = "across a 1,000 to 100,000 chunk ladder"
+published = "100,000"
+rows = "memory_stores"
+reduce = "max"
+field = "rows"
+where = { backend = "sqlite_vec" }
+why = "the largest rung of the memory ladder"
+
+[[claim]]
+id = "gaps-memory-sqlite-1k"
+quote = "45.1 MB at a thousand chunks and 45.8 MB at a hundred thousand"
+published = "45.1"
+rows = "memory_stores"
+reduce = "value"
+field = "resident_mb"
+where = { backend = "sqlite_vec", rows = 1000 }
+why = "sqlite_vec's serving footprint at 1,000 chunks"
+
+[[claim]]
+id = "gaps-memory-sqlite-100k"
+quote = "45.1 MB at a thousand chunks and 45.8 MB at a hundred thousand"
+published = "45.8"
+rows = "memory_stores"
+reduce = "value"
+field = "resident_mb"
+where = { backend = "sqlite_vec", rows = 100000 }
+why = "sqlite_vec's serving footprint at 100,000 chunks"
+
+[[claim]]
+id = "gaps-memory-json-per-chunk"
+quote = "store runs about 19 kB per"
+published = "19"
+rows = "memory_stores"
+reduce = "value"
+field = "resident_mb"
+where = { backend = "json", rows = 100000 }
+scale = 0.01
+why = "json's serving footprint at 100,000 chunks, 1,894.5 MB, spread over its rows: MB times 1,000 kB over 100,000 chunks is a scale of 0.01"
+
+[[claim]]
+id = "gaps-memory-lancedb-50k-resident"
+quote = "(320 MB to 164 MB, 15.1 ms to 5.6 ms)"
+published = "320"
+rows = "memory_stores"
+reduce = "value"
+field = "resident_mb"
+where = { backend = "lancedb", rows = 50000 }
+why = "lancedb's serving footprint at 50,000 chunks, the last flat-scan rung"
+
+[[claim]]
+id = "gaps-memory-lancedb-100k-resident"
+quote = "(320 MB to 164 MB, 15.1 ms to 5.6 ms)"
+published = "164"
+rows = "memory_stores"
+reduce = "value"
+field = "resident_mb"
+where = { backend = "lancedb", rows = 100000 }
+why = "lancedb's serving footprint at 100,000 chunks, the first indexed rung"
+
+[[claim]]
+id = "gaps-memory-lancedb-50k-query"
+quote = "(320 MB to 164 MB, 15.1 ms to 5.6 ms)"
+published = "15.1"
+rows = "memory_stores"
+reduce = "value"
+field = "query_ms"
+where = { backend = "lancedb", rows = 50000 }
+why = "lancedb's query p50 at 50,000 chunks"
+
+[[claim]]
+id = "gaps-memory-lancedb-100k-query"
+quote = "(320 MB to 164 MB, 15.1 ms to 5.6 ms)"
+published = "5.6"
+rows = "memory_stores"
+reduce = "value"
+field = "query_ms"
+where = { backend = "lancedb", rows = 100000 }
+why = "lancedb's query p50 at 100,000 chunks"
+
+# ---------------------------------------------------------------- 10. energy
+
+[[claim]]
+id = "gaps-energy-electricity-low"
+quote = "Electricity runs 0.10 to 1.26 EUR per million"
+published = "0.10"
+rows = "energy_gpu"
+reduce = "min"
+field = "eur_per_million_docs_marginal"
+where = { resolved = true }
+why = "the cheapest resolved marginal electricity figure; it is a GPU row (bge-m3), and the CPU rows run 0.13 to 0.44"
+
+[[claim]]
+id = "gaps-energy-electricity-high"
+quote = "Electricity runs 0.10 to 1.26 EUR per million"
+published = "1.26"
+rows = "energy_gpu"
+reduce = "max"
+field = "eur_per_million_docs_marginal"
+where = { resolved = true }
+why = "the dearest resolved marginal electricity figure, qwen3-8b on the GPU"
+
+[[claim]]
+id = "gaps-energy-cloud-low"
+quote = "the hosted APIs list 6.96 to 79.40 USD for the same million"
+published = "6.96"
+rows = "cloud"
+reduce = "value"
+field = "usd_per_million_tokens"
+where = { provider = "openai", model = "text-embedding-3-small" }
+scale = 348
+why = "the cheapest list price times the corpus's 348 gpt2 tokens per document, the tokenizer that counts fewest"
+
+[[claim]]
+id = "gaps-energy-cloud-high"
+quote = "the hosted APIs list 6.96 to 79.40 USD for the same million"
+published = "79.40"
+rows = "cloud"
+reduce = "value"
+field = "usd_per_million_tokens"
+where = { provider = "gemini", model = "gemini-embedding-2" }
+scale = 397
+why = "the dearest list price times the corpus's 397 bge-m3 tokens per document, the tokenizer that counts most"
+
+[[claim]]
+id = "gaps-energy-tokenizer-spread"
+quote = "`bge-m3` differ by 14 percent on the same documents"
+published = "14"
+rows = "cloud_sample"
+reduce = "percent_change"
+field = "by_tokenizer.BAAI/bge-m3"
+against_field = "by_tokenizer.gpt2"
+where = { documents_sampled = 500 }
+why = "bge-m3's token count per document against gpt2's on the same 500-document sample"
+
+[[claim]]
+id = "gaps-energy-idle-cpu-low"
+quote = "Idle is 97 to 123 W for the CPU package and 44 to 51 W for the card"
+published = "97"
+rows = "energy_cpu"
+reduce = "min"
+field = "idle_w"
+where = { provider = ["placeholder", "model2vec", "fastembed", "sentence_transformers"] }
+why = "the lowest CPU package idle draw across the four CPU runs' interleaved idle windows"
+
+[[claim]]
+id = "gaps-energy-idle-cpu-high"
+quote = "Idle is 97 to 123 W for the CPU package and 44 to 51 W for the card"
+published = "123"
+rows = "energy_cpu"
+reduce = "max"
+field = "idle_w"
+where = { provider = ["placeholder", "model2vec", "fastembed", "sentence_transformers"] }
+why = "the highest CPU package idle draw across the same windows"
+
+[[claim]]
+id = "gaps-energy-idle-gpu-low"
+quote = "Idle is 97 to 123 W for the CPU package and 44 to 51 W for the card"
+published = "44"
+rows = "energy_gpu"
+reduce = "min"
+field = "idle_w"
+where = { provider = "ollama" }
+why = "the lowest card idle draw across the three GPU runs' interleaved idle windows"
+
+[[claim]]
+id = "gaps-energy-idle-gpu-high"
+quote = "Idle is 97 to 123 W for the CPU package and 44 to 51 W for the card"
+published = "51"
+rows = "energy_gpu"
+reduce = "max"
+field = "idle_w"
+where = { provider = "ollama" }
+why = "the highest card idle draw across the same windows"
+
+# ---------------------------------------------------------------- 11. the four metrics
+
+[[claim]]
+id = "gaps-metrics-swept-configurations"
+quote = "Measured across all 254 swept configurations"
+published = "254"
+rows = "metric_corpora"
+reduce = "sum"
+field = "cells"
+where = { corpus = "@metric_corpora_all" }
+why = "the swept cells summed over the eight corpora the redundancy measurement covers"
+
+[[claim]]
+id = "gaps-metrics-views-high"
+quote = "1.12 on every corpus with enough cells to carry a rank correlation"
+published = "1.12"
+rows = "metric_corpora"
+reduce = "max"
+field = "effective_views"
+where = { corpus = "@metric_corpora_readable" }
+why = "the highest effective view count over the six corpora with enough cells (nfcorpus); the 1.01 low end is the MIRACL German slice"
+
+[[claim]]
+id = "gaps-metrics-views-low"
+quote = "the effective view count runs 1.01 to"
+published = "1.01"
+rows = "metric_corpora"
+reduce = "min"
+field = "effective_views"
+where = { corpus = "@metric_corpora_readable" }
+why = "the lowest effective view count over the same six corpora"
+
+[[claim]]
+id = "gaps-metrics-mldr-judged-per-query"
+quote = "1.00 relevant documents per query, and both collapse completely"
+published = "1.00"
+rows = "metric_corpora"
+reduce = "max"
+field = "judged_per_query"
+where = { corpus = ["mldr_de_3k_slice", "mldr_en_8k_slice"] }
+why = "relevant documents per query on the two MLDR slices; max and min are both exactly 1"
+
+[[claim]]
+id = "gaps-metrics-mldr-near-duplicate-pairs"
+quote = "all six metric pairs above the"
+published = "six"
+rows = "metric_corpora"
+reduce = "min"
+field = "near_duplicate_pairs"
+where = { corpus = ["mldr_de_3k_slice", "mldr_en_8k_slice"] }
+why = "metric pairs above the near-duplicate threshold on each MLDR slice; min over the two because both are 6, and 6 is every pair of four metrics"
+
+[[claim]]
+id = "gaps-metrics-nfcorpus-judged-per-query"
+quote = "nfcorpus averages 38.19 relevant documents per query"
+published = "38.19"
+rows = "metric_corpora"
+reduce = "value"
+field = "judged_per_query"
+where = { corpus = "nfcorpus" }
+why = "relevant documents per query on nfcorpus"
+
+[[claim]]
+id = "gaps-metrics-nfcorpus-views"
+quote = "still returns 1.12 views"
+published = "1.12"
+rows = "metric_corpora"
+reduce = "value"
+field = "effective_views"
+where = { corpus = "nfcorpus" }
+why = "nfcorpus's effective view count"
+
+[[claim]]
+id = "gaps-metrics-cqadupstack-cells"
+quote = "cqadupstack has 11 swept cells and fiqa 4"
+published = "11"
+rows = "metric_corpora"
+reduce = "value"
+field = "cells"
+where = { corpus = "cqadupstack" }
+why = "cqadupstack's swept cell count"
+
+[[claim]]
+id = "gaps-metrics-fiqa-cells"
+quote = "cqadupstack has 11 swept cells and fiqa 4"
+published = "4"
+rows = "metric_corpora"
+reduce = "value"
+field = "cells"
+where = { corpus = "fiqa" }
+why = "fiqa's swept cell count"
+
+[[claim]]
+id = "gaps-metrics-cqadupstack-views"
+quote = "returns the highest view count on the page (1.51)"
+published = "1.51"
+rows = "metric_corpora"
+reduce = "max"
+field = "effective_views"
+where = { corpus = "@metric_corpora_all" }
+why = "the highest effective view count on any corpus, which is cqadupstack's"
+
+# ---------------------------------------------------------------- 12. query power
+
+[[claim]]
+id = "gaps-power-fewest-queries"
+quote = "German does ship the fewest queries, 200,"
+published = "200"
+rows = "power_corpora"
+reduce = "min"
+field = "queries"
+where = { corpus = "mldr_de_3k_slice" }
+why = "MLDR German's query count, the smallest of the six corpora"
+
+[[claim]]
+id = "gaps-power-german-median-effect"
+quote = "0.0352 median against cqadupstack's 0.0017"
+published = "0.0352"
+rows = "power_corpora"
+reduce = "value"
+field = "median_effect"
+where = { corpus = "mldr_de_3k_slice" }
+why = "MLDR German's median effect over its comparisons"
+
+[[claim]]
+id = "gaps-power-cqadupstack-median-effect"
+quote = "0.0352 median against cqadupstack's 0.0017"
+published = "0.0017"
+rows = "power_corpora"
+reduce = "value"
+field = "median_effect"
+where = { corpus = "cqadupstack" }
+why = "cqadupstack's median effect"
+
+[[claim]]
+id = "gaps-power-german-required"
+quote = "puts German's median at about 1,236 queries, roughly six times what it has"
+published = "1,236"
+rows = "power_corpora"
+reduce = "value"
+field = "median_required_queries"
+where = { corpus = "mldr_de_3k_slice" }
+why = "the median query count MLDR German's ties would need"
+
+[[claim]]
+id = "gaps-power-german-required-multiple"
+quote = "puts German's median at about 1,236 queries, roughly six times what it has"
+published = "six"
+rows = "power_corpora"
+reduce = "ratio"
+field = "median_required_queries"
+against_field = "queries"
+where = { corpus = "mldr_de_3k_slice" }
+why = "that median over the 200 queries it has, 6.2"
+
+[[claim]]
+id = "gaps-power-cqadupstack-required"
+quote = "while cqadupstack needs 11,279 despite already shipping 876"
+published = "11,279"
+rows = "power_corpora"
+reduce = "value"
+field = "median_required_queries"
+where = { corpus = "cqadupstack" }
+why = "the median query count cqadupstack's ties would need"
+
+[[claim]]
+id = "gaps-power-cqadupstack-queries"
+quote = "while cqadupstack needs 11,279 despite already shipping 876"
+published = "876"
+rows = "power_corpora"
+reduce = "value"
+field = "queries"
+where = { corpus = "cqadupstack" }
+why = "cqadupstack's query count"
+
+[[claim]]
+id = "gaps-power-cqadupstack-over-german"
+quote = "cqadupstack's are the most expensive by a factor of nine."
+published = "nine"
+rows = "power_corpora"
+reduce = "ratio"
+field = "median_required_queries"
+where = { corpus = "cqadupstack" }
+against = { corpus = "mldr_de_3k_slice" }
+why = "cqadupstack's median required count over MLDR German's, 9.1; read as the factor between the most expensive corpus and the German one the paragraph is about"
+
+[[claim]]
+id = "gaps-power-english-comparisons"
+quote = "`mldr_en` runs the SAME 373 comparisons"
+published = "373"
+rows = "power_corpora"
+reduce = "value"
+field = "comparisons"
+where = { corpus = "mldr_en_8k_slice" }
+why = "MLDR English's comparison count, equal to German's"
+
+[[claim]]
+id = "gaps-power-english-query-multiple"
+quote = "over the same profiles at four"
+published = "four"
+rows = "power_corpora"
+reduce = "ratio"
+field = "queries"
+where = { corpus = "mldr_en_8k_slice" }
+against = { corpus = "mldr_de_3k_slice" }
+why = "800 English queries over 200 German"
+
+[[claim]]
+id = "gaps-power-english-unresolved-share"
+quote = "unresolved: 48.3 percent against 46.4"
+published = "48.3"
+rows = "power_corpora"
+reduce = "value"
+field = "unresolved_share"
+where = { corpus = "mldr_en_8k_slice" }
+scale = 100
+why = "MLDR English's unresolved share"
+
+[[claim]]
+id = "gaps-power-german-unresolved-share"
+quote = "unresolved: 48.3 percent against 46.4"
+published = "46.4"
+rows = "power_corpora"
+reduce = "value"
+field = "unresolved_share"
+where = { corpus = "mldr_de_3k_slice" }
+scale = 100
+why = "MLDR German's unresolved share"
+
+[[claim]]
+id = "gaps-power-english-effects-smaller"
+quote = "Its effects are three times smaller"
+published = "three"
+rows = "power_corpora"
+reduce = "ratio"
+field = "median_effect"
+where = { corpus = "mldr_de_3k_slice" }
+against = { corpus = "mldr_en_8k_slice" }
+why = "German's median effect over English's, 3.0"
+
+[[claim]]
+id = "gaps-power-german-never-resolvable"
+quote = "Seventeen German comparisons are also not underpowered at all"
+published = "Seventeen"
+rows = "power_corpora"
+reduce = "value"
+field = "never_resolvable"
+where = { corpus = "mldr_de_3k_slice" }
+why = "MLDR German comparisons whose effect is indistinguishable from zero at any query count"
+
+[[claim]]
+id = "gaps-power-holdout-precision"
+quote = "precision 0.47, recall 0.59."
+published = "0.47"
+rows = "power_validation"
+reduce = "mean"
+field = "precision"
+where = { seed = [0, 1, 2, 3, 4, 5, 6, 7] }
+why = "the holdout's precision at naming which ties resolve, averaged over its eight rounds"
+
+[[claim]]
+id = "gaps-power-holdout-recall"
+quote = "precision 0.47, recall 0.59."
+published = "0.59"
+rows = "power_validation"
+reduce = "mean"
+field = "recall"
+where = { seed = [0, 1, 2, 3, 4, 5, 6, 7] }
+why = "the holdout's recall, averaged over the same eight rounds"
+
+[[claim]]
+id = "gaps-power-cqadupstack-ties"
+quote = "and 12 of its 18 comparisons are ties"
+published = "12"
+rows = "power_corpora"
+reduce = "value"
+field = "unresolved"
+where = { corpus = "cqadupstack" }
+why = "cqadupstack's unresolved comparisons"
+
+[[claim]]
+id = "gaps-power-cqadupstack-comparisons"
+quote = "and 12 of its 18 comparisons are ties"
+published = "18"
+rows = "power_corpora"
+reduce = "value"
+field = "comparisons"
+where = { corpus = "cqadupstack" }
+why = "cqadupstack's comparison count"
+
+[[claim]]
+id = "gaps-gerdalir-queries"
+quote = "carries 12,298 German queries, 61 times MLDR German's 200"
+published = "12,298"
+rows = "chunk_sets"
+reduce = "value"
+field = "n_queries"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "GerDaLIR's query count"
+
+[[claim]]
+id = "gaps-gerdalir-query-multiple"
+quote = "carries 12,298 German queries, 61 times MLDR German's 200"
+published = "61"
+rows = "chunk_sets"
+reduce = "ratio"
+field = "n_queries"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t256-o0-gpt2" }
+against = { corpus = "mldr_de_3k_slice", profile = "recursive-t256-o0-gpt2" }
+why = "12,298 over 200, 61.5"
+
+[[claim]]
+id = "gaps-gerdalir-overlap-resolved"
+quote = "resolves 496 of its 632 overlap comparisons against MLDR German's 7 of 174"
+published = "496"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, corpus = "gerdalir_de_12k_slice" }
+why = "GerDaLIR's resolved overlap comparisons"
+
+[[claim]]
+id = "gaps-gerdalir-overlap-total"
+quote = "resolves 496 of its 632 overlap comparisons against MLDR German's 7 of 174"
+published = "632"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "gerdalir_de_12k_slice" }
+why = "GerDaLIR's overlap comparisons in all"
+
+[[claim]]
+id = "gaps-mldr-de-overlap-resolved"
+quote = "resolves 496 of its 632 overlap comparisons against MLDR German's 7 of 174"
+published = "7"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", resolved = true, corpus = "mldr_de_3k_slice" }
+why = "MLDR German's resolved overlap comparisons"
+
+[[claim]]
+id = "gaps-mldr-de-overlap-total"
+quote = "resolves 496 of its 632 overlap comparisons against MLDR German's 7 of 174"
+published = "174"
+rows = "effects"
+reduce = "count"
+where = { axis = "overlap_tokens", corpus = "mldr_de_3k_slice" }
+why = "MLDR German's overlap comparisons in all"
+
+[[claim]]
+id = "gaps-power-ladder-at-2000"
+quote = "The ladder says 100 of the 173 ties separate at 2,000 queries and 73 at 1,000"
+published = "100"
+rows = "power_corpora"
+reduce = "value"
+field = "resolved_at.2000"
+where = { corpus = "mldr_de_3k_slice" }
+why = "MLDR German ties the 1/sqrt(n) ladder predicts to resolve at 2,000 queries"
+
+[[claim]]
+id = "gaps-power-german-ties"
+quote = "The ladder says 100 of the 173 ties separate at 2,000 queries and 73 at 1,000"
+published = "173"
+rows = "power_corpora"
+reduce = "value"
+field = "unresolved"
+where = { corpus = "mldr_de_3k_slice" }
+why = "MLDR German's unresolved comparisons"
+
+[[claim]]
+id = "gaps-power-ladder-at-1000"
+quote = "The ladder says 100 of the 173 ties separate at 2,000 queries and 73 at 1,000"
+published = "73"
+rows = "power_corpora"
+reduce = "value"
+field = "resolved_at.1000"
+where = { corpus = "mldr_de_3k_slice" }
+why = "ties predicted to resolve at 1,000 queries"
+
+[[claim]]
+id = "gaps-power-ladder-discounted-2000"
+quote = "expect nearer 80 and 59."
+published = "80"
+rows = "power_corpora"
+reduce = "value"
+field = "resolved_at.2000"
+where = { corpus = "mldr_de_3k_slice" }
+scale = 0.80645
+tolerance = 1
+why = "the 2,000-query prediction divided by the holdout's 1.24x optimism, 80.6; 'nearer' is the page's own hedge, hence the tolerance of one"
+
+[[claim]]
+id = "gaps-power-ladder-discounted-1000"
+quote = "expect nearer 80 and 59."
+published = "59"
+rows = "power_corpora"
+reduce = "value"
+field = "resolved_at.1000"
+where = { corpus = "mldr_de_3k_slice" }
+scale = 0.80645
+why = "the 1,000-query prediction divided by the same 1.24, 58.9"
+
+# ---------------------------------------------------------------- 13. the chunking corrections restated
+
+[[claim]]
+id = "gaps-gerdalir-query-median-words"
+quote = "queries are citing passages (median 104 words); MLDR's are questions (median 13)"
+published = "104"
+rows = "query_shape"
+reduce = "value"
+field = "median_words"
+where = { corpus = "gerdalir_de_12k_slice" }
+why = "GerDaLIR's median query length in words"
+
+[[claim]]
+id = "gaps-mldr-query-median-words"
+quote = "queries are citing passages (median 104 words); MLDR's are questions (median 13)"
+published = "13"
+rows = "query_shape"
+reduce = "value"
+field = "median_words"
+where = { corpus = "mldr_en_8k_slice" }
+why = "MLDR English's median query length in words"
+
+[[claim]]
+id = "gaps-query-cut-words"
+quote = "cutting every GerDaLIR query to its first 20 words"
+published = "20"
+rows = "qlen_causal"
+reduce = "max"
+field = "query_words"
+where = { corpus = "gerdalir_de_12k_slice" }
+why = "the word cut the truncated-query re-score used"
+
+[[claim]]
+id = "gaps-causal-retrieval-32m-full"
+quote = "reverses it for three: +0.0312 becomes -0.0047 for"
+published = "+0.0312"
+rows = "qlen_causal"
+reduce = "value"
+field = "full_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "model2vec:potion-retrieval-32M" }
+why = "potion-retrieval-32M's 0-to-128 overlap gain on the full queries"
+
+[[claim]]
+id = "gaps-causal-retrieval-32m-cut"
+quote = "reverses it for three: +0.0312 becomes -0.0047 for"
+published = "-0.0047"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "model2vec:potion-retrieval-32M" }
+why = "the same comparison on the 20-word queries"
+
+[[claim]]
+id = "gaps-causal-base-8m-full"
+quote = "at 0 to 128 tokens, +0.0324 becomes -0.0120 for `potion-base-8M`, +0.0055"
+published = "+0.0324"
+rows = "qlen_causal"
+reduce = "value"
+field = "full_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "model2vec:potion-base-8M" }
+why = "potion-base-8M's 0-to-128 gain on the full queries"
+
+[[claim]]
+id = "gaps-causal-base-8m-cut"
+quote = "at 0 to 128 tokens, +0.0324 becomes -0.0120 for `potion-base-8M`, +0.0055"
+published = "-0.0120"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "model2vec:potion-base-8M" }
+why = "the same comparison on the 20-word queries"
+
+[[claim]]
+id = "gaps-causal-bge-base-full"
+quote = "at 0 to 128 tokens, +0.0324 becomes -0.0120 for `potion-base-8M`, +0.0055"
+published = "+0.0055"
+rows = "qlen_causal"
+reduce = "value"
+field = "full_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "fastembed:bge-base" }
+why = "bge-base's 0-to-128 gain on the full queries"
+
+[[claim]]
+id = "gaps-causal-bge-base-cut"
+quote = "becomes -0.0176 for `bge-base`"
+published = "-0.0176"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "fastembed:bge-base" }
+why = "bge-base's 0-to-128 comparison on the 20-word queries"
+
+[[claim]]
+id = "gaps-causal-bge-m3-full"
+quote = "(`bge-m3` +0.0136 becomes +0.0039, resolved)"
+published = "+0.0136"
+rows = "qlen_causal"
+reduce = "value"
+field = "full_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "ollama:bge-m3" }
+why = "bge-m3's 0-to-128 gain on the full queries"
+
+[[claim]]
+id = "gaps-causal-bge-m3-cut"
+quote = "(`bge-m3` +0.0136 becomes +0.0039, resolved)"
+published = "+0.0039"
+rows = "qlen_causal"
+reduce = "value"
+field = "truncated_queries.mean_delta"
+where = { corpus = "gerdalir_de_12k_slice", overlap_high = 128, embedding = "ollama:bge-m3", "truncated_queries.resolved" = true }
+why = "the same comparison on the 20-word queries, which still resolves"
+
+[[claim]]
+id = "gaps-whitespace-german-clipped-low"
+quote = "German corpora are 72 to 93 percent clipped"
+published = "72"
+rows = "embedder_truncation"
+reduce = "min"
+field = "truncated_pct"
+where = { chunk_set = "@german_whitespace_sets" }
+why = "the smaller share of clipped chunks over the two German whitespace sets and the CPU embedders"
+
+[[claim]]
+id = "gaps-whitespace-german-clipped-high"
+quote = "German corpora are 72 to 93 percent clipped"
+published = "93"
+rows = "embedder_truncation"
+reduce = "max"
+field = "truncated_pct"
+where = { chunk_set = "@german_whitespace_sets" }
+why = "the larger share over the same sets"
+
+[[claim]]
+id = "gaps-whitespace-ladder-floor"
+quote = "ladder at 64, 96, 128 and 256 words had shown"
+published = "64"
+rows = "effects"
+reduce = "min"
+field = "from_level"
+where = { axis = "max_tokens", "held_fixed.strategy" = "whitespace" }
+why = "the smallest whitespace chunk size in the sweep"
+
+[[claim]]
+id = "gaps-breakpoint-bge-m3-chunks"
+quote = "`bge-m3` cuts 428,748 chunks"
+published = "428,748"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2-bpbge-m3" }
+why = "chunks the semantic strategy cuts with bge-m3 as its breakpoint model on MLDR English"
+
+[[claim]]
+id = "gaps-breakpoint-bge-m3-wins"
+quote = "and wins 17-0; `e5-large` cuts 278,215 and wins twice"
+published = "17"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", resolved = true, favoured_level = "bge-m3", corpus = "@fit_corpora" }
+why = "resolved breakpoint-model comparisons bge-m3 wins"
+
+[[claim]]
+id = "gaps-breakpoint-bge-m3-losses"
+quote = "and wins 17-0; `e5-large` cuts 278,215 and wins twice"
+published = "0"
+rows = "effects"
+reduce = "count"
+where = { axis = "breakpoint_model", resolved = true, unfavoured_level = "bge-m3", corpus = "@fit_corpora" }
+why = "resolved breakpoint-model comparisons bge-m3 loses, the 0 of 13-0"
+
+[[claim]]
+id = "gaps-breakpoint-e5-chunks"
+quote = "and wins 17-0; `e5-large` cuts 278,215 and wins twice"
+published = "278,215"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "mldr_en_8k_slice", profile = "semantic-t256-o0-gpt2-bpe5-large" }
+why = "chunks the semantic strategy cuts with e5-large as its breakpoint model on MLDR English"
+
+[[claim]]
+id = "gaps-late-mass-lost"
+quote = "Its truncation was measured at 0.02 percent of token mass"
+published = "0.02"
+rows = "embedder_truncation"
+reduce = "max"
+field = "token_mass_lost_pct"
+where = { chunk_set = "@late_sets" }
+why = "the larger token-mass loss over the two late chunk sets and the CPU embedders"
+
+# ---------------------------------------------------------------- gap 13, the recursive size floor
+
+[[claim]]
+id = "gap13-gerdalir-cap64-chunks"
+quote = "(2,137,255 chunks at 64 on GerDaLIR)"
+published = "2,137,255"
+rows = "chunk_sets"
+reduce = "value"
+field = "rows"
+where = { corpus = "gerdalir_de_12k_slice", profile = "recursive-t64-o0-gpt2" }
+why = "chunk rows in the GerDaLIR cap64 set"
+
+[[claim]]
+id = "gap13-gerdalir-steps-count"
+quote = "every one of the 18 steps favours the larger chunk"
+published = "18"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive" }
+why = "every GerDaLIR recursive size comparison"
+
+[[claim]]
+id = "gap13-gerdalir-steps-all-larger"
+quote = "every one of the 18 steps favours the larger chunk"
+published = "18"
+rows = "effects"
+reduce = "count"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", resolved = true, favoured_end = "high" }
+why = "of those, the ones resolved for the larger chunk; equal to the total, so every one"
+
+[[claim]]
+id = "gap13-step-64-128-min"
+quote = "64 to 128 costing 0.065 to"
+published = "0.065"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 64, to_level = 128 }
+why = "the smallest 64-to-128 gain on GerDaLIR"
+
+[[claim]]
+id = "gap13-step-64-128-max"
+quote = "0.099 nDCG@10 and 128 to 256 a further 0.021 to 0.059"
+published = "0.099"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 64, to_level = 128 }
+why = "the largest 64-to-128 gain on GerDaLIR"
+
+[[claim]]
+id = "gap13-step-128-256-min"
+quote = "0.099 nDCG@10 and 128 to 256 a further 0.021 to 0.059"
+published = "0.021"
+rows = "effects"
+reduce = "min"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 128, to_level = 256 }
+why = "the smallest 128-to-256 gain on GerDaLIR"
+
+[[claim]]
+id = "gap13-step-128-256-max"
+quote = "0.099 nDCG@10 and 128 to 256 a further 0.021 to 0.059"
+published = "0.059"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+where = { axis = "max_tokens", corpus = "gerdalir_de_12k_slice", "held_fixed.strategy" = "recursive", from_level = 128, to_level = 256 }
+why = "the largest 128-to-256 gain on GerDaLIR"
+
+[[claim]]
+id = "gap13-largest-chunking-effect"
+quote = "largest resolved chunking effect anywhere is now the other way, 0.158"
+published = "0.158"
+rows = "effects"
+reduce = "max"
+field = "mean_delta"
+transform = "abs"
+where = { axis = ["max_tokens", "overlap_tokens", "strategy"], resolved = true, corpus = "@fit_corpora" }
+why = "the largest resolved effect any chunking knob produces, potion-base-8M on GerDaLIR from 64 up to 256"

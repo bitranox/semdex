@@ -1,0 +1,126 @@
+# ==============================================================================
+# semdex - index & search defaults ([index])
+# ==============================================================================
+#
+# Defaults for `semdex index` and `semdex search`. Every value resolves as:
+# CLI flag (explicit) > this config > built-in default. A value here changes the
+# default; a CLI flag still overrides it per invocation. Related config lives in
+# sibling sections: [embedding] (provider/model), [chunker] (strategy), [extractor]
+# (file conversion), [vector_store] (persistence).
+#
+# Environment / .env overrides:
+#   env var:  SEMDEX___INDEX__COLLECTION=memory   (SLUG___SECTION__KEY)
+#   .env:     INDEX__DEFAULT_K=10                 (SECTION__KEY, no prefix)
+# Precedence (low -> high): defaults -> app -> host -> user -> .env -> env vars
+# ==============================================================================
+
+[index]
+
+# store_dir - directory holding the vector store (and its collections).
+#   Default: unset -> the per-tool default ~/.semdex. Always OUTSIDE any indexed
+#     tree, so the store is never written into a source directory.
+#   Effect: where the index is persisted and read back from.
+#   When to change: point it at a durable/shared location (e.g. /var/lib/semdex) for a
+#     service, or a project-local path to keep one index per project.
+#   Consequences: different store_dir = a different, independent index. The --store-dir
+#     CLI flag overrides this per run.
+#   Recommendation: leave default for personal use; set an explicit path for a
+#     deployed/service install.
+# store_dir = "/var/lib/semdex"
+
+# collection - default collection name for index and search.
+#   Default: "default".
+#   Effect: names the logical index within the store; index and search must use the
+#     same collection to see the same data.
+#   When to change: use separate collections to keep unrelated corpora apart in one store.
+#   Consequences: searching a never-indexed collection returns nothing (with a hint).
+#   Recommendation: one collection per distinct corpus; keep "default" for a single corpus.
+collection = "default"
+
+# embedding_model - LEGACY embedding model id (superseded by the [embedding] section).
+#   Default: unset. Prefer [embedding].provider + [embedding].model. Kept only as a
+#     fallback for the --embedding-model flag / older configs; the [embedding] section
+#     is the canonical place to choose the provider and model.
+#   Recommendation: leave unset here and configure embeddings in [embedding].
+# embedding_model = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+
+# default_label - provenance label stamped on indexed sources when --label is omitted.
+#   Default: "" (no label).
+#   Effect: a free-form tag carried on each hit, useful to mark where content came from.
+#   When to change: set a label (e.g. "handbook", "tickets") to distinguish sources in results.
+#   Consequences: purely informational; does not affect ranking.
+#   Recommendation: set a short label when you index multiple distinct source sets.
+default_label = ""
+
+# default_k - number of hits `search` returns when --k is omitted.
+#   Default: 5.
+#   Effect: how many ranked matches are printed per query.
+#   When to change: raise for broad exploration, lower for a focused top answer.
+#   Consequences: larger k = more (lower-relevance) results and slightly more work. Must be > 0.
+#   Recommendation: 5 for interactive use; 10-20 when feeding results to another tool.
+default_k = 5
+
+# --- Tunable assumptions (best-guess defaults; validated by tests/test_perf_*) ---
+
+# max_tokens - maximum tokens per chunk (the chunking granularity).
+#   Default: 256. Token counting uses [chunker].tokenizer.
+#   Effect: smaller chunks = more, tighter matches (better precision, more vectors);
+#     larger chunks = fewer, broader matches (more context per hit).
+#   When to change: lower (~128) for short notes / precise lookup; raise (~512) for
+#     long-form documents where more context per chunk helps.
+#   Consequences: smaller = a larger store and more search work; larger = coarser matches.
+#     Must be > 0. Perf sweep: chunk count scales inversely with this value.
+#   Recommendation: 256 for mixed markdown; 128 for FAQ/notes; 512 for prose/manuals.
+max_tokens = 256
+
+# max_file_bytes - max size of a source file the embedded "text" extractor will read.
+#   Default: 5242880 (5 MiB). The HTTP doc converters use [extractor].max_file_bytes instead.
+#   Effect: a larger file is rejected (against its size) before it is read, keeping memory bounded.
+#   When to change: raise it if you index legitimately large text/markdown files; lower it
+#     to guard against accidentally reading huge/binary files.
+#   Consequences: too low skips large notes; too high risks reading an unintended big/binary file.
+#     Must be > 0.
+#   Recommendation: 5 MiB fits text/markdown; raise only for unusually large plain-text files.
+max_file_bytes = 5242880
+
+# embedding_dim - vector dimension of the built-in PLACEHOLDER embedding.
+#   Default: 256. Ignored by every real provider (fastembed/model2vec/ollama/sentence-
+#     transformers report their model's own dimension).
+#   Effect: sizes the deterministic token-hash vectors used offline / in tests.
+#   When to change: rarely - only when tuning the placeholder's precision/size trade-off.
+#   Consequences: higher = finer lexical buckets but a larger store and slower search
+#     (linear in dim). Must be > 0. Has NO effect unless [embedding].provider = "placeholder".
+#   Recommendation: leave at 256; irrelevant once you use a real embedding provider.
+embedding_dim = 256
+
+# snippet_chars - characters of chunk text shown per search hit.
+#   Default: 80.
+#   Effect: how much context each result line prints (the snippet is truncated with an ellipsis).
+#   When to change: raise for more readable previews, lower for compact one-line output.
+#   Consequences: display-only; does not affect ranking. Must be > 0.
+#   Recommendation: 80 for terminal use; 160-200 when you want fuller context per hit.
+snippet_chars = 80
+
+# hash_chunk_bytes - read-buffer size (bytes) for the streaming content hash during discovery.
+#   Default: 65536 (64 KiB).
+#   Effect: a pure performance knob for change detection - the file is hashed in fixed
+#     buffers so a large file is never fully loaded to hash it. The hash is identical
+#     regardless of this value.
+#   When to change: rarely - a larger buffer can be marginally faster on big files, a
+#     smaller one uses less memory per hash.
+#   Consequences: affects only hashing speed/memory, never correctness. Must be > 0.
+#   Recommendation: leave at 64 KiB; it is a good speed/memory balance.
+hash_chunk_bytes = 65536
+
+# extensions - file extensions discovered when you index a directory.
+#   Default: [".md", ".txt"].
+#   Effect: which files under an indexed directory are picked up (the embedded "text"
+#     extractor reads these).
+#   When to change: add extensions to index more plain-text formats. To index PDFs/Office
+#     docs, add their extensions AND switch [extractor].backend to a converter (the "text"
+#     backend cannot read binary formats).
+#   Consequences: adding binary extensions without a converter backend would read them as
+#     garbage text.
+#   Recommendation: keep [".md", ".txt"] for notes; extend deliberately alongside the
+#     matching [extractor] backend.
+extensions = [".md", ".txt"]

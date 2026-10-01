@@ -1,0 +1,48 @@
+{
+  "checked_utc": "2026-08-12",
+  "note": "Published list prices for the hosted embedding APIs semdex can use, recorded with their source so a stale figure is visible rather than assumed current. Prices are per MILLION INPUT TOKENS in the vendor's own currency; converting them to a per-document cost needs a tokenizer, and which tokenizer is not a detail - see tokens_per_document below.",
+  "currency": "USD",
+  "providers": [
+    {
+      "provider": "openai",
+      "model": "text-embedding-3-small",
+      "usd_per_million_tokens": 0.02,
+      "source": "https://developers.openai.com/api/docs/pricing"
+    },
+    {
+      "provider": "openai",
+      "model": "text-embedding-3-large",
+      "usd_per_million_tokens": 0.13,
+      "source": "https://developers.openai.com/api/docs/pricing"
+    },
+    {
+      "provider": "gemini",
+      "model": "gemini-embedding-001",
+      "usd_per_million_tokens": 0.15,
+      "source": "https://ai.google.dev/gemini-api/docs/pricing"
+    },
+    {
+      "provider": "gemini",
+      "model": "gemini-embedding-2",
+      "usd_per_million_tokens": 0.2,
+      "source": "https://ai.google.dev/gemini-api/docs/pricing"
+    },
+    {
+      "provider": "cohere",
+      "model": "embed-v4.0",
+      "usd_per_million_tokens": null,
+      "source": "https://cohere.com/pricing",
+      "unavailable_reason": "No per-token or per-call API price is published on the pricing page; it lists only Model Vault instance pricing ($4.00/hour Small, $5.00/hour Medium for Embed 4). Recorded as missing rather than guessed."
+    }
+  ],
+  "tokens_per_document": {
+    "corpus": "beir/nfcorpus/test",
+    "documents_sampled": 500,
+    "mean_bytes_per_document": 1639,
+    "note": "The gap this closes warns that token counts are not comparable across tokenizers. Measured here rather than assumed: the two tokenizers available offline differ by 14 percent on the same 500 documents, so every per-document cloud figure below carries at least that band. A vendor bills on ITS OWN tokenizer, which is neither of these.",
+    "by_tokenizer": {
+      "gpt2": 348.0,
+      "BAAI/bge-m3": 397.0
+    }
+  }
+}

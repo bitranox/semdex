@@ -1,0 +1,31 @@
+"""Map a filesystem path to and from the opaque ``file://`` URI a source carries.
+
+A :class:`~semdex.domain.models.SourceRef` identifies its location with an opaque
+``uri`` string so the store and search layers stay source-type-blind: a file is
+``file:///abs/path``, an email will be ``imap://mailbox/uid``. This module owns
+the filesystem (``file``) scheme end of that mapping - the discovery connector
+produces the URI, the extractors resolve it back to a path to read the bytes.
+Pure string/path manipulation (no I/O), so it stays in the adapters layer.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+from urllib.parse import urlparse
+from urllib.request import url2pathname
+
+__all__ = ["from_uri", "to_uri"]
+
+
+def to_uri(path: Path) -> str:
+    """Return the ``file://`` URI for *path* (resolved to an absolute location).
+
+    Resolving makes the URI a stable identity independent of the caller's working
+    directory; :meth:`Path.as_uri` percent-encodes spaces and non-ASCII names.
+    """
+    return path.resolve().as_uri()
+
+
+def from_uri(uri: str) -> Path:
+    """Return the filesystem path named by a ``file://`` *uri* (inverse of :func:`to_uri`)."""
+    return Path(url2pathname(urlparse(uri).path))

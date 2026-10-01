@@ -1,0 +1,130 @@
+# ==============================================================================
+# semdex - chunking strategy selection ([chunker])
+# ==============================================================================
+#
+# Chunking splits each document into embeddable pieces before indexing. The chunk
+# SIZE is [index].max_tokens; this section chooses the strategy, recipe, overlap,
+# and tokenizer. All strategies implement the same port, so switching is a config
+# change plus the matching optional extra. Changing the strategy affects retrieval
+# quality; reindex to apply it to already-indexed content.
+#
+# Override any key via environment / .env, e.g. SEMDEX___CHUNKER__STRATEGY=markdown
+#
+# Strategy comparison (tuned for markdown retrieval accuracy):
+#   strategy    engine   best for                                   needs
+#   ----------  -------  -----------------------------------------  ---------------------------------
+#   recursive   chonkie  DEFAULT; markdown, token-accurate, cheap   semdex[chunk]
+#   markdown    sts      max markdown fidelity (true CommonMark)    semdex[chunk]
+#   fast        sts      plain fast recursive, non-markdown input   semdex[chunk]
+#   semantic    chonkie  prose with weak structure (SDPM)           semdex[chunk-semantic] + real embedding
+#   late        chonkie  accuracy ceiling (section-aware vectors)   semdex[chunk-semantic] + real embedding
+#   whitespace  none     zero-dependency fallback                   none
+#
+# NOTE: "semantic" and "late" spend embeddings at index time and only beat the cheap
+# markdown "recursive" WITH a real embedding provider (see [embedding]; the default
+# fastembed makes them worthwhile). On the placeholder embedding they underperform -
+# which is why "recursive" is the default.
+# ==============================================================================
+
+[chunker]
+
+# strategy - how documents are split into chunks.
+#   Default: "recursive" (chonkie, markdown-aware).
+#   Effect: controls chunk boundaries, which drives retrieval quality - good
+#     boundaries keep a heading with its text and never split a code block or table.
+#   When to change: "markdown" for the highest markdown-boundary fidelity or on huge
+#     corpora (Rust-fast); "fast" for non-markdown/plain text; "semantic"/"late" for
+#     prose with weak structure IF you run a real embedding provider; "whitespace"
+#     only as a last-resort dependency-free fallback.
+#   Consequences: "semantic"/"late" cost embeddings at index time (slower indexing)
+#     and need semdex[chunk-semantic] + a real embedding to pay off; "whitespace"
+#     cuts mid-sentence and is not token-accurate.
+#   Fallback: if the strategy's library (semdex[chunk]) is missing, semdex logs a
+#     warning and degrades to "whitespace" so indexing never crashes.
+#   Recommendation: keep "recursive" for markdown notes/docs; switch to "late" +
+#     sentence-transformers only when you want maximum accuracy and can pay for it.
+strategy = "recursive"
+
+# recipe - chonkie recursive rule set (used only by strategy = "recursive").
+#   Default: "markdown" - makes recursive split on markdown structure (headings,
+#     code fences, paragraphs), which is why recursive is markdown-aware out of the box.
+#   Effect: chooses the boundary rules; "markdown" respects document structure, an
+#     empty string uses chonkie's generic paragraph/sentence rules.
+#   When to change: set to "" to force generic rules (also avoids a one-time recipe
+#     download); set to another chonkie recipe name for a different rule set.
+#   Consequences: the "markdown" recipe is fetched from the chonkie hub on first use
+#     and cached; if it cannot be fetched (offline), semdex warns and falls back to
+#     generic rules. Ignored by every strategy except "recursive".
+#   Recommendation: keep "markdown" for markdown corpora; use "" for plain-text-only
+#     content or strict offline first-run determinism.
+recipe = "markdown"
+
+# chunk_overlap - tokens of overlap between adjacent chunks.
+#   Default: 0 (no overlap).
+#   Effect: repeats the last N tokens of each chunk at the start of the next, so a
+#     query that lands near a boundary still matches.
+#   When to change: raise it (roughly 1/8 of [index].max_tokens, e.g. 32 for 256) to
+#     improve recall on content where important context spans boundaries.
+#   Consequences: more overlap = better boundary recall but a larger store and more
+#     vectors to embed/search (duplicated text). Must be >= 0.
+#   Recommendation: 0 for tight/structured notes; ~1/8 of max_tokens for prose or
+#     long technical docs where boundary context matters.
+chunk_overlap = 0
+
+# tokenizer - how chunk sizes (in tokens) are counted.
+#   Default: "gpt2" - offline subword counting, a good proxy for most models.
+#   Effect: defines what a "token" means for [index].max_tokens and chunk_overlap, so
+#     chunks match the target model's real budget rather than raw word counts.
+#   When to change: set to a HuggingFace model id to match your embedding model's
+#     exact tokenizer, or "character" for character-based sizing.
+#   Consequences: a HuggingFace tokenizer may download on first use; "character"
+#     sizing is coarser and not aligned to any model's token budget.
+#   Recommendation: keep "gpt2" unless you need exact alignment with a specific
+#     embedding model, then use that model's tokenizer id.
+tokenizer = "gpt2"
+
+# semantic_model - the embedding model the SEMANTIC (and late) strategy cuts chunk
+#   boundaries on. Ignored by the recursive/whitespace/markdown/fast strategies (they
+#   split on separators, not meaning), so it only matters when strategy = "semantic".
+#   Default: unset -> chonkie's own default, minishlab/potion-base-32M.
+#   Effect: the semantic chunker places a boundary where the similarity between
+#     consecutive sentences drops, so this model decides WHERE chunks are cut. Its
+#     language coverage is therefore load-bearing: the default is distilled from an
+#     ENGLISH model, so on non-English text it measures similarity it cannot read and
+#     cuts in the wrong places (measured: English/German sentence-pair separation
+#     0.58 vs 0.31 for potion-base-32M).
+#   When to change: set a MULTILINGUAL model for any non-English or mixed-language
+#     corpus. Static (CPU) option: "minishlab/potion-multilingual-128M" (fast, no GPU).
+#     Stronger (GPU) options: "BAAI/bge-m3" or "intfloat/multilingual-e5-large" via
+#     sentence-transformers. Accepts any model2vec or sentence-transformers id chonkie
+#     can load.
+#   Consequences: the model downloads on first use and is held in memory during
+#     chunking; a sentence-transformers model wants a GPU to chunk a large corpus in
+#     reasonable time. Does not change the RETRIEVAL embedder ([embedding].model) -
+#     only where boundaries fall.
+#   Recommendation: leave unset for English-only content; set
+#     "minishlab/potion-multilingual-128M" (CPU) or "BAAI/bge-m3" (GPU) for German or
+#     multilingual content.
+#   NOTE: the semantic/late strategies do NOT enforce max_tokens - an un-splittable
+#     "sentence" (a minified-JS or web-scrape blob) stays one oversized chunk. With
+#     [embedding].provider = "ollama" that chunk is then embedded from its first
+#     2048 tokens only, silently, unless [embedding].num_batch is raised to cover it.
+# semantic_model = "minishlab/potion-multilingual-128M"
+
+# enforce_max_tokens - lossless size-guard: split any chunk over [index].max_tokens.
+#   Default: true.
+#   Effect: after chunking, any chunk whose token_count exceeds [index].max_tokens is
+#     SPLIT into consecutive <=max_tokens token windows (nothing is dropped - the pieces
+#     tile the original text exactly). It matters for the "semantic"/"late" strategies:
+#     they group at sentence granularity, so a single un-splittable "sentence" (a
+#     minified-JS / web-scrape blob with no boundaries) can overflow far past the target
+#     (measured: up to 43090 tokens vs a 512 target). Without the guard the embedder
+#     truncates such a chunk to its max sequence length at embed time and SILENTLY DROPS
+#     the overflow; the guard embeds all of it instead. "recursive"/"whitespace" already
+#     cap, so the guard is a no-op there.
+#   When to change: leave it on. Set false only to reproduce the pre-guard (truncating)
+#     behaviour for a benchmark comparison.
+#   Consequences: a handful of oversized chunks become several in-cap chunks (more
+#     vectors for those few blobs); retrieval quality improves because content past the
+#     old truncation point is now represented. It is a SPLIT, never a truncate.
+# enforce_max_tokens = true

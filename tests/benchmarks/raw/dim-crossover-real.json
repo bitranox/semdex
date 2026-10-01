@@ -1,0 +1,689 @@
+{
+  "lance_index_threshold": 10000,
+  "source": "cache",
+  "corpus": "mldr_en_8k_slice",
+  "profile": "recursive-t256-o0-gpt2",
+  "k": 10,
+  "n_queries": 100,
+  "repeats": 3,
+  "results": [
+    {
+      "dim": 256,
+      "scale": 25000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 9.94,
+        "search_p95_ms": 10.94,
+        "search_min_ms": 9.08,
+        "search_max_ms": 14.64,
+        "upsert_s": 0.5,
+        "store_mb": 28.1,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 3.24,
+        "search_p95_ms": 4.26,
+        "search_min_ms": 2.34,
+        "search_max_ms": 8.39,
+        "upsert_s": 1.8,
+        "store_mb": 27.0,
+        "repeats": 3,
+        "recall_at_k": 0.513
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 256,
+      "scale": 50000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 20.83,
+        "search_p95_ms": 21.94,
+        "search_min_ms": 18.82,
+        "search_max_ms": 26.87,
+        "upsert_s": 1.1,
+        "store_mb": 55.2,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 3.2,
+        "search_p95_ms": 4.28,
+        "search_min_ms": 2.54,
+        "search_max_ms": 6.18,
+        "upsert_s": 3.3,
+        "store_mb": 53.6,
+        "repeats": 3,
+        "recall_at_k": 0.448
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 256,
+      "scale": 100000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 42.02,
+        "search_p95_ms": 47.24,
+        "search_min_ms": 39.47,
+        "search_max_ms": 55.87,
+        "upsert_s": 1.9,
+        "store_mb": 110.4,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 3.36,
+        "search_p95_ms": 4.61,
+        "search_min_ms": 2.65,
+        "search_max_ms": 7.58,
+        "upsert_s": 5.1,
+        "store_mb": 107.0,
+        "repeats": 3,
+        "recall_at_k": 0.477
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 384,
+      "scale": 25000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 16.0,
+        "search_p95_ms": 17.32,
+        "search_min_ms": 15.02,
+        "search_max_ms": 19.35,
+        "upsert_s": 0.6,
+        "store_mb": 41.2,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 3.89,
+        "search_p95_ms": 4.91,
+        "search_min_ms": 2.8,
+        "search_max_ms": 62.55,
+        "upsert_s": 2.3,
+        "store_mb": 40.1,
+        "repeats": 3,
+        "recall_at_k": 0.599
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 384,
+      "scale": 50000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 31.49,
+        "search_p95_ms": 32.86,
+        "search_min_ms": 29.09,
+        "search_max_ms": 36.1,
+        "upsert_s": 1.2,
+        "store_mb": 80.9,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 3.41,
+        "search_p95_ms": 4.55,
+        "search_min_ms": 2.66,
+        "search_max_ms": 6.47,
+        "upsert_s": 4.4,
+        "store_mb": 79.8,
+        "repeats": 3,
+        "recall_at_k": 0.583
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 384,
+      "scale": 100000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 62.51,
+        "search_p95_ms": 68.99,
+        "search_min_ms": 57.71,
+        "search_max_ms": 99.36,
+        "upsert_s": 2.3,
+        "store_mb": 161.8,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 3.66,
+        "search_p95_ms": 4.94,
+        "search_min_ms": 2.67,
+        "search_max_ms": 6.27,
+        "upsert_s": 7.4,
+        "store_mb": 159.1,
+        "repeats": 3,
+        "recall_at_k": 0.624
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 512,
+      "scale": 25000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 21.17,
+        "search_p95_ms": 23.09,
+        "search_min_ms": 20.11,
+        "search_max_ms": 28.94,
+        "upsert_s": 1.0,
+        "store_mb": 54.4,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 3.53,
+        "search_p95_ms": 5.27,
+        "search_min_ms": 2.68,
+        "search_max_ms": 7.7,
+        "upsert_s": 2.8,
+        "store_mb": 53.2,
+        "repeats": 3,
+        "recall_at_k": 0.613
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 512,
+      "scale": 50000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 42.1,
+        "search_p95_ms": 65.15,
+        "search_min_ms": 38.45,
+        "search_max_ms": 76.99,
+        "upsert_s": 2.1,
+        "store_mb": 106.7,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 4.1,
+        "search_p95_ms": 5.88,
+        "search_min_ms": 3.02,
+        "search_max_ms": 10.54,
+        "upsert_s": 6.3,
+        "store_mb": 105.9,
+        "repeats": 3,
+        "recall_at_k": 0.62
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 512,
+      "scale": 100000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 84.06,
+        "search_p95_ms": 90.01,
+        "search_min_ms": 78.8,
+        "search_max_ms": 126.11,
+        "upsert_s": 4.5,
+        "store_mb": 213.4,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 5.26,
+        "search_p95_ms": 7.05,
+        "search_min_ms": 3.39,
+        "search_max_ms": 9.1,
+        "upsert_s": 10.7,
+        "store_mb": 211.3,
+        "repeats": 3,
+        "recall_at_k": 0.633
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 768,
+      "scale": 25000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 31.62,
+        "search_p95_ms": 32.99,
+        "search_min_ms": 28.88,
+        "search_max_ms": 38.28,
+        "upsert_s": 2.8,
+        "store_mb": 80.6,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 3.93,
+        "search_p95_ms": 5.41,
+        "search_min_ms": 3.21,
+        "search_max_ms": 8.77,
+        "upsert_s": 4.1,
+        "store_mb": 79.5,
+        "repeats": 3,
+        "recall_at_k": 0.646
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 768,
+      "scale": 50000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 62.49,
+        "search_p95_ms": 65.77,
+        "search_min_ms": 59.64,
+        "search_max_ms": 69.9,
+        "upsert_s": 7.0,
+        "store_mb": 158.0,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 4.54,
+        "search_p95_ms": 6.1,
+        "search_min_ms": 3.38,
+        "search_max_ms": 7.32,
+        "upsert_s": 9.1,
+        "store_mb": 158.2,
+        "repeats": 3,
+        "recall_at_k": 0.68
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 768,
+      "scale": 100000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 125.35,
+        "search_p95_ms": 135.72,
+        "search_min_ms": 120.95,
+        "search_max_ms": 177.78,
+        "upsert_s": 14.8,
+        "store_mb": 316.1,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 5.1,
+        "search_p95_ms": 6.68,
+        "search_min_ms": 4.03,
+        "search_max_ms": 9.63,
+        "upsert_s": 14.8,
+        "store_mb": 315.6,
+        "repeats": 3,
+        "recall_at_k": 0.708
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 1024,
+      "scale": 25000,
+      "source": "cache",
+      "truncated_from": 2560,
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 42.48,
+        "search_p95_ms": 45.83,
+        "search_min_ms": 40.09,
+        "search_max_ms": 54.38,
+        "upsert_s": 5.5,
+        "store_mb": 106.8,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 4.29,
+        "search_p95_ms": 6.12,
+        "search_min_ms": 3.58,
+        "search_max_ms": 8.54,
+        "upsert_s": 5.4,
+        "store_mb": 105.8,
+        "repeats": 3,
+        "recall_at_k": 0.748
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 1024,
+      "scale": 50000,
+      "source": "cache",
+      "truncated_from": 2560,
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 83.55,
+        "search_p95_ms": 87.05,
+        "search_min_ms": 80.55,
+        "search_max_ms": 94.97,
+        "upsert_s": 11.8,
+        "store_mb": 209.5,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 4.88,
+        "search_p95_ms": 6.28,
+        "search_min_ms": 4.01,
+        "search_max_ms": 10.52,
+        "upsert_s": 11.6,
+        "store_mb": 210.4,
+        "repeats": 3,
+        "recall_at_k": 0.743
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 1024,
+      "scale": 100000,
+      "source": "cache",
+      "truncated_from": 2560,
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 165.65,
+        "search_p95_ms": 184.1,
+        "search_min_ms": 162.5,
+        "search_max_ms": 237.65,
+        "upsert_s": 24.3,
+        "store_mb": 419.0,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 5.8,
+        "search_p95_ms": 7.91,
+        "search_min_ms": 4.82,
+        "search_max_ms": 12.84,
+        "upsert_s": 20.6,
+        "store_mb": 419.8,
+        "repeats": 3,
+        "recall_at_k": 0.774
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 2048,
+      "scale": 25000,
+      "source": "cache",
+      "truncated_from": 2560,
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 86.31,
+        "search_p95_ms": 93.82,
+        "search_min_ms": 82.44,
+        "search_max_ms": 105.03,
+        "upsert_s": 17.1,
+        "store_mb": 211.8,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 6.49,
+        "search_p95_ms": 9.04,
+        "search_min_ms": 5.39,
+        "search_max_ms": 10.73,
+        "upsert_s": 11.0,
+        "store_mb": 210.8,
+        "repeats": 3,
+        "recall_at_k": 0.772
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 2048,
+      "scale": 50000,
+      "source": "cache",
+      "truncated_from": 2560,
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 168.68,
+        "search_p95_ms": 187.21,
+        "search_min_ms": 161.82,
+        "search_max_ms": 288.82,
+        "upsert_s": 37.5,
+        "store_mb": 415.2,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 7.7,
+        "search_p95_ms": 10.59,
+        "search_min_ms": 6.28,
+        "search_max_ms": 17.43,
+        "upsert_s": 23.7,
+        "store_mb": 419.5,
+        "repeats": 3,
+        "recall_at_k": 0.792
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 2048,
+      "scale": 100000,
+      "source": "cache",
+      "truncated_from": 2560,
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 383.84,
+        "search_p95_ms": 450.1,
+        "search_min_ms": 363.48,
+        "search_max_ms": 761.76,
+        "upsert_s": 74.5,
+        "store_mb": 830.4,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 8.76,
+        "search_p95_ms": 11.43,
+        "search_min_ms": 7.62,
+        "search_max_ms": 16.16,
+        "upsert_s": 36.8,
+        "store_mb": 837.0,
+        "repeats": 3,
+        "recall_at_k": 0.795
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 2560,
+      "scale": 25000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 107.11,
+        "search_p95_ms": 119.62,
+        "search_min_ms": 102.87,
+        "search_max_ms": 203.07,
+        "upsert_s": 23.0,
+        "store_mb": 264.3,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 8.2,
+        "search_p95_ms": 12.59,
+        "search_min_ms": 6.41,
+        "search_max_ms": 17.99,
+        "upsert_s": 13.6,
+        "store_mb": 263.4,
+        "repeats": 3,
+        "recall_at_k": 0.78
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 2560,
+      "scale": 50000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 211.63,
+        "search_p95_ms": 225.74,
+        "search_min_ms": 205.63,
+        "search_max_ms": 298.13,
+        "upsert_s": 48.2,
+        "store_mb": 518.1,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 9.11,
+        "search_p95_ms": 12.6,
+        "search_min_ms": 7.74,
+        "search_max_ms": 15.63,
+        "upsert_s": 29.6,
+        "store_mb": 524.1,
+        "repeats": 3,
+        "recall_at_k": 0.799
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 2560,
+      "scale": 100000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 480.29,
+        "search_p95_ms": 534.27,
+        "search_min_ms": 463.44,
+        "search_max_ms": 675.11,
+        "upsert_s": 97.5,
+        "store_mb": 1036.3,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 12.38,
+        "search_p95_ms": 16.0,
+        "search_min_ms": 9.88,
+        "search_max_ms": 19.21,
+        "upsert_s": 50.7,
+        "store_mb": 1045.5,
+        "repeats": 3,
+        "recall_at_k": 0.807
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 4096,
+      "scale": 25000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 182.11,
+        "search_p95_ms": 188.41,
+        "search_min_ms": 176.43,
+        "search_max_ms": 205.68,
+        "upsert_s": 47.5,
+        "store_mb": 421.7,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 11.05,
+        "search_p95_ms": 15.26,
+        "search_min_ms": 9.56,
+        "search_max_ms": 19.16,
+        "upsert_s": 23.0,
+        "store_mb": 420.9,
+        "repeats": 3,
+        "recall_at_k": 0.796
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 4096,
+      "scale": 50000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 408.91,
+        "search_p95_ms": 429.8,
+        "search_min_ms": 391.84,
+        "search_max_ms": 544.94,
+        "upsert_s": 88.2,
+        "store_mb": 826.6,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 12.61,
+        "search_p95_ms": 17.18,
+        "search_min_ms": 10.95,
+        "search_max_ms": 18.84,
+        "upsert_s": 47.5,
+        "store_mb": 837.7,
+        "repeats": 3,
+        "recall_at_k": 0.828
+      },
+      "ann_faster": true
+    },
+    {
+      "dim": 4096,
+      "scale": 100000,
+      "source": "cache",
+      "sqlite_vec": {
+        "store": "sqlite_vec",
+        "search_p50_ms": 790.33,
+        "search_p95_ms": 818.17,
+        "search_min_ms": 776.46,
+        "search_max_ms": 854.47,
+        "upsert_s": 174.9,
+        "store_mb": 1653.3,
+        "repeats": 3,
+        "recall_at_k": 1.0
+      },
+      "lancedb": {
+        "store": "lancedb",
+        "search_p50_ms": 15.44,
+        "search_p95_ms": 20.01,
+        "search_min_ms": 13.91,
+        "search_max_ms": 22.91,
+        "upsert_s": 71.3,
+        "store_mb": 1671.1,
+        "repeats": 3,
+        "recall_at_k": 0.831
+      },
+      "ann_faster": true
+    }
+  ]
+}
