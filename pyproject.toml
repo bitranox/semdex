@@ -23,7 +23,7 @@ dependencies = [
     # (measured A/B interleaved on real GerDaLIR chunks, 886 vs 104 ms/row, bge-base).
     # It arrives transitively through fastembed, so only an explicit cap holds it back.
     # Re-open the cap when a release measures at parity with 1.28.0 on the same probe.
-    "onnxruntime>=1.28.0,<1.29.0",
+    "onnxruntime>=1.28.0,<1.31.0",
 ]
 license = { text = "MIT" }
 authors = [{ name = "bitranox", email = "bitranox@gmail.com" }]
