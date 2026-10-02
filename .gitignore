@@ -28,6 +28,8 @@ pnpm-debug.log*
 .env.*
 !.env.example
 todo.md
+# the standing backlog carries internal working state; the repo is public
+OPEN-WORK.md
 tmp_*
 
 # ====================================
