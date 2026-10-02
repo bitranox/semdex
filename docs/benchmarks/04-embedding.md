@@ -142,19 +142,19 @@ memory moves to the server rather than disappearing. The chart is in
 <!-- BEGIN GENERATED embedder_ranking_mldr (scripts/gen_bench_tables.py) -->
 | Corpus     | Model                          | Dim  | Best profile for this model                          | nDCG@10 [95% CI]      | Recall@10 |
 |------------|--------------------------------|------|------------------------------------------------------|-----------------------|-----------|
-| mldr_en_8k | ollama:qwen3-embedding-8b      | 4096 | recursive cap64 ov0tok                               | 0.9242 [0.908, 0.940] | 0.9613    |
-| mldr_en_8k | ollama:qwen3-embedding-4b      | 2560 | recursive cap64 ov0tok                               | 0.9171 [0.901, 0.933] | 0.9637    |
-| mldr_en_8k | ollama:bge-m3                  | 1024 | recursive cap64 ov0tok                               | 0.9140 [0.897, 0.930] | 0.9613    |
-| mldr_en_8k | fastembed:bge-base             | 768  | recursive cap64 ov0tok                               | 0.9017 [0.883, 0.919] | 0.9475    |
-| mldr_en_8k | model2vec:potion-retrieval-32M | 512  | recursive cap64 ov0tok                               | 0.8304 [0.808, 0.852] | 0.9012    |
+| mldr_en_8k | ollama:qwen3-embedding-8b      | 4096 | recursive cap64 ov0tok (0%)                          | 0.9242 [0.908, 0.940] | 0.9613    |
+| mldr_en_8k | ollama:qwen3-embedding-4b      | 2560 | recursive cap64 ov0tok (0%)                          | 0.9171 [0.901, 0.933] | 0.9637    |
+| mldr_en_8k | ollama:bge-m3                  | 1024 | recursive cap64 ov0tok (0%)                          | 0.9140 [0.897, 0.930] | 0.9613    |
+| mldr_en_8k | fastembed:bge-base             | 768  | recursive cap64 ov0tok (0%)                          | 0.9017 [0.883, 0.919] | 0.9475    |
+| mldr_en_8k | model2vec:potion-retrieval-32M | 512  | recursive cap64 ov0tok (0%)                          | 0.8304 [0.808, 0.852] | 0.9012    |
 | mldr_en_8k | fastembed:bge-small            | 384  | semantic hint256 breakpoint-default(potion-base-32M) | 0.8294 [0.806, 0.852] | 0.8950    |
-| mldr_en_8k | model2vec:potion-base-8M       | 256  | recursive cap64 ov0tok                               | 0.7836 [0.759, 0.808] | 0.8675    |
-| mldr_de_3k | ollama:qwen3-embedding-8b      | 4096 | recursive cap256 ov10tok                             | 0.7350 [0.678, 0.790] | 0.8050    |
-| mldr_de_3k | ollama:qwen3-embedding-4b      | 2560 | fast hint256 ov26tok                                 | 0.7306 [0.674, 0.785] | 0.8150    |
-| mldr_de_3k | ollama:bge-m3                  | 1024 | fast hint256 ov51tok                                 | 0.7245 [0.668, 0.779] | 0.8100    |
-| mldr_de_3k | fastembed:bge-small            | 384  | recursive cap256 ov0tok                              | 0.4949 [0.432, 0.559] | 0.5900    |
-| mldr_de_3k | fastembed:bge-base             | 768  | fast hint256 ov0tok                                  | 0.4675 [0.402, 0.533] | 0.5350    |
-| mldr_de_3k | model2vec:potion-retrieval-32M | 512  | markdown hint256 ov51tok                             | 0.3601 [0.299, 0.422] | 0.4250    |
+| mldr_en_8k | model2vec:potion-base-8M       | 256  | recursive cap64 ov0tok (0%)                          | 0.7836 [0.759, 0.808] | 0.8675    |
+| mldr_de_3k | ollama:qwen3-embedding-8b      | 4096 | recursive cap256 ov10tok (4%)                        | 0.7350 [0.678, 0.790] | 0.8050    |
+| mldr_de_3k | ollama:qwen3-embedding-4b      | 2560 | fast hint256 ov26tok (10%)                           | 0.7306 [0.674, 0.785] | 0.8150    |
+| mldr_de_3k | ollama:bge-m3                  | 1024 | fast hint256 ov51tok (20%)                           | 0.7245 [0.668, 0.779] | 0.8100    |
+| mldr_de_3k | fastembed:bge-small            | 384  | recursive cap256 ov0tok (0%)                         | 0.4949 [0.432, 0.559] | 0.5900    |
+| mldr_de_3k | fastembed:bge-base             | 768  | fast hint256 ov0tok (0%)                             | 0.4675 [0.402, 0.533] | 0.5350    |
+| mldr_de_3k | model2vec:potion-retrieval-32M | 512  | markdown hint256 ov51tok (20%)                       | 0.3601 [0.299, 0.422] | 0.4250    |
 | mldr_de_3k | model2vec:potion-base-8M       | 256  | whitespace hint64                                    | 0.2573 [0.203, 0.312] | 0.3350    |
 
 

@@ -123,26 +123,26 @@ one.
 <!-- BEGIN GENERATED chunk_profile_shape_mldr_en (scripts/gen_bench_tables.py) -->
 | Profile                                              | Chunks  | Chunks/doc | Median tokens | Max tokens | True cap | Cap held | Chars/token |
 |------------------------------------------------------|---------|------------|---------------|------------|----------|----------|-------------|
-| fast hint256 ov0tok                                  | 150,311 | 18.79      | 208           | 256        | 256      | yes      | 4.30        |
-| fast hint256 ov26tok                                 | 152,233 | 19.03      | 209           | 256        | 256      | yes      | 4.29        |
-| fast hint256 ov38tok                                 | 154,032 | 19.25      | 210           | 256        | 256      | yes      | 4.28        |
-| fast hint256 ov51tok                                 | 156,759 | 19.59      | 210           | 256        | 256      | yes      | 4.28        |
+| fast hint256 ov0tok (0%)                             | 150,311 | 18.79      | 208           | 256        | 256      | yes      | 4.30        |
+| fast hint256 ov26tok (10%)                           | 152,233 | 19.03      | 209           | 256        | 256      | yes      | 4.29        |
+| fast hint256 ov38tok (15%)                           | 154,032 | 19.25      | 210           | 256        | 256      | yes      | 4.28        |
+| fast hint256 ov51tok (20%)                           | 156,759 | 19.59      | 210           | 256        | 256      | yes      | 4.28        |
 | late hint256                                         | 150,688 | 18.84      | 196           | 256        | 256      | yes      | 5.13        |
-| markdown hint256 ov0tok                              | 149,082 | 18.64      | 208           | 256        | 256      | yes      | 4.30        |
-| markdown hint256 ov26tok                             | 151,201 | 18.90      | 209           | 256        | 256      | yes      | 4.29        |
-| markdown hint256 ov38tok                             | 152,909 | 19.11      | 209           | 256        | 256      | yes      | 4.28        |
-| markdown hint256 ov51tok                             | 155,470 | 19.43      | 210           | 256        | 256      | yes      | 4.27        |
-| recursive cap128 ov0tok                              | 316,836 | 39.60      | 101           | 128        | 128      | yes      | 4.25        |
-| recursive cap256 ov0tok                              | 148,008 | 18.50      | 214           | 256        | 256      | yes      | 4.29        |
-| recursive cap256 ov10tok                             | 148,013 | 18.50      | 224           | 266        | 266      | yes      | 4.29        |
-| recursive cap256 ov15tok                             | 148,013 | 18.50      | 229           | 271        | 271      | yes      | 4.29        |
-| recursive cap256 ov26tok                             | 148,013 | 18.50      | 239           | 282        | 282      | yes      | 4.30        |
-| recursive cap256 ov38tok                             | 148,013 | 18.50      | 251           | 294        | 294      | yes      | 4.30        |
-| recursive cap256 ov51tok                             | 148,013 | 18.50      | 263           | 308        | 307      | NO       | 4.30        |
-| recursive cap512 ov0tok                              | 68,090  | 8.51       | 461           | 512        | 512      | yes      | 4.30        |
-| recursive cap512 ov10tok                             | 68,090  | 8.51       | 470           | 522        | 522      | yes      | 4.30        |
-| recursive cap512 ov15tok                             | 68,090  | 8.51       | 475           | 527        | 527      | yes      | 4.30        |
-| recursive cap64 ov0tok                               | 660,625 | 82.58      | 47            | 65         | 64       | NO       | 4.22        |
+| markdown hint256 ov0tok (0%)                         | 149,082 | 18.64      | 208           | 256        | 256      | yes      | 4.30        |
+| markdown hint256 ov26tok (10%)                       | 151,201 | 18.90      | 209           | 256        | 256      | yes      | 4.29        |
+| markdown hint256 ov38tok (15%)                       | 152,909 | 19.11      | 209           | 256        | 256      | yes      | 4.28        |
+| markdown hint256 ov51tok (20%)                       | 155,470 | 19.43      | 210           | 256        | 256      | yes      | 4.27        |
+| recursive cap128 ov0tok (0%)                         | 316,836 | 39.60      | 101           | 128        | 128      | yes      | 4.25        |
+| recursive cap256 ov0tok (0%)                         | 148,008 | 18.50      | 214           | 256        | 256      | yes      | 4.29        |
+| recursive cap256 ov10tok (4%)                        | 148,013 | 18.50      | 224           | 266        | 266      | yes      | 4.29        |
+| recursive cap256 ov15tok (6%)                        | 148,013 | 18.50      | 229           | 271        | 271      | yes      | 4.29        |
+| recursive cap256 ov26tok (10%)                       | 148,013 | 18.50      | 239           | 282        | 282      | yes      | 4.30        |
+| recursive cap256 ov38tok (15%)                       | 148,013 | 18.50      | 251           | 294        | 294      | yes      | 4.30        |
+| recursive cap256 ov51tok (20%)                       | 148,013 | 18.50      | 263           | 308        | 307      | NO       | 4.30        |
+| recursive cap512 ov0tok (0%)                         | 68,090  | 8.51       | 461           | 512        | 512      | yes      | 4.30        |
+| recursive cap512 ov10tok (2%)                        | 68,090  | 8.51       | 470           | 522        | 522      | yes      | 4.30        |
+| recursive cap512 ov15tok (3%)                        | 68,090  | 8.51       | 475           | 527        | 527      | yes      | 4.30        |
+| recursive cap64 ov0tok (0%)                          | 660,625 | 82.58      | 47            | 65         | 64       | NO       | 4.22        |
 | semantic hint256 breakpoint-default(potion-base-32M) | 385,414 | 48.18      | 46            | 256        | 256      | yes      | 4.70        |
 | semantic hint512 breakpoint-default(potion-base-32M) | 373,893 | 46.74      | 45            | 512        | 512      | yes      | 4.70        |
 | whitespace hint128                                   | 158,377 | 19.80      | 128           | 128        | 128      | yes      | 6.23        |
@@ -410,991 +410,991 @@ What the size axis still lacks: GerDaLIR has no rung above 256 tokens, MLDR Germ
 </picture>
 
 <!-- BEGIN GENERATED chunk_knob_overlap (scripts/gen_bench_tables.py) -->
-| Corpus                | Embedder                       | Held fixed       | Change (low to high) | Delta nDCG@10 | 95% CI             | Win/loss  | Verdict      |
-|-----------------------|--------------------------------|------------------|----------------------|---------------|--------------------|-----------|--------------|
-| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 0 to 26              | -0.0016       | [-0.0041, +0.0010] | 914/1009  | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 0 to 38              | -0.0010       | [-0.0044, +0.0024] | 1189/1344 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 26 to 38             | +0.0006       | [-0.0021, +0.0033] | 965/995   | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 0 to 51              | +0.0015       | [-0.0025, +0.0055] | 1506/1509 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 26 to 51             | +0.0031       | [-0.0006, +0.0067] | 1397/1365 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 38 to 51             | +0.0025       | [-0.0007, +0.0055] | 1154/1110 | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 0 to 26              | -0.0002       | [-0.0021, +0.0018] | 637/610   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 0 to 38              | +0.0018       | [-0.0010, +0.0045] | 909/883   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 26 to 38             | +0.0020       | [-0.0003, +0.0042] | 737/716   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 0 to 51              | +0.0039       | [+0.0005, +0.0073] | 1156/1061 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 26 to 51             | +0.0041       | [+0.0009, +0.0072] | 1057/998  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 38 to 51             | +0.0021       | [-0.0006, +0.0048] | 841/811   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 0 to 26              | -0.0001       | [-0.0021, +0.0018] | 705/726   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 0 to 38              | +0.0010       | [-0.0018, +0.0038] | 1024/1036 | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 26 to 38             | +0.0011       | [-0.0013, +0.0035] | 824/825   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 0 to 51              | +0.0038       | [+0.0004, +0.0072] | 1301/1229 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 26 to 51             | +0.0039       | [+0.0007, +0.0071] | 1211/1136 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 38 to 51             | +0.0028       | [+0.0000, +0.0055] | 996/942   | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 0 to 26              | -0.0015       | [-0.0035, +0.0005] | 947/1069  | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 0 to 38              | -0.0015       | [-0.0042, +0.0011] | 1406/1546 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 26 to 38             | -0.0001       | [-0.0023, +0.0022] | 1114/1197 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 0 to 51              | -0.0005       | [-0.0037, +0.0027] | 1700/1766 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 26 to 51             | +0.0010       | [-0.0019, +0.0039] | 1552/1613 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 38 to 51             | +0.0010       | [-0.0014, +0.0035] | 1295/1329 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 0 to 26              | +0.0012       | [-0.0007, +0.0031] | 1037/983  | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 0 to 38              | +0.0033       | [+0.0007, +0.0059] | 1505/1363 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 26 to 38             | +0.0021       | [-0.0001, +0.0043] | 1154/1114 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 0 to 51              | +0.0044       | [+0.0012, +0.0076] | 1806/1722 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 26 to 51             | +0.0033       | [+0.0002, +0.0062] | 1651/1619 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 38 to 51             | +0.0011       | [-0.0015, +0.0037] | 1328/1391 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 0 to 26              | +0.0014       | [-0.0006, +0.0034] | 1045/993  | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 0 to 38              | +0.0015       | [-0.0011, +0.0043] | 1481/1495 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 26 to 38             | +0.0002       | [-0.0020, +0.0024] | 1122/1217 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 0 to 51              | +0.0037       | [+0.0005, +0.0070] | 1802/1792 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 26 to 51             | +0.0023       | [-0.0007, +0.0053] | 1629/1714 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 38 to 51             | +0.0022       | [-0.0003, +0.0047] | 1373/1384 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 0 to 26              | -0.0020       | [-0.0044, +0.0004] | 1054/894  | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 0 to 38              | -0.0016       | [-0.0044, +0.0012] | 1157/1078 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 26 to 38             | +0.0004       | [-0.0013, +0.0022] | 548/622   | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 0 to 51              | -0.0017       | [-0.0049, +0.0014] | 1283/1236 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 26 to 51             | +0.0003       | [-0.0021, +0.0027] | 867/958   | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 38 to 51             | -0.0002       | [-0.0021, +0.0017] | 663/719   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 0 to 26              | -0.0009       | [-0.0025, +0.0007] | 525/503   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 0 to 38              | +0.0003       | [-0.0016, +0.0023] | 631/633   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 26 to 38             | +0.0012       | [-0.0001, +0.0026] | 362/375   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 0 to 51              | +0.0008       | [-0.0016, +0.0033] | 763/785   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 26 to 51             | +0.0017       | [-0.0003, +0.0038] | 604/638   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 38 to 51             | +0.0005       | [-0.0012, +0.0021] | 461/499   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 0 to 26              | -0.0006       | [-0.0021, +0.0008] | 562/458   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 0 to 38              | +0.0003       | [-0.0016, +0.0022] | 717/638   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 26 to 38             | +0.0009       | [-0.0004, +0.0023] | 444/421   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 0 to 51              | +0.0028       | [+0.0005, +0.0052] | 903/786   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 26 to 51             | +0.0035       | [+0.0015, +0.0054] | 733/648   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 38 to 51             | +0.0025       | [+0.0010, +0.0040] | 540/459   | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 0 to 26              | -0.0001       | [-0.0018, +0.0016] | 953/983   | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 0 to 38              | +0.0004       | [-0.0017, +0.0025] | 1123/1186 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 26 to 38             | +0.0005       | [-0.0009, +0.0020] | 588/662   | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 0 to 51              | -0.0002       | [-0.0026, +0.0023] | 1302/1440 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 26 to 51             | -0.0001       | [-0.0021, +0.0020] | 943/1094  | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 38 to 51             | -0.0006       | [-0.0022, +0.0011] | 693/832   | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 0 to 26              | +0.0003       | [-0.0015, +0.0020] | 910/1067  | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 0 to 38              | +0.0005       | [-0.0015, +0.0026] | 1133/1258 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 26 to 38             | +0.0003       | [-0.0012, +0.0017] | 658/698   | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 0 to 51              | +0.0001       | [-0.0023, +0.0025] | 1326/1457 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 26 to 51             | -0.0002       | [-0.0021, +0.0018] | 1003/1125 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 38 to 51             | -0.0004       | [-0.0020, +0.0012] | 748/841   | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 0 to 26              | -0.0000       | [-0.0018, +0.0017] | 916/1001  | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 0 to 38              | +0.0009       | [-0.0012, +0.0030] | 1172/1233 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 26 to 38             | +0.0009       | [-0.0005, +0.0024] | 680/697   | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 0 to 51              | +0.0007       | [-0.0017, +0.0031] | 1406/1449 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 26 to 51             | +0.0007       | [-0.0013, +0.0028] | 1091/1141 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 38 to 51             | -0.0002       | [-0.0019, +0.0015] | 813/874   | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 to 102             | +0.0052       | [+0.0016, +0.0088] | 1600/1476 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 to 115             | +0.0054       | [+0.0017, +0.0091] | 1624/1462 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 102 to 115           | +0.0002       | [-0.0014, +0.0019] | 905/850   | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 to 128             | +0.0055       | [+0.0018, +0.0092] | 1648/1496 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 102 to 128           | +0.0003       | [-0.0016, +0.0022] | 1060/1000 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 115 to 128           | +0.0001       | [-0.0015, +0.0017] | 883/894   | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 to 26              | +0.0009       | [-0.0017, +0.0035] | 1217/1182 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 to 102            | +0.0043       | [+0.0013, +0.0073] | 1395/1287 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 to 115            | +0.0045       | [+0.0014, +0.0076] | 1445/1287 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 to 128            | +0.0046       | [+0.0014, +0.0078] | 1499/1336 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 to 38              | +0.0018       | [-0.0011, +0.0045] | 1310/1298 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 to 102            | +0.0034       | [+0.0005, +0.0062] | 1364/1238 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 to 115            | +0.0036       | [+0.0007, +0.0066] | 1402/1262 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 to 128            | +0.0037       | [+0.0007, +0.0068] | 1427/1304 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 to 38             | +0.0009       | [-0.0009, +0.0026] | 925/911   | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 to 51              | +0.0019       | [-0.0012, +0.0049] | 1396/1332 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 to 102            | +0.0033       | [+0.0008, +0.0059] | 1266/1165 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 to 115            | +0.0035       | [+0.0008, +0.0063] | 1307/1234 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 to 128            | +0.0036       | [+0.0007, +0.0065] | 1355/1283 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 to 51             | +0.0010       | [-0.0012, +0.0031] | 1090/1029 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 to 51             | +0.0001       | [-0.0017, +0.0018] | 936/887   | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 to 64              | +0.0034       | [+0.0003, +0.0065] | 1463/1331 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 64 to 102            | +0.0018       | [-0.0006, +0.0041] | 1163/1113 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 64 to 115            | +0.0020       | [-0.0006, +0.0045] | 1214/1164 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 64 to 128            | +0.0021       | [-0.0007, +0.0047] | 1289/1242 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 to 64             | +0.0025       | [+0.0001, +0.0049] | 1198/1106 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 to 64             | +0.0017       | [-0.0004, +0.0037] | 1080/1005 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 to 64             | +0.0016       | [-0.0001, +0.0032] | 906/863   | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 to 77              | +0.0052       | [+0.0019, +0.0085] | 1532/1402 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 77 to 102            | +0.0000       | [-0.0020, +0.0020] | 1046/1015 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 77 to 115            | +0.0002       | [-0.0021, +0.0025] | 1140/1126 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 77 to 128            | +0.0003       | [-0.0021, +0.0028] | 1219/1186 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 to 77             | +0.0043       | [+0.0016, +0.0070] | 1291/1195 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 to 77             | +0.0034       | [+0.0010, +0.0058] | 1212/1098 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 to 77             | +0.0033       | [+0.0012, +0.0054] | 1077/1028 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 64 to 77             | +0.0017       | [+0.0000, +0.0035] | 909/891   | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 to 90              | +0.0068       | [+0.0033, +0.0103] | 1602/1422 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 90 to 102            | -0.0016       | [-0.0033, +0.0000] | 827/884   | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 90 to 115            | -0.0014       | [-0.0033, +0.0005] | 968/1014  | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 90 to 128            | -0.0013       | [-0.0035, +0.0009] | 1093/1126 | not resolved |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 to 90             | +0.0059       | [+0.0031, +0.0088] | 1385/1203 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 to 90             | +0.0051       | [+0.0024, +0.0077] | 1328/1145 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 to 90             | +0.0050       | [+0.0026, +0.0073] | 1202/1080 | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 64 to 90             | +0.0034       | [+0.0012, +0.0055] | 1092/997  | resolved     |
-| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 77 to 90             | +0.0017       | [-0.0001, +0.0033] | 915/885   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 102             | +0.0266       | [+0.0223, +0.0309] | 1811/1177 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 115             | +0.0292       | [+0.0249, +0.0336] | 1855/1175 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 115           | +0.0026       | [+0.0008, +0.0045] | 902/808   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 128             | +0.0324       | [+0.0280, +0.0368] | 1935/1170 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 128           | +0.0058       | [+0.0034, +0.0082] | 1100/923  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 to 128           | +0.0032       | [+0.0013, +0.0051] | 922/824   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 141             | +0.0349       | [+0.0304, +0.0394] | 2015/1148 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 141           | +0.0083       | [+0.0056, +0.0110] | 1237/996  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 to 141           | +0.0056       | [+0.0032, +0.0081] | 1115/955  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 to 141           | +0.0024       | [+0.0006, +0.0043] | 892/793   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 154             | +0.0356       | [+0.0311, +0.0401] | 1994/1146 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 154           | +0.0090       | [+0.0061, +0.0119] | 1285/1055 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 to 154           | +0.0064       | [+0.0037, +0.0090] | 1177/1024 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 to 154           | +0.0032       | [+0.0009, +0.0055] | 1000/973  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 to 154           | +0.0007       | [-0.0011, +0.0026] | 822/866   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 166             | +0.0381       | [+0.0336, +0.0426] | 2041/1123 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 166           | +0.0115       | [+0.0084, +0.0147] | 1381/1099 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 to 166           | +0.0089       | [+0.0060, +0.0118] | 1294/1060 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 to 166           | +0.0057       | [+0.0032, +0.0082] | 1135/1013 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 to 166           | +0.0032       | [+0.0010, +0.0054] | 1009/948  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 to 166           | +0.0025       | [+0.0009, +0.0041] | 816/735   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 179             | +0.0387       | [+0.0341, +0.0433] | 2055/1148 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 179           | +0.0120       | [+0.0088, +0.0154] | 1445/1129 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 to 179           | +0.0094       | [+0.0064, +0.0125] | 1348/1108 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 to 179           | +0.0062       | [+0.0035, +0.0091] | 1180/1079 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 to 179           | +0.0038       | [+0.0013, +0.0063] | 1093/1031 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 to 179           | +0.0031       | [+0.0010, +0.0051] | 954/890   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 to 179           | +0.0006       | [-0.0011, +0.0023] | 774/800   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 192             | +0.0390       | [+0.0346, +0.0435] | 2071/1113 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 192           | +0.0124       | [+0.0091, +0.0157] | 1468/1151 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 to 192           | +0.0097       | [+0.0066, +0.0129] | 1391/1135 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 to 192           | +0.0066       | [+0.0037, +0.0095] | 1241/1106 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 to 192           | +0.0041       | [+0.0014, +0.0069] | 1171/1101 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 to 192           | +0.0034       | [+0.0010, +0.0058] | 1025/1003 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 to 192           | +0.0009       | [-0.0012, +0.0031] | 908/947   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 to 192           | +0.0003       | [-0.0013, +0.0019] | 783/760   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 205             | +0.0407       | [+0.0363, +0.0452] | 2092/1116 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 205           | +0.0141       | [+0.0107, +0.0175] | 1521/1154 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 to 205           | +0.0115       | [+0.0082, +0.0147] | 1451/1149 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 to 205           | +0.0083       | [+0.0053, +0.0114] | 1323/1123 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 to 205           | +0.0058       | [+0.0030, +0.0087] | 1243/1118 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 to 205           | +0.0051       | [+0.0026, +0.0076] | 1144/1046 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 to 205           | +0.0026       | [+0.0003, +0.0050] | 1030/1016 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 to 205           | +0.0020       | [+0.0001, +0.0040] | 926/892   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 192 to 205           | +0.0017       | [+0.0002, +0.0032] | 727/702   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 218             | +0.0418       | [+0.0373, +0.0462] | 2120/1104 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 218           | +0.0151       | [+0.0117, +0.0186] | 1549/1161 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 to 218           | +0.0125       | [+0.0093, +0.0158] | 1470/1161 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 to 218           | +0.0093       | [+0.0063, +0.0125] | 1363/1137 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 to 218           | +0.0069       | [+0.0040, +0.0098] | 1267/1126 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 to 218           | +0.0061       | [+0.0035, +0.0088] | 1189/1069 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 to 218           | +0.0037       | [+0.0012, +0.0061] | 1093/1042 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 to 218           | +0.0031       | [+0.0009, +0.0053] | 984/940   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 192 to 218           | +0.0028       | [+0.0009, +0.0046] | 849/828   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 205 to 218           | +0.0010       | [-0.0003, +0.0024] | 672/675   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 230             | +0.0418       | [+0.0373, +0.0462] | 2090/1096 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 230           | +0.0152       | [+0.0117, +0.0187] | 1568/1167 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 to 230           | +0.0126       | [+0.0092, +0.0159] | 1494/1158 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 to 230           | +0.0094       | [+0.0063, +0.0125] | 1366/1148 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 to 230           | +0.0069       | [+0.0040, +0.0099] | 1311/1142 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 to 230           | +0.0062       | [+0.0035, +0.0090] | 1216/1088 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 to 230           | +0.0037       | [+0.0011, +0.0063] | 1120/1080 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 to 230           | +0.0031       | [+0.0008, +0.0055] | 1023/979  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 192 to 230           | +0.0028       | [+0.0007, +0.0049] | 907/891   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 205 to 230           | +0.0011       | [-0.0005, +0.0028] | 779/779   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 218 to 230           | +0.0000       | [-0.0011, +0.0012] | 549/584   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 243             | +0.0417       | [+0.0373, +0.0461] | 2108/1092 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 243           | +0.0151       | [+0.0116, +0.0186] | 1576/1182 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 to 243           | +0.0125       | [+0.0091, +0.0159] | 1495/1154 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 to 243           | +0.0093       | [+0.0062, +0.0124] | 1358/1157 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 to 243           | +0.0068       | [+0.0038, +0.0098] | 1311/1161 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 to 243           | +0.0061       | [+0.0033, +0.0089] | 1235/1111 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 to 243           | +0.0036       | [+0.0010, +0.0063] | 1125/1097 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 to 243           | +0.0031       | [+0.0006, +0.0055] | 1053/1019 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 192 to 243           | +0.0027       | [+0.0005, +0.0049] | 957/936   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 205 to 243           | +0.0010       | [-0.0008, +0.0028] | 810/840   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 218 to 243           | -0.0000       | [-0.0014, +0.0013] | 606/673   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 230 to 243           | -0.0001       | [-0.0011, +0.0010] | 423/476   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 256             | +0.0420       | [+0.0376, +0.0464] | 2101/1088 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 to 256           | +0.0154       | [+0.0119, +0.0189] | 1575/1175 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 to 256           | +0.0128       | [+0.0094, +0.0162] | 1496/1148 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 to 256           | +0.0096       | [+0.0064, +0.0127] | 1367/1149 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 to 256           | +0.0071       | [+0.0041, +0.0101] | 1312/1153 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 to 256           | +0.0064       | [+0.0036, +0.0093] | 1237/1099 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 to 256           | +0.0039       | [+0.0012, +0.0066] | 1128/1092 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 to 256           | +0.0033       | [+0.0009, +0.0057] | 1064/1010 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 192 to 256           | +0.0030       | [+0.0008, +0.0052] | 974/929   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 205 to 256           | +0.0013       | [-0.0005, +0.0031] | 819/832   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 218 to 256           | +0.0002       | [-0.0011, +0.0017] | 623/680   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 230 to 256           | +0.0002       | [-0.0009, +0.0013] | 433/491   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 243 to 256           | +0.0003       | [-0.0003, +0.0008] | 158/177   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 26              | +0.0057       | [+0.0028, +0.0085] | 1129/984  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 102            | +0.0210       | [+0.0172, +0.0247] | 1629/1106 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 115            | +0.0236       | [+0.0196, +0.0275] | 1715/1118 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 128            | +0.0268       | [+0.0228, +0.0307] | 1768/1090 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 141            | +0.0292       | [+0.0251, +0.0333] | 1840/1128 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 154            | +0.0299       | [+0.0259, +0.0340] | 1822/1107 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 166            | +0.0324       | [+0.0283, +0.0366] | 1882/1086 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 179            | +0.0330       | [+0.0288, +0.0372] | 1891/1102 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 192            | +0.0333       | [+0.0292, +0.0376] | 1908/1108 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 205            | +0.0350       | [+0.0309, +0.0392] | 1927/1103 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 218            | +0.0361       | [+0.0319, +0.0403] | 1942/1078 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 230            | +0.0361       | [+0.0319, +0.0403] | 1948/1073 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 243            | +0.0361       | [+0.0319, +0.0402] | 1961/1064 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 256            | +0.0363       | [+0.0321, +0.0404] | 1959/1058 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 38              | +0.0104       | [+0.0072, +0.0137] | 1287/1046 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 102            | +0.0162       | [+0.0126, +0.0198] | 1530/1080 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 115            | +0.0188       | [+0.0151, +0.0225] | 1614/1099 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 128            | +0.0220       | [+0.0182, +0.0258] | 1693/1095 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 141            | +0.0244       | [+0.0205, +0.0284] | 1754/1121 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 154            | +0.0252       | [+0.0212, +0.0291] | 1755/1123 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 166            | +0.0277       | [+0.0237, +0.0317] | 1786/1104 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 179            | +0.0282       | [+0.0241, +0.0323] | 1814/1123 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 192            | +0.0286       | [+0.0245, +0.0327] | 1836/1125 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 205            | +0.0303       | [+0.0263, +0.0343] | 1864/1101 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 218            | +0.0313       | [+0.0273, +0.0354] | 1871/1083 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 230            | +0.0314       | [+0.0273, +0.0354] | 1874/1091 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 243            | +0.0313       | [+0.0272, +0.0353] | 1880/1090 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 256            | +0.0316       | [+0.0275, +0.0356] | 1885/1089 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 38             | +0.0048       | [+0.0026, +0.0069] | 949/800   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 51              | +0.0147       | [+0.0111, +0.0183] | 1421/1111 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 102            | +0.0119       | [+0.0086, +0.0151] | 1392/1086 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 115            | +0.0145       | [+0.0112, +0.0179] | 1466/1088 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 128            | +0.0177       | [+0.0142, +0.0212] | 1567/1101 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 141            | +0.0202       | [+0.0164, +0.0239] | 1649/1127 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 154            | +0.0209       | [+0.0171, +0.0247] | 1649/1138 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 166            | +0.0234       | [+0.0195, +0.0273] | 1698/1126 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 179            | +0.0239       | [+0.0200, +0.0280] | 1743/1144 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 192            | +0.0243       | [+0.0203, +0.0283] | 1744/1168 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 205            | +0.0260       | [+0.0220, +0.0299] | 1767/1146 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 218            | +0.0270       | [+0.0230, +0.0310] | 1792/1142 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 230            | +0.0271       | [+0.0231, +0.0311] | 1791/1151 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 243            | +0.0270       | [+0.0230, +0.0310] | 1792/1144 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 256            | +0.0273       | [+0.0233, +0.0313] | 1803/1144 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 51             | +0.0090       | [+0.0063, +0.0118] | 1177/920  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 51             | +0.0043       | [+0.0021, +0.0064] | 948/821   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 64              | +0.0192       | [+0.0154, +0.0231] | 1559/1133 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 102            | +0.0074       | [+0.0046, +0.0103] | 1259/1011 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 115            | +0.0101       | [+0.0070, +0.0131] | 1370/1056 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 128            | +0.0133       | [+0.0099, +0.0165] | 1461/1075 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 141            | +0.0157       | [+0.0122, +0.0192] | 1545/1134 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 154            | +0.0164       | [+0.0128, +0.0200] | 1541/1143 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 166            | +0.0189       | [+0.0153, +0.0226] | 1601/1150 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 179            | +0.0195       | [+0.0157, +0.0233] | 1667/1173 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 192            | +0.0198       | [+0.0159, +0.0236] | 1673/1224 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 205            | +0.0215       | [+0.0177, +0.0253] | 1717/1208 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 218            | +0.0226       | [+0.0187, +0.0265] | 1757/1184 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 230            | +0.0226       | [+0.0187, +0.0265] | 1737/1180 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 243            | +0.0225       | [+0.0187, +0.0264] | 1740/1177 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 256            | +0.0228       | [+0.0190, +0.0267] | 1737/1177 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 64             | +0.0135       | [+0.0105, +0.0166] | 1344/995  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 64             | +0.0087       | [+0.0061, +0.0114] | 1196/929  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 64             | +0.0045       | [+0.0025, +0.0065] | 946/823   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 77              | +0.0226       | [+0.0186, +0.0267] | 1683/1137 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 102            | +0.0040       | [+0.0015, +0.0064] | 1084/966  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 115            | +0.0066       | [+0.0038, +0.0094] | 1212/1041 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 128            | +0.0098       | [+0.0067, +0.0129] | 1335/1097 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 141            | +0.0122       | [+0.0089, +0.0155] | 1438/1141 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 154            | +0.0130       | [+0.0096, +0.0164] | 1457/1171 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 166            | +0.0154       | [+0.0119, +0.0190] | 1526/1179 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 179            | +0.0160       | [+0.0124, +0.0197] | 1578/1214 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 192            | +0.0163       | [+0.0127, +0.0200] | 1599/1232 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 205            | +0.0181       | [+0.0144, +0.0217] | 1648/1237 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 218            | +0.0191       | [+0.0154, +0.0228] | 1672/1225 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 230            | +0.0192       | [+0.0154, +0.0229] | 1672/1208 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 243            | +0.0191       | [+0.0153, +0.0228] | 1673/1221 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 256            | +0.0194       | [+0.0156, +0.0231] | 1678/1223 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 77             | +0.0170       | [+0.0136, +0.0204] | 1483/1043 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 77             | +0.0122       | [+0.0092, +0.0152] | 1352/984  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 77             | +0.0079       | [+0.0054, +0.0106] | 1187/964  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 77             | +0.0035       | [+0.0015, +0.0055] | 970/824   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 to 90              | +0.0247       | [+0.0205, +0.0289] | 1748/1152 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 102            | +0.0019       | [+0.0001, +0.0039] | 873/826   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 115            | +0.0046       | [+0.0022, +0.0069] | 1066/944  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 128            | +0.0077       | [+0.0050, +0.0105] | 1219/990  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 141            | +0.0102       | [+0.0072, +0.0132] | 1329/1052 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 154            | +0.0109       | [+0.0078, +0.0141] | 1350/1102 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 166            | +0.0134       | [+0.0101, +0.0168] | 1430/1126 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 179            | +0.0140       | [+0.0106, +0.0174] | 1480/1171 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 192            | +0.0143       | [+0.0108, +0.0178] | 1494/1201 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 205            | +0.0160       | [+0.0125, +0.0195] | 1558/1170 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 218            | +0.0171       | [+0.0135, +0.0207] | 1598/1179 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 230            | +0.0171       | [+0.0135, +0.0207] | 1609/1172 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 243            | +0.0170       | [+0.0134, +0.0207] | 1619/1190 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 to 256            | +0.0173       | [+0.0137, +0.0209] | 1617/1186 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 to 90             | +0.0190       | [+0.0154, +0.0226] | 1543/1063 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 to 90             | +0.0142       | [+0.0108, +0.0176] | 1434/1042 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 to 90             | +0.0100       | [+0.0070, +0.0129] | 1289/1044 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 to 90             | +0.0055       | [+0.0030, +0.0080] | 1130/945  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 to 90             | +0.0020       | [+0.0001, +0.0039] | 928/829   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 102             | +0.0269       | [+0.0229, +0.0309] | 1954/1297 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 115             | +0.0285       | [+0.0243, +0.0326] | 2030/1315 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 115           | +0.0016       | [-0.0003, +0.0034] | 976/900   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 128             | +0.0312       | [+0.0269, +0.0354] | 2092/1314 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 128           | +0.0043       | [+0.0019, +0.0066] | 1182/1075 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 to 128           | +0.0027       | [+0.0009, +0.0044] | 967/896   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 141             | +0.0333       | [+0.0290, +0.0376] | 2127/1351 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 141           | +0.0064       | [+0.0038, +0.0090] | 1307/1131 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 to 141           | +0.0048       | [+0.0025, +0.0071] | 1133/1036 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 to 141           | +0.0022       | [+0.0004, +0.0039] | 959/922   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 154             | +0.0363       | [+0.0320, +0.0406] | 2188/1293 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 154           | +0.0094       | [+0.0065, +0.0123] | 1396/1173 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 to 154           | +0.0078       | [+0.0053, +0.0104] | 1267/1117 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 to 154           | +0.0052       | [+0.0029, +0.0073] | 1156/1052 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 to 154           | +0.0030       | [+0.0013, +0.0048] | 973/831   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 166             | +0.0368       | [+0.0324, +0.0412] | 2178/1299 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 166           | +0.0099       | [+0.0068, +0.0129] | 1448/1238 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 to 166           | +0.0083       | [+0.0055, +0.0111] | 1371/1199 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 to 166           | +0.0056       | [+0.0032, +0.0081] | 1271/1137 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 to 166           | +0.0035       | [+0.0013, +0.0057] | 1111/1020 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 to 166           | +0.0005       | [-0.0012, +0.0021] | 872/899   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 179             | +0.0380       | [+0.0335, +0.0423] | 2181/1288 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 179           | +0.0110       | [+0.0078, +0.0142] | 1558/1273 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 to 179           | +0.0094       | [+0.0064, +0.0124] | 1449/1220 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 to 179           | +0.0068       | [+0.0041, +0.0094] | 1355/1193 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 to 179           | +0.0046       | [+0.0022, +0.0070] | 1238/1126 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 to 179           | +0.0016       | [-0.0005, +0.0037] | 1047/1072 | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 to 179           | +0.0012       | [-0.0006, +0.0028] | 863/886   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 192             | +0.0400       | [+0.0355, +0.0443] | 2217/1273 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 192           | +0.0131       | [+0.0097, +0.0164] | 1593/1285 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 to 192           | +0.0115       | [+0.0083, +0.0146] | 1509/1249 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 to 192           | +0.0088       | [+0.0059, +0.0117] | 1444/1225 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 to 192           | +0.0066       | [+0.0040, +0.0094] | 1316/1171 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 to 192           | +0.0036       | [+0.0012, +0.0061] | 1165/1173 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 to 192           | +0.0032       | [+0.0011, +0.0053] | 1069/1035 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 to 192           | +0.0020       | [+0.0004, +0.0037] | 849/811   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 205             | +0.0390       | [+0.0345, +0.0433] | 2214/1267 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 205           | +0.0120       | [+0.0086, +0.0154] | 1627/1316 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 to 205           | +0.0104       | [+0.0073, +0.0136] | 1552/1297 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 to 205           | +0.0078       | [+0.0048, +0.0107] | 1444/1269 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 to 205           | +0.0056       | [+0.0028, +0.0084] | 1352/1238 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 to 205           | +0.0026       | [+0.0000, +0.0051] | 1228/1249 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 to 205           | +0.0022       | [-0.0002, +0.0045] | 1146/1144 | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 to 205           | +0.0010       | [-0.0009, +0.0029] | 977/1007  | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 192 to 205           | -0.0010       | [-0.0026, +0.0005] | 760/852   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 218             | +0.0404       | [+0.0360, +0.0447] | 2234/1230 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 218           | +0.0135       | [+0.0100, +0.0169] | 1646/1310 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 to 218           | +0.0119       | [+0.0087, +0.0151] | 1561/1281 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 to 218           | +0.0092       | [+0.0062, +0.0123] | 1478/1250 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 to 218           | +0.0071       | [+0.0042, +0.0100] | 1391/1257 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 to 218           | +0.0041       | [+0.0013, +0.0068] | 1271/1270 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 to 218           | +0.0036       | [+0.0011, +0.0061] | 1185/1190 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 to 218           | +0.0025       | [+0.0002, +0.0046] | 1027/1089 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 192 to 218           | +0.0004       | [-0.0014, +0.0023] | 866/981   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 205 to 218           | +0.0015       | [+0.0001, +0.0029] | 711/737   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 230             | +0.0415       | [+0.0371, +0.0459] | 2259/1216 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 230           | +0.0146       | [+0.0111, +0.0180] | 1686/1308 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 to 230           | +0.0130       | [+0.0097, +0.0163] | 1615/1287 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 to 230           | +0.0104       | [+0.0073, +0.0135] | 1530/1288 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 to 230           | +0.0082       | [+0.0052, +0.0112] | 1440/1291 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 to 230           | +0.0052       | [+0.0023, +0.0080] | 1331/1288 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 to 230           | +0.0048       | [+0.0021, +0.0074] | 1238/1222 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 to 230           | +0.0036       | [+0.0013, +0.0059] | 1119/1119 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 192 to 230           | +0.0016       | [-0.0005, +0.0037] | 956/1040  | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 205 to 230           | +0.0026       | [+0.0009, +0.0043] | 839/869   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 218 to 230           | +0.0011       | [-0.0001, +0.0023] | 615/616   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 243             | +0.0424       | [+0.0379, +0.0467] | 2278/1208 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 243           | +0.0155       | [+0.0119, +0.0189] | 1701/1311 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 to 243           | +0.0139       | [+0.0105, +0.0172] | 1629/1308 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 to 243           | +0.0112       | [+0.0080, +0.0144] | 1552/1292 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 to 243           | +0.0091       | [+0.0060, +0.0121] | 1467/1296 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 to 243           | +0.0061       | [+0.0031, +0.0089] | 1355/1287 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 to 243           | +0.0056       | [+0.0029, +0.0082] | 1271/1227 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 to 243           | +0.0044       | [+0.0020, +0.0068] | 1141/1155 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 192 to 243           | +0.0024       | [+0.0003, +0.0045] | 990/1071  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 205 to 243           | +0.0034       | [+0.0017, +0.0052] | 874/895   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 218 to 243           | +0.0020       | [+0.0006, +0.0034] | 696/692   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 230 to 243           | +0.0008       | [-0.0001, +0.0018] | 426/472   | not resolved |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 256             | +0.0429       | [+0.0385, +0.0472] | 2278/1201 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 to 256           | +0.0160       | [+0.0125, +0.0194] | 1705/1309 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 to 256           | +0.0144       | [+0.0110, +0.0177] | 1636/1299 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 to 256           | +0.0117       | [+0.0085, +0.0149] | 1548/1287 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 to 256           | +0.0096       | [+0.0065, +0.0126] | 1473/1287 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 to 256           | +0.0066       | [+0.0036, +0.0094] | 1367/1279 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 to 256           | +0.0061       | [+0.0034, +0.0088] | 1282/1216 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 to 256           | +0.0050       | [+0.0025, +0.0074] | 1164/1154 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 192 to 256           | +0.0029       | [+0.0008, +0.0051] | 1018/1080 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 205 to 256           | +0.0040       | [+0.0022, +0.0057] | 892/917   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 218 to 256           | +0.0025       | [+0.0011, +0.0039] | 712/709   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 230 to 256           | +0.0014       | [+0.0003, +0.0024] | 460/507   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 243 to 256           | +0.0005       | [+0.0000, +0.0010] | 159/171   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 26              | +0.0055       | [+0.0028, +0.0083] | 1273/1112 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 102            | +0.0214       | [+0.0177, +0.0250] | 1765/1227 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 115            | +0.0230       | [+0.0191, +0.0268] | 1832/1263 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 128            | +0.0256       | [+0.0217, +0.0296] | 1935/1302 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 141            | +0.0278       | [+0.0237, +0.0319] | 1992/1305 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 154            | +0.0308       | [+0.0267, +0.0348] | 2030/1261 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 166            | +0.0312       | [+0.0271, +0.0353] | 2033/1287 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 179            | +0.0324       | [+0.0282, +0.0365] | 2095/1289 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 192            | +0.0344       | [+0.0302, +0.0387] | 2129/1277 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 205            | +0.0334       | [+0.0292, +0.0375] | 2136/1259 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 218            | +0.0349       | [+0.0307, +0.0391] | 2146/1238 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 230            | +0.0360       | [+0.0318, +0.0402] | 2165/1231 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 243            | +0.0368       | [+0.0326, +0.0410] | 2172/1224 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 256            | +0.0374       | [+0.0332, +0.0415] | 2169/1211 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 38              | +0.0085       | [+0.0054, +0.0116] | 1416/1192 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 102            | +0.0184       | [+0.0150, +0.0218] | 1650/1187 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 115            | +0.0200       | [+0.0165, +0.0235] | 1735/1231 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 128            | +0.0227       | [+0.0190, +0.0264] | 1804/1251 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 141            | +0.0248       | [+0.0210, +0.0287] | 1885/1291 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 154            | +0.0278       | [+0.0239, +0.0317] | 1943/1262 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 166            | +0.0283       | [+0.0243, +0.0322] | 1953/1269 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 179            | +0.0294       | [+0.0254, +0.0335] | 1988/1290 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 192            | +0.0315       | [+0.0274, +0.0355] | 2014/1275 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 205            | +0.0304       | [+0.0264, +0.0344] | 2053/1254 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 218            | +0.0319       | [+0.0279, +0.0359] | 2059/1235 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 230            | +0.0330       | [+0.0290, +0.0370] | 2093/1240 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 243            | +0.0339       | [+0.0298, +0.0378] | 2101/1238 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 256            | +0.0344       | [+0.0304, +0.0383] | 2100/1226 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 38             | +0.0030       | [+0.0009, +0.0050] | 1021/914  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 51              | +0.0141       | [+0.0108, +0.0174] | 1563/1226 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 102            | +0.0129       | [+0.0098, +0.0159] | 1548/1144 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 115            | +0.0144       | [+0.0112, +0.0177] | 1614/1200 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 128            | +0.0171       | [+0.0136, +0.0206] | 1693/1264 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 141            | +0.0193       | [+0.0156, +0.0230] | 1774/1307 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 154            | +0.0223       | [+0.0185, +0.0259] | 1847/1296 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 166            | +0.0227       | [+0.0190, +0.0265] | 1859/1307 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 179            | +0.0239       | [+0.0201, +0.0276] | 1913/1304 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 192            | +0.0259       | [+0.0220, +0.0298] | 1935/1307 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 205            | +0.0249       | [+0.0210, +0.0287] | 1927/1317 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 218            | +0.0263       | [+0.0224, +0.0302] | 1960/1287 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 230            | +0.0275       | [+0.0236, +0.0313] | 2008/1275 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 243            | +0.0283       | [+0.0244, +0.0321] | 2016/1267 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 256            | +0.0288       | [+0.0250, +0.0327] | 2017/1261 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 51             | +0.0085       | [+0.0060, +0.0111] | 1268/1077 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 51             | +0.0056       | [+0.0036, +0.0075] | 1034/899  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 64              | +0.0185       | [+0.0149, +0.0221] | 1712/1261 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 102            | +0.0084       | [+0.0056, +0.0112] | 1402/1131 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 115            | +0.0100       | [+0.0069, +0.0130] | 1498/1189 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 128            | +0.0127       | [+0.0094, +0.0160] | 1598/1262 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 141            | +0.0148       | [+0.0113, +0.0184] | 1663/1291 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 154            | +0.0178       | [+0.0143, +0.0215] | 1726/1304 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 166            | +0.0183       | [+0.0147, +0.0220] | 1730/1314 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 179            | +0.0195       | [+0.0157, +0.0232] | 1782/1325 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 192            | +0.0215       | [+0.0177, +0.0253] | 1824/1332 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 205            | +0.0204       | [+0.0167, +0.0242] | 1851/1332 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 218            | +0.0219       | [+0.0181, +0.0258] | 1874/1316 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 230            | +0.0230       | [+0.0193, +0.0268] | 1912/1295 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 243            | +0.0239       | [+0.0201, +0.0277] | 1927/1301 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 256            | +0.0244       | [+0.0206, +0.0282] | 1935/1292 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 64             | +0.0130       | [+0.0100, +0.0160] | 1465/1162 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 64             | +0.0100       | [+0.0074, +0.0126] | 1298/1023 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 64             | +0.0044       | [+0.0024, +0.0064] | 1041/898  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 77              | +0.0225       | [+0.0187, +0.0262] | 1809/1251 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 102            | +0.0045       | [+0.0020, +0.0068] | 1175/1090 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 115            | +0.0061       | [+0.0033, +0.0088] | 1319/1173 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 128            | +0.0087       | [+0.0057, +0.0118] | 1450/1266 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 141            | +0.0109       | [+0.0076, +0.0142] | 1541/1291 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 154            | +0.0139       | [+0.0105, +0.0173] | 1606/1300 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 166            | +0.0143       | [+0.0108, +0.0179] | 1628/1305 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 179            | +0.0155       | [+0.0119, +0.0190] | 1685/1326 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 192            | +0.0175       | [+0.0138, +0.0212] | 1738/1337 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 205            | +0.0165       | [+0.0128, +0.0201] | 1780/1349 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 218            | +0.0180       | [+0.0142, +0.0216] | 1798/1327 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 230            | +0.0191       | [+0.0154, +0.0227] | 1827/1316 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 243            | +0.0199       | [+0.0162, +0.0236] | 1849/1315 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 256            | +0.0204       | [+0.0167, +0.0241] | 1851/1305 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 77             | +0.0169       | [+0.0137, +0.0202] | 1573/1168 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 77             | +0.0140       | [+0.0111, +0.0169] | 1449/1065 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 77             | +0.0084       | [+0.0060, +0.0108] | 1292/1024 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 77             | +0.0040       | [+0.0020, +0.0059] | 1045/906  | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 90              | +0.0246       | [+0.0207, +0.0286] | 1874/1307 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 102            | +0.0023       | [+0.0005, +0.0042] | 976/908   | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 115            | +0.0039       | [+0.0016, +0.0062] | 1167/1044 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 128            | +0.0066       | [+0.0039, +0.0093] | 1339/1150 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 141            | +0.0087       | [+0.0058, +0.0117] | 1424/1217 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 154            | +0.0117       | [+0.0086, +0.0149] | 1526/1245 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 166            | +0.0122       | [+0.0089, +0.0155] | 1570/1287 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 179            | +0.0134       | [+0.0099, +0.0167] | 1645/1304 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 192            | +0.0154       | [+0.0118, +0.0190] | 1689/1324 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 205            | +0.0144       | [+0.0107, +0.0179] | 1704/1355 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 218            | +0.0158       | [+0.0122, +0.0194] | 1737/1321 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 230            | +0.0169       | [+0.0133, +0.0205] | 1775/1333 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 243            | +0.0178       | [+0.0141, +0.0214] | 1793/1336 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 to 256            | +0.0183       | [+0.0146, +0.0220] | 1802/1326 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 90             | +0.0190       | [+0.0157, +0.0225] | 1660/1199 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 90             | +0.0161       | [+0.0129, +0.0193] | 1552/1147 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 to 90             | +0.0105       | [+0.0077, +0.0133] | 1416/1107 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 to 90             | +0.0061       | [+0.0036, +0.0085] | 1249/1071 | resolved     |
-| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 to 90             | +0.0021       | [+0.0002, +0.0040] | 978/951   | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 to 102             | +0.0130       | [+0.0096, +0.0165] | 2210/1687 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 to 115             | +0.0141       | [+0.0106, +0.0175] | 2233/1693 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 102 to 115           | +0.0010       | [-0.0005, +0.0026] | 1089/999  | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 to 128             | +0.0136       | [+0.0102, +0.0171] | 2232/1692 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 102 to 128           | +0.0006       | [-0.0013, +0.0025] | 1270/1149 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 115 to 128           | -0.0004       | [-0.0021, +0.0012] | 1037/1009 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 to 26              | +0.0004       | [-0.0021, +0.0029] | 1546/1513 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 to 102            | +0.0126       | [+0.0096, +0.0157] | 2005/1558 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 to 115            | +0.0137       | [+0.0106, +0.0168] | 2068/1589 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 to 128            | +0.0132       | [+0.0101, +0.0164] | 2100/1594 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 to 38              | +0.0049       | [+0.0021, +0.0077] | 1747/1546 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 to 102            | +0.0081       | [+0.0053, +0.0109] | 1825/1525 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 to 115            | +0.0091       | [+0.0062, +0.0121] | 1893/1582 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 to 128            | +0.0087       | [+0.0057, +0.0117] | 1952/1591 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 to 38             | +0.0045       | [+0.0026, +0.0065] | 1317/1143 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 to 51              | +0.0068       | [+0.0037, +0.0097] | 1895/1615 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 to 102            | +0.0063       | [+0.0038, +0.0088] | 1677/1446 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 to 115            | +0.0073       | [+0.0047, +0.0100] | 1738/1510 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 to 128            | +0.0069       | [+0.0041, +0.0096] | 1798/1531 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 to 51             | +0.0063       | [+0.0040, +0.0087] | 1551/1290 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 to 51             | +0.0018       | [-0.0001, +0.0037] | 1252/1143 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 to 64              | +0.0093       | [+0.0061, +0.0124] | 2038/1588 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 64 to 102            | +0.0037       | [+0.0014, +0.0061] | 1505/1387 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 64 to 115            | +0.0048       | [+0.0023, +0.0073] | 1588/1437 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 64 to 128            | +0.0043       | [+0.0017, +0.0070] | 1679/1481 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 to 64             | +0.0089       | [+0.0064, +0.0114] | 1746/1328 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 to 64             | +0.0044       | [+0.0021, +0.0066] | 1515/1264 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 to 64             | +0.0026       | [+0.0008, +0.0043] | 1207/1031 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 to 77              | +0.0102       | [+0.0069, +0.0134] | 2051/1634 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 77 to 102            | +0.0028       | [+0.0008, +0.0048] | 1284/1211 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 77 to 115            | +0.0039       | [+0.0016, +0.0061] | 1462/1330 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 77 to 128            | +0.0034       | [+0.0010, +0.0059] | 1540/1391 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 to 77             | +0.0098       | [+0.0071, +0.0126] | 1850/1435 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 to 77             | +0.0053       | [+0.0028, +0.0078] | 1653/1379 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 to 77             | +0.0034       | [+0.0013, +0.0056] | 1421/1237 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 64 to 77             | +0.0009       | [-0.0008, +0.0026] | 1145/1085 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 to 90              | +0.0115       | [+0.0081, +0.0149] | 2158/1673 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 90 to 102            | +0.0015       | [-0.0001, +0.0032] | 1066/1019 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 90 to 115            | +0.0025       | [+0.0006, +0.0045] | 1271/1186 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 90 to 128            | +0.0021       | [-0.0000, +0.0043] | 1412/1292 | not resolved |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 to 90             | +0.0111       | [+0.0082, +0.0141] | 1969/1506 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 to 90             | +0.0066       | [+0.0039, +0.0093] | 1771/1465 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 to 90             | +0.0048       | [+0.0025, +0.0071] | 1601/1370 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 64 to 90             | +0.0022       | [+0.0002, +0.0043] | 1374/1270 | resolved     |
-| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 77 to 90             | +0.0013       | [-0.0004, +0.0030] | 1122/1068 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 102             | +0.0159       | [+0.0127, +0.0190] | 2259/1637 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 115             | +0.0162       | [+0.0130, +0.0194] | 2300/1641 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 102 to 115           | +0.0003       | [-0.0012, +0.0018] | 1087/1005 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 128             | +0.0164       | [+0.0132, +0.0198] | 2299/1679 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 102 to 128           | +0.0006       | [-0.0012, +0.0024] | 1256/1254 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 115 to 128           | +0.0003       | [-0.0013, +0.0018] | 1022/1051 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 26              | +0.0055       | [+0.0034, +0.0077] | 1594/1333 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 102            | +0.0104       | [+0.0076, +0.0131] | 1941/1528 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 115            | +0.0107       | [+0.0078, +0.0136] | 2049/1581 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 128            | +0.0109       | [+0.0080, +0.0139] | 2080/1615 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 38              | +0.0076       | [+0.0052, +0.0099] | 1747/1418 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 to 102            | +0.0083       | [+0.0057, +0.0109] | 1843/1494 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 to 115            | +0.0086       | [+0.0059, +0.0113] | 1927/1533 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 to 128            | +0.0089       | [+0.0061, +0.0117] | 1950/1618 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 38             | +0.0021       | [+0.0004, +0.0037] | 1215/1077 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 51              | +0.0106       | [+0.0080, +0.0133] | 1907/1497 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 to 102            | +0.0053       | [+0.0029, +0.0075] | 1638/1389 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 to 115            | +0.0056       | [+0.0031, +0.0080] | 1740/1466 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 to 128            | +0.0059       | [+0.0033, +0.0084] | 1814/1523 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 51             | +0.0051       | [+0.0031, +0.0071] | 1471/1259 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 to 51             | +0.0030       | [+0.0013, +0.0047] | 1213/1112 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 64              | +0.0126       | [+0.0098, +0.0154] | 2043/1546 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 64 to 102            | +0.0033       | [+0.0011, +0.0054] | 1494/1330 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 64 to 115            | +0.0036       | [+0.0013, +0.0058] | 1615/1383 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 64 to 128            | +0.0038       | [+0.0014, +0.0062] | 1672/1465 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 64             | +0.0071       | [+0.0049, +0.0093] | 1624/1354 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 to 64             | +0.0051       | [+0.0031, +0.0070] | 1441/1260 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 to 64             | +0.0020       | [+0.0004, +0.0036] | 1148/1073 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 77              | +0.0137       | [+0.0107, +0.0167] | 2138/1605 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 77 to 102            | +0.0022       | [+0.0003, +0.0041] | 1297/1218 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 77 to 115            | +0.0025       | [+0.0005, +0.0046] | 1436/1328 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 77 to 128            | +0.0028       | [+0.0005, +0.0050] | 1518/1428 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 77             | +0.0082       | [+0.0057, +0.0106] | 1769/1457 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 to 77             | +0.0061       | [+0.0039, +0.0083] | 1596/1355 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 to 77             | +0.0031       | [+0.0012, +0.0050] | 1379/1225 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 64 to 77             | +0.0010       | [-0.0005, +0.0027] | 1131/1059 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 90              | +0.0142       | [+0.0112, +0.0173] | 2183/1627 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 90 to 102            | +0.0017       | [+0.0001, +0.0032] | 1055/1028 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 90 to 115            | +0.0020       | [+0.0002, +0.0038] | 1294/1172 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 90 to 128            | +0.0023       | [+0.0002, +0.0043] | 1404/1339 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 90             | +0.0087       | [+0.0060, +0.0114] | 1878/1532 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 to 90             | +0.0066       | [+0.0043, +0.0090] | 1720/1444 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 to 90             | +0.0036       | [+0.0015, +0.0057] | 1526/1347 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 64 to 90             | +0.0016       | [-0.0003, +0.0035] | 1319/1231 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 77 to 90             | +0.0005       | [-0.0010, +0.0021] | 1089/1091 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 102             | +0.0126       | [+0.0093, +0.0160] | 2247/1698 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 115             | +0.0132       | [+0.0099, +0.0167] | 2344/1713 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 102 to 115           | +0.0006       | [-0.0011, +0.0024] | 1169/1145 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 128             | +0.0133       | [+0.0099, +0.0168] | 2357/1730 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 102 to 128           | +0.0007       | [-0.0013, +0.0027] | 1328/1300 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 115 to 128           | +0.0001       | [-0.0016, +0.0017] | 1154/1122 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 26              | +0.0054       | [+0.0032, +0.0077] | 1650/1401 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 102            | +0.0072       | [+0.0043, +0.0101] | 1981/1621 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 115            | +0.0078       | [+0.0048, +0.0109] | 2055/1637 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 128            | +0.0079       | [+0.0048, +0.0110] | 2116/1698 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 38              | +0.0077       | [+0.0052, +0.0102] | 1832/1511 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 to 102            | +0.0049       | [+0.0022, +0.0077] | 1863/1608 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 to 115            | +0.0056       | [+0.0027, +0.0084] | 1973/1625 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 to 128            | +0.0056       | [+0.0027, +0.0086] | 2003/1683 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 38             | +0.0022       | [+0.0004, +0.0041] | 1317/1191 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 51              | +0.0090       | [+0.0063, +0.0118] | 1940/1557 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 to 102            | +0.0036       | [+0.0011, +0.0061] | 1680/1463 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 to 115            | +0.0042       | [+0.0016, +0.0069] | 1807/1523 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 to 128            | +0.0043       | [+0.0016, +0.0071] | 1860/1565 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 51             | +0.0036       | [+0.0014, +0.0057] | 1560/1377 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 to 51             | +0.0013       | [-0.0005, +0.0031] | 1290/1181 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 64              | +0.0106       | [+0.0077, +0.0135] | 2032/1631 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 64 to 102            | +0.0020       | [-0.0003, +0.0043] | 1560/1425 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 64 to 115            | +0.0026       | [+0.0002, +0.0051] | 1682/1452 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 64 to 128            | +0.0027       | [+0.0001, +0.0053] | 1750/1554 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 64             | +0.0052       | [+0.0028, +0.0076] | 1692/1440 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 to 64             | +0.0029       | [+0.0008, +0.0050] | 1484/1362 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 to 64             | +0.0016       | [-0.0002, +0.0033] | 1221/1144 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 77              | +0.0114       | [+0.0084, +0.0144] | 2122/1628 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 77 to 102            | +0.0012       | [-0.0008, +0.0033] | 1381/1287 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 77 to 115            | +0.0019       | [-0.0004, +0.0041] | 1519/1385 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 77 to 128            | +0.0019       | [-0.0005, +0.0043] | 1599/1476 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 77             | +0.0059       | [+0.0034, +0.0085] | 1809/1514 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 to 77             | +0.0037       | [+0.0014, +0.0060] | 1655/1437 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 to 77             | +0.0023       | [+0.0003, +0.0044] | 1457/1267 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 64 to 77             | +0.0008       | [-0.0010, +0.0025] | 1200/1173 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 90              | +0.0123       | [+0.0092, +0.0156] | 2214/1703 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 90 to 102            | +0.0003       | [-0.0015, +0.0020] | 1173/1131 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 90 to 115            | +0.0009       | [-0.0011, +0.0029] | 1402/1296 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 90 to 128            | +0.0010       | [-0.0013, +0.0032] | 1491/1394 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 90             | +0.0069       | [+0.0042, +0.0096] | 1906/1602 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 to 90             | +0.0047       | [+0.0021, +0.0072] | 1780/1543 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 to 90             | +0.0033       | [+0.0011, +0.0056] | 1583/1377 | resolved     |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 64 to 90             | +0.0017       | [-0.0003, +0.0038] | 1412/1330 | not resolved |
-| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 77 to 90             | +0.0010       | [-0.0007, +0.0027] | 1154/1141 | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 0 to 26              | -0.0057       | [-0.0269, +0.0138] | 16/11     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 0 to 38              | -0.0170       | [-0.0434, +0.0088] | 15/19     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 26 to 38             | -0.0112       | [-0.0321, +0.0094] | 8/16      | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 0 to 51              | -0.0190       | [-0.0501, +0.0117] | 21/22     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 26 to 51             | -0.0133       | [-0.0392, +0.0125] | 15/22     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 38 to 51             | -0.0020       | [-0.0222, +0.0177] | 15/12     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 to 26              | +0.0003       | [-0.0145, +0.0128] | 11/7      | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 to 38              | +0.0030       | [-0.0148, +0.0215] | 10/12     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 26 to 38             | +0.0027       | [-0.0134, +0.0202] | 10/14     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 to 51              | -0.0038       | [-0.0219, +0.0144] | 12/15     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 26 to 51             | -0.0041       | [-0.0201, +0.0122] | 10/14     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 38 to 51             | -0.0067       | [-0.0227, +0.0071] | 8/9       | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 to 26              | +0.0026       | [-0.0136, +0.0191] | 12/10     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 to 38              | +0.0145       | [-0.0050, +0.0349] | 14/8      | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 26 to 38             | +0.0119       | [-0.0014, +0.0268] | 11/7      | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 to 51              | +0.0134       | [-0.0069, +0.0343] | 13/7      | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 26 to 51             | +0.0109       | [-0.0081, +0.0313] | 13/10     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 38 to 51             | -0.0011       | [-0.0174, +0.0159] | 9/10      | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 0 to 26              | +0.0122       | [-0.0020, +0.0266] | 20/9      | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 0 to 38              | +0.0154       | [-0.0063, +0.0377] | 22/15     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 26 to 38             | +0.0032       | [-0.0145, +0.0214] | 13/16     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 0 to 51              | +0.0325       | [+0.0056, +0.0598] | 31/13     | resolved     |
-| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 26 to 51             | +0.0203       | [-0.0019, +0.0441] | 22/12     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 38 to 51             | +0.0172       | [-0.0052, +0.0398] | 23/8      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 to 26              | +0.0012       | [-0.0184, +0.0204] | 15/15     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 to 38              | -0.0057       | [-0.0305, +0.0174] | 17/23     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 26 to 38             | -0.0069       | [-0.0237, +0.0084] | 10/15     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 to 51              | -0.0001       | [-0.0279, +0.0264] | 18/18     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 26 to 51             | -0.0013       | [-0.0229, +0.0196] | 15/14     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 38 to 51             | +0.0055       | [-0.0099, +0.0226] | 14/8      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 to 26              | -0.0027       | [-0.0184, +0.0132] | 11/16     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 to 38              | +0.0016       | [-0.0173, +0.0210] | 11/18     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 26 to 38             | +0.0043       | [-0.0100, +0.0192] | 11/10     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 to 51              | +0.0019       | [-0.0204, +0.0250] | 14/17     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 26 to 51             | +0.0046       | [-0.0160, +0.0254] | 17/15     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 38 to 51             | +0.0003       | [-0.0153, +0.0161] | 12/12     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 0 to 26              | -0.0083       | [-0.0318, +0.0120] | 15/11     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 0 to 38              | -0.0011       | [-0.0257, +0.0230] | 17/16     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 26 to 38             | +0.0072       | [-0.0116, +0.0280] | 12/13     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 0 to 51              | -0.0018       | [-0.0313, +0.0275] | 22/20     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 26 to 51             | +0.0066       | [-0.0198, +0.0344] | 17/21     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 38 to 51             | -0.0007       | [-0.0229, +0.0216] | 14/15     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 to 26              | -0.0108       | [-0.0300, +0.0061] | 11/10     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 to 38              | -0.0056       | [-0.0279, +0.0168] | 14/16     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 26 to 38             | +0.0052       | [-0.0086, +0.0212] | 11/9      | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 to 51              | -0.0092       | [-0.0309, +0.0125] | 13/17     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 26 to 51             | +0.0016       | [-0.0162, +0.0209] | 11/12     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 38 to 51             | -0.0036       | [-0.0207, +0.0126] | 6/8       | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 to 26              | -0.0061       | [-0.0261, +0.0111] | 10/12     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 to 38              | +0.0040       | [-0.0210, +0.0288] | 14/10     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 26 to 38             | +0.0101       | [-0.0042, +0.0273] | 8/4       | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 to 51              | +0.0123       | [-0.0115, +0.0368] | 16/10     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 26 to 51             | +0.0184       | [-0.0027, +0.0418] | 12/7      | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 38 to 51             | +0.0083       | [-0.0096, +0.0281] | 10/7      | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 0 to 26              | +0.0103       | [-0.0065, +0.0282] | 19/10     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 0 to 38              | +0.0120       | [-0.0089, +0.0334] | 21/11     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 26 to 38             | +0.0017       | [-0.0117, +0.0162] | 12/13     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 0 to 51              | +0.0090       | [-0.0185, +0.0371] | 24/16     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 26 to 51             | -0.0013       | [-0.0241, +0.0223] | 14/16     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 38 to 51             | -0.0030       | [-0.0248, +0.0185] | 15/15     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 to 26              | -0.0110       | [-0.0318, +0.0083] | 14/16     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 to 38              | -0.0108       | [-0.0331, +0.0104] | 17/20     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 26 to 38             | +0.0002       | [-0.0146, +0.0153] | 11/12     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 to 51              | -0.0015       | [-0.0276, +0.0237] | 20/16     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 26 to 51             | +0.0096       | [-0.0103, +0.0309] | 21/11     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 38 to 51             | +0.0093       | [-0.0076, +0.0275] | 19/7      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 to 26              | -0.0030       | [-0.0157, +0.0093] | 10/14     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 to 38              | -0.0043       | [-0.0228, +0.0153] | 11/18     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 26 to 38             | -0.0014       | [-0.0166, +0.0143] | 11/13     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 to 51              | +0.0018       | [-0.0214, +0.0257] | 14/15     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 26 to 51             | +0.0047       | [-0.0162, +0.0254] | 19/12     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 38 to 51             | +0.0061       | [-0.0093, +0.0219] | 15/8      | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 0 to 10              | +0.0040       | [-0.0086, +0.0176] | 10/15     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 0 to 15              | +0.0011       | [-0.0129, +0.0158] | 11/13     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 10 to 15             | -0.0029       | [-0.0122, +0.0057] | 8/12      | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 0 to 26              | +0.0015       | [-0.0165, +0.0206] | 13/16     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 10 to 26             | -0.0025       | [-0.0161, +0.0106] | 12/12     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 15 to 26             | +0.0004       | [-0.0129, +0.0138] | 13/11     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 0 to 38              | +0.0028       | [-0.0170, +0.0221] | 15/16     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 10 to 38             | -0.0012       | [-0.0206, +0.0164] | 17/13     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 15 to 38             | +0.0017       | [-0.0163, +0.0182] | 16/12     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 26 to 38             | +0.0013       | [-0.0161, +0.0166] | 16/7      | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 0 to 51              | -0.0062       | [-0.0286, +0.0150] | 17/18     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 10 to 51             | -0.0102       | [-0.0320, +0.0098] | 18/19     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 15 to 51             | -0.0073       | [-0.0300, +0.0141] | 18/18     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 26 to 51             | -0.0077       | [-0.0296, +0.0123] | 16/13     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 38 to 51             | -0.0090       | [-0.0251, +0.0066] | 8/12      | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap256 | 0 to 10              | -0.0058       | [-0.0241, +0.0123] | 13/21     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap256 | 0 to 15              | -0.0119       | [-0.0305, +0.0065] | 15/23     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap256 | 10 to 15             | -0.0060       | [-0.0198, +0.0075] | 10/16     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 to 10              | -0.0017       | [-0.0187, +0.0148] | 12/17     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 to 15              | -0.0137       | [-0.0332, +0.0047] | 11/18     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 to 15             | -0.0120       | [-0.0250, +0.0007] | 7/18      | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 to 26              | -0.0001       | [-0.0233, +0.0217] | 18/14     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 to 26             | +0.0016       | [-0.0158, +0.0192] | 15/14     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 to 26             | +0.0135       | [-0.0036, +0.0311] | 19/9      | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 to 38              | -0.0056       | [-0.0319, +0.0212] | 15/20     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 to 38             | -0.0039       | [-0.0251, +0.0177] | 17/21     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 to 38             | +0.0080       | [-0.0131, +0.0291] | 20/17     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 26 to 38             | -0.0055       | [-0.0224, +0.0113] | 10/14     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 to 51              | -0.0041       | [-0.0328, +0.0245] | 17/22     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 to 51             | -0.0024       | [-0.0249, +0.0203] | 17/21     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 to 51             | +0.0096       | [-0.0118, +0.0317] | 20/15     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 26 to 51             | -0.0040       | [-0.0223, +0.0146] | 13/17     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 38 to 51             | +0.0015       | [-0.0127, +0.0159] | 12/12     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 10              | -0.0169       | [-0.0335, -0.0013] | 12/17     | resolved     |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 15              | -0.0190       | [-0.0377, -0.0012] | 13/19     | resolved     |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 to 15             | -0.0021       | [-0.0154, +0.0115] | 12/14     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 26              | -0.0039       | [-0.0267, +0.0184] | 17/17     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 to 26             | +0.0130       | [-0.0086, +0.0352] | 18/14     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 to 26             | +0.0150       | [-0.0029, +0.0345] | 19/13     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 38              | -0.0009       | [-0.0292, +0.0280] | 19/18     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 to 38             | +0.0160       | [-0.0103, +0.0440] | 21/15     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 to 38             | +0.0180       | [-0.0063, +0.0438] | 22/15     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 38             | +0.0030       | [-0.0160, +0.0220] | 18/14     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 51              | +0.0025       | [-0.0276, +0.0345] | 21/22     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 to 51             | +0.0194       | [-0.0109, +0.0510] | 23/20     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 to 51             | +0.0215       | [-0.0068, +0.0508] | 23/19     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 51             | +0.0064       | [-0.0166, +0.0295] | 18/18     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 51             | +0.0034       | [-0.0161, +0.0230] | 14/12     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 0 to 26              | +0.0152       | [-0.0014, +0.0323] | 23/13     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 0 to 38              | -0.0018       | [-0.0228, +0.0188] | 22/18     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 26 to 38             | -0.0170       | [-0.0346, -0.0006] | 12/18     | resolved     |
-| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 0 to 51              | -0.0045       | [-0.0257, +0.0166] | 21/18     | not resolved |
-| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 26 to 51             | -0.0198       | [-0.0383, -0.0032] | 10/19     | resolved     |
-| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 38 to 51             | -0.0028       | [-0.0161, +0.0098] | 12/17     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 10              | +0.0002       | [-0.0158, +0.0166] | 16/12     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 15              | -0.0050       | [-0.0250, +0.0141] | 16/16     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 to 15             | -0.0052       | [-0.0182, +0.0082] | 7/13      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 26              | -0.0036       | [-0.0258, +0.0178] | 18/17     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 to 26             | -0.0037       | [-0.0192, +0.0112] | 13/17     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 to 26             | +0.0015       | [-0.0115, +0.0147] | 12/14     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 38              | -0.0101       | [-0.0305, +0.0099] | 18/20     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 to 38             | -0.0102       | [-0.0268, +0.0055] | 14/18     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 to 38             | -0.0050       | [-0.0195, +0.0089] | 13/13     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 38             | -0.0065       | [-0.0208, +0.0074] | 12/16     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 51              | -0.0131       | [-0.0354, +0.0090] | 17/21     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 to 51             | -0.0132       | [-0.0329, +0.0063] | 14/19     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 to 51             | -0.0080       | [-0.0246, +0.0073] | 16/15     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 51             | -0.0095       | [-0.0259, +0.0070] | 15/19     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 38 to 51             | -0.0030       | [-0.0184, +0.0117] | 13/13     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 10              | +0.0054       | [-0.0079, +0.0191] | 13/12     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 15              | +0.0012       | [-0.0136, +0.0166] | 10/13     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 to 15             | -0.0042       | [-0.0175, +0.0087] | 11/12     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 26              | +0.0032       | [-0.0136, +0.0211] | 12/13     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 to 26             | -0.0022       | [-0.0164, +0.0141] | 7/13      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 to 26             | +0.0021       | [-0.0107, +0.0168] | 8/11      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 38              | -0.0012       | [-0.0196, +0.0161] | 15/12     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 to 38             | -0.0066       | [-0.0224, +0.0083] | 9/14      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 to 38             | -0.0024       | [-0.0170, +0.0111] | 12/11     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 38             | -0.0044       | [-0.0181, +0.0076] | 11/8      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 51              | -0.0001       | [-0.0197, +0.0190] | 16/14     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 to 51             | -0.0056       | [-0.0243, +0.0124] | 13/14     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 to 51             | -0.0013       | [-0.0169, +0.0136] | 12/11     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 51             | -0.0034       | [-0.0210, +0.0132] | 14/10     | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 38 to 51             | +0.0011       | [-0.0110, +0.0133] | 10/10     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap512 | 0 to 10              | -0.0076       | [-0.0236, +0.0085] | 13/21     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap512 | 0 to 15              | +0.0038       | [-0.0143, +0.0227] | 17/19     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap512 | 10 to 15             | +0.0114       | [+0.0017, +0.0219] | 18/8      | resolved     |
-| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap512 | 0 to 10              | -0.0030       | [-0.0184, +0.0126] | 17/17     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap512 | 0 to 15              | -0.0093       | [-0.0270, +0.0079] | 17/21     | not resolved |
-| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap512 | 10 to 15             | -0.0063       | [-0.0176, +0.0041] | 9/11      | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap512 | 0 to 10              | +0.0035       | [-0.0077, +0.0151] | 12/9      | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap512 | 0 to 15              | -0.0019       | [-0.0147, +0.0110] | 12/14     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap512 | 10 to 15             | -0.0054       | [-0.0164, +0.0054] | 11/12     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 0 to 10              | +0.0015       | [-0.0114, +0.0171] | 8/13      | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 0 to 15              | +0.0038       | [-0.0072, +0.0154] | 11/10     | not resolved |
-| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 10 to 15             | +0.0023       | [-0.0069, +0.0103] | 9/3       | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 0 to 10              | +0.0157       | [+0.0025, +0.0302] | 18/6      | resolved     |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 0 to 15              | +0.0124       | [-0.0021, +0.0276] | 19/9      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 10 to 15             | -0.0033       | [-0.0141, +0.0076] | 8/10      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 0 to 10              | +0.0088       | [-0.0012, +0.0198] | 12/6      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 0 to 15              | +0.0090       | [-0.0020, +0.0206] | 12/6      | not resolved |
-| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 10 to 15             | +0.0002       | [-0.0089, +0.0091] | 10/9      | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 0 to 26              | +0.0005       | [-0.0070, +0.0084] | 28/36     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 0 to 38              | +0.0058       | [-0.0019, +0.0140] | 39/37     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 26 to 38             | +0.0053       | [-0.0010, +0.0123] | 32/25     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 0 to 51              | +0.0039       | [-0.0047, +0.0126] | 44/38     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 26 to 51             | +0.0033       | [-0.0045, +0.0112] | 44/34     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 38 to 51             | -0.0019       | [-0.0086, +0.0044] | 27/23     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 to 26              | +0.0058       | [+0.0000, +0.0121] | 33/26     | resolved     |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 to 38              | +0.0049       | [-0.0012, +0.0111] | 43/36     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 26 to 38             | -0.0009       | [-0.0056, +0.0034] | 25/22     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 to 51              | +0.0116       | [+0.0044, +0.0193] | 54/40     | resolved     |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 26 to 51             | +0.0058       | [-0.0010, +0.0127] | 42/29     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 38 to 51             | +0.0067       | [+0.0014, +0.0126] | 31/19     | resolved     |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 to 26              | +0.0047       | [-0.0004, +0.0101] | 32/29     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 to 38              | +0.0016       | [-0.0037, +0.0068] | 33/34     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 26 to 38             | -0.0031       | [-0.0080, +0.0010] | 17/15     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 to 51              | +0.0046       | [-0.0015, +0.0109] | 41/37     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 26 to 51             | -0.0000       | [-0.0060, +0.0057] | 33/27     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 38 to 51             | +0.0031       | [-0.0011, +0.0074] | 25/20     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 0 to 26              | -0.0030       | [-0.0091, +0.0032] | 30/33     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 0 to 38              | +0.0010       | [-0.0063, +0.0085] | 38/33     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 26 to 38             | +0.0040       | [-0.0017, +0.0103] | 24/20     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 0 to 51              | +0.0036       | [-0.0040, +0.0117] | 38/35     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 26 to 51             | +0.0066       | [-0.0005, +0.0141] | 37/24     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 38 to 51             | +0.0026       | [-0.0044, +0.0098] | 24/22     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 to 26              | -0.0034       | [-0.0099, +0.0028] | 23/28     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 to 38              | +0.0002       | [-0.0078, +0.0076] | 28/29     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 26 to 38             | +0.0036       | [-0.0024, +0.0097] | 21/12     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 to 51              | -0.0018       | [-0.0095, +0.0056] | 31/30     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 26 to 51             | +0.0016       | [-0.0051, +0.0084] | 26/24     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 38 to 51             | -0.0019       | [-0.0072, +0.0030] | 16/22     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 to 26              | -0.0020       | [-0.0092, +0.0048] | 26/22     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 to 38              | +0.0002       | [-0.0076, +0.0075] | 36/27     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 26 to 38             | +0.0022       | [-0.0029, +0.0073] | 26/19     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 to 51              | -0.0013       | [-0.0095, +0.0063] | 41/31     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 26 to 51             | +0.0006       | [-0.0057, +0.0068] | 32/24     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 38 to 51             | -0.0016       | [-0.0064, +0.0031] | 22/20     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 0 to 26              | +0.0003       | [-0.0076, +0.0082] | 34/41     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 0 to 38              | +0.0016       | [-0.0073, +0.0108] | 37/47     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 26 to 38             | +0.0013       | [-0.0051, +0.0076] | 31/27     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 0 to 51              | -0.0032       | [-0.0125, +0.0061] | 46/52     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 26 to 51             | -0.0035       | [-0.0119, +0.0048] | 42/43     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 38 to 51             | -0.0047       | [-0.0120, +0.0023] | 25/28     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 to 26              | +0.0072       | [+0.0011, +0.0137] | 35/25     | resolved     |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 to 38              | +0.0080       | [+0.0017, +0.0147] | 44/30     | resolved     |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 26 to 38             | +0.0008       | [-0.0040, +0.0053] | 23/18     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 to 51              | +0.0132       | [+0.0055, +0.0215] | 55/36     | resolved     |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 26 to 51             | +0.0060       | [-0.0013, +0.0134] | 43/32     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 38 to 51             | +0.0053       | [-0.0006, +0.0116] | 31/24     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 to 26              | +0.0063       | [+0.0012, +0.0115] | 34/27     | resolved     |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 to 38              | +0.0049       | [-0.0007, +0.0106] | 32/31     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 26 to 38             | -0.0013       | [-0.0048, +0.0019] | 13/14     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 to 51              | +0.0062       | [-0.0008, +0.0134] | 42/38     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 26 to 51             | -0.0001       | [-0.0060, +0.0058] | 27/28     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 38 to 51             | +0.0012       | [-0.0038, +0.0064] | 24/23     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 0 to 26              | +0.0012       | [-0.0060, +0.0085] | 32/32     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 0 to 38              | +0.0054       | [-0.0025, +0.0135] | 40/33     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 26 to 38             | +0.0043       | [-0.0012, +0.0103] | 27/17     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 0 to 51              | +0.0052       | [-0.0029, +0.0137] | 39/35     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 26 to 51             | +0.0040       | [-0.0038, +0.0121] | 33/21     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 38 to 51             | -0.0003       | [-0.0073, +0.0066] | 25/22     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 to 26              | -0.0044       | [-0.0121, +0.0032] | 27/30     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 to 38              | +0.0010       | [-0.0070, +0.0088] | 29/26     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 26 to 38             | +0.0054       | [-0.0002, +0.0115] | 24/11     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 to 51              | -0.0024       | [-0.0112, +0.0061] | 38/34     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 26 to 51             | +0.0019       | [-0.0049, +0.0088] | 33/25     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 38 to 51             | -0.0035       | [-0.0094, +0.0019] | 18/23     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 to 26              | -0.0037       | [-0.0117, +0.0038] | 28/24     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 to 38              | -0.0002       | [-0.0090, +0.0080] | 33/25     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 26 to 38             | +0.0035       | [-0.0012, +0.0085] | 20/12     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 to 51              | -0.0009       | [-0.0094, +0.0070] | 43/27     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 26 to 51             | +0.0027       | [-0.0033, +0.0088] | 32/23     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 38 to 51             | -0.0008       | [-0.0063, +0.0046] | 24/21     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 0 to 10              | -0.0098       | [-0.0176, -0.0022] | 42/59     | resolved     |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 0 to 15              | -0.0069       | [-0.0154, +0.0013] | 38/55     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 10 to 15             | +0.0029       | [-0.0033, +0.0090] | 45/33     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 0 to 26              | -0.0113       | [-0.0204, -0.0024] | 37/64     | resolved     |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 10 to 26             | -0.0015       | [-0.0080, +0.0049] | 41/39     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 15 to 26             | -0.0043       | [-0.0109, +0.0022] | 35/40     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 0 to 38              | -0.0100       | [-0.0191, -0.0010] | 44/66     | resolved     |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 10 to 38             | -0.0002       | [-0.0082, +0.0078] | 59/49     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 15 to 38             | -0.0031       | [-0.0114, +0.0051] | 46/54     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 26 to 38             | +0.0013       | [-0.0053, +0.0078] | 38/38     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 0 to 51              | -0.0109       | [-0.0200, -0.0021] | 46/66     | resolved     |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 10 to 51             | -0.0011       | [-0.0095, +0.0071] | 55/52     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 15 to 51             | -0.0040       | [-0.0120, +0.0038] | 50/59     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 26 to 51             | +0.0003       | [-0.0077, +0.0085] | 48/52     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 38 to 51             | -0.0009       | [-0.0092, +0.0071] | 43/50     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap256 | 0 to 10              | -0.0087       | [-0.0190, +0.0016] | 58/61     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap256 | 0 to 15              | -0.0122       | [-0.0232, -0.0015] | 56/66     | resolved     |
-| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap256 | 10 to 15             | -0.0036       | [-0.0110, +0.0041] | 40/51     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 to 10              | +0.0018       | [-0.0051, +0.0090] | 64/48     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 to 15              | -0.0000       | [-0.0083, +0.0084] | 65/65     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 to 15             | -0.0018       | [-0.0070, +0.0032] | 31/44     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 to 26              | -0.0037       | [-0.0129, +0.0055] | 67/72     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 to 26             | -0.0055       | [-0.0128, +0.0017] | 43/61     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 to 26             | -0.0037       | [-0.0096, +0.0024] | 39/49     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 to 38              | -0.0019       | [-0.0122, +0.0084] | 70/79     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 to 38             | -0.0038       | [-0.0124, +0.0048] | 55/82     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 to 38             | -0.0019       | [-0.0097, +0.0061] | 57/68     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 26 to 38             | +0.0017       | [-0.0046, +0.0080] | 53/54     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 to 51              | -0.0003       | [-0.0115, +0.0108] | 78/84     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 to 51             | -0.0021       | [-0.0117, +0.0074] | 66/80     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 to 51             | -0.0003       | [-0.0098, +0.0092] | 71/70     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 26 to 51             | +0.0034       | [-0.0046, +0.0109] | 66/59     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 38 to 51             | +0.0017       | [-0.0043, +0.0075] | 48/48     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 10              | -0.0012       | [-0.0065, +0.0042] | 40/42     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 15              | -0.0005       | [-0.0068, +0.0058] | 46/46     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 to 15             | +0.0007       | [-0.0032, +0.0047] | 24/31     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 26              | -0.0032       | [-0.0102, +0.0039] | 47/58     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 to 26             | -0.0020       | [-0.0078, +0.0036] | 39/48     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 to 26             | -0.0027       | [-0.0078, +0.0022] | 31/44     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 38              | -0.0044       | [-0.0133, +0.0043] | 52/66     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 to 38             | -0.0032       | [-0.0107, +0.0040] | 43/57     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 to 38             | -0.0039       | [-0.0111, +0.0030] | 45/54     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 38             | -0.0012       | [-0.0068, +0.0044] | 39/38     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 to 51              | -0.0103       | [-0.0199, -0.0008] | 44/76     | resolved     |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 to 51             | -0.0091       | [-0.0176, -0.0008] | 39/72     | resolved     |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 to 51             | -0.0098       | [-0.0179, -0.0019] | 36/66     | resolved     |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 26 to 51             | -0.0071       | [-0.0139, -0.0002] | 37/58     | resolved     |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 38 to 51             | -0.0059       | [-0.0109, -0.0008] | 24/50     | resolved     |
-| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 0 to 26              | -0.0052       | [-0.0111, +0.0005] | 26/42     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 0 to 38              | -0.0085       | [-0.0154, -0.0021] | 27/50     | resolved     |
-| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 26 to 38             | -0.0033       | [-0.0076, +0.0008] | 19/33     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 0 to 51              | -0.0071       | [-0.0142, -0.0005] | 30/43     | resolved     |
-| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 26 to 51             | -0.0019       | [-0.0070, +0.0029] | 28/30     | not resolved |
-| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 38 to 51             | +0.0014       | [-0.0023, +0.0051] | 26/16     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 10              | -0.0019       | [-0.0079, +0.0041] | 33/35     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 15              | +0.0031       | [-0.0033, +0.0095] | 43/35     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 to 15             | +0.0050       | [+0.0009, +0.0093] | 29/18     | resolved     |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 26              | +0.0053       | [-0.0009, +0.0116] | 42/32     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 to 26             | +0.0072       | [+0.0027, +0.0119] | 34/19     | resolved     |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 to 26             | +0.0022       | [-0.0021, +0.0067] | 23/25     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 38              | +0.0003       | [-0.0068, +0.0074] | 39/49     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 to 38             | +0.0021       | [-0.0035, +0.0078] | 27/33     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 to 38             | -0.0028       | [-0.0079, +0.0023] | 21/38     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 38             | -0.0050       | [-0.0097, -0.0003] | 16/35     | resolved     |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 to 51              | -0.0035       | [-0.0102, +0.0032] | 37/48     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 to 51             | -0.0017       | [-0.0075, +0.0041] | 29/40     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 to 51             | -0.0066       | [-0.0124, -0.0010] | 21/43     | resolved     |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 26 to 51             | -0.0088       | [-0.0144, -0.0035] | 19/42     | resolved     |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 38 to 51             | -0.0038       | [-0.0089, +0.0009] | 24/29     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 10              | -0.0008       | [-0.0077, +0.0058] | 37/30     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 15              | -0.0062       | [-0.0132, +0.0002] | 35/38     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 to 15             | -0.0055       | [-0.0103, -0.0007] | 21/30     | resolved     |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 26              | -0.0033       | [-0.0100, +0.0029] | 41/38     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 to 26             | -0.0026       | [-0.0076, +0.0023] | 28/29     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 to 26             | +0.0029       | [-0.0017, +0.0077] | 30/23     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 38              | -0.0054       | [-0.0130, +0.0018] | 42/43     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 to 38             | -0.0046       | [-0.0107, +0.0013] | 32/37     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 to 38             | +0.0008       | [-0.0045, +0.0061] | 34/29     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 38             | -0.0021       | [-0.0073, +0.0030] | 33/38     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 to 51              | -0.0069       | [-0.0151, +0.0008] | 37/48     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 to 51             | -0.0062       | [-0.0134, +0.0010] | 34/45     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 to 51             | -0.0007       | [-0.0073, +0.0059] | 40/39     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 26 to 51             | -0.0036       | [-0.0103, +0.0030] | 35/42     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 38 to 51             | -0.0015       | [-0.0068, +0.0037] | 28/34     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap512 | 0 to 10              | +0.0000       | [-0.0080, +0.0078] | 46/54     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap512 | 0 to 15              | +0.0004       | [-0.0071, +0.0080] | 43/54     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap512 | 10 to 15             | +0.0004       | [-0.0048, +0.0057] | 30/32     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap512 | 0 to 10              | -0.0021       | [-0.0088, +0.0046] | 54/55     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap512 | 0 to 15              | -0.0020       | [-0.0081, +0.0040] | 55/53     | not resolved |
-| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap512 | 10 to 15             | +0.0001       | [-0.0045, +0.0047] | 42/36     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap512 | 0 to 10              | +0.0030       | [-0.0023, +0.0082] | 40/33     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap512 | 0 to 15              | -0.0005       | [-0.0060, +0.0050] | 42/42     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap512 | 10 to 15             | -0.0034       | [-0.0073, +0.0003] | 15/28     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 0 to 10              | +0.0015       | [-0.0018, +0.0048] | 27/25     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 0 to 15              | +0.0002       | [-0.0035, +0.0039] | 28/32     | not resolved |
-| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 10 to 15             | -0.0013       | [-0.0046, +0.0021] | 19/27     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 0 to 10              | -0.0059       | [-0.0110, -0.0008] | 24/43     | resolved     |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 0 to 15              | -0.0052       | [-0.0102, -0.0004] | 27/45     | resolved     |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 10 to 15             | +0.0007       | [-0.0029, +0.0043] | 27/28     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 0 to 10              | -0.0034       | [-0.0087, +0.0019] | 28/42     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 0 to 15              | -0.0030       | [-0.0085, +0.0022] | 25/40     | not resolved |
-| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 10 to 15             | +0.0004       | [-0.0037, +0.0044] | 30/27     | not resolved |
+| Corpus                | Embedder                       | Held fixed       | Change (low to high)    | Delta nDCG@10 | 95% CI             | Win/loss  | Verdict      |
+|-----------------------|--------------------------------|------------------|-------------------------|---------------|--------------------|-----------|--------------|
+| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 0 (0%) to 26 (10%)      | -0.0016       | [-0.0041, +0.0010] | 914/1009  | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 0 (0%) to 38 (15%)      | -0.0010       | [-0.0044, +0.0024] | 1189/1344 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 26 (10%) to 38 (15%)    | +0.0006       | [-0.0021, +0.0033] | 965/995   | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 0 (0%) to 51 (20%)      | +0.0015       | [-0.0025, +0.0055] | 1506/1509 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 26 (10%) to 51 (20%)    | +0.0031       | [-0.0006, +0.0067] | 1397/1365 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | fast hint256     | 38 (15%) to 51 (20%)    | +0.0025       | [-0.0007, +0.0055] | 1154/1110 | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 0 (0%) to 26 (10%)      | -0.0002       | [-0.0021, +0.0018] | 637/610   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 0 (0%) to 38 (15%)      | +0.0018       | [-0.0010, +0.0045] | 909/883   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 26 (10%) to 38 (15%)    | +0.0020       | [-0.0003, +0.0042] | 737/716   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 0 (0%) to 51 (20%)      | +0.0039       | [+0.0005, +0.0073] | 1156/1061 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 26 (10%) to 51 (20%)    | +0.0041       | [+0.0009, +0.0072] | 1057/998  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | fast hint256     | 38 (15%) to 51 (20%)    | +0.0021       | [-0.0006, +0.0048] | 841/811   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 0 (0%) to 26 (10%)      | -0.0001       | [-0.0021, +0.0018] | 705/726   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 0 (0%) to 38 (15%)      | +0.0010       | [-0.0018, +0.0038] | 1024/1036 | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 26 (10%) to 38 (15%)    | +0.0011       | [-0.0013, +0.0035] | 824/825   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 0 (0%) to 51 (20%)      | +0.0038       | [+0.0004, +0.0072] | 1301/1229 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 26 (10%) to 51 (20%)    | +0.0039       | [+0.0007, +0.0071] | 1211/1136 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | fast hint256     | 38 (15%) to 51 (20%)    | +0.0028       | [+0.0000, +0.0055] | 996/942   | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 0 (0%) to 26 (10%)      | -0.0015       | [-0.0035, +0.0005] | 947/1069  | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 0 (0%) to 38 (15%)      | -0.0015       | [-0.0042, +0.0011] | 1406/1546 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 26 (10%) to 38 (15%)    | -0.0001       | [-0.0023, +0.0022] | 1114/1197 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 0 (0%) to 51 (20%)      | -0.0005       | [-0.0037, +0.0027] | 1700/1766 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 26 (10%) to 51 (20%)    | +0.0010       | [-0.0019, +0.0039] | 1552/1613 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | fast hint256     | 38 (15%) to 51 (20%)    | +0.0010       | [-0.0014, +0.0035] | 1295/1329 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 0 (0%) to 26 (10%)      | +0.0012       | [-0.0007, +0.0031] | 1037/983  | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 0 (0%) to 38 (15%)      | +0.0033       | [+0.0007, +0.0059] | 1505/1363 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 26 (10%) to 38 (15%)    | +0.0021       | [-0.0001, +0.0043] | 1154/1114 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 0 (0%) to 51 (20%)      | +0.0044       | [+0.0012, +0.0076] | 1806/1722 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 26 (10%) to 51 (20%)    | +0.0033       | [+0.0002, +0.0062] | 1651/1619 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | fast hint256     | 38 (15%) to 51 (20%)    | +0.0011       | [-0.0015, +0.0037] | 1328/1391 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 0 (0%) to 26 (10%)      | +0.0014       | [-0.0006, +0.0034] | 1045/993  | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 0 (0%) to 38 (15%)      | +0.0015       | [-0.0011, +0.0043] | 1481/1495 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 26 (10%) to 38 (15%)    | +0.0002       | [-0.0020, +0.0024] | 1122/1217 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 0 (0%) to 51 (20%)      | +0.0037       | [+0.0005, +0.0070] | 1802/1792 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 26 (10%) to 51 (20%)    | +0.0023       | [-0.0007, +0.0053] | 1629/1714 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | fast hint256     | 38 (15%) to 51 (20%)    | +0.0022       | [-0.0003, +0.0047] | 1373/1384 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0020       | [-0.0044, +0.0004] | 1054/894  | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 0 (0%) to 38 (15%)      | -0.0016       | [-0.0044, +0.0012] | 1157/1078 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0004       | [-0.0013, +0.0022] | 548/622   | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 0 (0%) to 51 (20%)      | -0.0017       | [-0.0049, +0.0014] | 1283/1236 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0003       | [-0.0021, +0.0027] | 867/958   | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | markdown hint256 | 38 (15%) to 51 (20%)    | -0.0002       | [-0.0021, +0.0017] | 663/719   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0009       | [-0.0025, +0.0007] | 525/503   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0003       | [-0.0016, +0.0023] | 631/633   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0012       | [-0.0001, +0.0026] | 362/375   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 0 (0%) to 51 (20%)      | +0.0008       | [-0.0016, +0.0033] | 763/785   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0017       | [-0.0003, +0.0038] | 604/638   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | markdown hint256 | 38 (15%) to 51 (20%)    | +0.0005       | [-0.0012, +0.0021] | 461/499   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0006       | [-0.0021, +0.0008] | 562/458   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0003       | [-0.0016, +0.0022] | 717/638   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0009       | [-0.0004, +0.0023] | 444/421   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 0 (0%) to 51 (20%)      | +0.0028       | [+0.0005, +0.0052] | 903/786   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0035       | [+0.0015, +0.0054] | 733/648   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | markdown hint256 | 38 (15%) to 51 (20%)    | +0.0025       | [+0.0010, +0.0040] | 540/459   | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0001       | [-0.0018, +0.0016] | 953/983   | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0004       | [-0.0017, +0.0025] | 1123/1186 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0005       | [-0.0009, +0.0020] | 588/662   | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 0 (0%) to 51 (20%)      | -0.0002       | [-0.0026, +0.0023] | 1302/1440 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 26 (10%) to 51 (20%)    | -0.0001       | [-0.0021, +0.0020] | 943/1094  | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | markdown hint256 | 38 (15%) to 51 (20%)    | -0.0006       | [-0.0022, +0.0011] | 693/832   | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 0 (0%) to 26 (10%)      | +0.0003       | [-0.0015, +0.0020] | 910/1067  | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0005       | [-0.0015, +0.0026] | 1133/1258 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0003       | [-0.0012, +0.0017] | 658/698   | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 0 (0%) to 51 (20%)      | +0.0001       | [-0.0023, +0.0025] | 1326/1457 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 26 (10%) to 51 (20%)    | -0.0002       | [-0.0021, +0.0018] | 1003/1125 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | markdown hint256 | 38 (15%) to 51 (20%)    | -0.0004       | [-0.0020, +0.0012] | 748/841   | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0000       | [-0.0018, +0.0017] | 916/1001  | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0009       | [-0.0012, +0.0030] | 1172/1233 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0009       | [-0.0005, +0.0024] | 680/697   | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 0 (0%) to 51 (20%)      | +0.0007       | [-0.0017, +0.0031] | 1406/1449 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0007       | [-0.0013, +0.0028] | 1091/1141 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | markdown hint256 | 38 (15%) to 51 (20%)    | -0.0002       | [-0.0019, +0.0015] | 813/874   | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 (0%) to 102 (40%)     | +0.0052       | [+0.0016, +0.0088] | 1600/1476 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 (0%) to 115 (45%)     | +0.0054       | [+0.0017, +0.0091] | 1624/1462 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 102 (40%) to 115 (45%)  | +0.0002       | [-0.0014, +0.0019] | 905/850   | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 (0%) to 128 (50%)     | +0.0055       | [+0.0018, +0.0092] | 1648/1496 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 102 (40%) to 128 (50%)  | +0.0003       | [-0.0016, +0.0022] | 1060/1000 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 115 (45%) to 128 (50%)  | +0.0001       | [-0.0015, +0.0017] | 883/894   | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 (0%) to 26 (10%)      | +0.0009       | [-0.0017, +0.0035] | 1217/1182 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 (10%) to 102 (40%)   | +0.0043       | [+0.0013, +0.0073] | 1395/1287 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 (10%) to 115 (45%)   | +0.0045       | [+0.0014, +0.0076] | 1445/1287 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 (10%) to 128 (50%)   | +0.0046       | [+0.0014, +0.0078] | 1499/1336 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 (0%) to 38 (15%)      | +0.0018       | [-0.0011, +0.0045] | 1310/1298 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 (15%) to 102 (40%)   | +0.0034       | [+0.0005, +0.0062] | 1364/1238 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 (15%) to 115 (45%)   | +0.0036       | [+0.0007, +0.0066] | 1402/1262 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 (15%) to 128 (50%)   | +0.0037       | [+0.0007, +0.0068] | 1427/1304 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 (10%) to 38 (15%)    | +0.0009       | [-0.0009, +0.0026] | 925/911   | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 (0%) to 51 (20%)      | +0.0019       | [-0.0012, +0.0049] | 1396/1332 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 (20%) to 102 (40%)   | +0.0033       | [+0.0008, +0.0059] | 1266/1165 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 (20%) to 115 (45%)   | +0.0035       | [+0.0008, +0.0063] | 1307/1234 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 (20%) to 128 (50%)   | +0.0036       | [+0.0007, +0.0065] | 1355/1283 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 (10%) to 51 (20%)    | +0.0010       | [-0.0012, +0.0031] | 1090/1029 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 (15%) to 51 (20%)    | +0.0001       | [-0.0017, +0.0018] | 936/887   | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 (0%) to 64 (25%)      | +0.0034       | [+0.0003, +0.0065] | 1463/1331 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 64 (25%) to 102 (40%)   | +0.0018       | [-0.0006, +0.0041] | 1163/1113 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 64 (25%) to 115 (45%)   | +0.0020       | [-0.0006, +0.0045] | 1214/1164 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 64 (25%) to 128 (50%)   | +0.0021       | [-0.0007, +0.0047] | 1289/1242 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 (10%) to 64 (25%)    | +0.0025       | [+0.0001, +0.0049] | 1198/1106 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 (15%) to 64 (25%)    | +0.0017       | [-0.0004, +0.0037] | 1080/1005 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 (20%) to 64 (25%)    | +0.0016       | [-0.0001, +0.0032] | 906/863   | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 (0%) to 77 (30%)      | +0.0052       | [+0.0019, +0.0085] | 1532/1402 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 77 (30%) to 102 (40%)   | +0.0000       | [-0.0020, +0.0020] | 1046/1015 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 77 (30%) to 115 (45%)   | +0.0002       | [-0.0021, +0.0025] | 1140/1126 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 77 (30%) to 128 (50%)   | +0.0003       | [-0.0021, +0.0028] | 1219/1186 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 (10%) to 77 (30%)    | +0.0043       | [+0.0016, +0.0070] | 1291/1195 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 (15%) to 77 (30%)    | +0.0034       | [+0.0010, +0.0058] | 1212/1098 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 (20%) to 77 (30%)    | +0.0033       | [+0.0012, +0.0054] | 1077/1028 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 64 (25%) to 77 (30%)    | +0.0017       | [+0.0000, +0.0035] | 909/891   | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 0 (0%) to 90 (35%)      | +0.0068       | [+0.0033, +0.0103] | 1602/1422 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 90 (35%) to 102 (40%)   | -0.0016       | [-0.0033, +0.0000] | 827/884   | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 90 (35%) to 115 (45%)   | -0.0014       | [-0.0033, +0.0005] | 968/1014  | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 90 (35%) to 128 (50%)   | -0.0013       | [-0.0035, +0.0009] | 1093/1126 | not resolved |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 26 (10%) to 90 (35%)    | +0.0059       | [+0.0031, +0.0088] | 1385/1203 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 38 (15%) to 90 (35%)    | +0.0051       | [+0.0024, +0.0077] | 1328/1145 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 51 (20%) to 90 (35%)    | +0.0050       | [+0.0026, +0.0073] | 1202/1080 | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 64 (25%) to 90 (35%)    | +0.0034       | [+0.0012, +0.0055] | 1092/997  | resolved     |
+| gerdalir_de_12k_slice | fastembed:bge-base             | recursive cap256 | 77 (30%) to 90 (35%)    | +0.0017       | [-0.0001, +0.0033] | 915/885   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 102 (40%)     | +0.0266       | [+0.0223, +0.0309] | 1811/1177 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 115 (45%)     | +0.0292       | [+0.0249, +0.0336] | 1855/1175 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 115 (45%)  | +0.0026       | [+0.0008, +0.0045] | 902/808   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 128 (50%)     | +0.0324       | [+0.0280, +0.0368] | 1935/1170 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 128 (50%)  | +0.0058       | [+0.0034, +0.0082] | 1100/923  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 (45%) to 128 (50%)  | +0.0032       | [+0.0013, +0.0051] | 922/824   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 141 (55%)     | +0.0349       | [+0.0304, +0.0394] | 2015/1148 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 141 (55%)  | +0.0083       | [+0.0056, +0.0110] | 1237/996  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 (45%) to 141 (55%)  | +0.0056       | [+0.0032, +0.0081] | 1115/955  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 (50%) to 141 (55%)  | +0.0024       | [+0.0006, +0.0043] | 892/793   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 154 (60%)     | +0.0356       | [+0.0311, +0.0401] | 1994/1146 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 154 (60%)  | +0.0090       | [+0.0061, +0.0119] | 1285/1055 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 (45%) to 154 (60%)  | +0.0064       | [+0.0037, +0.0090] | 1177/1024 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 (50%) to 154 (60%)  | +0.0032       | [+0.0009, +0.0055] | 1000/973  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 (55%) to 154 (60%)  | +0.0007       | [-0.0011, +0.0026] | 822/866   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 166 (65%)     | +0.0381       | [+0.0336, +0.0426] | 2041/1123 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 166 (65%)  | +0.0115       | [+0.0084, +0.0147] | 1381/1099 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 (45%) to 166 (65%)  | +0.0089       | [+0.0060, +0.0118] | 1294/1060 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 (50%) to 166 (65%)  | +0.0057       | [+0.0032, +0.0082] | 1135/1013 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 (55%) to 166 (65%)  | +0.0032       | [+0.0010, +0.0054] | 1009/948  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 (60%) to 166 (65%)  | +0.0025       | [+0.0009, +0.0041] | 816/735   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 179 (70%)     | +0.0387       | [+0.0341, +0.0433] | 2055/1148 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 179 (70%)  | +0.0120       | [+0.0088, +0.0154] | 1445/1129 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 (45%) to 179 (70%)  | +0.0094       | [+0.0064, +0.0125] | 1348/1108 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 (50%) to 179 (70%)  | +0.0062       | [+0.0035, +0.0091] | 1180/1079 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 (55%) to 179 (70%)  | +0.0038       | [+0.0013, +0.0063] | 1093/1031 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 (60%) to 179 (70%)  | +0.0031       | [+0.0010, +0.0051] | 954/890   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 (65%) to 179 (70%)  | +0.0006       | [-0.0011, +0.0023] | 774/800   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 192 (75%)     | +0.0390       | [+0.0346, +0.0435] | 2071/1113 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 192 (75%)  | +0.0124       | [+0.0091, +0.0157] | 1468/1151 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 (45%) to 192 (75%)  | +0.0097       | [+0.0066, +0.0129] | 1391/1135 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 (50%) to 192 (75%)  | +0.0066       | [+0.0037, +0.0095] | 1241/1106 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 (55%) to 192 (75%)  | +0.0041       | [+0.0014, +0.0069] | 1171/1101 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 (60%) to 192 (75%)  | +0.0034       | [+0.0010, +0.0058] | 1025/1003 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 (65%) to 192 (75%)  | +0.0009       | [-0.0012, +0.0031] | 908/947   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 (70%) to 192 (75%)  | +0.0003       | [-0.0013, +0.0019] | 783/760   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 205 (80%)     | +0.0407       | [+0.0363, +0.0452] | 2092/1116 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 205 (80%)  | +0.0141       | [+0.0107, +0.0175] | 1521/1154 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 (45%) to 205 (80%)  | +0.0115       | [+0.0082, +0.0147] | 1451/1149 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 (50%) to 205 (80%)  | +0.0083       | [+0.0053, +0.0114] | 1323/1123 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 (55%) to 205 (80%)  | +0.0058       | [+0.0030, +0.0087] | 1243/1118 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 (60%) to 205 (80%)  | +0.0051       | [+0.0026, +0.0076] | 1144/1046 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 (65%) to 205 (80%)  | +0.0026       | [+0.0003, +0.0050] | 1030/1016 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 (70%) to 205 (80%)  | +0.0020       | [+0.0001, +0.0040] | 926/892   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 192 (75%) to 205 (80%)  | +0.0017       | [+0.0002, +0.0032] | 727/702   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 218 (85%)     | +0.0418       | [+0.0373, +0.0462] | 2120/1104 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 218 (85%)  | +0.0151       | [+0.0117, +0.0186] | 1549/1161 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 (45%) to 218 (85%)  | +0.0125       | [+0.0093, +0.0158] | 1470/1161 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 (50%) to 218 (85%)  | +0.0093       | [+0.0063, +0.0125] | 1363/1137 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 (55%) to 218 (85%)  | +0.0069       | [+0.0040, +0.0098] | 1267/1126 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 (60%) to 218 (85%)  | +0.0061       | [+0.0035, +0.0088] | 1189/1069 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 (65%) to 218 (85%)  | +0.0037       | [+0.0012, +0.0061] | 1093/1042 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 (70%) to 218 (85%)  | +0.0031       | [+0.0009, +0.0053] | 984/940   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 192 (75%) to 218 (85%)  | +0.0028       | [+0.0009, +0.0046] | 849/828   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 205 (80%) to 218 (85%)  | +0.0010       | [-0.0003, +0.0024] | 672/675   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 230 (90%)     | +0.0418       | [+0.0373, +0.0462] | 2090/1096 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 230 (90%)  | +0.0152       | [+0.0117, +0.0187] | 1568/1167 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 (45%) to 230 (90%)  | +0.0126       | [+0.0092, +0.0159] | 1494/1158 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 (50%) to 230 (90%)  | +0.0094       | [+0.0063, +0.0125] | 1366/1148 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 (55%) to 230 (90%)  | +0.0069       | [+0.0040, +0.0099] | 1311/1142 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 (60%) to 230 (90%)  | +0.0062       | [+0.0035, +0.0090] | 1216/1088 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 (65%) to 230 (90%)  | +0.0037       | [+0.0011, +0.0063] | 1120/1080 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 (70%) to 230 (90%)  | +0.0031       | [+0.0008, +0.0055] | 1023/979  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 192 (75%) to 230 (90%)  | +0.0028       | [+0.0007, +0.0049] | 907/891   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 205 (80%) to 230 (90%)  | +0.0011       | [-0.0005, +0.0028] | 779/779   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 218 (85%) to 230 (90%)  | +0.0000       | [-0.0011, +0.0012] | 549/584   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 243 (95%)     | +0.0417       | [+0.0373, +0.0461] | 2108/1092 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 243 (95%)  | +0.0151       | [+0.0116, +0.0186] | 1576/1182 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 (45%) to 243 (95%)  | +0.0125       | [+0.0091, +0.0159] | 1495/1154 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 (50%) to 243 (95%)  | +0.0093       | [+0.0062, +0.0124] | 1358/1157 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 (55%) to 243 (95%)  | +0.0068       | [+0.0038, +0.0098] | 1311/1161 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 (60%) to 243 (95%)  | +0.0061       | [+0.0033, +0.0089] | 1235/1111 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 (65%) to 243 (95%)  | +0.0036       | [+0.0010, +0.0063] | 1125/1097 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 (70%) to 243 (95%)  | +0.0031       | [+0.0006, +0.0055] | 1053/1019 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 192 (75%) to 243 (95%)  | +0.0027       | [+0.0005, +0.0049] | 957/936   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 205 (80%) to 243 (95%)  | +0.0010       | [-0.0008, +0.0028] | 810/840   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 218 (85%) to 243 (95%)  | -0.0000       | [-0.0014, +0.0013] | 606/673   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 230 (90%) to 243 (95%)  | -0.0001       | [-0.0011, +0.0010] | 423/476   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 256 (100%)    | +0.0420       | [+0.0376, +0.0464] | 2101/1088 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 102 (40%) to 256 (100%) | +0.0154       | [+0.0119, +0.0189] | 1575/1175 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 115 (45%) to 256 (100%) | +0.0128       | [+0.0094, +0.0162] | 1496/1148 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 128 (50%) to 256 (100%) | +0.0096       | [+0.0064, +0.0127] | 1367/1149 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 141 (55%) to 256 (100%) | +0.0071       | [+0.0041, +0.0101] | 1312/1153 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 154 (60%) to 256 (100%) | +0.0064       | [+0.0036, +0.0093] | 1237/1099 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 166 (65%) to 256 (100%) | +0.0039       | [+0.0012, +0.0066] | 1128/1092 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 179 (70%) to 256 (100%) | +0.0033       | [+0.0009, +0.0057] | 1064/1010 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 192 (75%) to 256 (100%) | +0.0030       | [+0.0008, +0.0052] | 974/929   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 205 (80%) to 256 (100%) | +0.0013       | [-0.0005, +0.0031] | 819/832   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 218 (85%) to 256 (100%) | +0.0002       | [-0.0011, +0.0017] | 623/680   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 230 (90%) to 256 (100%) | +0.0002       | [-0.0009, +0.0013] | 433/491   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 243 (95%) to 256 (100%) | +0.0003       | [-0.0003, +0.0008] | 158/177   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 26 (10%)      | +0.0057       | [+0.0028, +0.0085] | 1129/984  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 102 (40%)   | +0.0210       | [+0.0172, +0.0247] | 1629/1106 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 115 (45%)   | +0.0236       | [+0.0196, +0.0275] | 1715/1118 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 128 (50%)   | +0.0268       | [+0.0228, +0.0307] | 1768/1090 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 141 (55%)   | +0.0292       | [+0.0251, +0.0333] | 1840/1128 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 154 (60%)   | +0.0299       | [+0.0259, +0.0340] | 1822/1107 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 166 (65%)   | +0.0324       | [+0.0283, +0.0366] | 1882/1086 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 179 (70%)   | +0.0330       | [+0.0288, +0.0372] | 1891/1102 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 192 (75%)   | +0.0333       | [+0.0292, +0.0376] | 1908/1108 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 205 (80%)   | +0.0350       | [+0.0309, +0.0392] | 1927/1103 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 218 (85%)   | +0.0361       | [+0.0319, +0.0403] | 1942/1078 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 230 (90%)   | +0.0361       | [+0.0319, +0.0403] | 1948/1073 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 243 (95%)   | +0.0361       | [+0.0319, +0.0402] | 1961/1064 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 256 (100%)  | +0.0363       | [+0.0321, +0.0404] | 1959/1058 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 38 (15%)      | +0.0104       | [+0.0072, +0.0137] | 1287/1046 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 102 (40%)   | +0.0162       | [+0.0126, +0.0198] | 1530/1080 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 115 (45%)   | +0.0188       | [+0.0151, +0.0225] | 1614/1099 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 128 (50%)   | +0.0220       | [+0.0182, +0.0258] | 1693/1095 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 141 (55%)   | +0.0244       | [+0.0205, +0.0284] | 1754/1121 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 154 (60%)   | +0.0252       | [+0.0212, +0.0291] | 1755/1123 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 166 (65%)   | +0.0277       | [+0.0237, +0.0317] | 1786/1104 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 179 (70%)   | +0.0282       | [+0.0241, +0.0323] | 1814/1123 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 192 (75%)   | +0.0286       | [+0.0245, +0.0327] | 1836/1125 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 205 (80%)   | +0.0303       | [+0.0263, +0.0343] | 1864/1101 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 218 (85%)   | +0.0313       | [+0.0273, +0.0354] | 1871/1083 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 230 (90%)   | +0.0314       | [+0.0273, +0.0354] | 1874/1091 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 243 (95%)   | +0.0313       | [+0.0272, +0.0353] | 1880/1090 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 256 (100%)  | +0.0316       | [+0.0275, +0.0356] | 1885/1089 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 38 (15%)    | +0.0048       | [+0.0026, +0.0069] | 949/800   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 51 (20%)      | +0.0147       | [+0.0111, +0.0183] | 1421/1111 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 102 (40%)   | +0.0119       | [+0.0086, +0.0151] | 1392/1086 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 115 (45%)   | +0.0145       | [+0.0112, +0.0179] | 1466/1088 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 128 (50%)   | +0.0177       | [+0.0142, +0.0212] | 1567/1101 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 141 (55%)   | +0.0202       | [+0.0164, +0.0239] | 1649/1127 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 154 (60%)   | +0.0209       | [+0.0171, +0.0247] | 1649/1138 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 166 (65%)   | +0.0234       | [+0.0195, +0.0273] | 1698/1126 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 179 (70%)   | +0.0239       | [+0.0200, +0.0280] | 1743/1144 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 192 (75%)   | +0.0243       | [+0.0203, +0.0283] | 1744/1168 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 205 (80%)   | +0.0260       | [+0.0220, +0.0299] | 1767/1146 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 218 (85%)   | +0.0270       | [+0.0230, +0.0310] | 1792/1142 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 230 (90%)   | +0.0271       | [+0.0231, +0.0311] | 1791/1151 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 243 (95%)   | +0.0270       | [+0.0230, +0.0310] | 1792/1144 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 256 (100%)  | +0.0273       | [+0.0233, +0.0313] | 1803/1144 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 51 (20%)    | +0.0090       | [+0.0063, +0.0118] | 1177/920  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 51 (20%)    | +0.0043       | [+0.0021, +0.0064] | 948/821   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 64 (25%)      | +0.0192       | [+0.0154, +0.0231] | 1559/1133 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 102 (40%)   | +0.0074       | [+0.0046, +0.0103] | 1259/1011 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 115 (45%)   | +0.0101       | [+0.0070, +0.0131] | 1370/1056 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 128 (50%)   | +0.0133       | [+0.0099, +0.0165] | 1461/1075 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 141 (55%)   | +0.0157       | [+0.0122, +0.0192] | 1545/1134 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 154 (60%)   | +0.0164       | [+0.0128, +0.0200] | 1541/1143 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 166 (65%)   | +0.0189       | [+0.0153, +0.0226] | 1601/1150 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 179 (70%)   | +0.0195       | [+0.0157, +0.0233] | 1667/1173 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 192 (75%)   | +0.0198       | [+0.0159, +0.0236] | 1673/1224 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 205 (80%)   | +0.0215       | [+0.0177, +0.0253] | 1717/1208 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 218 (85%)   | +0.0226       | [+0.0187, +0.0265] | 1757/1184 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 230 (90%)   | +0.0226       | [+0.0187, +0.0265] | 1737/1180 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 243 (95%)   | +0.0225       | [+0.0187, +0.0264] | 1740/1177 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 256 (100%)  | +0.0228       | [+0.0190, +0.0267] | 1737/1177 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 64 (25%)    | +0.0135       | [+0.0105, +0.0166] | 1344/995  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 64 (25%)    | +0.0087       | [+0.0061, +0.0114] | 1196/929  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 64 (25%)    | +0.0045       | [+0.0025, +0.0065] | 946/823   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 77 (30%)      | +0.0226       | [+0.0186, +0.0267] | 1683/1137 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 102 (40%)   | +0.0040       | [+0.0015, +0.0064] | 1084/966  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 115 (45%)   | +0.0066       | [+0.0038, +0.0094] | 1212/1041 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 128 (50%)   | +0.0098       | [+0.0067, +0.0129] | 1335/1097 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 141 (55%)   | +0.0122       | [+0.0089, +0.0155] | 1438/1141 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 154 (60%)   | +0.0130       | [+0.0096, +0.0164] | 1457/1171 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 166 (65%)   | +0.0154       | [+0.0119, +0.0190] | 1526/1179 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 179 (70%)   | +0.0160       | [+0.0124, +0.0197] | 1578/1214 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 192 (75%)   | +0.0163       | [+0.0127, +0.0200] | 1599/1232 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 205 (80%)   | +0.0181       | [+0.0144, +0.0217] | 1648/1237 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 218 (85%)   | +0.0191       | [+0.0154, +0.0228] | 1672/1225 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 230 (90%)   | +0.0192       | [+0.0154, +0.0229] | 1672/1208 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 243 (95%)   | +0.0191       | [+0.0153, +0.0228] | 1673/1221 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 256 (100%)  | +0.0194       | [+0.0156, +0.0231] | 1678/1223 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 77 (30%)    | +0.0170       | [+0.0136, +0.0204] | 1483/1043 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 77 (30%)    | +0.0122       | [+0.0092, +0.0152] | 1352/984  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 77 (30%)    | +0.0079       | [+0.0054, +0.0106] | 1187/964  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 77 (30%)    | +0.0035       | [+0.0015, +0.0055] | 970/824   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 90 (35%)      | +0.0247       | [+0.0205, +0.0289] | 1748/1152 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 102 (40%)   | +0.0019       | [+0.0001, +0.0039] | 873/826   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 115 (45%)   | +0.0046       | [+0.0022, +0.0069] | 1066/944  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 128 (50%)   | +0.0077       | [+0.0050, +0.0105] | 1219/990  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 141 (55%)   | +0.0102       | [+0.0072, +0.0132] | 1329/1052 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 154 (60%)   | +0.0109       | [+0.0078, +0.0141] | 1350/1102 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 166 (65%)   | +0.0134       | [+0.0101, +0.0168] | 1430/1126 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 179 (70%)   | +0.0140       | [+0.0106, +0.0174] | 1480/1171 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 192 (75%)   | +0.0143       | [+0.0108, +0.0178] | 1494/1201 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 205 (80%)   | +0.0160       | [+0.0125, +0.0195] | 1558/1170 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 218 (85%)   | +0.0171       | [+0.0135, +0.0207] | 1598/1179 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 230 (90%)   | +0.0171       | [+0.0135, +0.0207] | 1609/1172 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 243 (95%)   | +0.0170       | [+0.0134, +0.0207] | 1619/1190 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 90 (35%) to 256 (100%)  | +0.0173       | [+0.0137, +0.0209] | 1617/1186 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 90 (35%)    | +0.0190       | [+0.0154, +0.0226] | 1543/1063 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 90 (35%)    | +0.0142       | [+0.0108, +0.0176] | 1434/1042 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 51 (20%) to 90 (35%)    | +0.0100       | [+0.0070, +0.0129] | 1289/1044 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 64 (25%) to 90 (35%)    | +0.0055       | [+0.0030, +0.0080] | 1130/945  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-base-8M       | recursive cap256 | 77 (30%) to 90 (35%)    | +0.0020       | [+0.0001, +0.0039] | 928/829   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 102 (40%)     | +0.0269       | [+0.0229, +0.0309] | 1954/1297 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 115 (45%)     | +0.0285       | [+0.0243, +0.0326] | 2030/1315 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 115 (45%)  | +0.0016       | [-0.0003, +0.0034] | 976/900   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 128 (50%)     | +0.0312       | [+0.0269, +0.0354] | 2092/1314 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 128 (50%)  | +0.0043       | [+0.0019, +0.0066] | 1182/1075 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 (45%) to 128 (50%)  | +0.0027       | [+0.0009, +0.0044] | 967/896   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 141 (55%)     | +0.0333       | [+0.0290, +0.0376] | 2127/1351 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 141 (55%)  | +0.0064       | [+0.0038, +0.0090] | 1307/1131 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 (45%) to 141 (55%)  | +0.0048       | [+0.0025, +0.0071] | 1133/1036 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 (50%) to 141 (55%)  | +0.0022       | [+0.0004, +0.0039] | 959/922   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 154 (60%)     | +0.0363       | [+0.0320, +0.0406] | 2188/1293 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 154 (60%)  | +0.0094       | [+0.0065, +0.0123] | 1396/1173 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 (45%) to 154 (60%)  | +0.0078       | [+0.0053, +0.0104] | 1267/1117 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 (50%) to 154 (60%)  | +0.0052       | [+0.0029, +0.0073] | 1156/1052 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 (55%) to 154 (60%)  | +0.0030       | [+0.0013, +0.0048] | 973/831   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 166 (65%)     | +0.0368       | [+0.0324, +0.0412] | 2178/1299 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 166 (65%)  | +0.0099       | [+0.0068, +0.0129] | 1448/1238 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 (45%) to 166 (65%)  | +0.0083       | [+0.0055, +0.0111] | 1371/1199 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 (50%) to 166 (65%)  | +0.0056       | [+0.0032, +0.0081] | 1271/1137 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 (55%) to 166 (65%)  | +0.0035       | [+0.0013, +0.0057] | 1111/1020 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 (60%) to 166 (65%)  | +0.0005       | [-0.0012, +0.0021] | 872/899   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 179 (70%)     | +0.0380       | [+0.0335, +0.0423] | 2181/1288 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 179 (70%)  | +0.0110       | [+0.0078, +0.0142] | 1558/1273 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 (45%) to 179 (70%)  | +0.0094       | [+0.0064, +0.0124] | 1449/1220 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 (50%) to 179 (70%)  | +0.0068       | [+0.0041, +0.0094] | 1355/1193 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 (55%) to 179 (70%)  | +0.0046       | [+0.0022, +0.0070] | 1238/1126 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 (60%) to 179 (70%)  | +0.0016       | [-0.0005, +0.0037] | 1047/1072 | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 (65%) to 179 (70%)  | +0.0012       | [-0.0006, +0.0028] | 863/886   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 192 (75%)     | +0.0400       | [+0.0355, +0.0443] | 2217/1273 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 192 (75%)  | +0.0131       | [+0.0097, +0.0164] | 1593/1285 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 (45%) to 192 (75%)  | +0.0115       | [+0.0083, +0.0146] | 1509/1249 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 (50%) to 192 (75%)  | +0.0088       | [+0.0059, +0.0117] | 1444/1225 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 (55%) to 192 (75%)  | +0.0066       | [+0.0040, +0.0094] | 1316/1171 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 (60%) to 192 (75%)  | +0.0036       | [+0.0012, +0.0061] | 1165/1173 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 (65%) to 192 (75%)  | +0.0032       | [+0.0011, +0.0053] | 1069/1035 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 (70%) to 192 (75%)  | +0.0020       | [+0.0004, +0.0037] | 849/811   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 205 (80%)     | +0.0390       | [+0.0345, +0.0433] | 2214/1267 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 205 (80%)  | +0.0120       | [+0.0086, +0.0154] | 1627/1316 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 (45%) to 205 (80%)  | +0.0104       | [+0.0073, +0.0136] | 1552/1297 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 (50%) to 205 (80%)  | +0.0078       | [+0.0048, +0.0107] | 1444/1269 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 (55%) to 205 (80%)  | +0.0056       | [+0.0028, +0.0084] | 1352/1238 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 (60%) to 205 (80%)  | +0.0026       | [+0.0000, +0.0051] | 1228/1249 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 (65%) to 205 (80%)  | +0.0022       | [-0.0002, +0.0045] | 1146/1144 | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 (70%) to 205 (80%)  | +0.0010       | [-0.0009, +0.0029] | 977/1007  | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 192 (75%) to 205 (80%)  | -0.0010       | [-0.0026, +0.0005] | 760/852   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 218 (85%)     | +0.0404       | [+0.0360, +0.0447] | 2234/1230 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 218 (85%)  | +0.0135       | [+0.0100, +0.0169] | 1646/1310 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 (45%) to 218 (85%)  | +0.0119       | [+0.0087, +0.0151] | 1561/1281 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 (50%) to 218 (85%)  | +0.0092       | [+0.0062, +0.0123] | 1478/1250 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 (55%) to 218 (85%)  | +0.0071       | [+0.0042, +0.0100] | 1391/1257 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 (60%) to 218 (85%)  | +0.0041       | [+0.0013, +0.0068] | 1271/1270 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 (65%) to 218 (85%)  | +0.0036       | [+0.0011, +0.0061] | 1185/1190 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 (70%) to 218 (85%)  | +0.0025       | [+0.0002, +0.0046] | 1027/1089 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 192 (75%) to 218 (85%)  | +0.0004       | [-0.0014, +0.0023] | 866/981   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 205 (80%) to 218 (85%)  | +0.0015       | [+0.0001, +0.0029] | 711/737   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 230 (90%)     | +0.0415       | [+0.0371, +0.0459] | 2259/1216 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 230 (90%)  | +0.0146       | [+0.0111, +0.0180] | 1686/1308 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 (45%) to 230 (90%)  | +0.0130       | [+0.0097, +0.0163] | 1615/1287 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 (50%) to 230 (90%)  | +0.0104       | [+0.0073, +0.0135] | 1530/1288 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 (55%) to 230 (90%)  | +0.0082       | [+0.0052, +0.0112] | 1440/1291 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 (60%) to 230 (90%)  | +0.0052       | [+0.0023, +0.0080] | 1331/1288 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 (65%) to 230 (90%)  | +0.0048       | [+0.0021, +0.0074] | 1238/1222 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 (70%) to 230 (90%)  | +0.0036       | [+0.0013, +0.0059] | 1119/1119 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 192 (75%) to 230 (90%)  | +0.0016       | [-0.0005, +0.0037] | 956/1040  | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 205 (80%) to 230 (90%)  | +0.0026       | [+0.0009, +0.0043] | 839/869   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 218 (85%) to 230 (90%)  | +0.0011       | [-0.0001, +0.0023] | 615/616   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 243 (95%)     | +0.0424       | [+0.0379, +0.0467] | 2278/1208 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 243 (95%)  | +0.0155       | [+0.0119, +0.0189] | 1701/1311 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 (45%) to 243 (95%)  | +0.0139       | [+0.0105, +0.0172] | 1629/1308 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 (50%) to 243 (95%)  | +0.0112       | [+0.0080, +0.0144] | 1552/1292 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 (55%) to 243 (95%)  | +0.0091       | [+0.0060, +0.0121] | 1467/1296 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 (60%) to 243 (95%)  | +0.0061       | [+0.0031, +0.0089] | 1355/1287 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 (65%) to 243 (95%)  | +0.0056       | [+0.0029, +0.0082] | 1271/1227 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 (70%) to 243 (95%)  | +0.0044       | [+0.0020, +0.0068] | 1141/1155 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 192 (75%) to 243 (95%)  | +0.0024       | [+0.0003, +0.0045] | 990/1071  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 205 (80%) to 243 (95%)  | +0.0034       | [+0.0017, +0.0052] | 874/895   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 218 (85%) to 243 (95%)  | +0.0020       | [+0.0006, +0.0034] | 696/692   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 230 (90%) to 243 (95%)  | +0.0008       | [-0.0001, +0.0018] | 426/472   | not resolved |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 256 (100%)    | +0.0429       | [+0.0385, +0.0472] | 2278/1201 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 102 (40%) to 256 (100%) | +0.0160       | [+0.0125, +0.0194] | 1705/1309 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 115 (45%) to 256 (100%) | +0.0144       | [+0.0110, +0.0177] | 1636/1299 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 128 (50%) to 256 (100%) | +0.0117       | [+0.0085, +0.0149] | 1548/1287 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 141 (55%) to 256 (100%) | +0.0096       | [+0.0065, +0.0126] | 1473/1287 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 154 (60%) to 256 (100%) | +0.0066       | [+0.0036, +0.0094] | 1367/1279 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 166 (65%) to 256 (100%) | +0.0061       | [+0.0034, +0.0088] | 1282/1216 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 179 (70%) to 256 (100%) | +0.0050       | [+0.0025, +0.0074] | 1164/1154 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 192 (75%) to 256 (100%) | +0.0029       | [+0.0008, +0.0051] | 1018/1080 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 205 (80%) to 256 (100%) | +0.0040       | [+0.0022, +0.0057] | 892/917   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 218 (85%) to 256 (100%) | +0.0025       | [+0.0011, +0.0039] | 712/709   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 230 (90%) to 256 (100%) | +0.0014       | [+0.0003, +0.0024] | 460/507   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 243 (95%) to 256 (100%) | +0.0005       | [+0.0000, +0.0010] | 159/171   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 26 (10%)      | +0.0055       | [+0.0028, +0.0083] | 1273/1112 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 102 (40%)   | +0.0214       | [+0.0177, +0.0250] | 1765/1227 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 115 (45%)   | +0.0230       | [+0.0191, +0.0268] | 1832/1263 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 128 (50%)   | +0.0256       | [+0.0217, +0.0296] | 1935/1302 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 141 (55%)   | +0.0278       | [+0.0237, +0.0319] | 1992/1305 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 154 (60%)   | +0.0308       | [+0.0267, +0.0348] | 2030/1261 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 166 (65%)   | +0.0312       | [+0.0271, +0.0353] | 2033/1287 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 179 (70%)   | +0.0324       | [+0.0282, +0.0365] | 2095/1289 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 192 (75%)   | +0.0344       | [+0.0302, +0.0387] | 2129/1277 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 205 (80%)   | +0.0334       | [+0.0292, +0.0375] | 2136/1259 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 218 (85%)   | +0.0349       | [+0.0307, +0.0391] | 2146/1238 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 230 (90%)   | +0.0360       | [+0.0318, +0.0402] | 2165/1231 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 243 (95%)   | +0.0368       | [+0.0326, +0.0410] | 2172/1224 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 256 (100%)  | +0.0374       | [+0.0332, +0.0415] | 2169/1211 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 38 (15%)      | +0.0085       | [+0.0054, +0.0116] | 1416/1192 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 102 (40%)   | +0.0184       | [+0.0150, +0.0218] | 1650/1187 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 115 (45%)   | +0.0200       | [+0.0165, +0.0235] | 1735/1231 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 128 (50%)   | +0.0227       | [+0.0190, +0.0264] | 1804/1251 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 141 (55%)   | +0.0248       | [+0.0210, +0.0287] | 1885/1291 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 154 (60%)   | +0.0278       | [+0.0239, +0.0317] | 1943/1262 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 166 (65%)   | +0.0283       | [+0.0243, +0.0322] | 1953/1269 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 179 (70%)   | +0.0294       | [+0.0254, +0.0335] | 1988/1290 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 192 (75%)   | +0.0315       | [+0.0274, +0.0355] | 2014/1275 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 205 (80%)   | +0.0304       | [+0.0264, +0.0344] | 2053/1254 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 218 (85%)   | +0.0319       | [+0.0279, +0.0359] | 2059/1235 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 230 (90%)   | +0.0330       | [+0.0290, +0.0370] | 2093/1240 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 243 (95%)   | +0.0339       | [+0.0298, +0.0378] | 2101/1238 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 256 (100%)  | +0.0344       | [+0.0304, +0.0383] | 2100/1226 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 38 (15%)    | +0.0030       | [+0.0009, +0.0050] | 1021/914  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 51 (20%)      | +0.0141       | [+0.0108, +0.0174] | 1563/1226 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 102 (40%)   | +0.0129       | [+0.0098, +0.0159] | 1548/1144 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 115 (45%)   | +0.0144       | [+0.0112, +0.0177] | 1614/1200 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 128 (50%)   | +0.0171       | [+0.0136, +0.0206] | 1693/1264 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 141 (55%)   | +0.0193       | [+0.0156, +0.0230] | 1774/1307 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 154 (60%)   | +0.0223       | [+0.0185, +0.0259] | 1847/1296 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 166 (65%)   | +0.0227       | [+0.0190, +0.0265] | 1859/1307 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 179 (70%)   | +0.0239       | [+0.0201, +0.0276] | 1913/1304 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 192 (75%)   | +0.0259       | [+0.0220, +0.0298] | 1935/1307 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 205 (80%)   | +0.0249       | [+0.0210, +0.0287] | 1927/1317 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 218 (85%)   | +0.0263       | [+0.0224, +0.0302] | 1960/1287 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 230 (90%)   | +0.0275       | [+0.0236, +0.0313] | 2008/1275 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 243 (95%)   | +0.0283       | [+0.0244, +0.0321] | 2016/1267 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 256 (100%)  | +0.0288       | [+0.0250, +0.0327] | 2017/1261 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 51 (20%)    | +0.0085       | [+0.0060, +0.0111] | 1268/1077 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 51 (20%)    | +0.0056       | [+0.0036, +0.0075] | 1034/899  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 64 (25%)      | +0.0185       | [+0.0149, +0.0221] | 1712/1261 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 102 (40%)   | +0.0084       | [+0.0056, +0.0112] | 1402/1131 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 115 (45%)   | +0.0100       | [+0.0069, +0.0130] | 1498/1189 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 128 (50%)   | +0.0127       | [+0.0094, +0.0160] | 1598/1262 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 141 (55%)   | +0.0148       | [+0.0113, +0.0184] | 1663/1291 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 154 (60%)   | +0.0178       | [+0.0143, +0.0215] | 1726/1304 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 166 (65%)   | +0.0183       | [+0.0147, +0.0220] | 1730/1314 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 179 (70%)   | +0.0195       | [+0.0157, +0.0232] | 1782/1325 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 192 (75%)   | +0.0215       | [+0.0177, +0.0253] | 1824/1332 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 205 (80%)   | +0.0204       | [+0.0167, +0.0242] | 1851/1332 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 218 (85%)   | +0.0219       | [+0.0181, +0.0258] | 1874/1316 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 230 (90%)   | +0.0230       | [+0.0193, +0.0268] | 1912/1295 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 243 (95%)   | +0.0239       | [+0.0201, +0.0277] | 1927/1301 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 256 (100%)  | +0.0244       | [+0.0206, +0.0282] | 1935/1292 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 64 (25%)    | +0.0130       | [+0.0100, +0.0160] | 1465/1162 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 64 (25%)    | +0.0100       | [+0.0074, +0.0126] | 1298/1023 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 64 (25%)    | +0.0044       | [+0.0024, +0.0064] | 1041/898  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 77 (30%)      | +0.0225       | [+0.0187, +0.0262] | 1809/1251 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 102 (40%)   | +0.0045       | [+0.0020, +0.0068] | 1175/1090 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 115 (45%)   | +0.0061       | [+0.0033, +0.0088] | 1319/1173 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 128 (50%)   | +0.0087       | [+0.0057, +0.0118] | 1450/1266 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 141 (55%)   | +0.0109       | [+0.0076, +0.0142] | 1541/1291 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 154 (60%)   | +0.0139       | [+0.0105, +0.0173] | 1606/1300 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 166 (65%)   | +0.0143       | [+0.0108, +0.0179] | 1628/1305 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 179 (70%)   | +0.0155       | [+0.0119, +0.0190] | 1685/1326 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 192 (75%)   | +0.0175       | [+0.0138, +0.0212] | 1738/1337 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 205 (80%)   | +0.0165       | [+0.0128, +0.0201] | 1780/1349 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 218 (85%)   | +0.0180       | [+0.0142, +0.0216] | 1798/1327 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 230 (90%)   | +0.0191       | [+0.0154, +0.0227] | 1827/1316 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 243 (95%)   | +0.0199       | [+0.0162, +0.0236] | 1849/1315 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 256 (100%)  | +0.0204       | [+0.0167, +0.0241] | 1851/1305 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 77 (30%)    | +0.0169       | [+0.0137, +0.0202] | 1573/1168 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 77 (30%)    | +0.0140       | [+0.0111, +0.0169] | 1449/1065 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 77 (30%)    | +0.0084       | [+0.0060, +0.0108] | 1292/1024 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 77 (30%)    | +0.0040       | [+0.0020, +0.0059] | 1045/906  | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 90 (35%)      | +0.0246       | [+0.0207, +0.0286] | 1874/1307 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 102 (40%)   | +0.0023       | [+0.0005, +0.0042] | 976/908   | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 115 (45%)   | +0.0039       | [+0.0016, +0.0062] | 1167/1044 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 128 (50%)   | +0.0066       | [+0.0039, +0.0093] | 1339/1150 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 141 (55%)   | +0.0087       | [+0.0058, +0.0117] | 1424/1217 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 154 (60%)   | +0.0117       | [+0.0086, +0.0149] | 1526/1245 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 166 (65%)   | +0.0122       | [+0.0089, +0.0155] | 1570/1287 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 179 (70%)   | +0.0134       | [+0.0099, +0.0167] | 1645/1304 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 192 (75%)   | +0.0154       | [+0.0118, +0.0190] | 1689/1324 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 205 (80%)   | +0.0144       | [+0.0107, +0.0179] | 1704/1355 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 218 (85%)   | +0.0158       | [+0.0122, +0.0194] | 1737/1321 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 230 (90%)   | +0.0169       | [+0.0133, +0.0205] | 1775/1333 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 243 (95%)   | +0.0178       | [+0.0141, +0.0214] | 1793/1336 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 90 (35%) to 256 (100%)  | +0.0183       | [+0.0146, +0.0220] | 1802/1326 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 90 (35%)    | +0.0190       | [+0.0157, +0.0225] | 1660/1199 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 90 (35%)    | +0.0161       | [+0.0129, +0.0193] | 1552/1147 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 51 (20%) to 90 (35%)    | +0.0105       | [+0.0077, +0.0133] | 1416/1107 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 64 (25%) to 90 (35%)    | +0.0061       | [+0.0036, +0.0085] | 1249/1071 | resolved     |
+| gerdalir_de_12k_slice | model2vec:potion-retrieval-32M | recursive cap256 | 77 (30%) to 90 (35%)    | +0.0021       | [+0.0002, +0.0040] | 978/951   | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 102 (40%)     | +0.0130       | [+0.0096, +0.0165] | 2210/1687 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 115 (45%)     | +0.0141       | [+0.0106, +0.0175] | 2233/1693 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 102 (40%) to 115 (45%)  | +0.0010       | [-0.0005, +0.0026] | 1089/999  | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 128 (50%)     | +0.0136       | [+0.0102, +0.0171] | 2232/1692 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 102 (40%) to 128 (50%)  | +0.0006       | [-0.0013, +0.0025] | 1270/1149 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 115 (45%) to 128 (50%)  | -0.0004       | [-0.0021, +0.0012] | 1037/1009 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 26 (10%)      | +0.0004       | [-0.0021, +0.0029] | 1546/1513 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 102 (40%)   | +0.0126       | [+0.0096, +0.0157] | 2005/1558 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 115 (45%)   | +0.0137       | [+0.0106, +0.0168] | 2068/1589 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 128 (50%)   | +0.0132       | [+0.0101, +0.0164] | 2100/1594 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 38 (15%)      | +0.0049       | [+0.0021, +0.0077] | 1747/1546 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 (15%) to 102 (40%)   | +0.0081       | [+0.0053, +0.0109] | 1825/1525 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 (15%) to 115 (45%)   | +0.0091       | [+0.0062, +0.0121] | 1893/1582 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 (15%) to 128 (50%)   | +0.0087       | [+0.0057, +0.0117] | 1952/1591 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 38 (15%)    | +0.0045       | [+0.0026, +0.0065] | 1317/1143 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 51 (20%)      | +0.0068       | [+0.0037, +0.0097] | 1895/1615 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 (20%) to 102 (40%)   | +0.0063       | [+0.0038, +0.0088] | 1677/1446 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 (20%) to 115 (45%)   | +0.0073       | [+0.0047, +0.0100] | 1738/1510 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 (20%) to 128 (50%)   | +0.0069       | [+0.0041, +0.0096] | 1798/1531 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 51 (20%)    | +0.0063       | [+0.0040, +0.0087] | 1551/1290 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 (15%) to 51 (20%)    | +0.0018       | [-0.0001, +0.0037] | 1252/1143 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 64 (25%)      | +0.0093       | [+0.0061, +0.0124] | 2038/1588 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 64 (25%) to 102 (40%)   | +0.0037       | [+0.0014, +0.0061] | 1505/1387 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 64 (25%) to 115 (45%)   | +0.0048       | [+0.0023, +0.0073] | 1588/1437 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 64 (25%) to 128 (50%)   | +0.0043       | [+0.0017, +0.0070] | 1679/1481 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 64 (25%)    | +0.0089       | [+0.0064, +0.0114] | 1746/1328 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 (15%) to 64 (25%)    | +0.0044       | [+0.0021, +0.0066] | 1515/1264 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 (20%) to 64 (25%)    | +0.0026       | [+0.0008, +0.0043] | 1207/1031 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 77 (30%)      | +0.0102       | [+0.0069, +0.0134] | 2051/1634 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 77 (30%) to 102 (40%)   | +0.0028       | [+0.0008, +0.0048] | 1284/1211 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 77 (30%) to 115 (45%)   | +0.0039       | [+0.0016, +0.0061] | 1462/1330 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 77 (30%) to 128 (50%)   | +0.0034       | [+0.0010, +0.0059] | 1540/1391 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 77 (30%)    | +0.0098       | [+0.0071, +0.0126] | 1850/1435 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 (15%) to 77 (30%)    | +0.0053       | [+0.0028, +0.0078] | 1653/1379 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 (20%) to 77 (30%)    | +0.0034       | [+0.0013, +0.0056] | 1421/1237 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 64 (25%) to 77 (30%)    | +0.0009       | [-0.0008, +0.0026] | 1145/1085 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 90 (35%)      | +0.0115       | [+0.0081, +0.0149] | 2158/1673 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 90 (35%) to 102 (40%)   | +0.0015       | [-0.0001, +0.0032] | 1066/1019 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 90 (35%) to 115 (45%)   | +0.0025       | [+0.0006, +0.0045] | 1271/1186 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 90 (35%) to 128 (50%)   | +0.0021       | [-0.0000, +0.0043] | 1412/1292 | not resolved |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 90 (35%)    | +0.0111       | [+0.0082, +0.0141] | 1969/1506 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 38 (15%) to 90 (35%)    | +0.0066       | [+0.0039, +0.0093] | 1771/1465 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 51 (20%) to 90 (35%)    | +0.0048       | [+0.0025, +0.0071] | 1601/1370 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 64 (25%) to 90 (35%)    | +0.0022       | [+0.0002, +0.0043] | 1374/1270 | resolved     |
+| gerdalir_de_12k_slice | ollama:bge-m3                  | recursive cap256 | 77 (30%) to 90 (35%)    | +0.0013       | [-0.0004, +0.0030] | 1122/1068 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 102 (40%)     | +0.0159       | [+0.0127, +0.0190] | 2259/1637 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 115 (45%)     | +0.0162       | [+0.0130, +0.0194] | 2300/1641 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 102 (40%) to 115 (45%)  | +0.0003       | [-0.0012, +0.0018] | 1087/1005 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 128 (50%)     | +0.0164       | [+0.0132, +0.0198] | 2299/1679 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 102 (40%) to 128 (50%)  | +0.0006       | [-0.0012, +0.0024] | 1256/1254 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 115 (45%) to 128 (50%)  | +0.0003       | [-0.0013, +0.0018] | 1022/1051 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 26 (10%)      | +0.0055       | [+0.0034, +0.0077] | 1594/1333 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 102 (40%)   | +0.0104       | [+0.0076, +0.0131] | 1941/1528 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 115 (45%)   | +0.0107       | [+0.0078, +0.0136] | 2049/1581 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 128 (50%)   | +0.0109       | [+0.0080, +0.0139] | 2080/1615 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 38 (15%)      | +0.0076       | [+0.0052, +0.0099] | 1747/1418 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 (15%) to 102 (40%)   | +0.0083       | [+0.0057, +0.0109] | 1843/1494 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 (15%) to 115 (45%)   | +0.0086       | [+0.0059, +0.0113] | 1927/1533 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 (15%) to 128 (50%)   | +0.0089       | [+0.0061, +0.0117] | 1950/1618 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 38 (15%)    | +0.0021       | [+0.0004, +0.0037] | 1215/1077 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 51 (20%)      | +0.0106       | [+0.0080, +0.0133] | 1907/1497 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 (20%) to 102 (40%)   | +0.0053       | [+0.0029, +0.0075] | 1638/1389 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 (20%) to 115 (45%)   | +0.0056       | [+0.0031, +0.0080] | 1740/1466 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 (20%) to 128 (50%)   | +0.0059       | [+0.0033, +0.0084] | 1814/1523 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 51 (20%)    | +0.0051       | [+0.0031, +0.0071] | 1471/1259 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 (15%) to 51 (20%)    | +0.0030       | [+0.0013, +0.0047] | 1213/1112 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 64 (25%)      | +0.0126       | [+0.0098, +0.0154] | 2043/1546 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 64 (25%) to 102 (40%)   | +0.0033       | [+0.0011, +0.0054] | 1494/1330 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 64 (25%) to 115 (45%)   | +0.0036       | [+0.0013, +0.0058] | 1615/1383 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 64 (25%) to 128 (50%)   | +0.0038       | [+0.0014, +0.0062] | 1672/1465 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 64 (25%)    | +0.0071       | [+0.0049, +0.0093] | 1624/1354 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 (15%) to 64 (25%)    | +0.0051       | [+0.0031, +0.0070] | 1441/1260 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 (20%) to 64 (25%)    | +0.0020       | [+0.0004, +0.0036] | 1148/1073 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 77 (30%)      | +0.0137       | [+0.0107, +0.0167] | 2138/1605 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 77 (30%) to 102 (40%)   | +0.0022       | [+0.0003, +0.0041] | 1297/1218 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 77 (30%) to 115 (45%)   | +0.0025       | [+0.0005, +0.0046] | 1436/1328 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 77 (30%) to 128 (50%)   | +0.0028       | [+0.0005, +0.0050] | 1518/1428 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 77 (30%)    | +0.0082       | [+0.0057, +0.0106] | 1769/1457 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 (15%) to 77 (30%)    | +0.0061       | [+0.0039, +0.0083] | 1596/1355 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 (20%) to 77 (30%)    | +0.0031       | [+0.0012, +0.0050] | 1379/1225 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 64 (25%) to 77 (30%)    | +0.0010       | [-0.0005, +0.0027] | 1131/1059 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 90 (35%)      | +0.0142       | [+0.0112, +0.0173] | 2183/1627 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 90 (35%) to 102 (40%)   | +0.0017       | [+0.0001, +0.0032] | 1055/1028 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 90 (35%) to 115 (45%)   | +0.0020       | [+0.0002, +0.0038] | 1294/1172 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 90 (35%) to 128 (50%)   | +0.0023       | [+0.0002, +0.0043] | 1404/1339 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 90 (35%)    | +0.0087       | [+0.0060, +0.0114] | 1878/1532 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 38 (15%) to 90 (35%)    | +0.0066       | [+0.0043, +0.0090] | 1720/1444 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 51 (20%) to 90 (35%)    | +0.0036       | [+0.0015, +0.0057] | 1526/1347 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 64 (25%) to 90 (35%)    | +0.0016       | [-0.0003, +0.0035] | 1319/1231 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-4b      | recursive cap256 | 77 (30%) to 90 (35%)    | +0.0005       | [-0.0010, +0.0021] | 1089/1091 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 102 (40%)     | +0.0126       | [+0.0093, +0.0160] | 2247/1698 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 115 (45%)     | +0.0132       | [+0.0099, +0.0167] | 2344/1713 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 102 (40%) to 115 (45%)  | +0.0006       | [-0.0011, +0.0024] | 1169/1145 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 128 (50%)     | +0.0133       | [+0.0099, +0.0168] | 2357/1730 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 102 (40%) to 128 (50%)  | +0.0007       | [-0.0013, +0.0027] | 1328/1300 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 115 (45%) to 128 (50%)  | +0.0001       | [-0.0016, +0.0017] | 1154/1122 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 26 (10%)      | +0.0054       | [+0.0032, +0.0077] | 1650/1401 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 102 (40%)   | +0.0072       | [+0.0043, +0.0101] | 1981/1621 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 115 (45%)   | +0.0078       | [+0.0048, +0.0109] | 2055/1637 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 128 (50%)   | +0.0079       | [+0.0048, +0.0110] | 2116/1698 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 38 (15%)      | +0.0077       | [+0.0052, +0.0102] | 1832/1511 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 (15%) to 102 (40%)   | +0.0049       | [+0.0022, +0.0077] | 1863/1608 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 (15%) to 115 (45%)   | +0.0056       | [+0.0027, +0.0084] | 1973/1625 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 (15%) to 128 (50%)   | +0.0056       | [+0.0027, +0.0086] | 2003/1683 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 38 (15%)    | +0.0022       | [+0.0004, +0.0041] | 1317/1191 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 51 (20%)      | +0.0090       | [+0.0063, +0.0118] | 1940/1557 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 (20%) to 102 (40%)   | +0.0036       | [+0.0011, +0.0061] | 1680/1463 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 (20%) to 115 (45%)   | +0.0042       | [+0.0016, +0.0069] | 1807/1523 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 (20%) to 128 (50%)   | +0.0043       | [+0.0016, +0.0071] | 1860/1565 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 51 (20%)    | +0.0036       | [+0.0014, +0.0057] | 1560/1377 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 (15%) to 51 (20%)    | +0.0013       | [-0.0005, +0.0031] | 1290/1181 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 64 (25%)      | +0.0106       | [+0.0077, +0.0135] | 2032/1631 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 64 (25%) to 102 (40%)   | +0.0020       | [-0.0003, +0.0043] | 1560/1425 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 64 (25%) to 115 (45%)   | +0.0026       | [+0.0002, +0.0051] | 1682/1452 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 64 (25%) to 128 (50%)   | +0.0027       | [+0.0001, +0.0053] | 1750/1554 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 64 (25%)    | +0.0052       | [+0.0028, +0.0076] | 1692/1440 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 (15%) to 64 (25%)    | +0.0029       | [+0.0008, +0.0050] | 1484/1362 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 (20%) to 64 (25%)    | +0.0016       | [-0.0002, +0.0033] | 1221/1144 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 77 (30%)      | +0.0114       | [+0.0084, +0.0144] | 2122/1628 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 77 (30%) to 102 (40%)   | +0.0012       | [-0.0008, +0.0033] | 1381/1287 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 77 (30%) to 115 (45%)   | +0.0019       | [-0.0004, +0.0041] | 1519/1385 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 77 (30%) to 128 (50%)   | +0.0019       | [-0.0005, +0.0043] | 1599/1476 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 77 (30%)    | +0.0059       | [+0.0034, +0.0085] | 1809/1514 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 (15%) to 77 (30%)    | +0.0037       | [+0.0014, +0.0060] | 1655/1437 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 (20%) to 77 (30%)    | +0.0023       | [+0.0003, +0.0044] | 1457/1267 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 64 (25%) to 77 (30%)    | +0.0008       | [-0.0010, +0.0025] | 1200/1173 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 90 (35%)      | +0.0123       | [+0.0092, +0.0156] | 2214/1703 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 90 (35%) to 102 (40%)   | +0.0003       | [-0.0015, +0.0020] | 1173/1131 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 90 (35%) to 115 (45%)   | +0.0009       | [-0.0011, +0.0029] | 1402/1296 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 90 (35%) to 128 (50%)   | +0.0010       | [-0.0013, +0.0032] | 1491/1394 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 90 (35%)    | +0.0069       | [+0.0042, +0.0096] | 1906/1602 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 38 (15%) to 90 (35%)    | +0.0047       | [+0.0021, +0.0072] | 1780/1543 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 51 (20%) to 90 (35%)    | +0.0033       | [+0.0011, +0.0056] | 1583/1377 | resolved     |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 64 (25%) to 90 (35%)    | +0.0017       | [-0.0003, +0.0038] | 1412/1330 | not resolved |
+| gerdalir_de_12k_slice | ollama:qwen3-embedding-8b      | recursive cap256 | 77 (30%) to 90 (35%)    | +0.0010       | [-0.0007, +0.0027] | 1154/1141 | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 0 (0%) to 26 (10%)      | -0.0057       | [-0.0269, +0.0138] | 16/11     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 0 (0%) to 38 (15%)      | -0.0170       | [-0.0434, +0.0088] | 15/19     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 26 (10%) to 38 (15%)    | -0.0112       | [-0.0321, +0.0094] | 8/16      | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 0 (0%) to 51 (20%)      | -0.0190       | [-0.0501, +0.0117] | 21/22     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 26 (10%) to 51 (20%)    | -0.0133       | [-0.0392, +0.0125] | 15/22     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | fast hint256     | 38 (15%) to 51 (20%)    | -0.0020       | [-0.0222, +0.0177] | 15/12     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 (0%) to 26 (10%)      | +0.0003       | [-0.0145, +0.0128] | 11/7      | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 (0%) to 38 (15%)      | +0.0030       | [-0.0148, +0.0215] | 10/12     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 26 (10%) to 38 (15%)    | +0.0027       | [-0.0134, +0.0202] | 10/14     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 (0%) to 51 (20%)      | -0.0038       | [-0.0219, +0.0144] | 12/15     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 26 (10%) to 51 (20%)    | -0.0041       | [-0.0201, +0.0122] | 10/14     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | fast hint256     | 38 (15%) to 51 (20%)    | -0.0067       | [-0.0227, +0.0071] | 8/9       | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 (0%) to 26 (10%)      | +0.0026       | [-0.0136, +0.0191] | 12/10     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 (0%) to 38 (15%)      | +0.0145       | [-0.0050, +0.0349] | 14/8      | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 26 (10%) to 38 (15%)    | +0.0119       | [-0.0014, +0.0268] | 11/7      | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 (0%) to 51 (20%)      | +0.0134       | [-0.0069, +0.0343] | 13/7      | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 26 (10%) to 51 (20%)    | +0.0109       | [-0.0081, +0.0313] | 13/10     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 38 (15%) to 51 (20%)    | -0.0011       | [-0.0174, +0.0159] | 9/10      | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 0 (0%) to 26 (10%)      | +0.0122       | [-0.0020, +0.0266] | 20/9      | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 0 (0%) to 38 (15%)      | +0.0154       | [-0.0063, +0.0377] | 22/15     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 26 (10%) to 38 (15%)    | +0.0032       | [-0.0145, +0.0214] | 13/16     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 0 (0%) to 51 (20%)      | +0.0325       | [+0.0056, +0.0598] | 31/13     | resolved     |
+| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 26 (10%) to 51 (20%)    | +0.0203       | [-0.0019, +0.0441] | 22/12     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | fast hint256     | 38 (15%) to 51 (20%)    | +0.0172       | [-0.0052, +0.0398] | 23/8      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 (0%) to 26 (10%)      | +0.0012       | [-0.0184, +0.0204] | 15/15     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 (0%) to 38 (15%)      | -0.0057       | [-0.0305, +0.0174] | 17/23     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 26 (10%) to 38 (15%)    | -0.0069       | [-0.0237, +0.0084] | 10/15     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 (0%) to 51 (20%)      | -0.0001       | [-0.0279, +0.0264] | 18/18     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 26 (10%) to 51 (20%)    | -0.0013       | [-0.0229, +0.0196] | 15/14     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 38 (15%) to 51 (20%)    | +0.0055       | [-0.0099, +0.0226] | 14/8      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 (0%) to 26 (10%)      | -0.0027       | [-0.0184, +0.0132] | 11/16     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 (0%) to 38 (15%)      | +0.0016       | [-0.0173, +0.0210] | 11/18     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 26 (10%) to 38 (15%)    | +0.0043       | [-0.0100, +0.0192] | 11/10     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 (0%) to 51 (20%)      | +0.0019       | [-0.0204, +0.0250] | 14/17     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 26 (10%) to 51 (20%)    | +0.0046       | [-0.0160, +0.0254] | 17/15     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 38 (15%) to 51 (20%)    | +0.0003       | [-0.0153, +0.0161] | 12/12     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0083       | [-0.0318, +0.0120] | 15/11     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 0 (0%) to 38 (15%)      | -0.0011       | [-0.0257, +0.0230] | 17/16     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0072       | [-0.0116, +0.0280] | 12/13     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 0 (0%) to 51 (20%)      | -0.0018       | [-0.0313, +0.0275] | 22/20     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0066       | [-0.0198, +0.0344] | 17/21     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | markdown hint256 | 38 (15%) to 51 (20%)    | -0.0007       | [-0.0229, +0.0216] | 14/15     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0108       | [-0.0300, +0.0061] | 11/10     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 (0%) to 38 (15%)      | -0.0056       | [-0.0279, +0.0168] | 14/16     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0052       | [-0.0086, +0.0212] | 11/9      | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 (0%) to 51 (20%)      | -0.0092       | [-0.0309, +0.0125] | 13/17     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0016       | [-0.0162, +0.0209] | 11/12     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | markdown hint256 | 38 (15%) to 51 (20%)    | -0.0036       | [-0.0207, +0.0126] | 6/8       | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0061       | [-0.0261, +0.0111] | 10/12     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0040       | [-0.0210, +0.0288] | 14/10     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0101       | [-0.0042, +0.0273] | 8/4       | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 (0%) to 51 (20%)      | +0.0123       | [-0.0115, +0.0368] | 16/10     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0184       | [-0.0027, +0.0418] | 12/7      | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 38 (15%) to 51 (20%)    | +0.0083       | [-0.0096, +0.0281] | 10/7      | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 0 (0%) to 26 (10%)      | +0.0103       | [-0.0065, +0.0282] | 19/10     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0120       | [-0.0089, +0.0334] | 21/11     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0017       | [-0.0117, +0.0162] | 12/13     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 0 (0%) to 51 (20%)      | +0.0090       | [-0.0185, +0.0371] | 24/16     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 26 (10%) to 51 (20%)    | -0.0013       | [-0.0241, +0.0223] | 14/16     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | markdown hint256 | 38 (15%) to 51 (20%)    | -0.0030       | [-0.0248, +0.0185] | 15/15     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0110       | [-0.0318, +0.0083] | 14/16     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 (0%) to 38 (15%)      | -0.0108       | [-0.0331, +0.0104] | 17/20     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0002       | [-0.0146, +0.0153] | 11/12     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 (0%) to 51 (20%)      | -0.0015       | [-0.0276, +0.0237] | 20/16     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0096       | [-0.0103, +0.0309] | 21/11     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 38 (15%) to 51 (20%)    | +0.0093       | [-0.0076, +0.0275] | 19/7      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0030       | [-0.0157, +0.0093] | 10/14     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 (0%) to 38 (15%)      | -0.0043       | [-0.0228, +0.0153] | 11/18     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 26 (10%) to 38 (15%)    | -0.0014       | [-0.0166, +0.0143] | 11/13     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 (0%) to 51 (20%)      | +0.0018       | [-0.0214, +0.0257] | 14/15     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0047       | [-0.0162, +0.0254] | 19/12     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 38 (15%) to 51 (20%)    | +0.0061       | [-0.0093, +0.0219] | 15/8      | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 0 (0%) to 10 (4%)       | +0.0040       | [-0.0086, +0.0176] | 10/15     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 0 (0%) to 15 (6%)       | +0.0011       | [-0.0129, +0.0158] | 11/13     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 10 (4%) to 15 (6%)      | -0.0029       | [-0.0122, +0.0057] | 8/12      | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 0 (0%) to 26 (10%)      | +0.0015       | [-0.0165, +0.0206] | 13/16     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 10 (4%) to 26 (10%)     | -0.0025       | [-0.0161, +0.0106] | 12/12     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 15 (6%) to 26 (10%)     | +0.0004       | [-0.0129, +0.0138] | 13/11     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 0 (0%) to 38 (15%)      | +0.0028       | [-0.0170, +0.0221] | 15/16     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 10 (4%) to 38 (15%)     | -0.0012       | [-0.0206, +0.0164] | 17/13     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 15 (6%) to 38 (15%)     | +0.0017       | [-0.0163, +0.0182] | 16/12     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 26 (10%) to 38 (15%)    | +0.0013       | [-0.0161, +0.0166] | 16/7      | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 0 (0%) to 51 (20%)      | -0.0062       | [-0.0286, +0.0150] | 17/18     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 10 (4%) to 51 (20%)     | -0.0102       | [-0.0320, +0.0098] | 18/19     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 15 (6%) to 51 (20%)     | -0.0073       | [-0.0300, +0.0141] | 18/18     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 26 (10%) to 51 (20%)    | -0.0077       | [-0.0296, +0.0123] | 16/13     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap256 | 38 (15%) to 51 (20%)    | -0.0090       | [-0.0251, +0.0066] | 8/12      | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap256 | 0 (0%) to 10 (4%)       | -0.0058       | [-0.0241, +0.0123] | 13/21     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap256 | 0 (0%) to 15 (6%)       | -0.0119       | [-0.0305, +0.0065] | 15/23     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap256 | 10 (4%) to 15 (6%)      | -0.0060       | [-0.0198, +0.0075] | 10/16     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 10 (4%)       | -0.0017       | [-0.0187, +0.0148] | 12/17     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 15 (6%)       | -0.0137       | [-0.0332, +0.0047] | 11/18     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 (4%) to 15 (6%)      | -0.0120       | [-0.0250, +0.0007] | 7/18      | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 26 (10%)      | -0.0001       | [-0.0233, +0.0217] | 18/14     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 (4%) to 26 (10%)     | +0.0016       | [-0.0158, +0.0192] | 15/14     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 (6%) to 26 (10%)     | +0.0135       | [-0.0036, +0.0311] | 19/9      | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 38 (15%)      | -0.0056       | [-0.0319, +0.0212] | 15/20     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 (4%) to 38 (15%)     | -0.0039       | [-0.0251, +0.0177] | 17/21     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 (6%) to 38 (15%)     | +0.0080       | [-0.0131, +0.0291] | 20/17     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 38 (15%)    | -0.0055       | [-0.0224, +0.0113] | 10/14     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 51 (20%)      | -0.0041       | [-0.0328, +0.0245] | 17/22     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 (4%) to 51 (20%)     | -0.0024       | [-0.0249, +0.0203] | 17/21     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 (6%) to 51 (20%)     | +0.0096       | [-0.0118, +0.0317] | 20/15     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 51 (20%)    | -0.0040       | [-0.0223, +0.0146] | 13/17     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 51 (20%)    | +0.0015       | [-0.0127, +0.0159] | 12/12     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 10 (4%)       | -0.0169       | [-0.0335, -0.0013] | 12/17     | resolved     |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 15 (6%)       | -0.0190       | [-0.0377, -0.0012] | 13/19     | resolved     |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 (4%) to 15 (6%)      | -0.0021       | [-0.0154, +0.0115] | 12/14     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 26 (10%)      | -0.0039       | [-0.0267, +0.0184] | 17/17     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 (4%) to 26 (10%)     | +0.0130       | [-0.0086, +0.0352] | 18/14     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 (6%) to 26 (10%)     | +0.0150       | [-0.0029, +0.0345] | 19/13     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 38 (15%)      | -0.0009       | [-0.0292, +0.0280] | 19/18     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 (4%) to 38 (15%)     | +0.0160       | [-0.0103, +0.0440] | 21/15     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 (6%) to 38 (15%)     | +0.0180       | [-0.0063, +0.0438] | 22/15     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 38 (15%)    | +0.0030       | [-0.0160, +0.0220] | 18/14     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 51 (20%)      | +0.0025       | [-0.0276, +0.0345] | 21/22     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 (4%) to 51 (20%)     | +0.0194       | [-0.0109, +0.0510] | 23/20     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 (6%) to 51 (20%)     | +0.0215       | [-0.0068, +0.0508] | 23/19     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 51 (20%)    | +0.0064       | [-0.0166, +0.0295] | 18/18     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 51 (20%)    | +0.0034       | [-0.0161, +0.0230] | 14/12     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 26 (10%)      | +0.0152       | [-0.0014, +0.0323] | 23/13     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 38 (15%)      | -0.0018       | [-0.0228, +0.0188] | 22/18     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 38 (15%)    | -0.0170       | [-0.0346, -0.0006] | 12/18     | resolved     |
+| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 51 (20%)      | -0.0045       | [-0.0257, +0.0166] | 21/18     | not resolved |
+| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 51 (20%)    | -0.0198       | [-0.0383, -0.0032] | 10/19     | resolved     |
+| mldr_de_3k_slice      | ollama:bge-m3                  | recursive cap256 | 38 (15%) to 51 (20%)    | -0.0028       | [-0.0161, +0.0098] | 12/17     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 10 (4%)       | +0.0002       | [-0.0158, +0.0166] | 16/12     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 15 (6%)       | -0.0050       | [-0.0250, +0.0141] | 16/16     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 (4%) to 15 (6%)      | -0.0052       | [-0.0182, +0.0082] | 7/13      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 26 (10%)      | -0.0036       | [-0.0258, +0.0178] | 18/17     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 (4%) to 26 (10%)     | -0.0037       | [-0.0192, +0.0112] | 13/17     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 (6%) to 26 (10%)     | +0.0015       | [-0.0115, +0.0147] | 12/14     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 38 (15%)      | -0.0101       | [-0.0305, +0.0099] | 18/20     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 (4%) to 38 (15%)     | -0.0102       | [-0.0268, +0.0055] | 14/18     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 (6%) to 38 (15%)     | -0.0050       | [-0.0195, +0.0089] | 13/13     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 38 (15%)    | -0.0065       | [-0.0208, +0.0074] | 12/16     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 51 (20%)      | -0.0131       | [-0.0354, +0.0090] | 17/21     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 (4%) to 51 (20%)     | -0.0132       | [-0.0329, +0.0063] | 14/19     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 (6%) to 51 (20%)     | -0.0080       | [-0.0246, +0.0073] | 16/15     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 51 (20%)    | -0.0095       | [-0.0259, +0.0070] | 15/19     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 38 (15%) to 51 (20%)    | -0.0030       | [-0.0184, +0.0117] | 13/13     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 10 (4%)       | +0.0054       | [-0.0079, +0.0191] | 13/12     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 15 (6%)       | +0.0012       | [-0.0136, +0.0166] | 10/13     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 (4%) to 15 (6%)      | -0.0042       | [-0.0175, +0.0087] | 11/12     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 26 (10%)      | +0.0032       | [-0.0136, +0.0211] | 12/13     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 (4%) to 26 (10%)     | -0.0022       | [-0.0164, +0.0141] | 7/13      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 (6%) to 26 (10%)     | +0.0021       | [-0.0107, +0.0168] | 8/11      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 38 (15%)      | -0.0012       | [-0.0196, +0.0161] | 15/12     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 (4%) to 38 (15%)     | -0.0066       | [-0.0224, +0.0083] | 9/14      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 (6%) to 38 (15%)     | -0.0024       | [-0.0170, +0.0111] | 12/11     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 38 (15%)    | -0.0044       | [-0.0181, +0.0076] | 11/8      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 51 (20%)      | -0.0001       | [-0.0197, +0.0190] | 16/14     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 (4%) to 51 (20%)     | -0.0056       | [-0.0243, +0.0124] | 13/14     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 (6%) to 51 (20%)     | -0.0013       | [-0.0169, +0.0136] | 12/11     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 51 (20%)    | -0.0034       | [-0.0210, +0.0132] | 14/10     | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 38 (15%) to 51 (20%)    | +0.0011       | [-0.0110, +0.0133] | 10/10     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap512 | 0 (0%) to 10 (2%)       | -0.0076       | [-0.0236, +0.0085] | 13/21     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap512 | 0 (0%) to 15 (3%)       | +0.0038       | [-0.0143, +0.0227] | 17/19     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-base             | recursive cap512 | 10 (2%) to 15 (3%)      | +0.0114       | [+0.0017, +0.0219] | 18/8      | resolved     |
+| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap512 | 0 (0%) to 10 (2%)       | -0.0030       | [-0.0184, +0.0126] | 17/17     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap512 | 0 (0%) to 15 (3%)       | -0.0093       | [-0.0270, +0.0079] | 17/21     | not resolved |
+| mldr_de_3k_slice      | fastembed:bge-small            | recursive cap512 | 10 (2%) to 15 (3%)      | -0.0063       | [-0.0176, +0.0041] | 9/11      | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap512 | 0 (0%) to 10 (2%)       | +0.0035       | [-0.0077, +0.0151] | 12/9      | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap512 | 0 (0%) to 15 (3%)       | -0.0019       | [-0.0147, +0.0110] | 12/14     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-base-8M       | recursive cap512 | 10 (2%) to 15 (3%)      | -0.0054       | [-0.0164, +0.0054] | 11/12     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 0 (0%) to 10 (2%)       | +0.0015       | [-0.0114, +0.0171] | 8/13      | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 0 (0%) to 15 (3%)       | +0.0038       | [-0.0072, +0.0154] | 11/10     | not resolved |
+| mldr_de_3k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 10 (2%) to 15 (3%)      | +0.0023       | [-0.0069, +0.0103] | 9/3       | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 0 (0%) to 10 (2%)       | +0.0157       | [+0.0025, +0.0302] | 18/6      | resolved     |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 0 (0%) to 15 (3%)       | +0.0124       | [-0.0021, +0.0276] | 19/9      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 10 (2%) to 15 (3%)      | -0.0033       | [-0.0141, +0.0076] | 8/10      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 0 (0%) to 10 (2%)       | +0.0088       | [-0.0012, +0.0198] | 12/6      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 0 (0%) to 15 (3%)       | +0.0090       | [-0.0020, +0.0206] | 12/6      | not resolved |
+| mldr_de_3k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 10 (2%) to 15 (3%)      | +0.0002       | [-0.0089, +0.0091] | 10/9      | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 0 (0%) to 26 (10%)      | +0.0005       | [-0.0070, +0.0084] | 28/36     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 0 (0%) to 38 (15%)      | +0.0058       | [-0.0019, +0.0140] | 39/37     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 26 (10%) to 38 (15%)    | +0.0053       | [-0.0010, +0.0123] | 32/25     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 0 (0%) to 51 (20%)      | +0.0039       | [-0.0047, +0.0126] | 44/38     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 26 (10%) to 51 (20%)    | +0.0033       | [-0.0045, +0.0112] | 44/34     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | fast hint256     | 38 (15%) to 51 (20%)    | -0.0019       | [-0.0086, +0.0044] | 27/23     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 (0%) to 26 (10%)      | +0.0058       | [+0.0000, +0.0121] | 33/26     | resolved     |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 (0%) to 38 (15%)      | +0.0049       | [-0.0012, +0.0111] | 43/36     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 26 (10%) to 38 (15%)    | -0.0009       | [-0.0056, +0.0034] | 25/22     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 0 (0%) to 51 (20%)      | +0.0116       | [+0.0044, +0.0193] | 54/40     | resolved     |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 26 (10%) to 51 (20%)    | +0.0058       | [-0.0010, +0.0127] | 42/29     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | fast hint256     | 38 (15%) to 51 (20%)    | +0.0067       | [+0.0014, +0.0126] | 31/19     | resolved     |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 (0%) to 26 (10%)      | +0.0047       | [-0.0004, +0.0101] | 32/29     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 (0%) to 38 (15%)      | +0.0016       | [-0.0037, +0.0068] | 33/34     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 26 (10%) to 38 (15%)    | -0.0031       | [-0.0080, +0.0010] | 17/15     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 0 (0%) to 51 (20%)      | +0.0046       | [-0.0015, +0.0109] | 41/37     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 26 (10%) to 51 (20%)    | -0.0000       | [-0.0060, +0.0057] | 33/27     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | fast hint256     | 38 (15%) to 51 (20%)    | +0.0031       | [-0.0011, +0.0074] | 25/20     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 0 (0%) to 26 (10%)      | -0.0030       | [-0.0091, +0.0032] | 30/33     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 0 (0%) to 38 (15%)      | +0.0010       | [-0.0063, +0.0085] | 38/33     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 26 (10%) to 38 (15%)    | +0.0040       | [-0.0017, +0.0103] | 24/20     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 0 (0%) to 51 (20%)      | +0.0036       | [-0.0040, +0.0117] | 38/35     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 26 (10%) to 51 (20%)    | +0.0066       | [-0.0005, +0.0141] | 37/24     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | fast hint256     | 38 (15%) to 51 (20%)    | +0.0026       | [-0.0044, +0.0098] | 24/22     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 (0%) to 26 (10%)      | -0.0034       | [-0.0099, +0.0028] | 23/28     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 (0%) to 38 (15%)      | +0.0002       | [-0.0078, +0.0076] | 28/29     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 26 (10%) to 38 (15%)    | +0.0036       | [-0.0024, +0.0097] | 21/12     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 0 (0%) to 51 (20%)      | -0.0018       | [-0.0095, +0.0056] | 31/30     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 26 (10%) to 51 (20%)    | +0.0016       | [-0.0051, +0.0084] | 26/24     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | fast hint256     | 38 (15%) to 51 (20%)    | -0.0019       | [-0.0072, +0.0030] | 16/22     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 (0%) to 26 (10%)      | -0.0020       | [-0.0092, +0.0048] | 26/22     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 (0%) to 38 (15%)      | +0.0002       | [-0.0076, +0.0075] | 36/27     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 26 (10%) to 38 (15%)    | +0.0022       | [-0.0029, +0.0073] | 26/19     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 0 (0%) to 51 (20%)      | -0.0013       | [-0.0095, +0.0063] | 41/31     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 26 (10%) to 51 (20%)    | +0.0006       | [-0.0057, +0.0068] | 32/24     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | fast hint256     | 38 (15%) to 51 (20%)    | -0.0016       | [-0.0064, +0.0031] | 22/20     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 0 (0%) to 26 (10%)      | +0.0003       | [-0.0076, +0.0082] | 34/41     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0016       | [-0.0073, +0.0108] | 37/47     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0013       | [-0.0051, +0.0076] | 31/27     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 0 (0%) to 51 (20%)      | -0.0032       | [-0.0125, +0.0061] | 46/52     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 26 (10%) to 51 (20%)    | -0.0035       | [-0.0119, +0.0048] | 42/43     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | markdown hint256 | 38 (15%) to 51 (20%)    | -0.0047       | [-0.0120, +0.0023] | 25/28     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 (0%) to 26 (10%)      | +0.0072       | [+0.0011, +0.0137] | 35/25     | resolved     |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0080       | [+0.0017, +0.0147] | 44/30     | resolved     |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0008       | [-0.0040, +0.0053] | 23/18     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 0 (0%) to 51 (20%)      | +0.0132       | [+0.0055, +0.0215] | 55/36     | resolved     |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0060       | [-0.0013, +0.0134] | 43/32     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | markdown hint256 | 38 (15%) to 51 (20%)    | +0.0053       | [-0.0006, +0.0116] | 31/24     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 (0%) to 26 (10%)      | +0.0063       | [+0.0012, +0.0115] | 34/27     | resolved     |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0049       | [-0.0007, +0.0106] | 32/31     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 26 (10%) to 38 (15%)    | -0.0013       | [-0.0048, +0.0019] | 13/14     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 0 (0%) to 51 (20%)      | +0.0062       | [-0.0008, +0.0134] | 42/38     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 26 (10%) to 51 (20%)    | -0.0001       | [-0.0060, +0.0058] | 27/28     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | markdown hint256 | 38 (15%) to 51 (20%)    | +0.0012       | [-0.0038, +0.0064] | 24/23     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 0 (0%) to 26 (10%)      | +0.0012       | [-0.0060, +0.0085] | 32/32     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0054       | [-0.0025, +0.0135] | 40/33     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0043       | [-0.0012, +0.0103] | 27/17     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 0 (0%) to 51 (20%)      | +0.0052       | [-0.0029, +0.0137] | 39/35     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0040       | [-0.0038, +0.0121] | 33/21     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | markdown hint256 | 38 (15%) to 51 (20%)    | -0.0003       | [-0.0073, +0.0066] | 25/22     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0044       | [-0.0121, +0.0032] | 27/30     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 (0%) to 38 (15%)      | +0.0010       | [-0.0070, +0.0088] | 29/26     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0054       | [-0.0002, +0.0115] | 24/11     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 0 (0%) to 51 (20%)      | -0.0024       | [-0.0112, +0.0061] | 38/34     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0019       | [-0.0049, +0.0088] | 33/25     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | markdown hint256 | 38 (15%) to 51 (20%)    | -0.0035       | [-0.0094, +0.0019] | 18/23     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 (0%) to 26 (10%)      | -0.0037       | [-0.0117, +0.0038] | 28/24     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 (0%) to 38 (15%)      | -0.0002       | [-0.0090, +0.0080] | 33/25     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 26 (10%) to 38 (15%)    | +0.0035       | [-0.0012, +0.0085] | 20/12     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 0 (0%) to 51 (20%)      | -0.0009       | [-0.0094, +0.0070] | 43/27     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 26 (10%) to 51 (20%)    | +0.0027       | [-0.0033, +0.0088] | 32/23     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | markdown hint256 | 38 (15%) to 51 (20%)    | -0.0008       | [-0.0063, +0.0046] | 24/21     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 0 (0%) to 10 (4%)       | -0.0098       | [-0.0176, -0.0022] | 42/59     | resolved     |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 0 (0%) to 15 (6%)       | -0.0069       | [-0.0154, +0.0013] | 38/55     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 10 (4%) to 15 (6%)      | +0.0029       | [-0.0033, +0.0090] | 45/33     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 0 (0%) to 26 (10%)      | -0.0113       | [-0.0204, -0.0024] | 37/64     | resolved     |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 10 (4%) to 26 (10%)     | -0.0015       | [-0.0080, +0.0049] | 41/39     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 15 (6%) to 26 (10%)     | -0.0043       | [-0.0109, +0.0022] | 35/40     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 0 (0%) to 38 (15%)      | -0.0100       | [-0.0191, -0.0010] | 44/66     | resolved     |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 10 (4%) to 38 (15%)     | -0.0002       | [-0.0082, +0.0078] | 59/49     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 15 (6%) to 38 (15%)     | -0.0031       | [-0.0114, +0.0051] | 46/54     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 26 (10%) to 38 (15%)    | +0.0013       | [-0.0053, +0.0078] | 38/38     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 0 (0%) to 51 (20%)      | -0.0109       | [-0.0200, -0.0021] | 46/66     | resolved     |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 10 (4%) to 51 (20%)     | -0.0011       | [-0.0095, +0.0071] | 55/52     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 15 (6%) to 51 (20%)     | -0.0040       | [-0.0120, +0.0038] | 50/59     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 26 (10%) to 51 (20%)    | +0.0003       | [-0.0077, +0.0085] | 48/52     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap256 | 38 (15%) to 51 (20%)    | -0.0009       | [-0.0092, +0.0071] | 43/50     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap256 | 0 (0%) to 10 (4%)       | -0.0087       | [-0.0190, +0.0016] | 58/61     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap256 | 0 (0%) to 15 (6%)       | -0.0122       | [-0.0232, -0.0015] | 56/66     | resolved     |
+| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap256 | 10 (4%) to 15 (6%)      | -0.0036       | [-0.0110, +0.0041] | 40/51     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 10 (4%)       | +0.0018       | [-0.0051, +0.0090] | 64/48     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 15 (6%)       | -0.0000       | [-0.0083, +0.0084] | 65/65     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 (4%) to 15 (6%)      | -0.0018       | [-0.0070, +0.0032] | 31/44     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 26 (10%)      | -0.0037       | [-0.0129, +0.0055] | 67/72     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 (4%) to 26 (10%)     | -0.0055       | [-0.0128, +0.0017] | 43/61     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 (6%) to 26 (10%)     | -0.0037       | [-0.0096, +0.0024] | 39/49     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 38 (15%)      | -0.0019       | [-0.0122, +0.0084] | 70/79     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 (4%) to 38 (15%)     | -0.0038       | [-0.0124, +0.0048] | 55/82     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 (6%) to 38 (15%)     | -0.0019       | [-0.0097, +0.0061] | 57/68     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 38 (15%)    | +0.0017       | [-0.0046, +0.0080] | 53/54     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 0 (0%) to 51 (20%)      | -0.0003       | [-0.0115, +0.0108] | 78/84     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 10 (4%) to 51 (20%)     | -0.0021       | [-0.0117, +0.0074] | 66/80     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 15 (6%) to 51 (20%)     | -0.0003       | [-0.0098, +0.0092] | 71/70     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 26 (10%) to 51 (20%)    | +0.0034       | [-0.0046, +0.0109] | 66/59     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap256 | 38 (15%) to 51 (20%)    | +0.0017       | [-0.0043, +0.0075] | 48/48     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 10 (4%)       | -0.0012       | [-0.0065, +0.0042] | 40/42     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 15 (6%)       | -0.0005       | [-0.0068, +0.0058] | 46/46     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 (4%) to 15 (6%)      | +0.0007       | [-0.0032, +0.0047] | 24/31     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 26 (10%)      | -0.0032       | [-0.0102, +0.0039] | 47/58     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 (4%) to 26 (10%)     | -0.0020       | [-0.0078, +0.0036] | 39/48     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 (6%) to 26 (10%)     | -0.0027       | [-0.0078, +0.0022] | 31/44     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 38 (15%)      | -0.0044       | [-0.0133, +0.0043] | 52/66     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 (4%) to 38 (15%)     | -0.0032       | [-0.0107, +0.0040] | 43/57     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 (6%) to 38 (15%)     | -0.0039       | [-0.0111, +0.0030] | 45/54     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 38 (15%)    | -0.0012       | [-0.0068, +0.0044] | 39/38     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 0 (0%) to 51 (20%)      | -0.0103       | [-0.0199, -0.0008] | 44/76     | resolved     |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 10 (4%) to 51 (20%)     | -0.0091       | [-0.0176, -0.0008] | 39/72     | resolved     |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 15 (6%) to 51 (20%)     | -0.0098       | [-0.0179, -0.0019] | 36/66     | resolved     |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 26 (10%) to 51 (20%)    | -0.0071       | [-0.0139, -0.0002] | 37/58     | resolved     |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap256 | 38 (15%) to 51 (20%)    | -0.0059       | [-0.0109, -0.0008] | 24/50     | resolved     |
+| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 26 (10%)      | -0.0052       | [-0.0111, +0.0005] | 26/42     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 38 (15%)      | -0.0085       | [-0.0154, -0.0021] | 27/50     | resolved     |
+| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 38 (15%)    | -0.0033       | [-0.0076, +0.0008] | 19/33     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 0 (0%) to 51 (20%)      | -0.0071       | [-0.0142, -0.0005] | 30/43     | resolved     |
+| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 26 (10%) to 51 (20%)    | -0.0019       | [-0.0070, +0.0029] | 28/30     | not resolved |
+| mldr_en_8k_slice      | ollama:bge-m3                  | recursive cap256 | 38 (15%) to 51 (20%)    | +0.0014       | [-0.0023, +0.0051] | 26/16     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 10 (4%)       | -0.0019       | [-0.0079, +0.0041] | 33/35     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 15 (6%)       | +0.0031       | [-0.0033, +0.0095] | 43/35     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 (4%) to 15 (6%)      | +0.0050       | [+0.0009, +0.0093] | 29/18     | resolved     |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 26 (10%)      | +0.0053       | [-0.0009, +0.0116] | 42/32     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 (4%) to 26 (10%)     | +0.0072       | [+0.0027, +0.0119] | 34/19     | resolved     |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 (6%) to 26 (10%)     | +0.0022       | [-0.0021, +0.0067] | 23/25     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 38 (15%)      | +0.0003       | [-0.0068, +0.0074] | 39/49     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 (4%) to 38 (15%)     | +0.0021       | [-0.0035, +0.0078] | 27/33     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 (6%) to 38 (15%)     | -0.0028       | [-0.0079, +0.0023] | 21/38     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 38 (15%)    | -0.0050       | [-0.0097, -0.0003] | 16/35     | resolved     |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 0 (0%) to 51 (20%)      | -0.0035       | [-0.0102, +0.0032] | 37/48     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 10 (4%) to 51 (20%)     | -0.0017       | [-0.0075, +0.0041] | 29/40     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 15 (6%) to 51 (20%)     | -0.0066       | [-0.0124, -0.0010] | 21/43     | resolved     |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 26 (10%) to 51 (20%)    | -0.0088       | [-0.0144, -0.0035] | 19/42     | resolved     |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap256 | 38 (15%) to 51 (20%)    | -0.0038       | [-0.0089, +0.0009] | 24/29     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 10 (4%)       | -0.0008       | [-0.0077, +0.0058] | 37/30     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 15 (6%)       | -0.0062       | [-0.0132, +0.0002] | 35/38     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 (4%) to 15 (6%)      | -0.0055       | [-0.0103, -0.0007] | 21/30     | resolved     |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 26 (10%)      | -0.0033       | [-0.0100, +0.0029] | 41/38     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 (4%) to 26 (10%)     | -0.0026       | [-0.0076, +0.0023] | 28/29     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 (6%) to 26 (10%)     | +0.0029       | [-0.0017, +0.0077] | 30/23     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 38 (15%)      | -0.0054       | [-0.0130, +0.0018] | 42/43     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 (4%) to 38 (15%)     | -0.0046       | [-0.0107, +0.0013] | 32/37     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 (6%) to 38 (15%)     | +0.0008       | [-0.0045, +0.0061] | 34/29     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 38 (15%)    | -0.0021       | [-0.0073, +0.0030] | 33/38     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 0 (0%) to 51 (20%)      | -0.0069       | [-0.0151, +0.0008] | 37/48     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 10 (4%) to 51 (20%)     | -0.0062       | [-0.0134, +0.0010] | 34/45     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 15 (6%) to 51 (20%)     | -0.0007       | [-0.0073, +0.0059] | 40/39     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 26 (10%) to 51 (20%)    | -0.0036       | [-0.0103, +0.0030] | 35/42     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap256 | 38 (15%) to 51 (20%)    | -0.0015       | [-0.0068, +0.0037] | 28/34     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap512 | 0 (0%) to 10 (2%)       | +0.0000       | [-0.0080, +0.0078] | 46/54     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap512 | 0 (0%) to 15 (3%)       | +0.0004       | [-0.0071, +0.0080] | 43/54     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-base             | recursive cap512 | 10 (2%) to 15 (3%)      | +0.0004       | [-0.0048, +0.0057] | 30/32     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap512 | 0 (0%) to 10 (2%)       | -0.0021       | [-0.0088, +0.0046] | 54/55     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap512 | 0 (0%) to 15 (3%)       | -0.0020       | [-0.0081, +0.0040] | 55/53     | not resolved |
+| mldr_en_8k_slice      | fastembed:bge-small            | recursive cap512 | 10 (2%) to 15 (3%)      | +0.0001       | [-0.0045, +0.0047] | 42/36     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap512 | 0 (0%) to 10 (2%)       | +0.0030       | [-0.0023, +0.0082] | 40/33     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap512 | 0 (0%) to 15 (3%)       | -0.0005       | [-0.0060, +0.0050] | 42/42     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-base-8M       | recursive cap512 | 10 (2%) to 15 (3%)      | -0.0034       | [-0.0073, +0.0003] | 15/28     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 0 (0%) to 10 (2%)       | +0.0015       | [-0.0018, +0.0048] | 27/25     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 0 (0%) to 15 (3%)       | +0.0002       | [-0.0035, +0.0039] | 28/32     | not resolved |
+| mldr_en_8k_slice      | model2vec:potion-retrieval-32M | recursive cap512 | 10 (2%) to 15 (3%)      | -0.0013       | [-0.0046, +0.0021] | 19/27     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 0 (0%) to 10 (2%)       | -0.0059       | [-0.0110, -0.0008] | 24/43     | resolved     |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 0 (0%) to 15 (3%)       | -0.0052       | [-0.0102, -0.0004] | 27/45     | resolved     |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-4b      | recursive cap512 | 10 (2%) to 15 (3%)      | +0.0007       | [-0.0029, +0.0043] | 27/28     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 0 (0%) to 10 (2%)       | -0.0034       | [-0.0087, +0.0019] | 28/42     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 0 (0%) to 15 (3%)       | -0.0030       | [-0.0085, +0.0022] | 25/40     | not resolved |
+| mldr_en_8k_slice      | ollama:qwen3-embedding-8b      | recursive cap512 | 10 (2%) to 15 (3%)      | +0.0004       | [-0.0037, +0.0044] | 30/27     | not resolved |
 
 
-Overlap is measured in TOKENS: ov10tok is 10 tokens, a 3.9 percent overlap at cap256 and 2.0 percent at cap512. Three strategies honour it - recursive, markdown and fast - and they implement it differently; chonkie ignores it for semantic and late. Only corpora that can carry a chunking claim are shown; the rest yield about one chunk per document, where every profile produces the same chunk. The full set is in `tests/benchmarks/raw/chunk-knob-effects.json`.
+Overlap is counted in gpt2 tokens and shown with its percent of the chunk cap, the unit industry guidance quotes. Three strategies honour it - recursive, markdown and fast - and they implement it differently; chonkie ignores it for semantic and late. Every verdict is document-level nDCG@10 (a document scores by its best chunk), while `semdex search` returns chunks. Only corpora that can carry a chunking claim are shown; the rest yield about one chunk per document, where every profile produces the same chunk. The full set is in `tests/benchmarks/raw/chunk-knob-effects.json`.
 <!-- END GENERATED chunk_knob_overlap -->
 
 Overlap is the knob most often recommended by general RAG advice, and this page has answered that
@@ -2584,38 +2584,38 @@ Fraction of answers lying wholly inside at least one chunk, measured on SQuAD-st
 <!-- BEGIN GENERATED span_knob_overlap (scripts/gen_bench_tables.py) -->
 | Corpus     | Held fixed                         | Change (low to high) | Delta intact | 95% CI             | Win/loss | Verdict      |
 |------------|------------------------------------|----------------------|--------------|--------------------|----------|--------------|
-| germanquad | max_tokens 128, strategy recursive | 0 to 10              | +0.0054      | [+0.0027, +0.0086] | 12/0     | resolved     |
-| germanquad | max_tokens 128, strategy recursive | 0 to 15              | +0.0068      | [+0.0036, +0.0104] | 15/0     | resolved     |
-| germanquad | max_tokens 128, strategy recursive | 0 to 32              | +0.0100      | [+0.0059, +0.0145] | 22/0     | resolved     |
-| germanquad | max_tokens 128, strategy recursive | 0 to 64              | +0.0236      | [+0.0177, +0.0299] | 52/0     | resolved     |
-| germanquad | max_tokens 256, strategy recursive | 0 to 10              | +0.0014      | [+0.0000, +0.0032] | 3/0      | not resolved |
-| germanquad | max_tokens 256, strategy recursive | 0 to 15              | +0.0018      | [+0.0005, +0.0036] | 4/0      | resolved     |
-| germanquad | max_tokens 256, strategy recursive | 0 to 32              | +0.0032      | [+0.0009, +0.0059] | 7/0      | resolved     |
-| germanquad | max_tokens 256, strategy recursive | 0 to 64              | +0.0064      | [+0.0032, +0.0100] | 14/0     | resolved     |
-| germanquad | max_tokens 512, strategy recursive | 0 to 10              | +0.0000      | [+0.0000, +0.0000] | 0/0      | not resolved |
-| germanquad | max_tokens 512, strategy recursive | 0 to 15              | +0.0000      | [+0.0000, +0.0000] | 0/0      | not resolved |
-| germanquad | max_tokens 512, strategy recursive | 0 to 32              | +0.0000      | [+0.0000, +0.0000] | 0/0      | not resolved |
-| germanquad | max_tokens 512, strategy recursive | 0 to 64              | +0.0000      | [+0.0000, +0.0000] | 0/0      | not resolved |
-| germanquad | max_tokens 64, strategy recursive  | 0 to 10              | +0.0218      | [+0.0159, +0.0281] | 48/0     | resolved     |
-| germanquad | max_tokens 64, strategy recursive  | 0 to 15              | +0.0327      | [+0.0254, +0.0404] | 72/0     | resolved     |
-| germanquad | max_tokens 64, strategy recursive  | 0 to 32              | +0.0717      | [+0.0613, +0.0826] | 158/0    | resolved     |
-| xquad.de   | max_tokens 128, strategy recursive | 0 to 10              | +0.0059      | [+0.0017, +0.0109] | 7/0      | resolved     |
-| xquad.de   | max_tokens 128, strategy recursive | 0 to 15              | +0.0067      | [+0.0025, +0.0118] | 8/0      | resolved     |
-| xquad.de   | max_tokens 128, strategy recursive | 0 to 32              | +0.0092      | [+0.0042, +0.0151] | 11/0     | resolved     |
-| xquad.de   | max_tokens 128, strategy recursive | 0 to 64              | +0.0101      | [+0.0050, +0.0160] | 12/0     | resolved     |
-| xquad.de   | max_tokens 64, strategy recursive  | 0 to 10              | +0.0202      | [+0.0118, +0.0294] | 26/2     | resolved     |
-| xquad.de   | max_tokens 64, strategy recursive  | 0 to 15              | +0.0244      | [+0.0151, +0.0345] | 31/2     | resolved     |
-| xquad.de   | max_tokens 64, strategy recursive  | 0 to 32              | +0.0319      | [+0.0218, +0.0429] | 40/2     | resolved     |
-| xquad.en   | max_tokens 64, strategy recursive  | 0 to 10              | +0.0051      | [+0.0017, +0.0093] | 6/0      | resolved     |
-| xquad.en   | max_tokens 64, strategy recursive  | 0 to 15              | +0.0051      | [+0.0017, +0.0093] | 6/0      | resolved     |
-| xquad.en   | max_tokens 64, strategy recursive  | 0 to 32              | +0.0059      | [+0.0017, +0.0110] | 7/0      | resolved     |
-| xquad.es   | max_tokens 128, strategy recursive | 0 to 10              | +0.0042      | [+0.0008, +0.0084] | 5/0      | resolved     |
-| xquad.es   | max_tokens 128, strategy recursive | 0 to 15              | +0.0042      | [+0.0008, +0.0084] | 5/0      | resolved     |
-| xquad.es   | max_tokens 128, strategy recursive | 0 to 32              | +0.0042      | [+0.0008, +0.0084] | 5/0      | resolved     |
-| xquad.es   | max_tokens 128, strategy recursive | 0 to 64              | +0.0042      | [+0.0008, +0.0084] | 5/0      | resolved     |
-| xquad.es   | max_tokens 64, strategy recursive  | 0 to 10              | +0.0152      | [+0.0084, +0.0228] | 18/0     | resolved     |
-| xquad.es   | max_tokens 64, strategy recursive  | 0 to 15              | +0.0177      | [+0.0110, +0.0253] | 21/0     | resolved     |
-| xquad.es   | max_tokens 64, strategy recursive  | 0 to 32              | +0.0203      | [+0.0127, +0.0287] | 24/0     | resolved     |
+| germanquad | max_tokens 128, strategy recursive | 0 (0%) to 10 (8%)    | +0.0054      | [+0.0027, +0.0086] | 12/0     | resolved     |
+| germanquad | max_tokens 128, strategy recursive | 0 (0%) to 15 (12%)   | +0.0068      | [+0.0036, +0.0104] | 15/0     | resolved     |
+| germanquad | max_tokens 128, strategy recursive | 0 (0%) to 32 (25%)   | +0.0100      | [+0.0059, +0.0145] | 22/0     | resolved     |
+| germanquad | max_tokens 128, strategy recursive | 0 (0%) to 64 (50%)   | +0.0236      | [+0.0177, +0.0299] | 52/0     | resolved     |
+| germanquad | max_tokens 256, strategy recursive | 0 (0%) to 10 (4%)    | +0.0014      | [+0.0000, +0.0032] | 3/0      | not resolved |
+| germanquad | max_tokens 256, strategy recursive | 0 (0%) to 15 (6%)    | +0.0018      | [+0.0005, +0.0036] | 4/0      | resolved     |
+| germanquad | max_tokens 256, strategy recursive | 0 (0%) to 32 (13%)   | +0.0032      | [+0.0009, +0.0059] | 7/0      | resolved     |
+| germanquad | max_tokens 256, strategy recursive | 0 (0%) to 64 (25%)   | +0.0064      | [+0.0032, +0.0100] | 14/0     | resolved     |
+| germanquad | max_tokens 512, strategy recursive | 0 (0%) to 10 (2%)    | +0.0000      | [+0.0000, +0.0000] | 0/0      | not resolved |
+| germanquad | max_tokens 512, strategy recursive | 0 (0%) to 15 (3%)    | +0.0000      | [+0.0000, +0.0000] | 0/0      | not resolved |
+| germanquad | max_tokens 512, strategy recursive | 0 (0%) to 32 (6%)    | +0.0000      | [+0.0000, +0.0000] | 0/0      | not resolved |
+| germanquad | max_tokens 512, strategy recursive | 0 (0%) to 64 (13%)   | +0.0000      | [+0.0000, +0.0000] | 0/0      | not resolved |
+| germanquad | max_tokens 64, strategy recursive  | 0 (0%) to 10 (16%)   | +0.0218      | [+0.0159, +0.0281] | 48/0     | resolved     |
+| germanquad | max_tokens 64, strategy recursive  | 0 (0%) to 15 (23%)   | +0.0327      | [+0.0254, +0.0404] | 72/0     | resolved     |
+| germanquad | max_tokens 64, strategy recursive  | 0 (0%) to 32 (50%)   | +0.0717      | [+0.0613, +0.0826] | 158/0    | resolved     |
+| xquad.de   | max_tokens 128, strategy recursive | 0 (0%) to 10 (8%)    | +0.0059      | [+0.0017, +0.0109] | 7/0      | resolved     |
+| xquad.de   | max_tokens 128, strategy recursive | 0 (0%) to 15 (12%)   | +0.0067      | [+0.0025, +0.0118] | 8/0      | resolved     |
+| xquad.de   | max_tokens 128, strategy recursive | 0 (0%) to 32 (25%)   | +0.0092      | [+0.0042, +0.0151] | 11/0     | resolved     |
+| xquad.de   | max_tokens 128, strategy recursive | 0 (0%) to 64 (50%)   | +0.0101      | [+0.0050, +0.0160] | 12/0     | resolved     |
+| xquad.de   | max_tokens 64, strategy recursive  | 0 (0%) to 10 (16%)   | +0.0202      | [+0.0118, +0.0294] | 26/2     | resolved     |
+| xquad.de   | max_tokens 64, strategy recursive  | 0 (0%) to 15 (23%)   | +0.0244      | [+0.0151, +0.0345] | 31/2     | resolved     |
+| xquad.de   | max_tokens 64, strategy recursive  | 0 (0%) to 32 (50%)   | +0.0319      | [+0.0218, +0.0429] | 40/2     | resolved     |
+| xquad.en   | max_tokens 64, strategy recursive  | 0 (0%) to 10 (16%)   | +0.0051      | [+0.0017, +0.0093] | 6/0      | resolved     |
+| xquad.en   | max_tokens 64, strategy recursive  | 0 (0%) to 15 (23%)   | +0.0051      | [+0.0017, +0.0093] | 6/0      | resolved     |
+| xquad.en   | max_tokens 64, strategy recursive  | 0 (0%) to 32 (50%)   | +0.0059      | [+0.0017, +0.0110] | 7/0      | resolved     |
+| xquad.es   | max_tokens 128, strategy recursive | 0 (0%) to 10 (8%)    | +0.0042      | [+0.0008, +0.0084] | 5/0      | resolved     |
+| xquad.es   | max_tokens 128, strategy recursive | 0 (0%) to 15 (12%)   | +0.0042      | [+0.0008, +0.0084] | 5/0      | resolved     |
+| xquad.es   | max_tokens 128, strategy recursive | 0 (0%) to 32 (25%)   | +0.0042      | [+0.0008, +0.0084] | 5/0      | resolved     |
+| xquad.es   | max_tokens 128, strategy recursive | 0 (0%) to 64 (50%)   | +0.0042      | [+0.0008, +0.0084] | 5/0      | resolved     |
+| xquad.es   | max_tokens 64, strategy recursive  | 0 (0%) to 10 (16%)   | +0.0152      | [+0.0084, +0.0228] | 18/0     | resolved     |
+| xquad.es   | max_tokens 64, strategy recursive  | 0 (0%) to 15 (23%)   | +0.0177      | [+0.0110, +0.0253] | 21/0     | resolved     |
+| xquad.es   | max_tokens 64, strategy recursive  | 0 (0%) to 32 (50%)   | +0.0203      | [+0.0127, +0.0287] | 24/0     | resolved     |
 
 
 Overlap off versus on, `recursive`, paired per question. Positive means overlap kept more answers intact. This is the measurement the end-to-end sweep could not make: overlap exists to stop a boundary cutting an answer, and document-level relevance cannot see that happen. The full level-by-level grid, including 10 against 15, is in `tests/benchmarks/raw/span-integrity.json`.
@@ -2779,60 +2779,60 @@ only one it was swept at, so read it for which strategy and overlap combination 
 and not for anything about size.
 
 <!-- BEGIN GENERATED ranking_mldr_en (scripts/gen_bench_tables.py) -->
-| #  | Profile                  | Embedder                  | Dim  | nDCG@10 [95% CI]      | Recall@10 | Queries |
-|----|--------------------------|---------------------------|------|-----------------------|-----------|---------|
-| 1  | recursive cap64 ov0tok   | ollama:qwen3-embedding-8b | 4096 | 0.9242 [0.908, 0.940] | 0.9613    | 800     |
-| 2  | recursive cap64 ov0tok   | ollama:qwen3-embedding-4b | 2560 | 0.9171 [0.901, 0.933] | 0.9637    | 800     |
-| 3  | recursive cap64 ov0tok   | ollama:bge-m3             | 1024 | 0.9140 [0.897, 0.930] | 0.9613    | 800     |
-| 4  | recursive cap128 ov0tok  | ollama:qwen3-embedding-8b | 4096 | 0.9114 [0.894, 0.928] | 0.9513    | 800     |
-| 5  | recursive cap128 ov0tok  | ollama:qwen3-embedding-4b | 2560 | 0.9058 [0.887, 0.923] | 0.9450    | 800     |
-| 6  | recursive cap128 ov0tok  | ollama:bge-m3             | 1024 | 0.9046 [0.886, 0.922] | 0.9463    | 800     |
-| 7  | recursive cap64 ov0tok   | fastembed:bge-base        | 768  | 0.9017 [0.883, 0.919] | 0.9475    | 800     |
-| 8  | recursive cap256 ov0tok  | ollama:qwen3-embedding-8b | 4096 | 0.8925 [0.874, 0.911] | 0.9437    | 800     |
-| 9  | recursive cap256 ov10tok | ollama:qwen3-embedding-8b | 4096 | 0.8917 [0.873, 0.910] | 0.9437    | 800     |
-| 10 | recursive cap128 ov0tok  | fastembed:bge-base        | 768  | 0.8905 [0.872, 0.909] | 0.9413    | 800     |
-| 11 | recursive cap256 ov26tok | ollama:qwen3-embedding-4b | 2560 | 0.8902 [0.871, 0.908] | 0.9425    | 800     |
-| 12 | markdown hint256 ov0tok  | ollama:qwen3-embedding-8b | 4096 | 0.8898 [0.871, 0.908] | 0.9437    | 800     |
+| #  | Profile                        | Embedder                  | Dim  | nDCG@10 [95% CI]      | Recall@10 | Queries |
+|----|--------------------------------|---------------------------|------|-----------------------|-----------|---------|
+| 1  | recursive cap64 ov0tok (0%)    | ollama:qwen3-embedding-8b | 4096 | 0.9242 [0.908, 0.940] | 0.9613    | 800     |
+| 2  | recursive cap64 ov0tok (0%)    | ollama:qwen3-embedding-4b | 2560 | 0.9171 [0.901, 0.933] | 0.9637    | 800     |
+| 3  | recursive cap64 ov0tok (0%)    | ollama:bge-m3             | 1024 | 0.9140 [0.897, 0.930] | 0.9613    | 800     |
+| 4  | recursive cap128 ov0tok (0%)   | ollama:qwen3-embedding-8b | 4096 | 0.9114 [0.894, 0.928] | 0.9513    | 800     |
+| 5  | recursive cap128 ov0tok (0%)   | ollama:qwen3-embedding-4b | 2560 | 0.9058 [0.887, 0.923] | 0.9450    | 800     |
+| 6  | recursive cap128 ov0tok (0%)   | ollama:bge-m3             | 1024 | 0.9046 [0.886, 0.922] | 0.9463    | 800     |
+| 7  | recursive cap64 ov0tok (0%)    | fastembed:bge-base        | 768  | 0.9017 [0.883, 0.919] | 0.9475    | 800     |
+| 8  | recursive cap256 ov0tok (0%)   | ollama:qwen3-embedding-8b | 4096 | 0.8925 [0.874, 0.911] | 0.9437    | 800     |
+| 9  | recursive cap256 ov10tok (4%)  | ollama:qwen3-embedding-8b | 4096 | 0.8917 [0.873, 0.910] | 0.9437    | 800     |
+| 10 | recursive cap128 ov0tok (0%)   | fastembed:bge-base        | 768  | 0.8905 [0.872, 0.909] | 0.9413    | 800     |
+| 11 | recursive cap256 ov26tok (10%) | ollama:qwen3-embedding-4b | 2560 | 0.8902 [0.871, 0.908] | 0.9425    | 800     |
+| 12 | markdown hint256 ov0tok (0%)   | ollama:qwen3-embedding-8b | 4096 | 0.8898 [0.871, 0.908] | 0.9437    | 800     |
 
 
 Ranked by mean nDCG@10. Neighbouring rows whose intervals overlap are not separated by this query set; see the paired comparisons for which differences actually resolve.
 <!-- END GENERATED ranking_mldr_en -->
 
 <!-- BEGIN GENERATED ranking_gerdalir_de (scripts/gen_bench_tables.py) -->
-| #  | Profile                   | Embedder                  | Dim  | nDCG@10 [95% CI]      | Recall@10 | Queries |
-|----|---------------------------|---------------------------|------|-----------------------|-----------|---------|
-| 1  | recursive cap256 ov128tok | ollama:qwen3-embedding-8b | 4096 | 0.5411 [0.534, 0.548] | 0.6822    | 12298   |
-| 2  | recursive cap256 ov115tok | ollama:qwen3-embedding-8b | 4096 | 0.5410 [0.534, 0.548] | 0.6831    | 12298   |
-| 3  | recursive cap256 ov102tok | ollama:qwen3-embedding-8b | 4096 | 0.5404 [0.533, 0.548] | 0.6799    | 12298   |
-| 4  | recursive cap256 ov90tok  | ollama:qwen3-embedding-8b | 4096 | 0.5401 [0.533, 0.547] | 0.6825    | 12298   |
-| 5  | recursive cap256 ov77tok  | ollama:qwen3-embedding-8b | 4096 | 0.5391 [0.532, 0.546] | 0.6803    | 12298   |
-| 6  | recursive cap256 ov64tok  | ollama:qwen3-embedding-8b | 4096 | 0.5384 [0.531, 0.546] | 0.6798    | 12298   |
-| 7  | recursive cap256 ov128tok | ollama:qwen3-embedding-4b | 2560 | 0.5375 [0.530, 0.545] | 0.6762    | 12298   |
-| 8  | recursive cap256 ov115tok | ollama:qwen3-embedding-4b | 2560 | 0.5372 [0.530, 0.545] | 0.6765    | 12298   |
-| 9  | recursive cap256 ov102tok | ollama:qwen3-embedding-4b | 2560 | 0.5369 [0.529, 0.544] | 0.6767    | 12298   |
-| 10 | recursive cap256 ov51tok  | ollama:qwen3-embedding-8b | 4096 | 0.5368 [0.529, 0.544] | 0.6758    | 12298   |
-| 11 | recursive cap256 ov38tok  | ollama:qwen3-embedding-8b | 4096 | 0.5354 [0.528, 0.543] | 0.6775    | 12298   |
-| 12 | recursive cap256 ov90tok  | ollama:qwen3-embedding-4b | 2560 | 0.5352 [0.528, 0.543] | 0.6751    | 12298   |
+| #  | Profile                         | Embedder                  | Dim  | nDCG@10 [95% CI]      | Recall@10 | Queries |
+|----|---------------------------------|---------------------------|------|-----------------------|-----------|---------|
+| 1  | recursive cap256 ov128tok (50%) | ollama:qwen3-embedding-8b | 4096 | 0.5411 [0.534, 0.548] | 0.6822    | 12298   |
+| 2  | recursive cap256 ov115tok (45%) | ollama:qwen3-embedding-8b | 4096 | 0.5410 [0.534, 0.548] | 0.6831    | 12298   |
+| 3  | recursive cap256 ov102tok (40%) | ollama:qwen3-embedding-8b | 4096 | 0.5404 [0.533, 0.548] | 0.6799    | 12298   |
+| 4  | recursive cap256 ov90tok (35%)  | ollama:qwen3-embedding-8b | 4096 | 0.5401 [0.533, 0.547] | 0.6825    | 12298   |
+| 5  | recursive cap256 ov77tok (30%)  | ollama:qwen3-embedding-8b | 4096 | 0.5391 [0.532, 0.546] | 0.6803    | 12298   |
+| 6  | recursive cap256 ov64tok (25%)  | ollama:qwen3-embedding-8b | 4096 | 0.5384 [0.531, 0.546] | 0.6798    | 12298   |
+| 7  | recursive cap256 ov128tok (50%) | ollama:qwen3-embedding-4b | 2560 | 0.5375 [0.530, 0.545] | 0.6762    | 12298   |
+| 8  | recursive cap256 ov115tok (45%) | ollama:qwen3-embedding-4b | 2560 | 0.5372 [0.530, 0.545] | 0.6765    | 12298   |
+| 9  | recursive cap256 ov102tok (40%) | ollama:qwen3-embedding-4b | 2560 | 0.5369 [0.529, 0.544] | 0.6767    | 12298   |
+| 10 | recursive cap256 ov51tok (20%)  | ollama:qwen3-embedding-8b | 4096 | 0.5368 [0.529, 0.544] | 0.6758    | 12298   |
+| 11 | recursive cap256 ov38tok (15%)  | ollama:qwen3-embedding-8b | 4096 | 0.5354 [0.528, 0.543] | 0.6775    | 12298   |
+| 12 | recursive cap256 ov90tok (35%)  | ollama:qwen3-embedding-4b | 2560 | 0.5352 [0.528, 0.543] | 0.6751    | 12298   |
 
 
 Ranked by mean nDCG@10. Neighbouring rows whose intervals overlap are not separated by this query set; see the paired comparisons for which differences actually resolve.
 <!-- END GENERATED ranking_gerdalir_de -->
 
 <!-- BEGIN GENERATED ranking_mldr_de (scripts/gen_bench_tables.py) -->
-| #  | Profile                  | Embedder                  | Dim  | nDCG@10 [95% CI]      | Recall@10 | Queries |
-|----|--------------------------|---------------------------|------|-----------------------|-----------|---------|
-| 1  | recursive cap256 ov10tok | ollama:qwen3-embedding-8b | 4096 | 0.7350 [0.678, 0.790] | 0.8050    | 200     |
-| 2  | recursive cap256 ov26tok | ollama:qwen3-embedding-8b | 4096 | 0.7328 [0.675, 0.788] | 0.8000    | 200     |
-| 3  | markdown hint256 ov51tok | ollama:qwen3-embedding-8b | 4096 | 0.7316 [0.675, 0.786] | 0.8000    | 200     |
-| 4  | recursive cap256 ov15tok | ollama:qwen3-embedding-8b | 4096 | 0.7308 [0.674, 0.786] | 0.7950    | 200     |
-| 5  | fast hint256 ov26tok     | ollama:qwen3-embedding-4b | 2560 | 0.7306 [0.674, 0.785] | 0.8150    | 200     |
-| 6  | markdown hint256 ov0tok  | ollama:qwen3-embedding-4b | 2560 | 0.7302 [0.674, 0.784] | 0.8100    | 200     |
-| 7  | markdown hint256 ov0tok  | ollama:qwen3-embedding-8b | 4096 | 0.7298 [0.673, 0.784] | 0.8050    | 200     |
-| 8  | recursive cap256 ov0tok  | ollama:qwen3-embedding-8b | 4096 | 0.7296 [0.673, 0.784] | 0.8050    | 200     |
-| 9  | fast hint256 ov0tok      | ollama:qwen3-embedding-4b | 2560 | 0.7294 [0.673, 0.784] | 0.8100    | 200     |
-| 10 | recursive cap256 ov10tok | ollama:qwen3-embedding-4b | 2560 | 0.7294 [0.674, 0.784] | 0.8100    | 200     |
-| 11 | recursive cap256 ov51tok | ollama:qwen3-embedding-8b | 4096 | 0.7294 [0.672, 0.784] | 0.8000    | 200     |
-| 12 | fast hint256 ov51tok     | ollama:qwen3-embedding-4b | 2560 | 0.7293 [0.671, 0.785] | 0.8000    | 200     |
+| #  | Profile                        | Embedder                  | Dim  | nDCG@10 [95% CI]      | Recall@10 | Queries |
+|----|--------------------------------|---------------------------|------|-----------------------|-----------|---------|
+| 1  | recursive cap256 ov10tok (4%)  | ollama:qwen3-embedding-8b | 4096 | 0.7350 [0.678, 0.790] | 0.8050    | 200     |
+| 2  | recursive cap256 ov26tok (10%) | ollama:qwen3-embedding-8b | 4096 | 0.7328 [0.675, 0.788] | 0.8000    | 200     |
+| 3  | markdown hint256 ov51tok (20%) | ollama:qwen3-embedding-8b | 4096 | 0.7316 [0.675, 0.786] | 0.8000    | 200     |
+| 4  | recursive cap256 ov15tok (6%)  | ollama:qwen3-embedding-8b | 4096 | 0.7308 [0.674, 0.786] | 0.7950    | 200     |
+| 5  | fast hint256 ov26tok (10%)     | ollama:qwen3-embedding-4b | 2560 | 0.7306 [0.674, 0.785] | 0.8150    | 200     |
+| 6  | markdown hint256 ov0tok (0%)   | ollama:qwen3-embedding-4b | 2560 | 0.7302 [0.674, 0.784] | 0.8100    | 200     |
+| 7  | markdown hint256 ov0tok (0%)   | ollama:qwen3-embedding-8b | 4096 | 0.7298 [0.673, 0.784] | 0.8050    | 200     |
+| 8  | recursive cap256 ov0tok (0%)   | ollama:qwen3-embedding-8b | 4096 | 0.7296 [0.673, 0.784] | 0.8050    | 200     |
+| 9  | fast hint256 ov0tok (0%)       | ollama:qwen3-embedding-4b | 2560 | 0.7294 [0.673, 0.784] | 0.8100    | 200     |
+| 10 | recursive cap256 ov10tok (4%)  | ollama:qwen3-embedding-4b | 2560 | 0.7294 [0.674, 0.784] | 0.8100    | 200     |
+| 11 | recursive cap256 ov51tok (20%) | ollama:qwen3-embedding-8b | 4096 | 0.7294 [0.672, 0.784] | 0.8000    | 200     |
+| 12 | fast hint256 ov51tok (20%)     | ollama:qwen3-embedding-4b | 2560 | 0.7293 [0.671, 0.785] | 0.8000    | 200     |
 
 
 Ranked by mean nDCG@10. Neighbouring rows whose intervals overlap are not separated by this query set; see the paired comparisons for which differences actually resolve.
