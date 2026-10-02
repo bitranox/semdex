@@ -268,9 +268,16 @@ def vector_repair_state(cache: Path) -> dict[str, dict[str, int]]:
 
 def _axis_key(row: dict[str, Any], axis: str) -> tuple:
     """Everything that identifies a comparison group EXCEPT the axis under test."""
-    axes = row["axes"]
-    fields = ["strategy", "max_tokens", "overlap_tokens", "tokenizer", "breakpoint_model"]
-    return (row["corpus"], *(axes.get(f) for f in fields if f != axis))
+    return _identity_without(row, axis)
+
+
+def _identity_without(row: dict[str, Any], axis: str) -> tuple:
+    """The corpus plus EVERY parsed axis except ``axis``.
+
+    Built from all axes rather than a list of them, so an axis the profile grammar gains later
+    (the recipe was one) separates its chunk sets without anyone remembering to add it here.
+    """
+    return (row["corpus"], *sorted((k, str(v)) for k, v in row["axes"].items() if k != axis))
 
 
 def _compare(axis: str, levels: list[dict[str, Any]]) -> dict[str, Any]:
@@ -501,8 +508,7 @@ def _moved_boundaries(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def _overlap_sibling_key(row: dict[str, Any]) -> tuple:
     """Everything that identifies a chunk set except its overlap level."""
-    axes = row["axes"]
-    return (row["corpus"], axes.get("max_tokens"), axes.get("tokenizer"), axes.get("breakpoint_model"))
+    return _identity_without(row, "overlap_tokens")
 
 
 def _print_summary(rows: list[dict[str, Any]], status: dict[str, Any], integrity: dict[str, Any]) -> None:

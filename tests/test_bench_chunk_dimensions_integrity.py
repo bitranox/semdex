@@ -117,3 +117,34 @@ def test_the_true_cap_adds_overlap_only_for_the_strategy_that_appends_it(audit: 
     assert audit.true_cap({"strategy": "markdown", "max_tokens": 256, "overlap_tokens": 51}) == 256
     assert audit.true_cap({"strategy": "semantic", "max_tokens": 256, "overlap_tokens": 0}) == 256
     assert audit.true_cap({"strategy": "recursive", "max_tokens": None, "overlap_tokens": 26}) == 0
+
+
+def test_a_set_cut_under_another_recipe_is_not_the_overlap_0_baseline(audit: Any) -> None:
+    # The markdown recipe cuts at headings, so its o0 set has its own count (156,223 against the
+    # generic recipe's 148,008). Taken as the generic ladder's baseline, it voided every
+    # published generic overlap cell as "re-cut under overlap".
+    rows = [
+        _row("recursive-t256-o0-gpt2", rows=148008, recipe=""),
+        _row("recursive-t256-o0-gpt2-rmarkdown", rows=156223, recipe="markdown"),
+        _row("recursive-t256-o51-gpt2", rows=148013, recipe="", overlap_tokens=51),
+    ]
+    assert audit._integrity(rows)["moved_boundaries_under_overlap"] == []
+    assert audit._integrity(list(reversed(rows)))["moved_boundaries_under_overlap"] == []
+
+
+def test_a_recipe_ladder_is_judged_against_its_own_overlap_0_set(audit: Any) -> None:
+    rows = [
+        _row("recursive-t256-o0-gpt2", rows=148008, recipe=""),
+        _row("recursive-t256-o0-gpt2-rmarkdown", rows=156223, recipe="markdown"),
+        _row("recursive-t256-o51-gpt2-rmarkdown", rows=148008, recipe="markdown", overlap_tokens=51),
+    ]
+    moved = audit._integrity(rows)["moved_boundaries_under_overlap"]
+    assert [(m["profile"], m["rows_at_overlap_0"]) for m in moved] == [("recursive-t256-o51-gpt2-rmarkdown", 156223)]
+
+
+def test_an_axis_group_never_mixes_two_recipes(audit: Any) -> None:
+    plain = _row("recursive-t256-o0-gpt2", rows=148008, recipe="")
+    other = _row("recursive-t256-o51-gpt2-rmarkdown", rows=156223, recipe="markdown", overlap_tokens=51)
+    assert audit._axis_key(plain, "overlap_tokens") != audit._axis_key(other, "overlap_tokens")
+    same = _row("recursive-t256-o51-gpt2", rows=148013, recipe="", overlap_tokens=51)
+    assert audit._axis_key(plain, "overlap_tokens") == audit._axis_key(same, "overlap_tokens")

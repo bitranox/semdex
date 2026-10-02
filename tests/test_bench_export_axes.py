@@ -138,3 +138,34 @@ def test_two_cells_with_identical_per_query_scores_are_one_measurement_not_a_com
     )
     effects = exporter.knob_effects(contest)
     assert [e["axis"] for e in effects] == ["method"]
+
+
+def _chunk_cell(embedding: str, **axes: Any) -> dict[str, Any]:
+    cell = _cell(embedding)
+    cell["axes"].update({"tokenizer": "gpt2", "recipe": ""})
+    cell["axes"].update(axes)
+    return cell
+
+
+def test_cells_cut_under_different_recipes_are_two_axes_apart_with_any_other_change(exporter: Any) -> None:
+    # A markdown-recipe cell differs from a generic one in the recipe AND whatever else changed,
+    # so neither the overlap nor the embedder may claim the whole difference.
+    generic = _chunk_cell("a")
+    markdown = _chunk_cell("a", recipe="markdown", overlap_tokens=51)
+    assert exporter._one_axis_apart(generic, markdown) is None
+    assert exporter._one_axis_apart(_chunk_cell("a"), _chunk_cell("b", recipe="markdown")) is None
+
+
+def test_cells_cut_with_different_tokenizers_are_not_an_overlap_or_embedding_effect(exporter: Any) -> None:
+    gpt2 = _chunk_cell("a")
+    assert exporter._one_axis_apart(gpt2, _chunk_cell("a", tokenizer="cl100k", overlap_tokens=51)) is None
+    assert exporter._one_axis_apart(gpt2, _chunk_cell("b", tokenizer="cl100k")) is None
+
+
+def test_a_recipe_only_difference_is_not_reported_as_a_chunk_knob(exporter: Any) -> None:
+    assert exporter._one_axis_apart(_chunk_cell("a"), _chunk_cell("a", recipe="markdown")) is None
+
+
+def test_a_single_knob_still_pairs_when_recipe_and_tokenizer_match(exporter: Any) -> None:
+    assert exporter._one_axis_apart(_chunk_cell("a"), _chunk_cell("a", overlap_tokens=51)) == "overlap_tokens"
+    assert exporter._one_axis_apart(_chunk_cell("a"), _chunk_cell("b")) == "embedding"

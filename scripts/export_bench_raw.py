@@ -456,7 +456,11 @@ def _one_axis_apart(left: dict[str, Any], right: dict[str, Any]) -> str | None:
     """
     if left["corpus"] != right["corpus"]:
         return None
-    differing = [axis for axis in _CHUNK_AXES if left["axes"].get(axis) != right["axes"].get(axis)]
+    # Every parsed axis counts toward "how far apart", not only the knobs reported: a recipe or
+    # tokenizer difference riding along with an overlap change would otherwise be credited to it.
+    differing = sorted(
+        axis for axis in left["axes"].keys() | right["axes"].keys() if left["axes"].get(axis) != right["axes"].get(axis)
+    )
     # The retrieval method (dense / bm25 / hybrid) is an axis like any other, so "does adding
     # lexical search help" is answered by the same paired bootstrap as "does overlap help",
     # instead of by comparing two means.
@@ -478,7 +482,7 @@ def _one_axis_apart(left: dict[str, Any], right: dict[str, Any]) -> str | None:
         return None
     if left["embedding"] != right["embedding"]:
         return "embedding" if not differing else None
-    return differing[0] if len(differing) == 1 else None
+    return differing[0] if len(differing) == 1 and differing[0] in _CHUNK_AXES else None
 
 
 def knob_effects(rows: list[dict[str, Any]], metric: str = MATERIAL_FLOOR_METRIC) -> list[dict[str, Any]]:
