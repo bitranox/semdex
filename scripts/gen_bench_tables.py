@@ -98,6 +98,22 @@ def _interval(row: dict[str, Any], metric: str = "ndcg@10") -> str:
     return f"{_fmt(row.get(metric))} [{_fmt(row.get(f'{metric}_ci_lo'), 3)}, {_fmt(row.get(f'{metric}_ci_hi'), 3)}]"
 
 
+def _overlap_percent(overlap_tokens: int, cap: int) -> int:
+    """Overlap as the percent of the chunk cap, the unit industry guidance quotes (10-25 percent).
+
+    Rounded half up, so the ladder's token rungs (26, 38, 51 at cap256; 51, 77, 102, 128 at cap512)
+    print as the round percentages they were chosen to be.
+    """
+    return int(overlap_tokens * 100 / cap + 0.5)
+
+
+def _overlap_text(overlap_tokens: Any, cap: Any) -> str:
+    """An overlap level in tokens, with its percent of the cap when the cap is known."""
+    if _is_rung(overlap_tokens) and _is_rung(cap) and cap > 0:
+        return f"{overlap_tokens} ({_overlap_percent(overlap_tokens, cap)}%)"
+    return level_label(overlap_tokens)
+
+
 def _display_profile(axes: dict[str, Any]) -> str:
     """A profile named so it needs no legend.
 
@@ -113,7 +129,8 @@ def _display_profile(axes: dict[str, Any]) -> str:
     # label carrying different numbers. markdown and fast honour it as a re-split; only the
     # chonkie strategies ignore the setting, and printing ov0tok on those would be a lie.
     if strategy in _OVERLAP_AWARE_STRATEGIES:
-        label += f" ov{overlap}tok"
+        percent = f" ({_overlap_percent(overlap, size)}%)" if _is_rung(size) and size > 0 else ""
+        label += f" ov{overlap}tok{percent}"
     breakpoint_model = axes.get("breakpoint_model")
     if breakpoint_model:
         label += f" breakpoint-{breakpoint_model}"
@@ -263,6 +280,14 @@ def level_label(level: Any) -> str:
     return "default" if level is None else str(level)
 
 
+def _levels_text(effect: dict[str, Any], axis: str) -> str:
+    """The "from to" cell of an effect row; an overlap level also shows its percent of the held cap."""
+    if axis == "overlap_tokens":
+        cap = effect["held_fixed"].get("max_tokens")
+        return f"{_overlap_text(effect['from_level'], cap)} to {_overlap_text(effect['to_level'], cap)}"
+    return f"{level_label(effect['from_level'])} to {level_label(effect['to_level'])}"
+
+
 def _knob_rows(
     effects: list[dict[str, Any]],
     axis: str,
@@ -291,7 +316,7 @@ def _knob_rows(
                 # echo the Change column; the dimension is what a reader wants beside it.
                 str(effect.get("dim") or "-") if axis == "embedding" else effect["embedding"],
                 _held_fixed_label(effect["held_fixed"], axis),
-                f"{level_label(effect['from_level'])} to {level_label(effect['to_level'])}",
+                _levels_text(effect, axis),
                 f"{effect['mean_delta']:+.4f}",
                 f"[{effect['ci_lo']:+.4f}, {effect['ci_hi']:+.4f}]",
                 f"{effect['wins']}/{effect['losses']}",
@@ -945,9 +970,11 @@ def _register_effect_tables(tables: dict[str, Any], effects: dict[str, Any], fit
             "chunk_knob_overlap",
             "overlap_tokens",
             "Effect of chunk overlap",
-            "Overlap is measured in TOKENS: ov10tok is 10 tokens, a 3.9 percent overlap at cap256 "
-            "and 2.0 percent at cap512. Three strategies honour it - recursive, markdown and fast "
-            "- and they implement it differently; chonkie ignores it for semantic and late.",
+            "Overlap is counted in gpt2 tokens and shown with its percent of the chunk cap, the unit "
+            "industry guidance quotes. Three strategies honour it - recursive, markdown and fast - "
+            "and they implement it differently; chonkie ignores it for semantic and late. Every "
+            "verdict is document-level nDCG@10 (a document scores by its best chunk), while "
+            "`semdex search` returns chunks.",
             None,
         ),
         (
@@ -1119,7 +1146,7 @@ def _span_axis_rows(
             [
                 effect["corpus"],
                 fixed,
-                f"{level_label(effect['from_level'])} to {level_label(effect['to_level'])}",
+                _levels_text(effect, axis),
                 f"{effect['mean_delta']:+.4f}",
                 f"[{effect['ci_lo']:+.4f}, {effect['ci_hi']:+.4f}]",
                 f"{effect['wins']}/{effect['losses']}",
