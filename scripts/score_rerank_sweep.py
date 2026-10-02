@@ -34,7 +34,6 @@ Env:
 
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import sys
@@ -48,6 +47,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _fusion import reciprocal_rank_fusion
 from _optional_ml import CrossEncoderModel, load_cross_encoder, set_torch_threads
+from _perquery import write_per_query
 from _provenance import stamped
 from _score_kernel import topk_stream
 from _score_stats import bootstrap_ci
@@ -130,16 +130,15 @@ def _write_per_query(cell: str, per_query: dict[str, dict[str, float]]) -> str:
     def column(metric: str) -> np.ndarray:
         return np.asarray([per_query[q][metric] for q in qids], dtype=np.float32)
 
-    path = root / f"{cell}.npz"
-    np.savez(
-        path,
-        qids=np.asarray(qids),
-        ndcg=column("ndcg@10"),
-        recall=column("recall@10"),
-        mrr=column("mrr"),
-        p1=column("p@1"),
-    )
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    # The npz keys are the identifier-safe aliases in NPZ_KEYS; the metric names contain "@".
+    arrays = {
+        "qids": np.asarray(qids),
+        "ndcg": column("ndcg@10"),
+        "recall": column("recall@10"),
+        "mrr": column("mrr"),
+        "p1": column("p@1"),
+    }
+    return write_per_query(root, cell, arrays)
 
 
 def _candidates(context: dict[str, Any], label: str) -> tuple[list[str], dict[str, dict[str, list[tuple[str, int]]]]]:

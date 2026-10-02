@@ -21,7 +21,7 @@ Env (all optional):
   SEMDEX_PRODUCT_FETCH       chunks streamed per query (default 100; raised to the largest rung k)
   SEMDEX_PRODUCT_FORCE       1 to re-score cells already in the results file
   SEMDEX_SCORE_OUT           results json (default <cache>/scores/product_k_scores.json)
-  SEMDEX_SCORE_PERQUERY      per-query npz dir (default <cache>/scores/perquery)
+  SEMDEX_PRODUCT_K_PERQUERY  per-query npz dir (default <cache>/scores/perquery-product-k)
   SEMDEX_SCORE_QVECS         query-vector cache dir (default <cache>/scores/qvecs)
   SEMDEX_SCORE_BLOCK_BYTES   streaming block size for topk_stream
   CACHE_ROOT                 the vector cache root (default /embeddings)
@@ -29,7 +29,6 @@ Env (all optional):
 
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import sys
@@ -41,6 +40,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # import the sibling driver helpers
 
+from _perquery import write_per_query
 from _provenance import stamped
 from _score_kernel import topk_stream
 from _score_stats import bootstrap_ci, paired_ci
@@ -173,24 +173,22 @@ def _write_per_query(
     cell: str, qids: list[str], rungs: list[Rung], per_rung: dict[int, dict[str, dict[str, float]]]
 ) -> str:
     """Per-query arrays beside the cache, one column per rung, referenced from the row by hash."""
-    root = Path(os.environ.get("SEMDEX_SCORE_PERQUERY", str(_cache_root() / "scores" / "perquery")))
-    root.mkdir(parents=True, exist_ok=True)
+    # Its own directory and its own variable: these files share their names with the dense
+    # scorer's, so one directory for both lets either run replace the other's arrays.
+    root = Path(os.environ.get("SEMDEX_PRODUCT_K_PERQUERY", str(_cache_root() / "scores" / "perquery-product-k")))
     ks = [rung.k for rung in rungs]
 
     def matrix(view: str) -> np.ndarray:
         return np.asarray([[per_rung[k][qid][view] for k in ks] for qid in qids], dtype=np.float32)
 
-    path = root / f"{cell}.npz"
-    with path.open("wb") as handle:
-        np.savez(
-            handle,
-            qids=np.asarray(qids),
-            ks=np.asarray(ks, dtype=np.int32),
-            delivered=matrix("delivered"),
-            documents=matrix("documents"),
-            distinct=matrix("distinct"),
-        )
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    arrays = {
+        "qids": np.asarray(qids),
+        "ks": np.asarray(ks, dtype=np.int32),
+        "delivered": matrix("delivered"),
+        "documents": matrix("documents"),
+        "distinct": matrix("distinct"),
+    }
+    return write_per_query(root, cell, arrays)
 
 
 def score_cell(

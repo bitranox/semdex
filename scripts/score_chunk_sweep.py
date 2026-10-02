@@ -54,6 +54,7 @@ import pyarrow.parquet as pq
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # import the sibling driver helpers
 
+from _perquery import write_per_query
 from _provenance import stamped
 from _score_kernel import topk_stream
 from _score_stats import bootstrap_ci
@@ -269,19 +270,15 @@ def _write_per_query(cell: str, per_query: dict[str, dict[str, float]]) -> str:
     def column(metric: str) -> np.ndarray:
         return np.asarray([per_query[q][metric] for q in qids], dtype=np.float32)
 
-    path = root / f"{cell}.npz"
-    # Explicit keyword arguments rather than **arrays: the metric names contain "@", so the npz
-    # keys are the identifier-safe aliases in NPZ_KEYS, and unpacking an untyped dict into savez
-    # would widen into its allow_pickle parameter.
-    np.savez(
-        path,
-        qids=np.asarray(qids),
-        ndcg=column("ndcg@10"),
-        recall=column("recall@10"),
-        mrr=column("mrr"),
-        p1=column("p@1"),
-    )
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    # The npz keys are the identifier-safe aliases in NPZ_KEYS; the metric names contain "@".
+    arrays = {
+        "qids": np.asarray(qids),
+        "ndcg": column("ndcg@10"),
+        "recall": column("recall@10"),
+        "mrr": column("mrr"),
+        "p1": column("p@1"),
+    }
+    return write_per_query(root, cell, arrays)
 
 
 def _discover_profiles(corpora: list[str]) -> list[str]:

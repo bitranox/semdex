@@ -145,7 +145,7 @@ def test_a_fixture_cell_scores_both_views_from_one_top_list(
     core: Any, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("CACHE_ROOT", str(tmp_path))
-    monkeypatch.setenv("SEMDEX_SCORE_PERQUERY", str(tmp_path / "perquery"))
+    monkeypatch.setenv("SEMDEX_PRODUCT_K_PERQUERY", str(tmp_path / "perquery"))
     _write_cell(tmp_path, core, with_query_cache=True)
     row = core.score_cell(_CORPUS, _PROFILE, _LABEL, product_k=2, budgets=[512], fetch=4)
     assert row is not None

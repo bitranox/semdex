@@ -46,6 +46,7 @@ import pyarrow.parquet as pq
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _fusion import RRF_K, reciprocal_rank_fusion
+from _perquery import write_per_query
 from _provenance import stamped
 from _score_kernel import topk_stream
 from _score_stats import bootstrap_ci
@@ -144,27 +145,22 @@ def _summarize(per_query: dict[str, dict[str, float]]) -> dict[str, Any]:
 
 
 def _write_per_query(cell: str, per_query: dict[str, dict[str, float]]) -> str:
-    import hashlib
-
     root = Path(os.environ.get("SEMDEX_SCORE_PERQUERY", str(_cache_root() / "scores" / "perquery")))
     root.mkdir(parents=True, exist_ok=True)
     qids = sorted(per_query)
-    path = root / f"{cell}.npz"
 
     def column(metric: str) -> np.ndarray:
         return np.asarray([per_query[q][metric] for q in qids], dtype=np.float32)
 
-    # Explicit keywords, not a **dict: unpacking an untyped mapping into savez widens into its
-    # allow_pickle parameter. The npz keys are the identifier-safe aliases the metric names lack.
-    np.savez(
-        path,
-        qids=np.asarray(qids),
-        ndcg=column("ndcg@10"),
-        recall=column("recall@10"),
-        mrr=column("mrr"),
-        p1=column("p@1"),
-    )
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    # The npz keys are the identifier-safe aliases in NPZ_KEYS; the metric names contain "@".
+    arrays = {
+        "qids": np.asarray(qids),
+        "ndcg": column("ndcg@10"),
+        "recall": column("recall@10"),
+        "mrr": column("mrr"),
+        "p1": column("p@1"),
+    }
+    return write_per_query(root, cell, arrays)
 
 
 def score_cell(context: dict[str, Any], label: str) -> dict[str, dict[str, Any]] | None:
