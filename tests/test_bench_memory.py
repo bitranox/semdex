@@ -92,7 +92,7 @@ def test_a_platform_with_neither_proc_nor_resource_reads_zero_and_says_it_cannot
 ) -> None:
     """Windows has no /proc and no resource module: the helper degrades to 0.0, and can_measure
     says so, which is what lets the driver refuse to publish a table of zeros."""
-    monkeypatch.setitem(sys.modules, "resource", None)  # makes `import resource` raise ImportError
+    monkeypatch.setattr(mem.sys, "platform", "win32")
 
     assert mem.peak_rss_mb(source=tmp_path / "absent") == 0.0
     assert mem.can_measure(source=tmp_path / "absent") is False

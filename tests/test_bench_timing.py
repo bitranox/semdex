@@ -184,7 +184,7 @@ def test_the_load_snapshot_records_what_else_the_box_was_doing(timing: Any) -> N
 
 def test_a_platform_without_a_load_average_records_none_not_zero(timing: Any, monkeypatch: pytest.MonkeyPatch) -> None:
     """Windows has no os.getloadavg; a zero would read as an idle box, so the load is unrecorded."""
-    monkeypatch.delattr(timing.os, "getloadavg", raising=False)
+    monkeypatch.setattr(timing.sys, "platform", "win32")
 
     snapshot = timing.load_snapshot()
 

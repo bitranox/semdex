@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import json
 import os
+import platform
 import subprocess
 import sys
 import time
@@ -206,7 +207,7 @@ def main() -> None:
 
     payload = {
         "generated_utc": datetime.now(UTC).isoformat(timespec="seconds"),
-        "host": os.uname().nodename,
+        "host": platform.node(),
         "cpu": _cpu_model(),
         "tariff_eur_per_kwh": float(os.environ.get("TARIFF", "0.30")),
         "corpus": "beir/nfcorpus/test",

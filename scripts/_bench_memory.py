@@ -51,12 +51,14 @@ def _proc_status_kb(field: str, *, source: Path = STATUS_PATH) -> int | None:
 def _getrusage_peak_kb() -> int | None:
     """The high-water mark from getrusage, in kB, or None where there is no ``resource`` module.
 
-    ru_maxrss is kB on Linux and BYTES on macOS. Windows has no ``resource`` module at all.
+    ru_maxrss is kB on Linux and BYTES on macOS. Windows has no ``resource`` module at all; the
+    platform test (not a try/except ImportError) is what lets pyright see the import as unreachable
+    when it checks for Windows.
     """
-    try:
-        import resource
-    except ImportError:
+    if sys.platform == "win32":
         return None
+    import resource
+
     raw = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     return raw // 1024 if sys.platform == "darwin" else raw
 

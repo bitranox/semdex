@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import os
 import statistics
+import sys
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -123,7 +124,9 @@ def load_snapshot() -> dict[str, float | int | None]:
     published without it. The load fields are None on Windows, which has no load average: an
     unrecorded load, never a zero one.
     """
-    if not hasattr(os, "getloadavg"):
+    # A platform test rather than hasattr: pyright narrows on sys.platform, so the call below
+    # stays typed when it checks for Windows.
+    if sys.platform == "win32":
         return {"load_1min": None, "load_5min": None, "load_15min": None, "cores": os.cpu_count() or 0}
     one, five, fifteen = os.getloadavg()
     return {

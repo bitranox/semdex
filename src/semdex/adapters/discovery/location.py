@@ -12,7 +12,11 @@ from __future__ import annotations
 
 from pathlib import Path
 from urllib.parse import urlparse
-from urllib.request import url2pathname
+
+# typeshed routes the Windows url2pathname through nturl2path and marks it deprecated for every
+# Python version, but nturl2path is deprecated only from 3.14, where urllib.request.url2pathname
+# no longer uses it. Remove the ignore once the floor reaches 3.14 (the stub then picks that one).
+from urllib.request import url2pathname  # pyright: ignore[reportDeprecated]
 
 __all__ = ["from_uri", "to_uri"]
 
@@ -48,4 +52,4 @@ def from_uri(uri: str) -> Path:
     parsed = urlparse(uri)
     if parsed.scheme != "file":
         raise ValueError(f"not a file: URI: {uri!r}")
-    return Path(url2pathname(parsed.path))
+    return Path(url2pathname(parsed.path))  # pyright: ignore[reportDeprecated] - see the import
