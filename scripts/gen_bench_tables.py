@@ -559,7 +559,7 @@ def _precision_table(docs: list[dict[str, Any]]) -> dict[str, Any]:
             entry["halves"].append(half)
     rows = []
     for corpus, entry in sorted(by_corpus.items(), key=lambda kv: -kv[1]["n"]):
-        mean_half = sum(entry["halves"]) / len(entry["halves"])
+        mean_half = math.fsum(entry["halves"]) / len(entry["halves"])
         rows.append([corpus, str(entry["n"]), f"+/-{mean_half:.3f}", f"{mean_half * 2:.3f}"])
     return _table(
         "How large a difference has to be before it is a result",
@@ -824,7 +824,7 @@ def _rung_table(effects: dict[str, Any], fit: set[str] | None) -> dict[str, Any]
                     f"{low} to {high}",
                     f"{low / cap:.1%} to {high / cap:.1%}",
                     f"{sum(1 for effect in step if effect['resolved'])}/{len(step)}",
-                    f"{sum(deltas) / len(deltas):+.4f}",
+                    f"{math.fsum(deltas) / len(deltas):+.4f}",
                     f"[{min(deltas):+.4f}, {max(deltas):+.4f}]",
                 ]
             )
@@ -1783,7 +1783,7 @@ def _register_query_power_validation(tables: dict[str, Any], doc: dict[str, Any]
     actual = [r["actually_resolved"] for r in rounds]
     precision = [r["precision"] for r in rounds if r["precision"] is not None]
     recall = [r["recall"] for r in rounds if r["recall"] is not None]
-    overshoot = (sum(predicted) / len(predicted)) / (sum(actual) / len(actual)) if sum(actual) else 0.0
+    overshoot = (math.fsum(predicted) / len(predicted)) / (math.fsum(actual) / len(actual)) if sum(actual) else 0.0
     tables["query_power_validation"] = _table(
         "Does the prediction hold up on a holdout",
         ["Check", "Expected", "Measured", "Reading"],
@@ -1797,13 +1797,13 @@ def _register_query_power_validation(tables: dict[str, Any], doc: dict[str, Any]
             [
                 "Ties predicted to resolve",
                 "matches actual",
-                f"{sum(predicted) / len(predicted):.0f} predicted, {sum(actual) / len(actual):.0f} actual",
+                f"{math.fsum(predicted) / len(predicted):.0f} predicted, {math.fsum(actual) / len(actual):.0f} actual",
                 f"optimistic by {overshoot:.2f}x",
             ],
             [
                 "Which ties resolve",
                 "1.00 precision",
-                f"{sum(precision) / len(precision):.2f} precision, {sum(recall) / len(recall):.2f} recall",
+                f"{math.fsum(precision) / len(precision):.2f} precision, {math.fsum(recall) / len(recall):.2f} recall",
                 "barely better than chance per comparison",
             ],
         ],
