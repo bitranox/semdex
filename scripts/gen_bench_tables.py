@@ -129,7 +129,7 @@ def _display_profile(axes: dict[str, Any]) -> str:
     # label carrying different numbers. markdown and fast honour it as a re-split; only the
     # chonkie strategies ignore the setting, and printing ov0tok on those would be a lie.
     if strategy in _OVERLAP_AWARE_STRATEGIES:
-        percent = f" ({_overlap_percent(overlap, size)}%)" if _is_rung(size) and size > 0 else ""
+        percent = f" ({_overlap_percent(overlap, size)}%)" if isinstance(size, int) and size > 0 else ""
         label += f" ov{overlap}tok{percent}"
     breakpoint_model = axes.get("breakpoint_model")
     if breakpoint_model:

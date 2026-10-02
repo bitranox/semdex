@@ -85,20 +85,25 @@ import importlib.util, sys
 from pathlib import Path
 import pytest
 
+
 def _load():
     path = Path(__file__).resolve().parents[1] / "scripts" / "preembed_vectors.py"
     spec = importlib.util.spec_from_file_location("preembed_vectors", path)
-    mod = importlib.util.module_from_spec(spec); sys.modules[spec.name] = mod
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
     return mod
+
 
 def test_num_batch_unset_keeps_server_default(monkeypatch):
     monkeypatch.delenv("SEMDEX_PREEMBED_NUM_BATCH", raising=False)
     assert _load()._num_batch_from_env() is None
 
+
 def test_num_batch_read_as_int(monkeypatch):
     monkeypatch.setenv("SEMDEX_PREEMBED_NUM_BATCH", "4096")
     assert _load()._num_batch_from_env() == 4096
+
 
 @pytest.mark.parametrize("bad", ["0", "-1", "abc"])
 def test_num_batch_refuses_nonsense(monkeypatch, bad):
@@ -141,11 +146,13 @@ In `_ensure_vectors`, pass `num_batch=_num_batch_from_env() if backend is Embedd
 ```python
 from gen_bench_tables import _display_profile, _overlap_percent
 
+
 def test_percent_is_of_the_cap():
     assert _overlap_percent(51, 512) == 10
     assert _overlap_percent(128, 512) == 25
     assert _overlap_percent(205, 1024) == 20
     assert _overlap_percent(26, 256) == 10
+
 
 def test_label_carries_tokens_and_percent():
     axes = {"strategy": "recursive", "max_tokens": 512, "overlap_tokens": 102}

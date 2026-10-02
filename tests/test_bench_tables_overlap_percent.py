@@ -72,6 +72,10 @@ def test_overlap_levels_in_a_knob_row_carry_their_percent(generator: Any) -> Non
 
 
 def test_other_axes_keep_their_plain_levels(generator: Any) -> None:
-    effect = {**_overlap_effect(256, 512, 512), "axis": "max_tokens", "held_fixed": {"strategy": "recursive", "overlap_tokens": 0}}
+    effect = {
+        **_overlap_effect(256, 512, 512),
+        "axis": "max_tokens",
+        "held_fixed": {"strategy": "recursive", "overlap_tokens": 0},
+    }
     rows = generator._knob_rows([effect], "max_tokens", None)
     assert rows[0][3] == "256 to 512"
