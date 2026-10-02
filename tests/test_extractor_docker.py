@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from semdex.adapters.discovery.location import to_uri
 from semdex.adapters.extractor import DoclingExtractor, MarkitdownExtractor, XbergExtractor
 from semdex.domain.models import SourceRef
 
@@ -25,7 +26,7 @@ pytestmark = [pytest.mark.local_only, pytest.mark.os_agnostic]
 def _write(tmp_path: Path, name: str, data: bytes) -> SourceRef:
     path = tmp_path / name
     path.write_bytes(data)
-    return SourceRef(uri=str(path), label="curated", content_hash="h", mtime=1.0)
+    return SourceRef(uri=to_uri(path), label="curated", content_hash="h", mtime=1.0)
 
 
 def _http_ready(port: int, path: str) -> bool:
@@ -99,7 +100,7 @@ def test_xberg_extracts_text(xberg_endpoint: str, tmp_path: Path) -> None:
 def test_xberg_ocrs_scanned_image_with_force_ocr(xberg_endpoint: str) -> None:
     """With force_ocr the v4 image runs Tesseract on a scanned image and recovers its text."""
     scan = Path(__file__).parent / "fixtures" / "extract" / "scan.png"
-    src = SourceRef(uri=str(scan), label="curated", content_hash="h", mtime=1.0)
+    src = SourceRef(uri=to_uri(scan), label="curated", content_hash="h", mtime=1.0)
     doc = XbergExtractor(xberg_endpoint, force_ocr=True, ocr_language="eng")(src)
     assert "quick brown fox" in doc.text.lower()
 

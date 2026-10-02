@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from semdex.adapters.extractor import TextExtractor
 from semdex.adapters.discovery.location import to_uri
+from semdex.adapters.extractor import TextExtractor
 from semdex.domain.errors import ExtractionError
 from semdex.domain.models import ExtractedDocument, SourceRef
 

@@ -13,8 +13,8 @@ from typing import TYPE_CHECKING, Protocol
 import httpx
 import pytest
 
-from semdex.adapters.extractor import DoclingExtractor, MineruExtractor, XbergExtractor
 from semdex.adapters.discovery.location import to_uri
+from semdex.adapters.extractor import DoclingExtractor, MineruExtractor, XbergExtractor
 from semdex.domain.errors import ExtractionError
 from semdex.domain.models import SourceRef
 

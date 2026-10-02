@@ -65,7 +65,10 @@ def test_store_ranks_matching_chunk_first() -> None:
     embed = InMemoryEmbeddingProvider(dim=64)
     store = InMemoryVectorStore()
     store.ensure_collection(Collection(name="c", model_id=embed.model_id, dim=embed.dim))
-    chunks = [_chunk("apple banana cherry", "file:///mem/fruit.md"), _chunk("engine piston valve", "file:///mem/car.md")]
+    chunks = [
+        _chunk("apple banana cherry", "file:///mem/fruit.md"),
+        _chunk("engine piston valve", "file:///mem/car.md"),
+    ]
     store.upsert(collection="c", chunks=chunks, vectors=embed.embed_passages([c.text for c in chunks]))
 
     hits = store.query(collection="c", vector=embed.embed_query("banana cherry apple"), k=2)

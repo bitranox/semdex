@@ -42,6 +42,7 @@ import pytest
 import rtoml
 from _benchmark_report import ResultStatus, image_digest, record
 
+from semdex.adapters.discovery.location import to_uri
 from semdex.adapters.extractor import (
     DoclingExtractor,
     MarkitdownExtractor,
@@ -244,7 +245,7 @@ def _extract_and_score(extractor: Extract, fixture_name: str) -> tuple[float, fl
     per-extractor floor ("at least one phrase survives") is asserted by the targeted tests that
     call this, not here - so one weak cell is data, never a grid abort.
     """
-    source = SourceRef(uri=str(_FIXTURES_DIR / fixture_name), label="", content_hash="", mtime=0.0)
+    source = SourceRef(uri=to_uri(_FIXTURES_DIR / fixture_name), label="", content_hash="", mtime=0.0)
     phrases = _EXPECTED[fixture_name]["phrases"]
     started = time.perf_counter()
     text = extractor(source).text
@@ -440,7 +441,7 @@ def _score_corpus_extractor(
     recalls: list[float] = []
     similarities: list[float] = []
     for path, reference in docs:
-        source = SourceRef(uri=str(path), label="", content_hash="", mtime=0.0)
+        source = SourceRef(uri=to_uri(path), label="", content_hash="", mtime=0.0)
         text = extractor(source).text
         if isinstance(reference, list):
             recalls.append(_phrase_recall(text, reference))

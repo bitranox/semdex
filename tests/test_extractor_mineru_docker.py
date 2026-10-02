@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from semdex.adapters.discovery.location import to_uri
 from semdex.adapters.extractor import MineruExtractor
 from semdex.domain.models import SourceRef
 
@@ -67,6 +68,6 @@ def mineru_endpoint(service_container: Callable[..., int]) -> str:
 def test_mineru_extracts_markdown(mineru_endpoint: str, tmp_path: Path) -> None:
     path = tmp_path / "hello.pdf"
     path.write_bytes(_MINIMAL_PDF)
-    source = SourceRef(uri=str(path), label="curated", content_hash="h", mtime=1.0)
+    source = SourceRef(uri=to_uri(path), label="curated", content_hash="h", mtime=1.0)
     doc = MineruExtractor(mineru_endpoint)(source)
     assert "Hello world" in doc.text

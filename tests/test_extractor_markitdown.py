@@ -17,12 +17,12 @@ from pathlib import Path
 import pytest
 from mcp.types import CallToolResult, TextContent
 
+from semdex.adapters.discovery.location import to_uri
 from semdex.adapters.extractor.markitdown import (
     MarkitdownExtractor,
     _mcp_url,  # pyright: ignore[reportPrivateUsage]
     _text_of,  # pyright: ignore[reportPrivateUsage]
 )
-from semdex.adapters.discovery.location import to_uri
 from semdex.domain.errors import ExtractionError
 from semdex.domain.models import SourceRef
 
