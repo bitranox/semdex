@@ -32,7 +32,6 @@ import json
 import os
 import platform
 import shutil
-import subprocess
 import sys
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -43,6 +42,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from _provenance import source_git_sha
 from _score_kernel import topk_stream
 from preembed_vectors import cache_root, read_json
 from score_chunk_sweep import dirsafe, metrics, query_vectors
@@ -122,20 +122,6 @@ class Cell:
     qids: list[str]
     queries: np.ndarray
     qrels: dict[str, dict[str, int]]
-
-
-def _git_sha() -> str:
-    try:
-        out = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"],
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=Path(__file__).resolve().parents[1],
-        )
-        return out.stdout.strip()
-    except (subprocess.CalledProcessError, OSError):
-        return "unknown"
 
 
 def load_cell(corpus: str, profile: str, embedding: str) -> Cell | None:
@@ -310,7 +296,7 @@ def sweep_backend(
 def _environment() -> dict[str, Any]:
     return {
         "generated_utc": datetime.now(UTC).isoformat(timespec="seconds"),
-        "semdex_git_sha": _git_sha(),
+        "semdex_git_sha": source_git_sha(),
         "host": platform.node(),
         "cpu": platform.processor() or platform.machine(),
         "python": platform.python_version(),

@@ -38,7 +38,6 @@ import json
 import platform
 import random
 import re
-import subprocess
 import sys
 import tempfile
 import time
@@ -52,6 +51,8 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from _provenance import source_git_sha
 
 from semdex.composition import build_extractor
 from semdex.domain.enums import ExtractorBackend
@@ -116,20 +117,6 @@ class Page:
     @property
     def text(self) -> str:
         return "\n".join(self.blocks)
-
-
-def _git_sha() -> str:
-    try:
-        out = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"],
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=Path(__file__).resolve().parents[1],
-        )
-        return out.stdout.strip()
-    except (subprocess.CalledProcessError, OSError):
-        return "unknown"
 
 
 def normalize(text: str) -> str:
@@ -355,7 +342,7 @@ def merge_payload(existing: dict[str, Any], fresh: dict[str, Any], names: Sequen
 def _environment() -> dict[str, Any]:
     return {
         "generated_utc": datetime.now(UTC).isoformat(timespec="seconds"),
-        "semdex_git_sha": _git_sha(),
+        "semdex_git_sha": source_git_sha(),
         "host": platform.node(),
         "cpu": platform.processor() or platform.machine(),
         "python": platform.python_version(),

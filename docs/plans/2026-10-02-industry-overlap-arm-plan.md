@@ -53,7 +53,7 @@ The GPU chain runs about 7-8 days in total. Task 3 re-measures every rate on rea
 - cap512 rungs: overlap 0/51/77/102/128 tokens (0/10/15/20/25 percent). cap1024 rungs: 0/102/154/205 (0/10/15/20 percent). Tokenizer `gpt2`, chunker `recursive`, recipe `""`.
 - Corpora: `mldr_en_8k_slice`, `mldr_de_3k_slice` (scores -> `/embeddings/scores/mldr_chunk_scores.json`) and `gerdalir_de_12k_slice` (scores -> `gerdalir_chunk_scores.json`). Never `gerdalir_new_rungs_scores.json`, which the export does not read.
 - Long jobs:
-  - run from the FROZEN copy (`/home/srvadmin/semdex-sweep-run/scripts/` + `.venv-sweep`), and record `SOURCE_SHA-item12.txt`;
+  - run from the FROZEN copy (`/home/srvadmin/semdex-sweep-run/scripts/` + `.venv-sweep`), record `SOURCE_SHA-item12.txt`, and export `SEMDEX_SOURCE_SHA` from it: the frozen copy has no repository to ask, so without it every row is stamped `semdex_git_sha: unknown`;
   - wrap every Python step in `nice -n 19 ionice -c3`, launch the script with `setsid nohup`, and have it append `RC_*=` lines itself;
   - set `PYTHONUNBUFFERED=1`, `FASTEMBED_CACHE_PATH=/embeddings/.fastembed_cache` and ollama batch 128;
   - never put them in `run_in_background`.
@@ -216,8 +216,8 @@ The expensive embedders run on a 1,000-chunk sample only. Work dir: `/home/srvad
 **Files:** create `/home/srvadmin/semdex-sweep-run/item12-overlap-arm.sh` (private), copied from `item20-chunk-floor.sh`'s skeleton (frozen `.venv-sweep`, per-phase logs, RC lines).
 
 - [ ] **Step 1:** The script runs two chains in parallel (`&` + `wait`):
-  - **GPU:** `ollama:bge-m3,ollama:qwen3-embedding-4b,ollama:qwen3-embedding-8b`, batch 128, `SEMDEX_PREEMBED_NUM_BATCH=4096` if C6 required it. cap512 profiles first (all three corpora), then cap1024.
-  - **CPU:** `fastembed:bge-base` on the cap512 profiles minus any C5-dropped sets.
+  - **GPU:** `ollama:bge-m3,ollama:qwen3-embedding-4b,ollama:qwen3-embedding-8b`, batch 128, `SEMDEX_PREEMBED_NUM_BATCH=4096` (the pilot's C6 found it required: bge-m3 at ollama's default processes 2048 of up to 2157 tokens). cap512 profiles first (all three corpora), then cap1024.
+  - **CPU:** `fastembed:bge-base` on the cap512 profiles minus the C5-dropped sets (the pilot dropped four: GerDaLIR o128, MLDR de o128, MLDR en o102 and o128).
   - Then score per corpus file, all six embedders named explicitly in `SEMDEX_SCORE_EMBEDDINGS` (the default skips ollama), writing `RC_SCORE`. Then `audit_chunk_dimensions.py` and the truncation census, writing `RC_AUDIT`. Final line: `DONE`.
 - [ ] **Step 2:** Launch with `setsid nohup bash item12-overlap-arm.sh > logs/item12-<ts>.log 2>&1 &`. Within 60 s, verify the first vectors.npy.tmp is growing and both chains are alive.
 - [ ] **Step 3:** Arm the monitoring like the bp-sweep monitor:

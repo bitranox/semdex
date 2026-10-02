@@ -44,7 +44,6 @@ import hashlib
 import json
 import os
 import re
-import subprocess
 import sys
 from collections import defaultdict
 from datetime import UTC, datetime
@@ -53,6 +52,10 @@ from typing import Any
 
 import numpy as np
 import pyarrow.parquet as pq
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # import the sibling provenance helper
+
+from _provenance import source_git_sha
 
 _ROOT = Path(__file__).resolve().parent.parent
 _BATCH = 16384
@@ -71,19 +74,6 @@ _KNOWN_RECIPES = ("markdown",)
 
 def _cache_root() -> Path:
     return Path(os.environ.get("CACHE_ROOT", "/embeddings"))
-
-
-def _git_sha() -> str:
-    try:
-        out = subprocess.run(
-            ["git", "-C", str(_ROOT), "rev-parse", "--short", "HEAD"],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-    except (OSError, subprocess.CalledProcessError):
-        return "unknown"
-    return out.stdout.strip()
 
 
 def parse_profile(profile: str) -> dict[str, Any]:
@@ -565,7 +555,7 @@ def main() -> None:
         json.dumps(
             {
                 "generated_utc": datetime.now(UTC).isoformat(timespec="seconds"),
-                "semdex_git_sha": _git_sha(),
+                "semdex_git_sha": source_git_sha(),
                 "cache_root": str(cache),
                 "chunk_sets": rows,
                 "axis_effects": effects,

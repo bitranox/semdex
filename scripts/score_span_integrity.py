@@ -39,7 +39,6 @@ import argparse
 import json
 import os
 import platform
-import subprocess
 import sys
 from bisect import bisect_right
 from collections.abc import Callable, Iterator, Sequence
@@ -54,6 +53,7 @@ import pyarrow.parquet as pq  # pyright: ignore[reportMissingTypeStubs] - pyarro
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from _provenance import source_git_sha
 from _score_stats import bootstrap_ci, paired_ci
 
 from semdex.composition import build_chunker, build_embedding
@@ -94,20 +94,6 @@ class Corpus:
     contexts: list[str]
     items: list[QaItem]
     dropped_offsets: int
-
-
-def _git_sha() -> str:
-    try:
-        out = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"],
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=Path(__file__).resolve().parents[1],
-        )
-        return out.stdout.strip()
-    except (subprocess.CalledProcessError, OSError):
-        return "unknown"
 
 
 def _dataset_paths() -> dict[str, Path]:
@@ -550,7 +536,7 @@ def merge_payload(existing: dict[str, Any], fresh: dict[str, Any]) -> dict[str, 
 def _environment() -> dict[str, Any]:
     return {
         "generated_utc": datetime.now(UTC).isoformat(timespec="seconds"),
-        "semdex_git_sha": _git_sha(),
+        "semdex_git_sha": source_git_sha(),
         "host": platform.node(),
         "cpu": platform.processor() or platform.machine(),
         "python": platform.python_version(),

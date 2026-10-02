@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import os
 import platform
+import re
 import socket
 import subprocess
 from datetime import UTC, datetime
@@ -31,12 +32,17 @@ from typing import Any
 
 import numpy as np
 
-__all__ = ["MEASURED_ON", "measurement_provenance", "stamped"]
+__all__ = ["MEASURED_ON", "measurement_provenance", "source_git_sha", "stamped"]
 
 # The key a stamp is written under, on the cell it describes.
 MEASURED_ON = "measured_on"
 
 _ROOT = Path(__file__).resolve().parent.parent
+
+# A sweep run from a copy of scripts/ frozen outside the repo cannot ask git which commit it is; its
+# run script exports the frozen sha here instead.
+SOURCE_SHA_ENV = "SEMDEX_SOURCE_SHA"
+_SHA_RE = re.compile(r"[0-9a-f]{7,40}")
 
 
 def _run(args: list[str]) -> str:
@@ -57,6 +63,19 @@ def _blas() -> str:
         return "unknown"
 
 
+def source_git_sha() -> str:
+    """The commit of the code doing the measuring: SEMDEX_SOURCE_SHA, else git, else "unknown".
+
+    The variable wins because a frozen copy has no repository to ask, and a git lookup from there
+    could reach an unrelated enclosing repository. A value that is not a hex sha is ignored rather
+    than stamped, so a mistyped export cannot put arbitrary text into every row.
+    """
+    declared = os.environ.get(SOURCE_SHA_ENV, "").strip().lower()
+    if _SHA_RE.fullmatch(declared):
+        return declared
+    return _run(["git", "-C", str(_ROOT), "rev-parse", "--short", "HEAD"])
+
+
 def measurement_provenance() -> dict[str, Any]:
     """Stamp for a cell being measured RIGHT NOW.
 
@@ -65,7 +84,7 @@ def measurement_provenance() -> dict[str, Any]:
     """
     return {
         "measured_utc": datetime.now(UTC).isoformat(timespec="seconds"),
-        "semdex_git_sha": _run(["git", "-C", str(_ROOT), "rev-parse", "--short", "HEAD"]),
+        "semdex_git_sha": source_git_sha(),
         "host": socket.gethostname(),
         "cpu": platform.processor() or platform.machine(),
         "python": platform.python_version(),
