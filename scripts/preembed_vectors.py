@@ -37,6 +37,10 @@ All config is via environment variables (the scripts/ convention - no argparse):
                               which is why 256 is the ollama default (matches the #45 throughput
                               bench). Keep batch/docs_per_sec under the adapter's 60s httpx timeout
                               (512 @ ~38/s = ~13s, safe).
+  SEMDEX_PREEMBED_NUM_BATCH   ollama's physical batch in tokens (default unset = the server's 2048).
+                              ollama embeds a longer input from its first num_batch tokens and still
+                              answers 200, so set it to at least the longest chunk (cap + overlap) in
+                              model tokens for long chunk sets. Ignored for non-ollama backends.
   SEMDEX_PREEMBED_EMBED_THREADS cap the CPU embedder's (fastembed/onnxruntime) intra-op threads;
                               unset = onnxruntime's default (one spinning thread per core, which
                               thrashes on a shared/contended box). Set to ~half the cores there.
@@ -203,6 +207,20 @@ def _chunk_profile() -> str:
 
 def _chunks_dir(corpus: str) -> Path:
     return _cache_root() / "chunks" / f"{corpus}__{_chunk_profile()}"
+
+
+def _num_batch_from_env() -> int | None:
+    """ollama's physical batch from SEMDEX_PREEMBED_NUM_BATCH; None keeps the server default.
+
+    The default (2048 tokens) silently embeds a longer input from its prefix, so a run over long
+    chunks must raise it; a value that is not a positive integer stops the run before any spend.
+    """
+    raw = os.environ.get("SEMDEX_PREEMBED_NUM_BATCH")
+    if raw is None:
+        return None
+    if not raw.isdigit() or int(raw) <= 0:
+        raise SystemExit(f"SEMDEX_PREEMBED_NUM_BATCH must be a positive integer, got {raw!r}")
+    return int(raw)
 
 
 def _cell_id(corpus: str, label: str) -> str:
@@ -520,7 +538,10 @@ def _ensure_vectors(corpus: str, label: str, chunk_count: int) -> None:
     # way; the real speed lever is GPU embedding, not thread count).
     threads_env = os.environ.get("SEMDEX_PREEMBED_EMBED_THREADS")
     threads = int(threads_env) if threads_env else None
-    embedding = build_embedding(backend, model=model_id, endpoint=endpoint, threads=threads, allow_fallback=False)
+    num_batch = _num_batch_from_env() if backend is EmbeddingBackend.OLLAMA else None
+    embedding = build_embedding(
+        backend, model=model_id, endpoint=endpoint, threads=threads, num_batch=num_batch, allow_fallback=False
+    )
     dim = embedding.dim
 
     if _vectors_complete(corpus, label, chunk_count, dim):
