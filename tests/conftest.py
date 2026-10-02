@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import lib_cli_exit_tools
+import lib_log_rich.runtime
 import pytest
 from click.testing import CliRunner
 from lib_layered_config import Config
@@ -99,6 +100,22 @@ def _restore_cli_config(snapshot: dict[str, object]) -> None:
     """Reapply a configuration snapshot captured by ``_snapshot_cli_config``."""
     for name, value in snapshot.items():
         setattr(lib_cli_exit_tools.config, name, value)
+
+
+@pytest.fixture(autouse=True)
+def shut_down_logging_runtime_after_each_test() -> Iterator[None]:
+    """End a logging runtime a test started, as ``main()`` does when an invocation ends.
+
+    A test that drives the CLI through ``CliRunner.invoke(cli, ...)`` reaches ``init_logging``
+    but never ``main()``, whose ``finally`` is what shuts the runtime down. Left running, its
+    queue worker thread outlives the test and renders every later test's log events into the
+    stream that was current when it started. When that write hit a broken pipe on macOS, rich's
+    handler ran ``os.dup2(devnull, sys.stdout.fileno())`` from that thread and took pytest's own
+    capture descriptor with it: every test after it errored with "Bad file descriptor".
+    """
+    yield
+    if lib_log_rich.runtime.is_initialised():
+        lib_log_rich.runtime.shutdown()
 
 
 @pytest.fixture
