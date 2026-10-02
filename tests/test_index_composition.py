@@ -57,11 +57,12 @@ def test_wired_services_index_and_search_end_to_end() -> None:
     services.store_writer.ensure_collection(coll)
 
     for path in documents:
-        source = SourceRef(uri=str(path), label="curated", content_hash="h", mtime=0.0)
+        # as_posix keeps the drive-less in-memory path the same URI on every platform.
+        source = SourceRef(uri=f"file://{path.as_posix()}", label="curated", content_hash="h", mtime=0.0)
         document = services.extract(source)
         chunks = services.chunk(document, max_tokens=100)
         vectors = services.embedding.embed_passages([chunk.text for chunk in chunks])
         services.store_writer.upsert(collection="c", chunks=chunks, vectors=vectors)
 
     hits = services.store_reader.query(collection="c", vector=services.embedding.embed_query("apple banana"), k=1)
-    assert hits[0].uri == "/mem/fruit.md"
+    assert hits[0].uri == "file:///mem/fruit.md"

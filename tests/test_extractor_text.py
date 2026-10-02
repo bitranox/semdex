@@ -7,12 +7,13 @@ from pathlib import Path
 import pytest
 
 from semdex.adapters.extractor import TextExtractor
+from semdex.adapters.discovery.location import to_uri
 from semdex.domain.errors import ExtractionError
 from semdex.domain.models import ExtractedDocument, SourceRef
 
 
 def _source(path: Path) -> SourceRef:
-    return SourceRef(uri=str(path), label="", content_hash="h", mtime=0.0)
+    return SourceRef(uri=to_uri(path), label="", content_hash="h", mtime=0.0)
 
 
 @pytest.mark.os_agnostic

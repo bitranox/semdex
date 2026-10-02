@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from semdex.adapters.discovery.location import from_uri, to_uri
 
 
@@ -37,3 +39,18 @@ def test_from_uri_decodes_unicode(tmp_path: Path) -> None:
     path = tmp_path / "café.md"
 
     assert from_uri(to_uri(path)) == path.resolve()
+
+
+@pytest.mark.parametrize(
+    "not_a_file_uri",
+    ["/tmp/a.md", "C:\\Users\\x\\a.md", "a.md", "semdex://knowledge/abc", "https://example.com/a.md"],
+)
+def test_from_uri_refuses_anything_but_a_file_uri(not_a_file_uri: str) -> None:
+    """A bare path or another scheme is refused instead of read as a path.
+
+    A bare POSIX path happens to survive urlparse, so a caller passing one works
+    on Linux and loses the drive on Windows (urlparse reads "C:" as a scheme).
+    Refusing it on every platform makes that mistake fail where it is made.
+    """
+    with pytest.raises(ValueError, match="file:"):
+        from_uri(not_a_file_uri)

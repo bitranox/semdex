@@ -14,6 +14,7 @@ import httpx
 import pytest
 
 from semdex.adapters.extractor import DoclingExtractor, MineruExtractor, XbergExtractor
+from semdex.adapters.discovery.location import to_uri
 from semdex.domain.errors import ExtractionError
 from semdex.domain.models import SourceRef
 
@@ -55,7 +56,7 @@ _ALL_ADAPTERS: list[_RestAdapterCls] = [XbergExtractor, DoclingExtractor, Mineru
 def _source(tmp_path: Path, *, name: str = "doc.pdf", data: bytes = b"payload") -> SourceRef:
     path = tmp_path / name
     path.write_bytes(data)
-    return SourceRef(uri=str(path), label="lbl", content_hash="h", mtime=1.0)
+    return SourceRef(uri=to_uri(path), label="lbl", content_hash="h", mtime=1.0)
 
 
 def _client(handler: Callable[[httpx.Request], httpx.Response]) -> httpx.Client:

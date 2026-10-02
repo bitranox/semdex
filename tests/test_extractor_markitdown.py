@@ -22,6 +22,7 @@ from semdex.adapters.extractor.markitdown import (
     _mcp_url,  # pyright: ignore[reportPrivateUsage]
     _text_of,  # pyright: ignore[reportPrivateUsage]
 )
+from semdex.adapters.discovery.location import to_uri
 from semdex.domain.errors import ExtractionError
 from semdex.domain.models import SourceRef
 
@@ -31,7 +32,7 @@ pytestmark = pytest.mark.os_agnostic
 def _source(tmp_path: Path, *, name: str = "report.docx", data: bytes = b"payload") -> SourceRef:
     path = tmp_path / name
     path.write_bytes(data)
-    return SourceRef(uri=str(path), label="lbl", content_hash="h", mtime=1.0)
+    return SourceRef(uri=to_uri(path), label="lbl", content_hash="h", mtime=1.0)
 
 
 def test_happy_path_encodes_data_uri_and_returns_markdown(tmp_path: Path) -> None:

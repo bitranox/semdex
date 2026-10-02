@@ -22,11 +22,11 @@ from semdex.domain.errors import CollectionModelMismatchError, ExtractionError
 from semdex.domain.models import ChangeEvent, Chunk, Collection, ExtractedDocument, SourceRef
 
 
-def _source(path: str = "/mem/a.md") -> SourceRef:
+def _source(path: str = "file:///mem/a.md") -> SourceRef:
     return SourceRef(uri=str(path), label="curated", content_hash="h", mtime=0.0)
 
 
-def _chunk(text: str, path: str = "/mem/a.md") -> Chunk:
+def _chunk(text: str, path: str = "file:///mem/a.md") -> Chunk:
     return Chunk(text=text, source=_source(path), ordinal=0, token_count=len(text.split()))
 
 
@@ -65,12 +65,12 @@ def test_store_ranks_matching_chunk_first() -> None:
     embed = InMemoryEmbeddingProvider(dim=64)
     store = InMemoryVectorStore()
     store.ensure_collection(Collection(name="c", model_id=embed.model_id, dim=embed.dim))
-    chunks = [_chunk("apple banana cherry", "/mem/fruit.md"), _chunk("engine piston valve", "/mem/car.md")]
+    chunks = [_chunk("apple banana cherry", "file:///mem/fruit.md"), _chunk("engine piston valve", "file:///mem/car.md")]
     store.upsert(collection="c", chunks=chunks, vectors=embed.embed_passages([c.text for c in chunks]))
 
     hits = store.query(collection="c", vector=embed.embed_query("banana cherry apple"), k=2)
 
-    assert hits[0].uri == "/mem/fruit.md"
+    assert hits[0].uri == "file:///mem/fruit.md"
     assert hits[0].score >= hits[1].score
 
 
@@ -80,7 +80,7 @@ def test_store_hit_carries_chunk_ordinal() -> None:
     embed = InMemoryEmbeddingProvider(dim=64)
     store = InMemoryVectorStore()
     store.ensure_collection(Collection(name="c", model_id=embed.model_id, dim=embed.dim))
-    chunk = Chunk(text="apple banana cherry", source=_source("/mem/fruit.md"), ordinal=7, token_count=3)
+    chunk = Chunk(text="apple banana cherry", source=_source("file:///mem/fruit.md"), ordinal=7, token_count=3)
     store.upsert(collection="c", chunks=[chunk], vectors=embed.embed_passages([chunk.text]))
 
     hits = store.query(collection="c", vector=embed.embed_query("banana cherry apple"), k=1)
@@ -96,19 +96,19 @@ def test_store_source_hashes_maps_uri_to_content_hash() -> None:
     store.ensure_collection(Collection(name="c", model_id=embed.model_id, dim=embed.dim))
     a = Chunk(
         text="alpha",
-        source=SourceRef(uri="/a.md", label="", content_hash="ha", mtime=0.0),
+        source=SourceRef(uri="file:///a.md", label="", content_hash="ha", mtime=0.0),
         ordinal=0,
         token_count=1,
     )
     b = Chunk(
         text="beta",
-        source=SourceRef(uri="/b.md", label="", content_hash="hb", mtime=0.0),
+        source=SourceRef(uri="file:///b.md", label="", content_hash="hb", mtime=0.0),
         ordinal=0,
         token_count=1,
     )
     store.upsert(collection="c", chunks=[a, b], vectors=embed.embed_passages(["alpha", "beta"]))
 
-    assert store.source_hashes(collection="c") == {"/a.md": "ha", "/b.md": "hb"}
+    assert store.source_hashes(collection="c") == {"file:///a.md": "ha", "file:///b.md": "hb"}
 
 
 @pytest.mark.os_agnostic
@@ -127,13 +127,13 @@ def test_store_count_delete_and_collections() -> None:
     store = InMemoryVectorStore()
     coll = Collection(name="c", model_id=embed.model_id, dim=embed.dim)
     store.ensure_collection(coll)
-    chunk = _chunk("hi", "/mem/a.md")
+    chunk = _chunk("hi", "file:///mem/a.md")
     store.upsert(collection="c", chunks=[chunk], vectors=[embed.embed_query("hi")])
 
     assert store.count(collection="c") == 1
     assert store.collections() == [coll]
 
-    store.delete_by_source(collection="c", uri="/mem/a.md")
+    store.delete_by_source(collection="c", uri="file:///mem/a.md")
     assert store.count(collection="c") == 0
 
 
@@ -171,7 +171,7 @@ def test_watcher_delivers_emitted_events_until_stopped() -> None:
 @pytest.mark.os_agnostic
 def test_extractor_returns_registered_document() -> None:
     """The in-memory extractor returns text registered for the source path."""
-    ref = _source("/mem/a.md")
+    ref = _source("file:///mem/a.md")
     extractor = InMemoryExtractor({Path("/mem/a.md"): "# Title\nbody"})
     assert extractor(ref) == ExtractedDocument(source=ref, text="# Title\nbody")
 
@@ -181,13 +181,13 @@ def test_extractor_raises_for_unknown_path() -> None:
     """An unregistered path is an extraction error, not a silent empty doc."""
     extractor = InMemoryExtractor({})
     with pytest.raises(ExtractionError):
-        extractor(_source("/mem/missing.md"))
+        extractor(_source("file:///mem/missing.md"))
 
 
 @pytest.mark.os_agnostic
 def test_chunker_splits_into_bounded_chunks() -> None:
     """The chunker splits a document into token-bounded chunks preserving order."""
-    ref = _source("/mem/a.md")
+    ref = _source("file:///mem/a.md")
     doc = ExtractedDocument(source=ref, text="one two three four five six")
     chunks = chunk_in_memory(doc, max_tokens=2)
 

@@ -83,29 +83,29 @@ def _run(
 def test_reconcile_indexes_new_and_prunes_vanished() -> None:
     """A source absent from the connector's next listing is pruned; a new one is indexed."""
     store, embed, extract = _fixture()
-    _run(store, embed, extract, [_ref("/a.md", "ha"), _ref("/b.md", "hb")])
-    assert store.source_hashes(collection="c") == {"/a.md": "ha", "/b.md": "hb"}
+    _run(store, embed, extract, [_ref("file:///a.md", "ha"), _ref("file:///b.md", "hb")])
+    assert store.source_hashes(collection="c") == {"file:///a.md": "ha", "file:///b.md": "hb"}
 
-    _run(store, embed, extract, [_ref("/a.md", "ha"), _ref("/c.md", "hc")])  # /b.md vanished, /c.md new
-    assert store.source_hashes(collection="c") == {"/a.md": "ha", "/c.md": "hc"}
+    _run(store, embed, extract, [_ref("file:///a.md", "ha"), _ref("file:///c.md", "hc")])  # /b.md vanished, /c.md new
+    assert store.source_hashes(collection="c") == {"file:///a.md": "ha", "file:///c.md": "hc"}
 
 
 @pytest.mark.os_agnostic
 def test_reconcile_reindexes_a_changed_source() -> None:
     """A source whose content_hash changed is re-indexed at the new hash."""
     store, embed, extract = _fixture()
-    _run(store, embed, extract, [_ref("/a.md", "ha")])
-    _run(store, embed, extract, [_ref("/a.md", "ha2")])  # same uri, new hash
-    assert store.source_hashes(collection="c") == {"/a.md": "ha2"}
+    _run(store, embed, extract, [_ref("file:///a.md", "ha")])
+    _run(store, embed, extract, [_ref("file:///a.md", "ha2")])  # same uri, new hash
+    assert store.source_hashes(collection="c") == {"file:///a.md": "ha2"}
 
 
 @pytest.mark.os_agnostic
 def test_reconcile_skips_unchanged_sources_without_reembedding() -> None:
     """An unchanged source (same uri, same hash) is not re-embedded."""
     store, embed, extract = _fixture()
-    _run(store, embed, extract, [_ref("/a.md", "ha"), _ref("/b.md", "hb")])
+    _run(store, embed, extract, [_ref("file:///a.md", "ha"), _ref("file:///b.md", "hb")])
     assert embed.passages_embedded == 2  # one chunk each, first index
 
     embed.passages_embedded = 0
-    _run(store, embed, extract, [_ref("/a.md", "ha"), _ref("/b.md", "hb")])  # nothing changed
+    _run(store, embed, extract, [_ref("file:///a.md", "ha"), _ref("file:///b.md", "hb")])  # nothing changed
     assert embed.passages_embedded == 0

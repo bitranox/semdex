@@ -27,5 +27,25 @@ def to_uri(path: Path) -> str:
 
 
 def from_uri(uri: str) -> Path:
-    """Return the filesystem path named by a ``file://`` *uri* (inverse of :func:`to_uri`)."""
-    return Path(url2pathname(urlparse(uri).path))
+    """Return the filesystem path named by a ``file://`` *uri* (inverse of :func:`to_uri`).
+
+    Args:
+        uri: A ``file:`` URI, as produced by :func:`to_uri`.
+
+    Returns:
+        The path the URI names.
+
+    Raises:
+        ValueError: *uri* is not a ``file:`` URI. A bare path is refused too: a POSIX
+            one would happen to parse, but a Windows one loses its drive (``urlparse``
+            reads ``C:`` as the scheme), so accepting either hides the mistake on
+            every platform but one.
+
+    Examples:
+        >>> from_uri("file:///srv/notes/a%20b.md").name
+        'a b.md'
+    """
+    parsed = urlparse(uri)
+    if parsed.scheme != "file":
+        raise ValueError(f"not a file: URI: {uri!r}")
+    return Path(url2pathname(parsed.path))

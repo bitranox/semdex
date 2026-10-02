@@ -55,7 +55,7 @@ def test_index_sources_reports_and_persists_chunks() -> None:
     """Indexing extracts, chunks, embeds and upserts every source."""
     services = build_index_testing(documents={Path("/mem/a.md"): "alpha beta", Path("/mem/b.md"): "gamma delta"})
 
-    report = _index(services, _sources("/mem/a.md", "/mem/b.md"))
+    report = _index(services, _sources("file:///mem/a.md", "file:///mem/b.md"))
 
     assert report == IndexReport(sources_indexed=2, chunks_indexed=2)
     assert services.store_reader.count(collection=_COLLECTION) == 2
@@ -65,7 +65,7 @@ def test_index_sources_reports_and_persists_chunks() -> None:
 def test_index_sources_is_idempotent_on_reindex() -> None:
     """Reindexing the same sources replaces chunks instead of duplicating them."""
     services = build_index_testing(documents={Path("/mem/a.md"): "alpha beta gamma"})
-    sources = _sources("/mem/a.md")
+    sources = _sources("file:///mem/a.md")
 
     _index(services, sources)
     _index(services, sources)
@@ -78,7 +78,7 @@ def test_index_sources_skips_empty_document() -> None:
     """A source with no extractable text contributes zero chunks."""
     services = build_index_testing(documents={Path("/mem/a.md"): ""})
 
-    report = _index(services, _sources("/mem/a.md"))
+    report = _index(services, _sources("file:///mem/a.md"))
 
     assert report == IndexReport(sources_indexed=1, chunks_indexed=0)
     assert services.store_reader.count(collection=_COLLECTION) == 0
@@ -88,7 +88,7 @@ def test_index_sources_skips_empty_document() -> None:
 def test_index_sources_without_summarizer_leaves_summary_none() -> None:
     """The tier is off by default: hits carry no summary and behaviour is unchanged."""
     services = build_index_testing(documents={Path("/mem/a.md"): "alpha beta"})
-    _index(services, _sources("/mem/a.md"))
+    _index(services, _sources("file:///mem/a.md"))
 
     hits = search(embedding=services.embedding, store=services.store_reader, collection=_COLLECTION, query="alpha", k=1)
     assert hits[0].summary is None
@@ -111,7 +111,7 @@ def test_index_sources_attaches_one_document_summary_and_round_trips_it() -> Non
         embedding=services.embedding,
         store=services.store_writer,
         collection=_COLLECTION,
-        sources=_sources("/mem/doc.md"),
+        sources=_sources("file:///mem/doc.md"),
         max_tokens=2,  # force several chunks per document
         summarize=summarizer,
     )
@@ -133,7 +133,7 @@ def test_search_ranks_matching_source_first() -> None:
             Path("/mem/car.md"): "engine piston valve",
         }
     )
-    _index(services, _sources("/mem/fruit.md", "/mem/car.md"))
+    _index(services, _sources("file:///mem/fruit.md", "file:///mem/car.md"))
 
     hits = search(
         embedding=services.embedding,
@@ -143,7 +143,7 @@ def test_search_ranks_matching_source_first() -> None:
         k=2,
     )
 
-    assert hits[0].uri == "/mem/fruit.md"
+    assert hits[0].uri == "file:///mem/fruit.md"
 
 
 @pytest.mark.os_agnostic
@@ -152,7 +152,7 @@ def test_search_respects_k() -> None:
     services = build_index_testing(
         documents={Path("/mem/a.md"): "one", Path("/mem/b.md"): "two", Path("/mem/c.md"): "three"}
     )
-    _index(services, _sources("/mem/a.md", "/mem/b.md", "/mem/c.md"))
+    _index(services, _sources("file:///mem/a.md", "file:///mem/b.md", "file:///mem/c.md"))
 
     hits = search(
         embedding=services.embedding,
