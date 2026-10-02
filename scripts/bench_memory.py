@@ -47,7 +47,14 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from _bench_memory import Measurement, current_rss_mb, interpreter_baseline_mb, peak_rss_mb, run_cell
+from _bench_memory import (
+    Measurement,
+    can_measure,
+    current_rss_mb,
+    interpreter_baseline_mb,
+    peak_rss_mb,
+    run_cell,
+)
 
 DEFAULT_SCALES = (1_000, 10_000, 50_000)
 DEFAULT_STORES = ("json", "sqlite_vec", "lancedb")
@@ -195,6 +202,9 @@ def main() -> None:
     if os.environ.get("CELL_KIND") == "embedder":
         return embedder_cell()
 
+    if not can_measure():
+        # Every row would read 0.0 MB, which looks like a result rather than a missing one.
+        sys.exit("bench_memory: this platform has neither /proc nor getrusage, so no peak can be measured")
     me = Path(__file__).resolve()
     baseline = interpreter_baseline_mb()
     print(f"interpreter baseline: {baseline} MB (subtracted from every row)", flush=True)

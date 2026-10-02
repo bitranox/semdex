@@ -116,12 +116,15 @@ def _iterations_for(work: Callable[[], int], min_seconds: float) -> int:
     return max(1, int(min_seconds / once) + 1)
 
 
-def load_snapshot() -> dict[str, float | int]:
+def load_snapshot() -> dict[str, float | int | None]:
     """What else the machine was doing, recorded beside every rate.
 
     A throughput number from a shared box is only readable next to its load, and this repo's were
-    published without it.
+    published without it. The load fields are None on Windows, which has no load average: an
+    unrecorded load, never a zero one.
     """
+    if not hasattr(os, "getloadavg"):
+        return {"load_1min": None, "load_5min": None, "load_15min": None, "cores": os.cpu_count() or 0}
     one, five, fifteen = os.getloadavg()
     return {
         "load_1min": round(one, 2),

@@ -48,6 +48,8 @@ def test_peak_is_reported_in_megabytes_not_kilobytes(mem: Any) -> None:
     A running interpreter holds a few MB and nowhere near a few GB, so a wrong unit lands far
     outside this band rather than looking merely surprising.
     """
+    if not mem.can_measure():
+        pytest.skip("no /proc and no resource module (Windows): nothing to read a peak from")
     peak = mem.peak_rss_mb()
 
     assert 1.0 < peak < 4000.0
@@ -85,6 +87,17 @@ def test_a_missing_status_file_does_not_crash_the_run(mem: Any, tmp_path: Path) 
     assert mem.peak_rss_mb(source=tmp_path / "absent") >= 0.0
 
 
+def test_a_platform_with_neither_proc_nor_resource_reads_zero_and_says_it_cannot_measure(
+    mem: Any, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Windows has no /proc and no resource module: the helper degrades to 0.0, and can_measure
+    says so, which is what lets the driver refuse to publish a table of zeros."""
+    monkeypatch.setitem(sys.modules, "resource", None)  # makes `import resource` raise ImportError
+
+    assert mem.peak_rss_mb(source=tmp_path / "absent") == 0.0
+    assert mem.can_measure(source=tmp_path / "absent") is False
+
+
 def test_the_field_match_is_anchored_so_a_prefix_cannot_win(mem: Any, tmp_path: Path) -> None:
     """`VmRSS` is a prefix of nothing today, but `VmPeak`/`VmSize` sit in the same file and a
     loose `in` test would let the first line containing the name answer for it."""
@@ -99,6 +112,8 @@ def test_the_field_match_is_anchored_so_a_prefix_cannot_win(mem: Any, tmp_path: 
 
 def test_the_baseline_is_a_real_interpreter_measurement(mem: Any) -> None:
     """Measured, not assumed: it moves with the Python build and is a large share of small rows."""
+    if not mem.can_measure():
+        pytest.skip("no /proc and no resource module (Windows): nothing to read a peak from")
     baseline = mem.interpreter_baseline_mb()
 
     assert 1.0 < baseline < 200.0

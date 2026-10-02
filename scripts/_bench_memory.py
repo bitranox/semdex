@@ -48,15 +48,30 @@ def _proc_status_kb(field: str, *, source: Path = STATUS_PATH) -> int | None:
     return None
 
 
+def _getrusage_peak_kb() -> int | None:
+    """The high-water mark from getrusage, in kB, or None where there is no ``resource`` module.
+
+    ru_maxrss is kB on Linux and BYTES on macOS. Windows has no ``resource`` module at all.
+    """
+    try:
+        import resource
+    except ImportError:
+        return None
+    raw = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    return raw // 1024 if sys.platform == "darwin" else raw
+
+
+def can_measure(*, source: Path = STATUS_PATH) -> bool:
+    """Whether this platform yields a real peak at all (/proc or getrusage; Windows has neither)."""
+    return _proc_status_kb("VmHWM", source=source) is not None or _getrusage_peak_kb() is not None
+
+
 def peak_rss_mb(*, source: Path = STATUS_PATH) -> float:
     """High-water resident memory of THIS process, in MB. 0.0 where it cannot be read."""
     kb = _proc_status_kb("VmHWM", source=source)
     if kb is None:
-        import resource
-
-        raw = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-        kb = raw // 1024 if sys.platform == "darwin" else raw
-    return round(kb / 1024, 1)
+        kb = _getrusage_peak_kb()
+    return round(kb / 1024, 1) if kb is not None else 0.0
 
 
 def current_rss_mb(*, source: Path = STATUS_PATH) -> float:
@@ -101,12 +116,24 @@ def interpreter_baseline_mb() -> float:
     return float(out.stdout.strip())
 
 
+# The same order as peak_rss_mb (/proc, then getrusage), written inline so the probe interpreter
+# imports nothing beyond sys and pathlib: importing this module would add its own imports to the
+# baseline it exists to measure.
 _READ_PEAK = """
 def peak():
-    for line in pathlib.Path("/proc/self/status").read_text().splitlines():
+    try:
+        text = pathlib.Path("/proc/self/status").read_text()
+    except OSError:
+        text = ""
+    for line in text.splitlines():
         if line.startswith("VmHWM:"):
             return round(int(line.split()[1]) / 1024, 1)
-    return 0.0
+    try:
+        import resource
+    except ImportError:
+        return 0.0
+    raw = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    return round((raw // 1024 if sys.platform == "darwin" else raw) / 1024, 1)
 """
 
 
@@ -139,6 +166,7 @@ def run_cell(script: Path, env: dict[str, str], *, timeout: float = 900.0) -> di
 __all__ = [
     "STATUS_PATH",
     "Measurement",
+    "can_measure",
     "current_rss_mb",
     "interpreter_baseline_mb",
     "peak_rss_mb",
