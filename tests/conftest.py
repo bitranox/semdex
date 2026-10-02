@@ -686,8 +686,11 @@ def service_container() -> Iterator[Callable[..., int]]:
         return subprocess.run(["docker", "info"], capture_output=True, check=False).returncode == 0
 
     def _free_port() -> int:
+        # Probe the wildcard address because `docker run -p PORT:...` binds 0.0.0.0. A port
+        # free on 127.0.0.1 can still be held on another loopback address (127.0.0.2, ...),
+        # and the docker bind then fails with "address already in use".
         with socket.socket() as sock:
-            sock.bind(("127.0.0.1", 0))
+            sock.bind(("0.0.0.0", 0))  # noqa: S104 - a probe socket, closed before docker binds
             return int(sock.getsockname()[1])
 
     def _start(
