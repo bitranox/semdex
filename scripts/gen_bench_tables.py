@@ -732,15 +732,18 @@ def _method_ranking_table(doc: dict[str, Any]) -> dict[str, Any]:
     )
 
 
-def declared_renderings(raw_dir: Path = _RAW) -> set[str]:
+def declared_renderings(raw_dir: Path | None = None) -> set[str]:
     """Corpora that a committed raw file declares to be a re-rendering of another corpus.
 
     Any raw JSON whose top-level ``slice`` object carries both ``corpus`` and ``source_corpus``
     declares ``slice["corpus"]`` a rendering of ``slice["source_corpus"]``: same documents, same
     queries and qrels, re-rendered to answer one paired question. Scanning for the shape (rather
     than naming a file) means a future rendering declared the same way is excluded with no code
-    change. ``raw_dir`` is a parameter so a test can point it at a throwaway fixture.
+    change. ``raw_dir`` is a parameter so a test can point it at a throwaway fixture; left out, it
+    is the module's raw dir resolved NOW, the one ``_load`` reads, so a redirected generator never
+    takes its tables from one directory and its renderings from another.
     """
+    raw_dir = _RAW if raw_dir is None else raw_dir
     renderings: set[str] = set()
     for path in sorted(raw_dir.glob("*.json")):
         # No skip on a broken file: if the broken one is the file that declares a rendering, the

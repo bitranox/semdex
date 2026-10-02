@@ -413,6 +413,22 @@ def test_declared_renderings_reads_the_slice_source_corpus_shape(generator: Any,
     assert generator.declared_renderings(tmp_path) == {"widget_md_slice"}
 
 
+def test_declared_renderings_follows_the_raw_dir_the_tables_are_read_from(
+    generator: Any, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Called with no argument, it reads the SAME raw dir every other loader reads at that moment.
+
+    A default bound when the function was defined kept pointing at the committed raw dir after a
+    caller redirected the generator, so the tables came from one directory and the fitness filter's
+    renderings from another, with nothing to say so.
+    """
+    (tmp_path / "some-effect.json").write_text(
+        json.dumps({"slice": {"corpus": "widget_md_slice", "source_corpus": "widget_slice"}})
+    )
+    monkeypatch.setattr(generator, "_RAW", tmp_path)
+    assert generator.declared_renderings() == {"widget_md_slice"}
+
+
 def test_declared_renderings_ignores_a_slice_that_is_not_an_object(generator: Any, tmp_path: Path) -> None:
     """A ``slice`` value that is not an object declares nothing, and must not crash the scan."""
     (tmp_path / "string-slice.json").write_text(json.dumps({"slice": "widget_md_slice"}))
