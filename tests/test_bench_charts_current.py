@@ -179,6 +179,8 @@ def test_the_product_k_budget_chart_draws_all_embedders_beyond_palette_length(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """A seventh embedder is drawn, not dropped when palette has six colors."""
+    # This one renders a real figure, so it needs the charts extra; CI installs only .[dev].
+    pytest.importorskip("matplotlib")
     gen = _load_generator()
 
     # Build data with 7 embedders (exceeds 6-color palette)

@@ -10,6 +10,7 @@ without a fixed startup sleep) and assert on the delivered events.
 from __future__ import annotations
 
 import importlib.util
+import sys
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -47,7 +48,13 @@ def _poke_until(mutate: Callable[[], None], predicate: Callable[[], bool], *, ti
 
 @_needs_watchfiles
 def test_created_and_modified_events_are_delivered(tmp_path: Path) -> None:
-    """Writing a .md file delivers a CREATED/MODIFIED event; a later write delivers MODIFIED."""
+    """Writing a .md file delivers a CREATED/MODIFIED event; a later write delivers MODIFIED.
+
+    macOS FSEvents coalesces a path's flags, so a re-write shortly after creation can still carry
+    the created flag and arrive as CREATED. serve reconciles on any event whatever its kind, so
+    both satisfy the contract there; elsewhere the OS reports the modification and it is required.
+    """
+    rewrite_kinds = {ChangeKind.MODIFIED, ChangeKind.CREATED} if sys.platform == "darwin" else {ChangeKind.MODIFIED}
     events: list[ChangeEvent] = []
     watcher = WatchfilesWatcher(mode=WatchMode.AUTO, debounce_ms=50)
     watcher.start(roots=[tmp_path], on_change=events.append)
@@ -63,8 +70,9 @@ def test_created_and_modified_events_are_delivered(tmp_path: Path) -> None:
         assert {e.kind for e in events if e.path == target} & {ChangeKind.CREATED, ChangeKind.MODIFIED}
 
         events.clear()
-        assert _poke_until(_write, lambda: any(e.kind is ChangeKind.MODIFIED for e in events if e.path == target)), (
-            "no MODIFIED event for the re-written file"
+        assert _poke_until(_write, lambda: any(e.kind in rewrite_kinds for e in events if e.path == target)), (
+            f"no {sorted(k.value for k in rewrite_kinds)} event for the re-written file; "
+            f"saw {[(e.kind.value, e.path.name) for e in events]}"
         )
     finally:
         watcher.stop()

@@ -98,10 +98,12 @@ def _write_source(root: Path, docs: dict[str, str]) -> Path:
     src.joinpath("corpus.jsonl").write_bytes(
         b"".join(json.dumps({"_id": d, "title": "", "text": t}).encode() + b"\n" for d, t in sorted(docs.items()))
     )
-    src.joinpath("queries.json").write_text(json.dumps({"q1": "what is it"}))
-    src.joinpath("qrels.json").write_text(json.dumps({"q1": {"doc-1": 1}}))
-    src.joinpath("doc_ids.txt").write_text("\n".join(sorted(docs)) + "\n")
-    src.joinpath("meta.json").write_text(json.dumps({"corpus": "mldr_en_8k_slice", "total": len(docs)}))
+    src.joinpath("queries.json").write_text(json.dumps({"q1": "what is it"}), encoding="utf-8")
+    src.joinpath("qrels.json").write_text(json.dumps({"q1": {"doc-1": 1}}), encoding="utf-8")
+    src.joinpath("doc_ids.txt").write_text("\n".join(sorted(docs)) + "\n", encoding="utf-8")
+    src.joinpath("meta.json").write_text(
+        json.dumps({"corpus": "mldr_en_8k_slice", "total": len(docs)}), encoding="utf-8"
+    )
     return src
 
 
@@ -110,10 +112,12 @@ def test_build_writes_a_twin_slice_with_the_same_ids_queries_and_qrels(builder: 
     src = _write_source(tmp_path, docs)
     out = tmp_path / "mldr_en_8k_md_slice"
     meta = builder.build(src, out, sample_size=5, seed=1)
-    assert out.joinpath("doc_ids.txt").read_text() == src.joinpath("doc_ids.txt").read_text()
+    assert out.joinpath("doc_ids.txt").read_text(encoding="utf-8") == src.joinpath("doc_ids.txt").read_text(
+        encoding="utf-8"
+    )
     assert out.joinpath("queries.json").read_bytes() == src.joinpath("queries.json").read_bytes()
     assert out.joinpath("qrels.json").read_bytes() == src.joinpath("qrels.json").read_bytes()
-    rows = [json.loads(line) for line in out.joinpath("corpus.jsonl").read_text().splitlines()]
+    rows = [json.loads(line) for line in out.joinpath("corpus.jsonl").read_text(encoding="utf-8").splitlines()]
     assert [r["_id"] for r in rows] == ["doc-1", "doc-2"]
     assert rows[0]["text"] == f"## History\n{_PROSE}\n"
     assert rows[1]["text"] == docs["doc-2"]
@@ -123,9 +127,9 @@ def test_build_writes_a_twin_slice_with_the_same_ids_queries_and_qrels(builder: 
     assert meta["marked_lines"] == 1 and meta["marked_docs"] == 1 and meta["total"] == 2
     assert meta["rule"]["max_chars"] == builder.MAX_HEADING_CHARS
     assert len(meta["source_corpus_sha256"]) == 64
-    written = json.loads(out.joinpath("meta.json").read_text())
+    written = json.loads(out.joinpath("meta.json").read_text(encoding="utf-8"))
     assert written == meta
-    sample = out.joinpath("heading-sample.txt").read_text().splitlines()
+    sample = out.joinpath("heading-sample.txt").read_text(encoding="utf-8").splitlines()
     assert sample and sample[0].startswith("doc-1\t## History\t"), "one marked line per row: doc id, heading, next line"
 
 
