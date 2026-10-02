@@ -55,16 +55,18 @@ regression ends with a pin + upstream issue; a genuine accepted change moves on 
 python scripts/benchmark_compare.py benchmark-results.json --update
 ```
 
-Then update, in the same commit: the affected ranked tables AND their prose in
-Nothing by hand. Run `python scripts/export_bench_raw.py` then
-`python scripts/gen_bench_tables.py` and `python scripts/gen_bench_charts.py`: every published
-table and chart under `docs/benchmarks/` is generated from `tests/benchmarks/raw/`, and
+Then regenerate every published number in that same commit, never by hand. Run
+`python scripts/export_bench_raw.py`, then `python scripts/gen_bench_tables.py` and
+`python scripts/gen_bench_charts.py`: every published table and chart under `docs/benchmarks/`
+is generated from `tests/benchmarks/raw/`, and
 `pytest tests/test_bench_tables_current.py tests/test_bench_charts_current.py` fails if a
-published number no longer matches its data. Only the PROSE around a table needs a human, if a verdict
-changed; the new component versions/digests named in the commit message; a `CHANGELOG.md`
-entry; a `pyproject.toml` constraint if a floor/pin changed. The quality-table numbers come
-from the 4-corpus run (`SEMDEX_BENCH_CORPORA=nfcorpus,cqadupstack,scifact,fiqa`) - re-run that
-before re-ranking chunker/embedding tables.
+published number no longer matches its data.
+
+What a human still writes, in the same commit: the PROSE around a table, if a verdict changed;
+the new component versions/digests, named in the commit message; a `CHANGELOG.md` entry; a
+`pyproject.toml` constraint if a floor or pin changed. The quality-table numbers come from the
+4-corpus run (`SEMDEX_BENCH_CORPORA=nfcorpus,cqadupstack,scifact,fiqa`) - re-run that before
+re-ranking chunker/embedding tables.
 
 ## 5. Gate before pushing
 
@@ -74,5 +76,6 @@ make test
 ```
 
 Done when: every flagged cell has a written root cause, `make test` is green, the baseline
-refresh is its own reviewable commit naming the version bump that justifies it, and the doc
-tables cite the new numbers.
+refresh and the docs regenerated from it are one reviewable commit of their own (no semdex code
+fix from step 3 in it) naming the component versions/digests that justify it, and the doc tables
+cite the new numbers.
