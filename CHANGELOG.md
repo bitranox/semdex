@@ -117,7 +117,10 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
   composition raised `RuntimeError('lib_log_rich.init() must be called before using the logging
   API')`. It now starts a quiet runtime (no journald, event log, Graylog or queue; console at ERROR;
   no `.env` loading), and the conftest fixtures that build services use it too, so a `logger.error`
-  line now precedes a command's `Error:` line on CliRunner's stderr.
+  line now precedes a command's `Error:` line on CliRunner's stderr. That runtime starts with every
+  `LOG_*` variable hidden and puts each back afterwards: a `LOG_CONSOLE_LEVEL=bogus` in the shell
+  running the tests made every command under `build_testing()` fail with `ValueError: Unknown log
+  level: 'bogus'`, and a valid one changed the quiet runtime. Production logging is unaffected.
 - **Tests no longer pass or fail by order or by machine.** The autouse fixture that shut the
   lib_log_rich runtime down after each test now also restores the root logger's handlers, level and
   propagate flag, which production `init_logging` changes and `runtime.shutdown()` does not undo. A

@@ -41,7 +41,7 @@ Complete (v1.1.2+)
 - `src/semdex/adapters/memory/__init__.py` — Public facade + Protocol conformance assertions
 - `src/semdex/adapters/memory/config.py` — In-memory config adapters
 - `src/semdex/adapters/memory/email.py` — In-memory email adapters
-- `src/semdex/adapters/memory/logging.py` - In-memory logging (a quiet lib_log_rich runtime for tests)
+- `src/semdex/adapters/memory/logging.py` - In-memory logging (a quiet lib_log_rich runtime for tests, started with every `LOG_*` variable hidden)
 
 ### Composition Layer
 - `src/semdex/composition/__init__.py` — Wires adapters to ports
