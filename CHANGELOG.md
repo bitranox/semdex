@@ -12,6 +12,14 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
   section now; a caller that wants the settings uses its `deploy_permissions_from_config`.
 
 ### Fixed
+- **The documented `.env` and environment syntax for logging tables and lists works.**
+  `.env.example`, `defaultconfig.d/90-logging.toml` and the README still showed comma-separated
+  lists (`SEMDEX___EMAIL__SMTP_HOSTS="a:587,b:587"`) and `LEVEL=style` / `field=regex` pairs, but a
+  comma-separated value arrives as ONE string in both layers: one bogus SMTP host, or a logging
+  table that lib_log_rich refuses. They now show a JSON array or object (unquoted in `.env`,
+  shell-quoted in the environment) or one key per entry
+  (`LIB_LOG_RICH__SCRUB_PATTERNS__API_KEY=.+`), and say that every `.env` value is text that the
+  setting's own validation reads.
 - **BREAKING (exit code): an invalid `[email]` section exits 78, no longer 22.** `send-email` and
   `send-notification` let the `ValidationError` escape to `main()`'s catch-all, which exited 22
   with pydantic's multi-line report and documentation URL. They now exit 78 (EX_CONFIG) with one
