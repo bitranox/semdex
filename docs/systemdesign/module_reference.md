@@ -68,6 +68,7 @@ Complete (v1.1.2+)
 - `tests/test_config_overrides.py` — `--set` parsing tests
 - `tests/test_display.py` — Config display formatting tests
 - `tests/test_exit_codes.py` — ExitCode enum tests
+- `tests/test_logging_dotenv_isolation.py` - Logging takes only `LOG_*` from a `.env`; an invalid `[lib_log_rich]` section is a configuration failure
 - `tests/test_mail.py` — Email configuration and sending tests
 - `tests/test_cli_email_config_errors.py` - An invalid `[email]` section or option value: one `Error:` line per problem
 - `tests/test_memory_logging.py` - Testing-composition logging runtime and the per-test logging reset

@@ -13,6 +13,8 @@ dependencies = [
     "lib_cli_exit_tools>=2.4.0",
     "lib_log_rich>=6.3.9",
     "lib_layered_config>=7.0.1",
+    # The logging setup reads the LOG_* lines of a .env itself (adapters/logging/setup.py).
+    "python-dotenv>=1.2.4",
     "btx_lib_mail>=3.0.1",
     "pydantic>=2.13.5",
     "orjson>=3.12.0",
