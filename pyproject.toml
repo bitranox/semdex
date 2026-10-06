@@ -6,6 +6,10 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "rich-click>=1.9.9",
+    # Imported directly (adapters/cli/main.py, commands/config.py; adapters/config/display.py),
+    # not only through rich-click.
+    "click>=8.5.0",
+    "rich>=15.0.0",
     "lib_cli_exit_tools>=2.4.0",
     "lib_log_rich>=6.3.9",
     "lib_layered_config>=7.0.1",
@@ -131,6 +135,8 @@ sqlite = [
 # Embedded columnar ANN vector store (pulls pyarrow; heavier, opt-in).
 lance = [
   "lancedb>=0.39.0",
+  # Imported directly by the lance adapter, not only through lancedb.
+  "pyarrow>=25.0.1",
 ]
 # Postgres + pgvector server backend.
 pg = [

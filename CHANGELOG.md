@@ -94,6 +94,12 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 - An email attachment allow or block list given in a form it cannot be read in is now refused instead of silently ignored. A comma-separated value (`.pdf,.txt` in an environment variable or `.env`) arrives as one string, and the validators turned any value that was not a list into "not configured", so btx_lib_mail's default lists applied in place of the configured ones. A list or tuple is read as its items (an empty one still means not configured), a set is kept as given, an empty value means not configured, and anything else fails validation naming the setting and the accepted form (a JSON array such as `[".pdf", ".txt"]`). `smtp_hosts` and `recipients` no longer turn a tuple or another non-list value into an empty list. The shipped `50-mail.toml` and `.env.example` documented the comma form for all six list settings; they now show the JSON-array and per-index forms.
 
 ### Changed
+- **`click` and `rich` are declared dependencies, and `pyarrow` is part of the `lance` extra.**
+  The package imports `click` (`adapters/cli/main.py`, `commands/config.py`) and `rich`
+  (`adapters/config/display.py`) directly but only had them through rich-click, and the lance
+  adapter imports `pyarrow`, which only came through lancedb. A new test fails when a module the
+  package imports at run time is in no dependency list or user extra, or when an import that runs
+  on module import is not a core dependency.
 - **The deploy port (`DeployConfiguration`) takes `set_permissions: bool | None` and
   `permission_overrides`.** None, the new default, lets lib_layered_config follow the configured
   `enabled`; a custom deploy double needs both parameters.

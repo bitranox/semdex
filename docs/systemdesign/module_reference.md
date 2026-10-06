@@ -71,6 +71,7 @@ Complete (v1.1.2+)
 - `tests/test_mail.py` — Email configuration and sending tests
 - `tests/test_cli_email_config_errors.py` - An invalid `[email]` section or option value: one `Error:` line per problem
 - `tests/test_memory_logging.py` - Testing-composition logging runtime and the per-test logging reset
+- `tests/test_declared_dependencies.py` - Every module the package imports at run time is a declared dependency
 - `tests/test_metadata.py` — Package metadata tests
 - `tests/test_module_entry.py` — `python -m` entry tests
 - `tests/test_ports.py` — Protocol conformance tests
