@@ -294,11 +294,11 @@ CPU, numpy and BLAS build, and thread count.
 
 ## Measurement tiers
 
-| Tier    | What it is                                               | Where it lives                              | What it can support                                                                                                    |
-|---------|----------------------------------------------------------|---------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
-| Gated   | 150 documents, 20 queries, re-run in CI on every push    | `tests/benchmarks/baseline.json`            | Catching a regression, by comparing the same 20 queries pairwise against the baseline rather than comparing two means. |
-| Swept   | The full offline grid over the pre-computed vector cache | `tests/benchmarks/raw/chunk-sweep-*.json`   | The selection advice on these pages. Carries intervals.                                                                |
-| One-off | A single reference run on a named machine                | the remaining `tests/benchmarks/raw/*.json` | Order of magnitude. Not a third decimal, and not a regression signal.                                                  |
+| Tier    | What it is                                                     | Where it lives                              | What it can support                                                                                                    |
+|---------|----------------------------------------------------------------|---------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| Gated   | 150 documents, 20 queries, re-run in CI weekly and on dispatch | `tests/benchmarks/baseline.json`            | Catching a regression, by comparing the same 20 queries pairwise against the baseline rather than comparing two means. |
+| Swept   | The full offline grid over the pre-computed vector cache       | `tests/benchmarks/raw/chunk-sweep-*.json`   | The selection advice on these pages. Carries intervals.                                                                |
+| One-off | A single reference run on a named machine                      | the remaining `tests/benchmarks/raw/*.json` | Order of magnitude. Not a third decimal, and not a regression signal.                                                  |
 
 ## Where the numbers live, and why the tables are generated
 

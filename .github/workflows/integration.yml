@@ -72,6 +72,11 @@ jobs:
       SEMDEX_BENCH_MAX_DOCS: "150"
       SEMDEX_BENCH_MAX_QUERIES: "20"
       SEMDEX_BENCH_EXTRACTORS: text,markitdown
+      # Only the embedding models a GitHub-hosted runner can load. The ollama models need
+      # the LAN test rig, so here they would record "skip" and read as ok -> skip
+      # regressions; left out, the comparator reports their baseline cells as "not run".
+      # A model added to _EMBED_MODELS in tests/test_e2e_matrix.py must be added here too.
+      SEMDEX_BENCH_EMBED_MODELS: "fastembed:bge-small,fastembed:bge-base,model2vec:potion-base-8M,model2vec:potion-retrieval-32M,st:all-MiniLM-L6-v2"
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
