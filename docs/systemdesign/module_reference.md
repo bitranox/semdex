@@ -22,7 +22,7 @@ Complete (v1.1.2+)
 - `src/semdex/adapters/config/overrides.py` — CLI `--set` override parsing and deep-merge
 - `src/semdex/adapters/email/sender.py` — SMTP email with EmailConfig (Pydantic)
 - `src/semdex/adapters/email/validation.py` — Email recipient validation
-- `src/semdex/adapters/logging/setup.py` — lib_log_rich initialization
+- `src/semdex/adapters/logging/setup.py` - lib_log_rich initialization; takes only the `LOG_*` lines of a `.env`, and raises `InvalidLoggingConfigError` for a refused `[lib_log_rich]` value or `LOG_*` variable, after starting logging with its defaults (and without the `LOG_*` variables only when one of them is refused)
 - `src/semdex/adapters/cli/` — CLI adapter package:
   - `__init__.py` — Public facade
   - `constants.py` — Shared constants
@@ -68,7 +68,7 @@ Complete (v1.1.2+)
 - `tests/test_config_overrides.py` — `--set` parsing tests
 - `tests/test_display.py` — Config display formatting tests
 - `tests/test_exit_codes.py` — ExitCode enum tests
-- `tests/test_logging_dotenv_isolation.py` - Logging takes only `LOG_*` from a `.env`; an invalid `[lib_log_rich]` section is a configuration failure
+- `tests/test_logging_dotenv_isolation.py` - Logging takes only `LOG_*` from a `.env`; an invalid `[lib_log_rich]` section or `LOG_*` variable is a configuration failure that leaves logging running
 - `tests/test_mail.py` — Email configuration and sending tests
 - `tests/test_cli_email_config_errors.py` - An invalid `[email]` section or option value: one `Error:` line per problem
 - `tests/test_memory_logging.py` - Testing-composition logging runtime and the per-test logging reset

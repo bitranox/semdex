@@ -26,15 +26,21 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
   `FASTEMBED_CACHE_PATH` and `DEVELOPMENT_MODE`, which semdex reads from the process environment,
   must be exported (`serve` refuses with exit 78 naming a missing MCP secret, it never starts
   unauthenticated).
-- **An invalid `[lib_log_rich]` value no longer disables every command (exit code change).** A
-  value lib_log_rich refuses (`rate_limit = "100:60"`, `queue_maxsize = 0`, an unknown
-  `console_level`) exited 22 with pydantic's multi-line report from every command,
-  `config-deploy --force` included. It is now a configuration failure like a broken file: logging
-  starts with its defaults, `config`, `index`, `search`, `serve`, `send-email` and
-  `send-notification` refuse with exit 78 and one line per problem naming the key, never the
-  value (`lib_log_rich.rate_limit: Input should be a valid tuple`), and the other commands run
-  (exit 0). `InvalidLoggingConfigError` (a `ConfigurationError`) is what the logging setup
-  raises for it.
+- **An invalid `[lib_log_rich]` value or `LOG_*` variable no longer disables every command (exit
+  code change).** A value lib_log_rich refuses in the section (`rate_limit = "100:60"`,
+  `queue_maxsize = 0`, an unknown `console_level`) exited 22 with pydantic's multi-line report
+  from every command, `config-deploy --force` included, and one in a `LOG_*` variable, exported
+  or in the `.env` logging reads (`LOG_CONSOLE_LEVEL=bogus`), exited 1. Both are now a
+  configuration failure like a broken file: `config`, `index`, `search`, `serve`, `send-email`
+  and `send-notification` refuse with exit 78, and the other commands run (exit 0). A problem the
+  section's type check finds is one line per problem naming the key, never the value
+  (`lib_log_rich.rate_limit: Input should be a valid tuple`); a value only lib_log_rich refuses
+  carries lib_log_rich's own message (`Error: lib_log_rich: Unknown log level: 'bogus'`), which
+  may name neither the setting nor where it was set. Logging falls back to its defaults: with the
+  valid `LOG_*` variables still in force when the section was refused, and with every `LOG_*`
+  variable hidden for that start (and put back afterwards) only when one of them is the refused
+  setting. `InvalidLoggingConfigError` (a `ConfigurationError`) is what the logging setup raises
+  for it, after logging has started.
 - **The documented `.env` and environment syntax for logging tables and lists works.**
   `.env.example`, `defaultconfig.d/90-logging.toml` and the README still showed comma-separated
   lists (`SEMDEX___EMAIL__SMTP_HOSTS="a:587,b:587"`) and `LEVEL=style` / `field=regex` pairs, but a
