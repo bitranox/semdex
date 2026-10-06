@@ -7,6 +7,25 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 ## [Unreleased]
 
 ### Fixed
+- **A broken configuration file no longer disables every command (exit code change).** The root
+  group loaded the configuration before any subcommand option was parsed and let a load error
+  escape, so a malformed `config.toml`, an unreadable one or an `--env-file` that is not UTF-8 made
+  every command, `--help` and `config-deploy` (the command that replaces the file) exit 1 with
+  empty stdout. The root now records the failure (`adapters/cli/config_load.py`): `config`,
+  `index`, `search`, `serve`, `send-email` and `send-notification` refuse with exit 78 (was 1) and
+  one line naming the file, while `info`, `config-generate-examples` and help run (exit 0, was 1),
+  and `config-deploy` runs with a warning naming the failure it skipped. `--traceback` prints the
+  loader's chained traceback before the line. Any other exception from the loader is a bug and
+  propagates as one. `config --profile X` reloads with the root's `--env-file` instead of
+  searching for another `.env`, and a profile file that does not load exits 78 there too.
+- **Command-line mistakes are usage errors, checked before the configuration loads (exit code
+  change).** A malformed `--set` is refused for every command whether or not the file loads. Two
+  `--set` values that give one key a value and put a key under it (`--set a.b=1 --set a.b.c=2`)
+  escaped as a `TypeError` in one order and silently dropped the earlier value in the other; both
+  orders now exit 2 naming the pair. An invalid `--profile` name such as `../x` now exits 2 for
+  every command: the root's `--profile` and `config --profile` exited 22, and
+  `config-deploy --profile` exited 1 ("Failed to deploy configuration"). A script that tells a bad
+  profile name apart by exit code 22 has to test for 2.
 - **No more `SystemExit: N` on stderr.** The email, config, `index`, `search` and `serve` commands
   raised a bare `SystemExit`, which `main()`'s catch-all branch printed as `SystemExit: 78` after the
   real error message. They now exit through click's context (`ctx.exit`), and `main()` returns the
@@ -42,6 +61,8 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 - Every MCP tool schema now carries one-line, plain-text descriptions. Pydantic had copied each output model's developer docstring, and the `StoreBackend` / `Partition` enums' multi-paragraph docstrings, into the published `outputSchema` (RST markup and deployment advice included). Each model and enum field now states its own wire description; the enum fields still publish their allowed values. Validation is unchanged.
 
 ### Added
+- `nest_overrides` in `adapters/config/overrides.py` (exported): the `--set` nesting that refuses
+  a conflicting pair, shared by the root's command-line check and `apply_overrides`.
 - `semdex serve`: an MCP server (a delivery-surface adapter, sibling of the CLI) exposing the search and reindex use cases over stdio (local) and Streamable HTTP (network). Tools: `list_datasets`, `search`, `reindex` (`reindex` refused for a `read_only` dataset). Install with the new `semdex[mcp-server]` extra (`fastmcp`).
 - `[mcp]` config section (transport / host / port / auth) with a fully documented `defaultconfig.d/17-mcp.toml`. Auth modes: `none`, `bearer`, `oauth`; every secret loads from an environment variable named in config, never inline. OAuth proxy mode (the interactive-flow fields set) requires `[mcp].oauth_base_url`; without it the server now refuses to start with a clear `ConfigurationError` instead of failing later inside fastmcp. `[mcp].oauth_revocation_url` forwards an upstream token-revocation endpoint to the proxy when set.
 - An unexpected exception raised inside an MCP tool (a bug, not a deliberately raised error) is masked from clients by default: `[mcp].mask_error_details` (default `true`) reaches FastMCP's own masking, so only a message we chose to send - never internal text or a traceback - ever crosses the wire. Set it `false` to see the original message while developing.

@@ -29,6 +29,7 @@ Complete (v1.1.2+)
   - `exit_codes.py` — POSIX exit codes (ExitCode IntEnum)
   - `traceback.py` — Traceback state management
   - `context.py` — Click context helpers
+  - `config_load.py` - Configuration load for the CLI; records a load failure, `require_config` refuses with exit 78
   - `root.py` — Root command group
   - `main.py` — Entry point
   - `commands/info.py` — info, hello, fail commands
@@ -61,6 +62,7 @@ Complete (v1.1.2+)
 - `tests/test_cache_effectiveness.py` — LRU cache behavior tests
 - `tests/test_cli.py` — CLI command tests
 - `tests/test_cli_main_exit.py` - Exit codes and stderr through the real `main()` entry point
+- `tests/test_cli_config_errors.py` - Which commands refuse and which still run when the configuration cannot be loaded
 - `tests/test_config_overrides.py` — `--set` parsing tests
 - `tests/test_display.py` — Config display formatting tests
 - `tests/test_exit_codes.py` — ExitCode enum tests
@@ -110,7 +112,7 @@ POSIX-conventional exit codes defined in `adapters/cli/exit_codes.py`:
 | 13   | `PERMISSION_DENIED` | Cannot write to target directory          |
 | 22   | `INVALID_ARGUMENT`  | Invalid CLI argument or section not found |
 | 69   | `SMTP_FAILURE`      | SMTP delivery failed                      |
-| 78   | `CONFIG_ERROR`      | Missing required configuration            |
+| 78   | `CONFIG_ERROR`      | Configuration missing or not loadable     |
 | 110  | `TIMEOUT`           | Operation timed out                       |
 | 130  | `SIGNAL_INT`        | Interrupted (SIGINT/Ctrl+C)               |
 | 141  | `BROKEN_PIPE`       | Output pipe closed                        |
@@ -159,7 +161,7 @@ Display merged configuration from all sources.
 | `--format [human\|json]` | Output format (default: human) |
 | `--section NAME`         | Show only specific section     |
 
-**Exit codes:** 0, 22 (section not found)
+**Exit codes:** 0, 2 (usage error), 22 (section not found), 78 (configuration not loadable)
 
 ### config-deploy
 
@@ -171,7 +173,7 @@ Deploy default configuration to system or user directories.
 | `--force`                    | Overwrite existing files               |
 | `--profile NAME`             | Deploy to profile subdirectory         |
 
-**Exit codes:** 0, 1, 13 (permission denied)
+**Exit codes:** 0, 1, 2 (usage error, including an invalid `--profile` name), 13 (permission denied)
 
 ### config-generate-examples
 
@@ -202,7 +204,7 @@ Send email using configured SMTP settings.
 | `--use-starttls / --no-use-starttls` | Override STARTTLS               |
 | `--timeout SECONDS`                  | Override timeout                |
 
-**Exit codes:** 0, 2 (file not found), 22, 69 (SMTP failure), 78 (no SMTP hosts)
+**Exit codes:** 0, 2 (file not found, or usage error), 22, 69 (SMTP failure), 78 (no SMTP hosts, or configuration not loadable)
 
 ### send-notification
 
@@ -220,7 +222,7 @@ Send simple plain-text notification email.
 | `--use-starttls / --no-use-starttls` | Override STARTTLS               |
 | `--timeout SECONDS`                  | Override timeout                |
 
-**Exit codes:** 0, 22, 69 (SMTP failure), 78 (no SMTP hosts)
+**Exit codes:** 0, 2 (usage error), 22, 69 (SMTP failure), 78 (no SMTP hosts, or configuration not loadable)
 
 ### logdemo
 

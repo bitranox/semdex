@@ -33,6 +33,7 @@ from semdex.application.use_cases.reconciling import reconcile
 from semdex.domain.enums import EmbeddingBackend, McpTransport, SummaryBackend
 from semdex.domain.errors import ConfigurationError, WatchError
 
+from ..config_load import require_config
 from ..constants import CLICK_CONTEXT_SETTINGS
 from ..context import get_cli_context
 from ..exit_codes import ExitCode
@@ -91,8 +92,8 @@ def cli_serve(
     from the ``[[dataset]]`` config; auth and transport come from ``[mcp]``.
     """
     cli_ctx = get_cli_context(ctx)
+    config = require_config(ctx, cli_ctx)
     factory = _require_dataset_factory(cli_ctx)
-    config = cli_ctx.config
     mcp_cfg = get_mcp_config(config)
     resolved_transport = McpTransport(transport) if transport is not None else mcp_cfg.transport
     resolved_host = host if host is not None else mcp_cfg.host
