@@ -107,7 +107,10 @@ jobs:
   real-adapters:
     # Exercises real (non-stub) adapters behind the ports: sentence-transformers
     # and local embeddings, real chunkers, and the pgvector/mariadb SQL vector
-    # stores against live containers. ollama-real self-skips without a server.
+    # stores against live containers. Cells that need the private LAN test rig (real
+    # ollama / llama.cpp servers, the persistent SQL test server) carry the lan_rig
+    # marker and FAIL when it is unreachable, which a GitHub-hosted runner always is,
+    # so this job deselects them; they run locally via `make ti`.
     name: Real adapters (embedding, chunker, SQL vector stores)
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -128,7 +131,7 @@ jobs:
 
       - name: Run real adapter tests
         run: >-
-          python -m pytest -p no:cacheprovider -o addopts=""
+          python -m pytest -p no:cacheprovider -o addopts="" -m "not lan_rig"
           tests/test_embedding_local.py tests/test_embedding_sentence_transformers.py
           tests/test_chunker_local.py tests/test_vectorstore_pgvector.py tests/test_vectorstore_mariadb.py
           tests/test_e2e_mcp_knowledge_matrix.py

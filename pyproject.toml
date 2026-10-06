@@ -392,6 +392,7 @@ markers = [
   "os_linux: test exercises Linux-only behavior",
   "local_only: tests that require the local dev environment (external resources, script composition); skipped in CI",
   "integration: tests requiring external resources (SMTP, databases, APIs); run via 'bmk ti' or 'mktesti.sh'",
+  "lan_rig: tests that need the private LAN test rig (real embedding servers or the persistent SQL test server); unreachable from GitHub-hosted runners, so the integration workflow deselects them with -m 'not lan_rig'",
 ]
 
 [tool.coverage.run]

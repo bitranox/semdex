@@ -7,7 +7,10 @@ over the cross product of:
 - **embeddings**: ``placeholder`` (offline, CI) and the real providers ``fastembed`` /
   ``model2vec`` / ``sentence_transformers`` (download models), ``ollama`` (native
   ``/api/embed``), and ``openai`` (any OpenAI-compatible ``/v1/embeddings`` server -
-  ollama ``/v1`` or llama.cpp), the servers ``local_only`` and skipped when absent. The
+  ollama ``/v1`` or llama.cpp). The server cells are ``local_only`` and ``lan_rig``: they
+  need the LAN test rig and FAIL when it is unreachable, because a missing server there is a
+  rig fault rather than a reason to skip, so GitHub-hosted runs deselect them with
+  ``-m 'not lan_rig'``. The
   ``ollama`` and ``openai`` request/response paths also run in CI against a mocked
   transport, so the wire contract is covered with no server. The native cloud providers
   ``gemini`` / ``cohere`` run ``local_only`` against their REAL vendor APIs when a
@@ -198,6 +201,7 @@ def _ollama_ready(model: str | None = None) -> tuple[str, str] | None:
 
 
 @pytest.mark.local_only
+@pytest.mark.lan_rig
 @pytest.mark.os_agnostic
 @pytest.mark.asyncio
 async def test_write_read_delete_roundtrip_ollama(tmp_path: Path) -> None:
@@ -316,6 +320,7 @@ def _openai_ready() -> tuple[str, str, str | None] | None:
 
 
 @pytest.mark.local_only
+@pytest.mark.lan_rig
 @pytest.mark.os_agnostic
 @pytest.mark.asyncio
 async def test_write_read_delete_roundtrip_openai(tmp_path: Path) -> None:
@@ -497,6 +502,7 @@ def _ollama_openai_ready() -> tuple[str, str] | None:
 
 
 @pytest.mark.local_only
+@pytest.mark.lan_rig
 @pytest.mark.os_agnostic
 @pytest.mark.asyncio
 async def test_write_read_delete_roundtrip_openai_via_ollama(tmp_path: Path) -> None:
@@ -557,6 +563,7 @@ async def test_write_read_delete_roundtrip_sentence_transformers(tmp_path: Path)
 
 
 @pytest.mark.local_only
+@pytest.mark.lan_rig
 @pytest.mark.os_agnostic
 @pytest.mark.asyncio
 async def test_reindex_source_dataset_with_qwen3(tmp_path: Path) -> None:
@@ -711,6 +718,7 @@ async def test_multi_knowledge_bases_isolated_and_fused_embedded(tmp_path: Path,
 
 
 @pytest.mark.local_only
+@pytest.mark.lan_rig
 @pytest.mark.os_agnostic
 @pytest.mark.asyncio
 async def test_mixed_provider_fanout(tmp_path: Path) -> None:
@@ -1068,6 +1076,7 @@ _SERVER_STORE = [
 
 
 @pytest.mark.local_only
+@pytest.mark.lan_rig
 @pytest.mark.os_agnostic
 @pytest.mark.asyncio
 @pytest.mark.parametrize(("backend", "dsn_env"), _SERVER_STORE)
