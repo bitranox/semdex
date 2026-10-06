@@ -6,7 +6,35 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
 
+### Removed
+- `adapters/config/permissions.py` (`PermissionDefaults`, `get_permission_defaults`,
+  `get_modes_for_target`, `parse_mode`): lib_layered_config reads and validates the permission
+  section now; a caller that wants the settings uses its `deploy_permissions_from_config`.
+
 ### Fixed
+- **`config-deploy` leaves every permission decision to lib_layered_config (exit code change).**
+  The command read `[lib_layered_config.default_permissions]` from its own configuration load,
+  `.env` included, and used only `enabled` from it: a `.env` in the working directory (or
+  `--env-file`) decided whether modes were set, and a `--set` of a mode never reached the deploy.
+  It now hands its options and any `--set` of the section to lib_layered_config's `deploy_config`,
+  which reads the section itself, from the bundled defaults, the configuration files the deploy
+  does not overwrite and the environment, never from `.env`, so a `.env` can neither change a
+  deployed mode nor block a deploy, and `config-deploy --force` replaces a deployed file that
+  holds a bad value without further options. A setting the library refuses (a malformed, unsafe
+  or bare-integer mode such as TOML `user_file = 400`, which is decimal 400, i.e. `0o620`; a
+  non-boolean `enabled`; an unknown key; a section that is not a table) exited 1 with
+  "Failed to deploy configuration: ..."; it now exits 78 before anything is written, with one
+  `Error:` line per problem naming the key and where it was set (`(source: override)` for a
+  `--set`), then, for a configured value, a hint that both `--dir-mode` and `--file-mode` deploy
+  anyway.
+- **`--dir-mode`/`--file-mode` refuse an unsafe or malformed mode as a usage error (exit code
+  change).** They were parsed with a bare `int(value, 8)`, so `-1`, `777` or a group-writable mode
+  reached the deploy and failed there as "Failed to deploy configuration" (exit 1). They are now
+  parsed by lib_layered_config's `DeployMode`, the rule the library applies to configured modes,
+  and a refused mode exits 2 naming the offending bits before anything is written;
+  `--no-permissions` together with a mode option is a usage error too. `config-deploy` logs
+  "Deployed configuration" after the deploy instead of "Deploying configuration" before it, and
+  says "(permissions not set)" only for an explicit `--no-permissions`.
 - **A broken configuration file no longer disables every command (exit code change).** The root
   group loaded the configuration before any subcommand option was parsed and let a load error
   escape, so a malformed `config.toml`, an unreadable one or an `--env-file` that is not UTF-8 made
@@ -57,6 +85,9 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 - An email attachment allow or block list given in a form it cannot be read in is now refused instead of silently ignored. A comma-separated value (`.pdf,.txt` in an environment variable or `.env`) arrives as one string, and the validators turned any value that was not a list into "not configured", so btx_lib_mail's default lists applied in place of the configured ones. A list or tuple is read as its items (an empty one still means not configured), a set is kept as given, an empty value means not configured, and anything else fails validation naming the setting and the accepted form (a JSON array such as `[".pdf", ".txt"]`). `smtp_hosts` and `recipients` no longer turn a tuple or another non-list value into an empty list. The shipped `50-mail.toml` and `.env.example` documented the comma form for all six list settings; they now show the JSON-array and per-index forms.
 
 ### Changed
+- **The deploy port (`DeployConfiguration`) takes `set_permissions: bool | None` and
+  `permission_overrides`.** None, the new default, lets lib_layered_config follow the configured
+  `enabled`; a custom deploy double needs both parameters.
 - **BREAKING (behaviour, not API): `ann_recall = "balanced"` no longer means "lancedb's driver default".** It now resolves to `nprobes=10, refine_factor=5` for lancedb only; pgvector and mariadb are untouched. A recall/latency sweep (`scripts/score_ann_frontier.py`) measured lancedb's own default keeping just 0.567 of the exact top-10 and giving up 0.0474 nDCG@10, which was the entire "approximation costs up to 5.6 percent" figure this project published. The new setting measures 0.986 recall and nDCG 0.8412 - 0.4 percent under an exact scan - for about 9 percent more search latency. Set `ann_recall = "fast"` to get the previous behaviour back. Only affects lancedb deployments that resolve ANN params through config.
 - Every MCP tool schema now carries one-line, plain-text descriptions. Pydantic had copied each output model's developer docstring, and the `StoreBackend` / `Partition` enums' multi-paragraph docstrings, into the published `outputSchema` (RST markup and deployment advice included). Each model and enum field now states its own wire description; the enum fields still publish their allowed values. Validation is unchanged.
 

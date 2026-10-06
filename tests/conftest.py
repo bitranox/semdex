@@ -13,7 +13,7 @@ import logging
 import os
 import re
 import tempfile
-from collections.abc import Callable, Iterator, Sequence
+from collections.abc import Callable, Iterator, Mapping, Sequence
 from dataclasses import dataclass, fields
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -505,9 +505,10 @@ def inject_deploy_with_profile_capture(
             targets: Any,
             force: bool = False,
             profile: str | None = None,
-            set_permissions: bool = True,
+            set_permissions: bool | None = None,
             dir_mode: int | None = None,
             file_mode: int | None = None,
+            permission_overrides: Mapping[str, object] | None = None,
         ) -> list[Path]:
             captured_profiles.append(profile)
             return [deployed_path]

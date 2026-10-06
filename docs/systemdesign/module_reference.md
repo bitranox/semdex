@@ -63,6 +63,8 @@ Complete (v1.1.2+)
 - `tests/test_cli.py` — CLI command tests
 - `tests/test_cli_main_exit.py` - Exit codes and stderr through the real `main()` entry point
 - `tests/test_cli_config_errors.py` - Which commands refuse and which still run when the configuration cannot be loaded
+- `tests/test_deploy_mode_safety.py` - `--dir-mode`/`--file-mode` literal, range and safety checks
+- `tests/test_permission_defaults.py` - `config-deploy` hands permissions to lib_layered_config: `--set` overrides, `.env` and deployed destinations never decide a mode, refusals exit 78
 - `tests/test_config_overrides.py` — `--set` parsing tests
 - `tests/test_display.py` — Config display formatting tests
 - `tests/test_exit_codes.py` — ExitCode enum tests
@@ -173,7 +175,7 @@ Deploy default configuration to system or user directories.
 | `--force`                    | Overwrite existing files               |
 | `--profile NAME`             | Deploy to profile subdirectory         |
 
-**Exit codes:** 0, 1, 2 (usage error, including an invalid `--profile` name), 13 (permission denied)
+**Exit codes:** 0, 1, 2 (usage error, including a refused `--dir-mode`/`--file-mode` or `--profile` name, and `--no-permissions` together with a mode), 13 (permission denied), 78 (lib_layered_config refused the permission settings: a configured one, which both `--dir-mode` and `--file-mode` or `--no-permissions` deploy past, or a `--set` of `lib_layered_config.default_permissions`)
 
 ### config-generate-examples
 
