@@ -24,13 +24,23 @@ env:
 
 jobs:
   matrix-benchmark:
-    # Retrieval quality/latency benchmark across corpora (NFCorpus, CQADupStack).
-    # Downloads corpora via ir_datasets/datasets on first use - heavy, hence weekly/manual only.
-    name: Retrieval benchmark matrix
+    # Retrieval quality across chunkers x embeddings, one job per corpus so the two run in
+    # parallel. Downloads corpora via ir_datasets on first use - heavy, hence weekly/manual
+    # only. Capped: the whole matrix over a full corpus (nfcorpus is 3,633 docs) does not
+    # finish in 120 minutes on a 2-core runner - the 150-doc regression slice alone takes
+    # 47 minutes there, about 31 of them in the quality matrix, so 300 docs is sized near
+    # an hour. The store and embedding-model matrices run in regression-gate (nfcorpus).
+    name: Retrieval benchmark matrix (${{ matrix.corpus }})
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        corpus: [nfcorpus, cqadupstack]
     env:
-      SEMDEX_BENCH_CORPORA: nfcorpus,cqadupstack
+      SEMDEX_BENCH_CORPORA: ${{ matrix.corpus }}
+      SEMDEX_BENCH_MAX_DOCS: "300"
+      SEMDEX_BENCH_MAX_QUERIES: "50"
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -47,13 +57,13 @@ jobs:
           uv pip install -e ".[dev,bench,pg,mariadb,model2vec,chunk,chunk-semantic,embed,ollama,docling,xberg,markitdown,mineru,sqlite,lance]" --system
 
       - name: Run retrieval benchmark matrix
-        run: python -m pytest -p no:cacheprovider -o addopts="" -s tests/test_e2e_matrix.py
+        run: python -m pytest -p no:cacheprovider -o addopts="" -s tests/test_e2e_matrix.py::test_quality_matrix
 
       - name: Upload benchmark report
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: benchmark-report-retrieval
+          name: benchmark-report-retrieval-${{ matrix.corpus }}
           path: benchmark-report.md
           if-no-files-found: warn
 
