@@ -445,17 +445,23 @@ Configuration can be overridden via environment variables using two methods:
 For logging configuration, use the native `LOG_*` variables (highest precedence):
 
 ```bash
-LOG_CONSOLE_LEVEL=DEBUG semdex hello
-LOG_ENABLE_GRAYLOG=true LOG_GRAYLOG_ENDPOINT="logs.example.com:12201" semdex hello
+LOG_CONSOLE_LEVEL=DEBUG semdex info
+LOG_ENABLE_GRAYLOG=true LOG_GRAYLOG_ENDPOINT="logs.example.com:12201" semdex info
 ```
+
+A value lib_log_rich refuses, in a `LOG_*` variable or in the `[lib_log_rich]` section, is a
+configuration failure: `config`, `index`, `search`, `serve`, `send-email` and `send-notification`
+exit 78 with one `Error:` line, and the other commands (`info`, `config-deploy`, ...) run with
+logging on its defaults. A refused `LOG_*` variable is ignored for that start together with every
+other `LOG_*` variable; a refused section value leaves the valid `LOG_*` variables in force.
 
 ### Method 2: Application-Prefixed Variables
 
 For any configuration section, use the format: `<PREFIX>___<SECTION>__<KEY>=value`
 
 ```bash
-SEMDEX___LIB_LOG_RICH__CONSOLE_LEVEL=DEBUG semdex hello
-SEMDEX___EMAIL__SMTP_HOSTS='["smtp.example.com:587"]' semdex hello
+SEMDEX___LIB_LOG_RICH__CONSOLE_LEVEL=DEBUG semdex info
+SEMDEX___EMAIL__SMTP_HOSTS='["smtp.example.com:587"]' semdex config --section email
 ```
 
 **Separator reference:**
