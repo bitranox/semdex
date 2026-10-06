@@ -118,8 +118,11 @@ auth = "none"
 #     provides; the tokens themselves always live in the environment, never here.
 #   Consequences: with auth = "bearer" and the variable empty/unset, serve errors
 #     (it refuses to start an endpoint that would accept no one, or everyone).
-#   Recommendation: keep the default name; supply the tokens via the environment /
-#     a .env that is NOT committed, and rotate by changing that value.
+#   Recommendation: keep the default name; export the tokens in the service's own
+#     environment (a systemd EnvironmentFile, the launching shell) and rotate by
+#     changing that value. A .env does NOT reach this variable: semdex copies only
+#     the LOG_* lines of a .env into the environment, so a token written there is
+#     never seen and serve refuses to start.
 bearer_token_env = "SEMDEX_MCP_BEARER_TOKENS"
 
 # oauth_jwks_uri / oauth_issuer / oauth_audience - JWT verification settings
@@ -168,7 +171,9 @@ bearer_token_env = "SEMDEX_MCP_BEARER_TOKENS"
 #   When to change: point it at a differently named secret your deployment provides.
 #   Consequences: like every other secret, the value lives in the environment, never
 #     in this file.
-#   Recommendation: keep the default name; supply the secret via the environment.
+#   Recommendation: keep the default name; export the secret in the service's own
+#     environment (a systemd EnvironmentFile, the launching shell). A .env does NOT
+#     reach this variable: only its LOG_* lines are copied into the environment.
 oauth_client_secret_env = "SEMDEX_MCP_OAUTH_CLIENT_SECRET"
 
 # oauth_revocation_url - upstream token-REVOCATION endpoint (OAuth proxy only; used

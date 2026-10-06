@@ -241,9 +241,14 @@ environment variable, and the value is read at runtime.
 | oauth  | `auth = "oauth"` + `oauth_jwks_uri` / `oauth_issuer` (+ proxy endpoints) | `SEMDEX_MCP_OAUTH_CLIENT_SECRET` |
 
 ```bash
-export SEMDEX_MCP_BEARER_TOKENS="s3cret-a,s3cret-b"   # from your .env, never the repo
+export SEMDEX_MCP_BEARER_TOKENS="s3cret-a,s3cret-b"   # never in the repo
 semdex serve --transport http --port 9001
 ```
+
+Export the secret in the environment that launches `serve` (the shell, or a systemd
+`EnvironmentFile`). A `.env` does not reach it: semdex copies only the `LOG_*` lines of a
+`.env` into the environment, so a token written there is never seen and `serve` refuses to
+start (exit 78).
 
 See `defaultconfig.d/17-mcp.toml` for every `[mcp]` key documented in full.
 
