@@ -6,15 +6,15 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "rich-click>=1.9.9",
-    "lib_cli_exit_tools>=2.3.4",
-    "lib_log_rich>=6.3.7",
+    "lib_cli_exit_tools>=2.4.0",
+    "lib_log_rich>=6.3.9",
     "lib_layered_config>=7.0.1",
     "btx_lib_mail>=3.0.1",
     "pydantic>=2.13.5",
     "orjson>=3.12.0",
     # Cross-OS user cache dir for the fastembed model cache (persistent default,
     # not the reboot-wiped system temp dir fastembed uses out of the box).
-    "platformdirs>=4.12.2",
+    "platformdirs>=4.12.3",
     # Default embedding provider: light ONNX embeddings (no torch), offline after
     # the first model download. Composition falls back to the deterministic
     # placeholder if a model cannot be loaded.
@@ -112,7 +112,7 @@ chunk-semantic = [
 # is for FreshStack. Metrics are computed inline (no pytrec_eval/beir/torch).
 bench = [
   "ir_datasets>=0.6.3",
-  "datasets>=5.0.1",
+  "datasets>=5.1.0",
   # Lexical retrieval for the dense-vs-BM25-vs-hybrid comparison (scripts/score_hybrid_sweep.py).
   # PyStemmer supplies the snowball stemmers; the analyzer language follows the corpus, because an
   # English analyzer on German text understates BM25 and biases the comparison toward dense.
@@ -178,7 +178,7 @@ vision = [
 # Opt-in - the core CLI does not need it. Separate from the `markitdown`/`mcp`
 # client dep above (that is a converter client; this is the server).
 mcp-server = [
-  "fastmcp>=4.0.10",
+  "fastmcp>=4.0.11",
 ]
 # Live filesystem watching: watchfiles (Rust-backed, native OS events + polling
 # fallback). Enables auto-reindex on change while `semdex serve` runs.
@@ -203,18 +203,18 @@ dev = [
   "psycopg[binary]>=3.3.6",
   "pymysql>=1.2.3",
   "ir_datasets>=0.6.3",
-  "datasets>=5.0.1",
+  "datasets>=5.1.0",
   # bench extra: scripts/score_hybrid_sweep.py imports bm25s and Stemmer (PyStemmer).
   "bm25s>=0.3.12",
   "PyStemmer>=3.1.0",
   "lancedb>=0.39.0",
   # MCP server (mcp-server extra) mirrored into dev so CI's `.[dev]` pyright run
   # can type-check the adapters/mcp/ modules and their tests.
-  "fastmcp>=4.0.10",
+  "fastmcp>=4.0.11",
   "pytest>=9.1.1",
   "pytest-asyncio>=1.4.0",  # in-memory async testing of the FastMCP server (Client(server))
   "pytest-cov>=7.1.0",
-  "hypothesis>=6.168.3",
+  "hypothesis>=6.168.5",
   "ruff>=0.16.10",
   "pyright[nodejs]>=1.1.414",
   "bandit>=1.9.4",
