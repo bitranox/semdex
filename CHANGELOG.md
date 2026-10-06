@@ -82,7 +82,8 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
   empty stdout. The root now records the failure (`adapters/cli/config_load.py`): `config`,
   `index`, `search`, `serve`, `send-email` and `send-notification` refuse with exit 78 (was 1) and
   one line naming the file, while `info`, `config-generate-examples` and help run (exit 0, was 1),
-  and `config-deploy` runs with a warning naming the failure it skipped. `--traceback` prints the
+  and `config-deploy` runs too: it reads nothing from that configuration, so
+  `config-deploy --force` replaces the broken file. `--traceback` prints the
   loader's chained traceback before the line. Any other exception from the loader is a bug and
   propagates as one. `config --profile X` reloads with the root's `--env-file` instead of
   searching for another `.env`, and a profile file that does not load exits 78 there too.
