@@ -9,6 +9,7 @@ Centralizes test infrastructure following clean architecture principles:
 from __future__ import annotations
 
 import contextlib
+import logging
 import os
 import re
 import tempfile
@@ -20,6 +21,7 @@ from typing import TYPE_CHECKING, Any
 import lib_cli_exit_tools
 import lib_log_rich.runtime
 import pytest
+import rich_click.rich_click
 from click.testing import CliRunner
 from lib_layered_config import Config
 from lib_layered_config.domain.config import SourceInfo
@@ -102,20 +104,76 @@ def _restore_cli_config(snapshot: dict[str, object]) -> None:
         setattr(lib_cli_exit_tools.config, name, value)
 
 
-@pytest.fixture(autouse=True)
-def shut_down_logging_runtime_after_each_test() -> Iterator[None]:
-    """End a logging runtime a test started, as ``main()`` does when an invocation ends.
+def _restore_logging_state(handlers: list[logging.Handler], level: int, propagate: bool) -> None:
+    """Shut down a live lib_log_rich runtime and put the root logger back as it was.
 
-    A test that drives the CLI through ``CliRunner.invoke(cli, ...)`` reaches ``init_logging``
-    but never ``main()``, whose ``finally`` is what shuts the runtime down. Left running, its
-    queue worker thread outlives the test and renders every later test's log events into the
-    stream that was current when it started. When that write hit a broken pipe on macOS, rich's
-    handler ran ``os.dup2(devnull, sys.stdout.fileno())`` from that thread and took pytest's own
-    capture descriptor with it: every test after it errored with "Bad file descriptor".
+    ``runtime.shutdown()`` alone is not enough: production ``init_logging`` also attaches a
+    stdlib handler to the root logger and raises its level, and shutting the runtime down
+    undoes neither, so a later test's stdlib warnings would be swallowed.
     """
-    yield
     if lib_log_rich.runtime.is_initialised():
         lib_log_rich.runtime.shutdown()
+    root = logging.getLogger()
+    root.handlers[:] = handlers
+    root.setLevel(level)
+    root.propagate = propagate
+
+
+@pytest.fixture(autouse=True)
+def isolated_logging_state() -> Iterator[Callable[[], None]]:
+    """Reset the process-global logging state after every test, as ``main()`` does when an invocation ends.
+
+    The lib_log_rich runtime and the stdlib root logger are process-global. A test that drives
+    the CLI through ``CliRunner.invoke(cli, ...)`` reaches ``init_logging`` (production or
+    testing composition) but never ``main()``, whose ``finally`` is what shuts the runtime down,
+    so a test would otherwise pass or fail by what ran before it rather than by its own setup.
+    Left running, the runtime's queue worker thread also outlives the test and renders every
+    later test's log events into the stream that was current when it started. When that write
+    hit a broken pipe on macOS, rich's handler ran ``os.dup2(devnull, sys.stdout.fileno())``
+    from that thread and took pytest's own capture descriptor with it: every test after it
+    errored with "Bad file descriptor". The root logger is snapshotted before the test and
+    restored after, together with shutting the runtime down.
+
+    Yields:
+        The same restore step, so a test can apply it mid-test and assert its effect.
+    """
+    root = logging.getLogger()
+    handlers, level, propagate = list(root.handlers), root.level, root.propagate
+
+    def _restore() -> None:
+        _restore_logging_state(handlers, level, propagate)
+
+    yield _restore
+    _restore()
+
+
+#: The width every test's CLI output is rendered at. Wider than the 80 columns the assertions were
+#: written against, so a message that fits one line there cannot wrap on a narrower runner.
+_CLI_OUTPUT_WIDTH = 120
+
+
+@pytest.fixture(autouse=True)
+def deterministic_cli_output(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Give every test the same uncoloured, fixed-width CLI output, on any machine and in CI.
+
+    rich-click decides colour and width once, when it is imported, into module globals that each
+    command reads again when it formats an error; an environment variable changed per test arrives
+    after that import and changes nothing, so the globals are reset here:
+
+    - ``FORCE_TERMINAL`` comes from FORCE_COLOR, PY_COLORS or GITHUB_ACTIONS, and GitHub sets
+      GITHUB_ACTIONS on every runner, so CI output was coloured and local output was not.
+    - ``WIDTH`` and ``MAX_WIDTH`` come from the terminal, which is 79 columns on the Windows
+      runners and 80 elsewhere, so an error box wrapped its message on Windows only.
+
+    rich itself reads FORCE_COLOR whenever a ``Console`` is built, which happens per command, so
+    removing the variable for the test reaches it. A console built at import time is out of reach
+    of all of this: lib_layered_config's default display console is one, so the
+    ``display_config`` tests still see colour when FORCE_COLOR is exported for the whole run.
+    """
+    monkeypatch.setattr(rich_click.rich_click, "FORCE_TERMINAL", None)
+    monkeypatch.setattr(rich_click.rich_click, "WIDTH", _CLI_OUTPUT_WIDTH)
+    monkeypatch.setattr(rich_click.rich_click, "MAX_WIDTH", _CLI_OUTPUT_WIDTH)
+    monkeypatch.delenv("FORCE_COLOR", raising=False)
 
 
 @pytest.fixture
@@ -329,6 +387,7 @@ def inject_config(
             result = cli_runner.invoke(cli, ["config"], obj=factory)
             assert "key" in result.output
     """
+    from semdex.adapters.memory import init_logging_in_memory
     from semdex.composition import AppServices, build_production
 
     def _inject(config: Config) -> Callable[[], AppServices]:
@@ -344,7 +403,9 @@ def inject_config(
             send_email=prod.send_email,
             send_notification=prod.send_notification,
             load_email_config_from_dict=prod.load_email_config_from_dict,
-            init_logging=prod.init_logging,
+            # The quiet runtime: production init_logging queues INFO lines that race into
+            # CliRunner's stderr, so a stderr assertion would depend on timing.
+            init_logging=init_logging_in_memory,
         )
         return lambda: test_services
 
@@ -380,6 +441,7 @@ def inject_config_with_profile_capture(
             cli_runner.invoke(cli, ["--profile", "staging", "config"], obj=factory)
             assert captured == ["staging"]
     """
+    from semdex.adapters.memory import init_logging_in_memory
     from semdex.composition import AppServices, build_production
 
     def _inject(config: Config, captured_profiles: list[str | None]) -> Callable[[], AppServices]:
@@ -396,7 +458,9 @@ def inject_config_with_profile_capture(
             send_email=prod.send_email,
             send_notification=prod.send_notification,
             load_email_config_from_dict=prod.load_email_config_from_dict,
-            init_logging=prod.init_logging,
+            # The quiet runtime: production init_logging queues INFO lines that race into
+            # CliRunner's stderr, so a stderr assertion would depend on timing.
+            init_logging=init_logging_in_memory,
         )
         return lambda: test_services
 
@@ -432,6 +496,7 @@ def inject_deploy_with_profile_capture(
             cli_runner.invoke(cli, ["--profile", "prod", "config-deploy", ...], obj=factory)
             assert captured == ["prod"]
     """
+    from semdex.adapters.memory import init_logging_in_memory
     from semdex.composition import AppServices, build_production
 
     def _inject(deployed_path: Path, captured_profiles: list[str | None]) -> Callable[[], AppServices]:
@@ -456,7 +521,9 @@ def inject_deploy_with_profile_capture(
             send_email=prod.send_email,
             send_notification=prod.send_notification,
             load_email_config_from_dict=prod.load_email_config_from_dict,
-            init_logging=prod.init_logging,
+            # The quiet runtime: production init_logging queues INFO lines that race into
+            # CliRunner's stderr, so a stderr assertion would depend on timing.
+            init_logging=init_logging_in_memory,
         )
         return lambda: test_services
 
@@ -488,6 +555,7 @@ def inject_deploy_configuration() -> Callable[[Callable[..., list[Path]]], Calla
             cli_runner.invoke(cli, ["config-deploy", "--target", "user"], obj=factory)
             assert len(calls) == 1
     """
+    from semdex.adapters.memory import init_logging_in_memory
     from semdex.composition import AppServices, build_production
 
     def _inject(deploy_fn: Callable[..., list[Path]]) -> Callable[[], AppServices]:
@@ -500,7 +568,9 @@ def inject_deploy_configuration() -> Callable[[Callable[..., list[Path]]], Calla
             send_email=prod.send_email,
             send_notification=prod.send_notification,
             load_email_config_from_dict=prod.load_email_config_from_dict,
-            init_logging=prod.init_logging,
+            # The quiet runtime: production init_logging queues INFO lines that race into
+            # CliRunner's stderr, so a stderr assertion would depend on timing.
+            init_logging=init_logging_in_memory,
         )
         return lambda: test_services
 
@@ -585,7 +655,7 @@ def email_cli_context(
             assert result.exit_code == 0
             assert ctx.spy.sent_notifications[0].subject == "Hi"
     """
-    from semdex.adapters.memory import load_email_config_from_dict_in_memory
+    from semdex.adapters.memory import init_logging_in_memory, load_email_config_from_dict_in_memory
     from semdex.adapters.memory.email import EmailSpy as EmailSpyImpl
     from semdex.composition import AppServices, build_production
 
@@ -605,7 +675,9 @@ def email_cli_context(
             send_email=spy.send_email,
             send_notification=spy.send_notification,
             load_email_config_from_dict=load_email_config_from_dict_in_memory,
-            init_logging=prod.init_logging,
+            # The quiet runtime: production init_logging queues INFO lines that race into
+            # CliRunner's stderr, so a stderr assertion would depend on timing.
+            init_logging=init_logging_in_memory,
         )
         return EmailCliContext(factory=lambda: test_services, spy=spy)
 
@@ -637,6 +709,7 @@ def config_cli_context(
             result = cli_runner.invoke(cli, ["config"], obj=factory)
             assert "key" in result.output
     """
+    from semdex.adapters.memory import init_logging_in_memory
     from semdex.composition import AppServices, build_production
 
     def _create(config_data: dict[str, Any]) -> Callable[[], AppServices]:
@@ -654,7 +727,9 @@ def config_cli_context(
             send_email=prod.send_email,
             send_notification=prod.send_notification,
             load_email_config_from_dict=prod.load_email_config_from_dict,
-            init_logging=prod.init_logging,
+            # The quiet runtime: production init_logging queues INFO lines that race into
+            # CliRunner's stderr, so a stderr assertion would depend on timing.
+            init_logging=init_logging_in_memory,
         )
         return lambda: test_services
 

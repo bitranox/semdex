@@ -40,7 +40,7 @@ Complete (v1.1.2+)
 - `src/semdex/adapters/memory/__init__.py` — Public facade + Protocol conformance assertions
 - `src/semdex/adapters/memory/config.py` — In-memory config adapters
 - `src/semdex/adapters/memory/email.py` — In-memory email adapters
-- `src/semdex/adapters/memory/logging.py` — In-memory logging (no-op)
+- `src/semdex/adapters/memory/logging.py` - In-memory logging (a quiet lib_log_rich runtime for tests)
 
 ### Composition Layer
 - `src/semdex/composition/__init__.py` — Wires adapters to ports
@@ -64,6 +64,7 @@ Complete (v1.1.2+)
 - `tests/test_display.py` — Config display formatting tests
 - `tests/test_exit_codes.py` — ExitCode enum tests
 - `tests/test_mail.py` — Email configuration and sending tests
+- `tests/test_memory_logging.py` - Testing-composition logging runtime and the per-test logging reset
 - `tests/test_metadata.py` — Package metadata tests
 - `tests/test_module_entry.py` — `python -m` entry tests
 - `tests/test_ports.py` — Protocol conformance tests
