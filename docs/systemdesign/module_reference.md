@@ -60,6 +60,7 @@ Complete (v1.1.2+)
 - `tests/test_behaviors.py` — Domain function tests
 - `tests/test_cache_effectiveness.py` — LRU cache behavior tests
 - `tests/test_cli.py` — CLI command tests
+- `tests/test_cli_main_exit.py` - Exit codes and stderr through the real `main()` entry point
 - `tests/test_config_overrides.py` — `--set` parsing tests
 - `tests/test_display.py` — Config display formatting tests
 - `tests/test_exit_codes.py` — ExitCode enum tests

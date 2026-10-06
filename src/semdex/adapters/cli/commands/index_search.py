@@ -33,7 +33,7 @@ from semdex.domain.models import CompactionPolicy
 from ..constants import CLICK_CONTEXT_SETTINGS
 from ..context import CLIContext, get_cli_context
 from ..exit_codes import ExitCode
-from ..typed_click import argument, option
+from ..typed_click import argument, get_current_context, option
 
 if TYPE_CHECKING:
     from semdex.adapters.config.index import IndexConfig
@@ -54,7 +54,7 @@ def _require_index_factory(cli_ctx: CLIContext) -> IndexServicesFactory:
     factory = cli_ctx.index_services_factory
     if factory is None:
         click.echo("Error: this build has no index backend wired.", err=True)
-        raise SystemExit(ExitCode.CONFIG_ERROR)
+        get_current_context().exit(ExitCode.CONFIG_ERROR)
     return factory
 
 
@@ -243,7 +243,7 @@ def cli_search(
             )
         except VectorStoreError as exc:
             click.echo(f"Error: {exc}. Run 'semdex index' first.", err=True)
-            raise SystemExit(ExitCode.GENERAL_ERROR) from exc
+            ctx.exit(ExitCode.GENERAL_ERROR)
     if not hits:
         click.echo("No matches.")
         return

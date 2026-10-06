@@ -36,7 +36,7 @@ from semdex.domain.errors import ConfigurationError, WatchError
 from ..constants import CLICK_CONTEXT_SETTINGS
 from ..context import get_cli_context
 from ..exit_codes import ExitCode
-from ..typed_click import option
+from ..typed_click import get_current_context, option
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -63,7 +63,7 @@ def _require_dataset_factory(cli_ctx: CLIContext) -> DatasetServicesFactory:
     factory = cli_ctx.dataset_services_factory
     if factory is None:
         click.echo("Error: this build has no dataset backend wired.", err=True)
-        raise SystemExit(ExitCode.CONFIG_ERROR)
+        get_current_context().exit(ExitCode.CONFIG_ERROR)
     return factory
 
 
@@ -118,7 +118,7 @@ def cli_serve(
         )
     except ConfigurationError as exc:
         click.echo(f"Error: {exc}", err=True)
-        raise SystemExit(ExitCode.CONFIG_ERROR) from exc
+        ctx.exit(ExitCode.CONFIG_ERROR)
 
     watchers = _start_watchers(cli_ctx, config, services)
     health_loop = _start_health_loop(config, health)

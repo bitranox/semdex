@@ -7,6 +7,17 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 ## [Unreleased]
 
 ### Fixed
+- **No more `SystemExit: N` on stderr.** The email, config, `index`, `search` and `serve` commands
+  raised a bare `SystemExit`, which `main()`'s catch-all branch printed as `SystemExit: 78` after the
+  real error message. They now exit through click's context (`ctx.exit`), and `main()` returns the
+  exit code rich_click's `main()` hands back instead of discarding it and returning 0. `typed_click`
+  gains a typed `get_current_context` wrapper for the helpers that have no `ctx` parameter. The exit
+  codes themselves are unchanged.
+- **A failed send is reported once.** click's `Exit` subclasses `RuntimeError`, so the send-result
+  exit raised inside the delivery `try` was caught again by the `DeliveryError`/`RuntimeError`
+  branch, adding "SMTP delivery failed" / "Failed to send email" to the correct "sending failed".
+  The send result is handled in the `try`'s `else`, and `config-deploy` re-raises an `Exit` before
+  its catch-all.
 - **`build_testing()` can run a command.** The in-memory logging initializer was a no-op while every
   command binds job context onto the lib_log_rich runtime, so any command under the testing
   composition raised `RuntimeError('lib_log_rich.init() must be called before using the logging
