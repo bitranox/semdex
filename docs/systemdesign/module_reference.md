@@ -69,6 +69,7 @@ Complete (v1.1.2+)
 - `tests/test_display.py` — Config display formatting tests
 - `tests/test_exit_codes.py` — ExitCode enum tests
 - `tests/test_mail.py` — Email configuration and sending tests
+- `tests/test_cli_email_config_errors.py` - An invalid `[email]` section or option value: one `Error:` line per problem
 - `tests/test_memory_logging.py` - Testing-composition logging runtime and the per-test logging reset
 - `tests/test_metadata.py` — Package metadata tests
 - `tests/test_module_entry.py` — `python -m` entry tests
@@ -206,7 +207,7 @@ Send email using configured SMTP settings.
 | `--use-starttls / --no-use-starttls` | Override STARTTLS               |
 | `--timeout SECONDS`                  | Override timeout                |
 
-**Exit codes:** 0, 2 (file not found, or usage error), 22, 69 (SMTP failure), 78 (no SMTP hosts, or configuration not loadable)
+**Exit codes:** 0, 2 (file not found, or usage error), 22 (invalid option value), 69 (SMTP failure), 78 (no SMTP hosts, an invalid `[email]` section, or configuration not loadable)
 
 ### send-notification
 
@@ -224,7 +225,7 @@ Send simple plain-text notification email.
 | `--use-starttls / --no-use-starttls` | Override STARTTLS               |
 | `--timeout SECONDS`                  | Override timeout                |
 
-**Exit codes:** 0, 2 (usage error), 22, 69 (SMTP failure), 78 (no SMTP hosts, or configuration not loadable)
+**Exit codes:** 0, 2 (usage error), 22 (invalid option value), 69 (SMTP failure), 78 (no SMTP hosts, an invalid `[email]` section, or configuration not loadable)
 
 ### logdemo
 

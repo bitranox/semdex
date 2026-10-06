@@ -12,6 +12,15 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
   section now; a caller that wants the settings uses its `deploy_permissions_from_config`.
 
 ### Fixed
+- **BREAKING (exit code): an invalid `[email]` section exits 78, no longer 22.** `send-email` and
+  `send-notification` let the `ValidationError` escape to `main()`'s catch-all, which exited 22
+  with pydantic's multi-line report and documentation URL. They now exit 78 (EX_CONFIG) with one
+  line per problem, `Error: Invalid configuration: email.<key>: <reason>` (an `[email.attachments]`
+  setting is named by its nested key, and the refused value, which can be the SMTP password, is
+  never shown). An invalid option value (`--timeout -5`) still exits 22, now in the same one-line
+  form (`Error: Invalid option value: ...`). A script that checks for 22 after a refused
+  configuration must check for 78. `describe_validation_error` in `adapters/email/config.py` is
+  the exported renderer.
 - **`config-deploy` leaves every permission decision to lib_layered_config (exit code change).**
   The command read `[lib_layered_config.default_permissions]` from its own configuration load,
   `.env` included, and used only `enabled` from it: a `.env` in the working directory (or

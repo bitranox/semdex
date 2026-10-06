@@ -120,7 +120,7 @@ raise_on_invalid_recipient = true
 # .env: EMAIL__ATTACHMENTS__ALLOWED_EXTENSIONS=[".pdf",".txt",".docx"] (unquoted)
 #   or one key per extension: EMAIL__ATTACHMENTS__ALLOWED_EXTENSIONS__0=.pdf, ...
 # A comma-separated value is NOT a list: it arrives as one string and is refused
-# (the command fails naming the key) rather than read as "not configured".
+# (the command exits 78 naming the key) rather than read as "not configured".
 # Note: When set, ONLY these extensions are allowed (whitelist mode)
 #
 # Whitelist Mode Examples (recommended for maximum security):
@@ -139,7 +139,7 @@ allowed_extensions = []
 # .env: EMAIL__ATTACHMENTS__BLOCKED_EXTENSIONS=[".exe",".bat",".cmd"] (unquoted)
 #   or one key per extension: EMAIL__ATTACHMENTS__BLOCKED_EXTENSIONS__0=.exe, ...
 # A comma-separated value is NOT a list: it arrives as one string and is refused
-# (the command fails naming the key) rather than read as "not configured".
+# (the command exits 78 naming the key) rather than read as "not configured".
 # Note: Only used when allowed_extensions is empty (blacklist mode)
 #
 # btx_lib_mail Default Blocked Extensions by OS:
@@ -173,7 +173,7 @@ blocked_extensions = []
 # .env: EMAIL__ATTACHMENTS__ALLOWED_DIRECTORIES=["/home/user/attachments","/tmp/exports"] (unquoted)
 #   or one key per directory: EMAIL__ATTACHMENTS__ALLOWED_DIRECTORIES__0=/home/user/attachments, ...
 # A comma-separated value is NOT a list: it arrives as one string and is refused
-# (the command fails naming the key) rather than read as "not configured".
+# (the command exits 78 naming the key) rather than read as "not configured".
 # Note: When set, attachments MUST reside under one of these directories
 #
 # Whitelist Mode Examples (recommended for maximum security):
@@ -189,7 +189,7 @@ allowed_directories = []
 # .env: EMAIL__ATTACHMENTS__BLOCKED_DIRECTORIES=["/etc","/root"] (unquoted)
 #   or one key per directory: EMAIL__ATTACHMENTS__BLOCKED_DIRECTORIES__0=/etc, ...
 # A comma-separated value is NOT a list: it arrives as one string and is refused
-# (the command fails naming the key) rather than read as "not configured".
+# (the command exits 78 naming the key) rather than read as "not configured".
 # Note: Only used when allowed_directories is empty (blacklist mode)
 #
 # btx_lib_mail Default Blocked Directories by OS:
