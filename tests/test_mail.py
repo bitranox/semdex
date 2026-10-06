@@ -7,6 +7,7 @@ email operations.
 
 from __future__ import annotations
 
+import re
 import smtplib
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -15,7 +16,12 @@ from typing import IO
 from unittest.mock import patch
 
 import pytest
-from btx_lib_mail.lib_mail import DeliveryOptions
+from btx_lib_mail.lib_mail import (
+    DANGEROUS_EXTENSIONS_POSIX,
+    DANGEROUS_EXTENSIONS_WINDOWS,
+    AttachmentSecurityError,
+    DeliveryOptions,
+)
 from pydantic import ValidationError as PydanticValidationError
 
 from semdex.adapters.email.sender import (
@@ -939,6 +945,86 @@ def test_send_email_falls_back_to_second_host_when_first_fails() -> None:
     assert result is True
     assert transport.attempted_hosts == ["smtp1.test.com:587", "smtp2.test.com:587"]
     assert [delivery.host for delivery in transport.deliveries] == ["smtp2.test.com:587"]
+
+
+# ======================== btx_lib_mail 4.0.0 defaults and limits ========================
+
+
+@pytest.mark.os_agnostic
+@pytest.mark.parametrize("suffix", [".exe", ".sh"], ids=["windows-list", "posix-list"])
+def test_a_dangerous_extension_from_either_list_is_refused_on_every_platform(tmp_path: Path, suffix: str) -> None:
+    """The default blocked extensions are the POSIX and the Windows lists on every platform.
+
+    The recipient's system decides what an attachment runs as, so a Linux sender refuses
+    ``.exe`` and a Windows sender ``.sh``; ``blocked_extensions = []`` keeps that default.
+    """
+    attachment = tmp_path / f"tool{suffix}"
+    attachment.write_bytes(b"x")
+    config = EmailConfig(
+        smtp_hosts=["smtp.test.com:587"],
+        from_address="sender@test.com",
+        attachment_blocked_directories=frozenset(),
+    )
+    transport = RecordingTransport()
+
+    with pytest.raises(AttachmentSecurityError):
+        send_email(
+            config=config, recipients="ops@example.com", subject="s", attachments=[attachment], transport=transport
+        )
+
+    assert transport.attempted_hosts == []
+
+
+@pytest.mark.os_agnostic
+def test_more_recipients_than_the_library_allows_are_refused_before_any_delivery() -> None:
+    """btx_lib_mail refuses more than 1000 recipients in one send, as a ValueError (exit 22 in the CLI)."""
+    config = EmailConfig(smtp_hosts=["smtp.test.com:587"], from_address="sender@test.com")
+    transport = RecordingTransport()
+    recipients = [f"user{index}@example.com" for index in range(1001)]
+
+    with pytest.raises(ValueError, match=r"1001 recipients, more than recipient_max_count \(1000\)"):
+        send_email(config=config, recipients=recipients, subject="s", transport=transport)
+
+    assert transport.attempted_hosts == []
+
+
+@pytest.mark.os_agnostic
+def test_more_attachments_than_the_library_allows_are_refused_before_any_delivery(tmp_path: Path) -> None:
+    """btx_lib_mail refuses more than 100 attachments in one send, as a ValueError (exit 22 in the CLI)."""
+    attachments: list[Path] = []
+    for index in range(101):
+        attachment = tmp_path / f"part{index}.txt"
+        attachment.write_text("x", encoding="utf-8")
+        attachments.append(attachment)
+    config = EmailConfig(
+        smtp_hosts=["smtp.test.com:587"],
+        from_address="sender@test.com",
+        attachment_blocked_directories=frozenset(),
+    )
+    transport = RecordingTransport()
+
+    with pytest.raises(ValueError, match=r"101 attachments, more than attachment_max_count \(100\)"):
+        send_email(
+            config=config, recipients="ops@example.com", subject="s", attachments=attachments, transport=transport
+        )
+
+    assert transport.attempted_hosts == []
+
+
+_SHIPPED_MAIL = (
+    Path(__file__).parent.parent / "src" / "semdex" / "adapters" / "config" / "defaultconfig.d" / "50-mail.toml"
+)
+
+
+@pytest.mark.os_agnostic
+def test_the_shipped_mail_file_lists_exactly_the_default_blocked_extensions() -> None:
+    """The comment block in 50-mail.toml names the library's lists, so it must not drift from them."""
+    text = _SHIPPED_MAIL.read_text(encoding="utf-8")
+    start = text.index("# btx_lib_mail Default Blocked Extensions")
+    block = text[start : text.index("blocked_extensions = []", start)]
+    listed = set(re.findall(r"(?<![\w.])\.[a-z0-9]+\b", block))
+
+    assert listed == set(DANGEROUS_EXTENSIONS_POSIX | DANGEROUS_EXTENSIONS_WINDOWS)
 
 
 # ======================== EmailConfig Recipients Defaults ========================

@@ -135,6 +135,16 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
   adapter imports `pyarrow`, which only came through lancedb. A new test fails when a module the
   package imports at run time is in no dependency list or user extra, or when an import that runs
   on module import is not a core dependency.
+- **Requires `btx_lib_mail>=4.0.0`.** What a user of `send-email` and `send-notification` can
+  see: the default blocked attachment extensions are the POSIX and the Windows lists on every
+  platform, so a Linux or macOS sender now refuses `.exe`, `.bat`, `.ps1`, `.dll`, `.lnk` and the
+  rest of the Windows list (and a Windows sender `.sh`, `.py`, ...), with exit 1 like any other
+  refused attachment; one send accepts at most 1000 recipients and 100 attachments, more are
+  refused before any delivery (exit 22); a sender or recipient longer than RFC 5321 allows, and a
+  subject with a control character or over 4096 characters, are refused. A delivery failure is
+  still reported as `DeliveryError` (exit 69). The shipped `50-mail.toml` now lists the two
+  default extension lists as the library defines them (it named a macOS list and Office macro
+  extensions the library never blocked). See the btx_lib_mail 4.0.0 changelog for the full list.
 - **The deploy port (`DeployConfiguration`) takes `set_permissions: bool | None` and
   `permission_overrides`.** None, the new default, lets lib_layered_config follow the configured
   `enabled`; a custom deploy double needs both parameters.

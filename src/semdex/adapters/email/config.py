@@ -251,7 +251,8 @@ class EmailConfig(BaseModel):
         }
 
         # Only pass attachment security settings when explicitly configured
-        # (None = use btx_lib_mail's OS-specific defaults)
+        # (None = use btx_lib_mail's defaults: both extension lists on every platform, the
+        # blocked directories of the running platform)
         if self.attachment_allowed_extensions is not None:
             kwargs["attachment_allowed_extensions"] = self.attachment_allowed_extensions
         if self.attachment_blocked_extensions is not None:

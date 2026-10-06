@@ -308,7 +308,10 @@ The `EmailConfig` Pydantic model (`adapters/email/sender.py`) provides validated
 | `attachment_raise_on_security_violation` | `bool`                    | `True`       | Raise or skip on security violation           |
 
 **Notes:**
-- `None` values use `btx_lib_mail`'s OS-specific defaults (blocked extensions/directories)
+- `None` values use `btx_lib_mail`'s defaults: the POSIX and the Windows dangerous extensions on
+  every platform, and the blocked directories of the running platform
+- One send accepts at most 1000 recipients and 100 attachments (btx_lib_mail's own limits;
+  more are refused with a `ValueError` before any delivery)
 - Empty arrays `[]` in TOML configuration are coerced to `None`
 - `max_size_bytes = 0` is coerced to `None` (disable size checking)
 - String paths are converted to `Path` objects during validation
