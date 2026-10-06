@@ -30,12 +30,12 @@ from pathlib import Path
 from typing import NamedTuple
 
 import pytest
+from _bench_corpus import corpus_extractor, corpus_sources, ranked_doc_ids
 from _benchmark_report import ResultStatus, record
 
 from semdex.application.use_cases import index_sources, search
 from semdex.composition import build_chunker, build_embedding, build_vector_store
 from semdex.domain.enums import ChunkStrategy, EmbeddingBackend, StoreBackend
-from semdex.domain.models import SourceRef
 
 # integration (not local_only): the store/quality/embedding matrices spin Docker DBs, download
 # up to 10 embedding models, and run the slow `late` chunker - minutes, too long for `make test`.
@@ -159,24 +159,6 @@ def _env_filter(env: str, members: tuple):
 # --------------------------------------------------------------------------- harness
 
 
-def _sources(docs: Mapping[str, str]) -> list[SourceRef]:
-    return [SourceRef(uri=str(doc_id), label="", content_hash="", mtime=0.0) for doc_id in docs]
-
-
-def _ranked_docs(hits: list, limit: int) -> list[str]:
-    """Dedup chunk hits to documents, best rank first."""
-    ranked: list[str] = []
-    seen: set[str] = set()
-    for hit in hits:
-        doc_id = str(hit.uri)
-        if doc_id not in seen:
-            seen.add(doc_id)
-            ranked.append(doc_id)
-        if len(ranked) >= limit:
-            break
-    return ranked
-
-
 class EvalScores(NamedTuple):
     """What one indexed-and-searched corpus produced.
 
@@ -193,10 +175,8 @@ class EvalScores(NamedTuple):
 
 def _index_and_eval(*, chunker, embedding, store, corpus: Corpus, max_tokens: int = 256) -> EvalScores:
     """Index the corpus with the given ports and score the queries."""
-    from semdex.adapters.memory.index import InMemoryExtractor
-
     docs, queries, qrels = corpus
-    extractor = InMemoryExtractor({Path(doc_id): text for doc_id, text in docs.items()})
+    extractor = corpus_extractor(docs)
     started = time.perf_counter()
     index_sources(
         extract=extractor,
@@ -204,7 +184,7 @@ def _index_and_eval(*, chunker, embedding, store, corpus: Corpus, max_tokens: in
         embedding=embedding,
         store=store,
         collection="bench",
-        sources=_sources(docs),
+        sources=corpus_sources(docs),
         max_tokens=max_tokens,
     )
     index_seconds = time.perf_counter() - started
@@ -219,7 +199,7 @@ def _index_and_eval(*, chunker, embedding, store, corpus: Corpus, max_tokens: in
         t0 = time.perf_counter()
         hits = search(embedding=embedding, store=store, collection="bench", query=text, k=_SEARCH_K)
         latencies.append(time.perf_counter() - t0)
-        ranked = _ranked_docs(hits, _NDCG_K)
+        ranked = ranked_doc_ids(hits, _NDCG_K)
         scores = {
             "ndcg@10": _ndcg_at_k(ranked, rel, _NDCG_K),
             "recall@10": _recall_at_k(ranked, relevant, _NDCG_K),
