@@ -9,16 +9,16 @@ dependencies = [
     "lib_cli_exit_tools>=2.4.0",
     "lib_log_rich>=6.3.9",
     "lib_layered_config>=7.0.1",
-    "btx_lib_mail>=3.0.1",
+    "btx_lib_mail>=4.0.0",
     "pydantic>=2.13.5",
-    "orjson>=3.12.0",
+    "orjson>=3.13.0",
     # Cross-OS user cache dir for the fastembed model cache (persistent default,
     # not the reboot-wiped system temp dir fastembed uses out of the box).
-    "platformdirs>=4.12.3",
+    "platformdirs>=4.12.4",
     # Default embedding provider: light ONNX embeddings (no torch), offline after
     # the first model download. Composition falls back to the deterministic
     # placeholder if a model cannot be loaded.
-    "fastembed>=0.8.1",
+    "fastembed>=0.9.0",
     # CAPPED, not a floor bump: onnxruntime 1.29.0 embeds 8.5x slower on CPU than 1.28.0
     # (measured A/B interleaved on real GerDaLIR chunks, 886 vs 104 ms/row, bge-base).
     # It arrives transitively through fastembed, so only an explicit cap holds it back.
@@ -116,7 +116,7 @@ bench = [
   # Lexical retrieval for the dense-vs-BM25-vs-hybrid comparison (scripts/score_hybrid_sweep.py).
   # PyStemmer supplies the snowball stemmers; the analyzer language follows the corpus, because an
   # English analyzer on German text understates BM25 and biases the comparison toward dense.
-  "bm25s>=0.3.12",
+  "bm25s>=0.3.13",
   "PyStemmer>=3.1.0",
 ]
 # Benchmark chart generation only (scripts/gen_bench_charts.py regenerates docs/benchmarks/img/*.png from
@@ -130,7 +130,7 @@ sqlite = [
 ]
 # Embedded columnar ANN vector store (pulls pyarrow; heavier, opt-in).
 lance = [
-  "lancedb>=0.39.0",
+  "lancedb>=0.40.0",
 ]
 # Postgres + pgvector server backend.
 pg = [
@@ -205,9 +205,9 @@ dev = [
   "ir_datasets>=0.6.3",
   "datasets>=5.1.0",
   # bench extra: scripts/score_hybrid_sweep.py imports bm25s and Stemmer (PyStemmer).
-  "bm25s>=0.3.12",
+  "bm25s>=0.3.13",
   "PyStemmer>=3.1.0",
-  "lancedb>=0.39.0",
+  "lancedb>=0.40.0",
   # MCP server (mcp-server extra) mirrored into dev so CI's `.[dev]` pyright run
   # can type-check the adapters/mcp/ modules and their tests.
   "fastmcp>=4.0.11",
