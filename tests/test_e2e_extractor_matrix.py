@@ -432,8 +432,14 @@ def _score_corpus_extractor(
     name: str,
     docs: list[tuple[Path, Reference]],
     service_container: Callable[..., int],
-) -> str | None:
-    """Score one container extractor across the corpus sample; None if its backend is unavailable."""
+) -> tuple[str, float] | None:
+    """Score one container extractor across the corpus sample: its table row and mean similarity.
+
+    Returns None if the extractor's backend is unavailable. A zero score is a result, not an
+    error: olmOCR-Bench's old_scans PDFs have no text layer, so an extractor without OCR
+    (markitdown) recovers nothing from them, and that is the row the table should show. The
+    caller asserts only that SOME extractor read the corpus, as the fixture grid does.
+    """
     extractor = _build_extractor(name, service_container)
     if extractor is None:
         return None
@@ -450,13 +456,9 @@ def _score_corpus_extractor(
             similarities.append(_similarity(text, reference))
 
     mean_similarity = _mean(similarities)
-    assert mean_similarity > 0.0, f"{corpus_id}/{name}: zero similarity to the reference text"
-    recall_label = "n/a"
-    if recalls:
-        mean_recall = _mean(recalls)
-        assert mean_recall > 0.0, f"{corpus_id}/{name}: no phrases recovered"
-        recall_label = f"{mean_recall * 100:.1f}%"
-    return f"| {corpus_id:12s} | {name:10s} | {recall_label:>6s} | {mean_similarity:.3f} | {len(docs)} |"
+    recall_label = f"{_mean(recalls) * 100:.1f}%" if recalls else "n/a"
+    row = f"| {corpus_id:12s} | {name:10s} | {recall_label:>6s} | {mean_similarity:.3f} | {len(docs)} |"
+    return row, mean_similarity
 
 
 @pytest.mark.parametrize("corpus_id", _PDF_CORPORA)
@@ -478,10 +480,12 @@ def test_extractor_pdf_corpora(corpus_id: str, service_container: Callable[..., 
         pytest.skip(f"{corpus_id}: no usable documents in the downloaded sample")
 
     rows: list[str] = []
+    similarities: dict[str, float] = {}
     for name in _PDF_CORPUS_EXTRACTORS:
-        row = _score_corpus_extractor(corpus_id, name, docs, service_container)
-        if row is not None:
-            rows.append(row)
+        scored = _score_corpus_extractor(corpus_id, name, docs, service_container)
+        if scored is not None:
+            rows.append(scored[0])
+            similarities[name] = scored[1]
     if not rows:
         pytest.skip(f"{corpus_id}: no container extractor available (docker absent?)")
 
@@ -492,4 +496,7 @@ def test_extractor_pdf_corpora(corpus_id: str, service_container: Callable[..., 
         f"PDF corpus fidelity - {corpus_id}",
         "| corpus | extractor | phrase_recall | edit_similarity | n_docs |\n|---|---|---|---|---|",
         rows,
+    )
+    assert any(score > 0.0 for score in similarities.values()), (
+        f"{corpus_id}: no extractor recovered any text from the corpus: {similarities}"
     )
