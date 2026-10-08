@@ -15,14 +15,14 @@ from semdex.adapters.discovery.location import from_uri, to_uri
 
 
 def test_file_uri_round_trips_through_path(tmp_path: Path) -> None:
-    """to_uri then from_uri returns the original (resolved) path, spaces and all."""
+    """to_uri then from_uri returns the original path, spaces and all."""
     path = tmp_path / "a b.md"
     path.write_text("x", encoding="utf-8")
 
     uri = to_uri(path)
 
     assert uri.startswith("file://")
-    assert from_uri(uri) == path.resolve()
+    assert from_uri(uri) == path
 
 
 def test_to_uri_is_absolute_and_percent_encodes(tmp_path: Path) -> None:
@@ -38,7 +38,43 @@ def test_from_uri_decodes_unicode(tmp_path: Path) -> None:
     """A non-ASCII name survives the round trip."""
     path = tmp_path / "café.md"
 
-    assert from_uri(to_uri(path)) == path.resolve()
+    assert from_uri(to_uri(path)) == path
+
+
+def _symlink_or_skip(link: Path, target: Path) -> None:
+    """Create *link* -> *target*, skipping where the platform refuses symlinks (Windows without the privilege)."""
+    try:
+        link.symlink_to(target)
+    except OSError as exc:
+        pytest.skip(f"symlinks unavailable here: {exc}")
+
+
+def test_to_uri_keeps_a_symlinks_own_name(tmp_path: Path) -> None:
+    """A symlinked document is named by the link, not by the file it points at.
+
+    Discovery selects a file by its own suffix, and the extractors derive the upload name
+    and MIME type from the URI. A content-addressed store (a HuggingFace cache, git-annex,
+    nix) links ``report.pdf`` to an extension-less blob, so following the link would hand
+    the extractor ``abc123`` as ``application/octet-stream`` and show the blob in hits.
+    """
+    store = tmp_path / "store"
+    store.mkdir()
+    blob = store / "abc123"
+    blob.write_text("x", encoding="utf-8")
+    link = tmp_path / "report.pdf"
+    _symlink_or_skip(link, blob)
+
+    uri = to_uri(link)
+
+    assert uri.endswith("/report.pdf")
+    assert from_uri(uri) == link
+
+
+def test_to_uri_normalises_dot_dot_lexically(tmp_path: Path) -> None:
+    """Two spellings of one path give one URI, so identity does not depend on how it was named."""
+    (tmp_path / "sub").mkdir()
+
+    assert to_uri(tmp_path / "sub" / ".." / "a.md") == to_uri(tmp_path / "a.md")
 
 
 @pytest.mark.parametrize(

@@ -10,6 +10,7 @@ Pure string/path manipulation (no I/O), so it stays in the adapters layer.
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -22,12 +23,18 @@ __all__ = ["from_uri", "to_uri"]
 
 
 def to_uri(path: Path) -> str:
-    """Return the ``file://`` URI for *path* (resolved to an absolute location).
+    """Return the ``file://`` URI for *path*, made absolute and normalised lexically.
 
-    Resolving makes the URI a stable identity independent of the caller's working
-    directory; :meth:`Path.as_uri` percent-encodes spaces and non-ASCII names.
+    An absolute, ``..``-free path makes the URI a stable identity independent of the
+    caller's working directory. Symlinks are deliberately NOT followed: a document is
+    named by the path it was discovered under, because the extractors derive the upload
+    name and MIME type from the URI, and a content-addressed store (a HuggingFace cache,
+    git-annex, nix) links ``report.pdf`` to an extension-less blob that no extractor can
+    type. :meth:`Path.as_uri` percent-encodes spaces and non-ASCII names.
     """
-    return path.resolve().as_uri()
+    # Path.resolve() would follow the link; pathlib has no lexical normaliser, so absolute()
+    # (no link following) plus os.path.normpath (collapses ``..`` as text) is the equivalent.
+    return Path(os.path.normpath(path.absolute())).as_uri()
 
 
 def from_uri(uri: str) -> Path:

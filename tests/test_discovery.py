@@ -9,6 +9,7 @@ import pytest
 
 from semdex.adapters.discovery import FilesystemConnector, discover_sources
 from semdex.adapters.discovery.location import from_uri, to_uri
+from semdex.adapters.extractor._http import guess_mime, source_name
 
 
 @pytest.mark.os_agnostic
@@ -34,6 +35,31 @@ def test_accepts_a_single_file_path(tmp_path: Path) -> None:
     file = tmp_path / "note.md"
     file.write_text("x", encoding="utf-8")
     assert [s.uri for s in discover_sources([file])] == [to_uri(file)]
+
+
+@pytest.mark.os_agnostic
+def test_a_symlinked_document_reaches_extractors_under_its_own_name(tmp_path: Path) -> None:
+    """A doc linked into a content-addressed store keeps the name and type it was selected by.
+
+    Discovery picks ``report.pdf`` by its suffix; the HTTP extractors upload it under
+    ``source_name`` with ``guess_mime``. Naming it by the extension-less blob made Xberg
+    answer 500 ``UnsupportedFormatError: application/octet-stream`` on every such file.
+    """
+    store = tmp_path / "store"
+    store.mkdir()
+    blob = store / "abc123"
+    blob.write_bytes(b"%PDF-1.3\n")
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    try:
+        (docs / "report.pdf").symlink_to(blob)
+    except OSError as exc:
+        pytest.skip(f"symlinks unavailable here: {exc}")
+
+    [source] = discover_sources([docs], extensions=(".pdf",))
+
+    assert source_name(source) == "report.pdf"
+    assert guess_mime(source) == "application/pdf"
 
 
 @pytest.mark.os_agnostic

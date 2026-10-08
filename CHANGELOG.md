@@ -10,6 +10,13 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 - **`email.smtp_hosts` and `email.recipients` set to nothing mean not configured.** A bare YAML
   key or an environment `null` was refused as "Input should be a valid list" for both settings.
   Both now read `None` as an empty list.
+- **A symlinked document keeps its own name.** Source URIs followed symlinks, so a document
+  linked to an extension-less file (a HuggingFace cache, git-annex, nix) was uploaded to the
+  HTTP extractors under the target's name as `application/octet-stream` - Xberg answered 500
+  `UnsupportedFormatError` - and search hits showed the target path. A source URI is now the
+  absolute, lexically normalised path it was discovered under. Two links to one file are now
+  two sources, and a dataset whose configured root runs through a symlinked directory
+  reindexes once under the new URIs.
 
 ### Security
 - An email attachment allow or block list given in a form it cannot be read in is now refused instead of silently ignored. A comma-separated value (`.pdf,.txt` in an environment variable or `.env`) arrives as one string, and the validators turned any value that was not a list into "not configured", so btx_lib_mail's default lists applied in place of the configured ones. A list or tuple is read as its items (an empty one still means not configured), a set is kept as given, an empty value means not configured, and anything else fails validation naming the setting and the accepted form (a JSON array such as `[".pdf", ".txt"]`). `smtp_hosts` and `recipients` no longer turn a tuple or another non-list value into an empty list. The shipped `50-mail.toml` and `.env.example` documented the comma form for all six list settings; they now show the JSON-array and per-index forms.
