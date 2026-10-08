@@ -175,7 +175,7 @@ def send_email(
         AttachmentSecurityError: An attachment the security settings refuse
             (by default the POSIX and the Windows dangerous extensions, on
             every platform) and config.attachment_raise_on_security_violation
-            is True.
+            is True. Raised before anything is delivered.
         DeliveryError: All SMTP hosts failed for a recipient.
 
     Side Effects:

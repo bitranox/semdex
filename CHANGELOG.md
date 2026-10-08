@@ -6,6 +6,20 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
 
+### Changed
+- **A refused attachment exits 77, not 1 with a traceback (exit code change).** An attachment
+  btx_lib_mail's security checks refuse (a blocked extension such as `.exe`, a file under a
+  blocked directory, a symlink, a file over the size limit) made `send-email` exit 1 with
+  `Error: Unexpected error - Attachment security violation (...)` and log the refusal with a
+  traceback, as if the program had crashed. Since btx_lib_mail 4.0.0 every blocked extension is
+  refused on every platform, so this is an ordinary outcome on Linux and macOS too. It now exits
+  77 (`ExitCode.ATTACHMENT_REFUSED`, sysexits `EX_NOPERM`: not permitted by policy) with one
+  line, `Error: Attachment refused by security policy - <the library's reason>`, logs no
+  traceback, and delivers nothing. A script that checks for 1 after a refused attachment must
+  check for 77. With `email.attachments.raise_on_security_violation = false` the attachment is
+  still skipped with a warning and the message sent, as before; a violation that names no attachment
+  left to drop is refused in warn mode too, and now exits 77 where it exited 1.
+
 ### Removed
 - `adapters/config/permissions.py` (`PermissionDefaults`, `get_permission_defaults`,
   `get_modes_for_target`, `parse_mode`): lib_layered_config reads and validates the permission
