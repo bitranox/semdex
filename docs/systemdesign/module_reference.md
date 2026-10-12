@@ -22,13 +22,14 @@ Complete (v1.1.2+)
 - `src/semdex/adapters/config/overrides.py` — CLI `--set` override parsing and deep-merge
 - `src/semdex/adapters/email/sender.py` — SMTP email with EmailConfig (Pydantic)
 - `src/semdex/adapters/email/validation.py` — Email recipient validation
-- `src/semdex/adapters/logging/setup.py` — lib_log_rich initialization
+- `src/semdex/adapters/logging/setup.py` - lib_log_rich initialization; takes only the `LOG_*` lines of a `.env`, and raises `InvalidLoggingConfigError` for a refused `[lib_log_rich]` value or `LOG_*` variable, after starting logging with its defaults (and without the `LOG_*` variables only when one of them is refused)
 - `src/semdex/adapters/cli/` — CLI adapter package:
   - `__init__.py` — Public facade
   - `constants.py` — Shared constants
   - `exit_codes.py` — POSIX exit codes (ExitCode IntEnum)
   - `traceback.py` — Traceback state management
   - `context.py` — Click context helpers
+  - `config_load.py` - Configuration load for the CLI; records a load failure, `require_config` refuses with exit 78
   - `root.py` — Root command group
   - `main.py` — Entry point
   - `commands/info.py` — info, hello, fail commands
@@ -40,7 +41,7 @@ Complete (v1.1.2+)
 - `src/semdex/adapters/memory/__init__.py` — Public facade + Protocol conformance assertions
 - `src/semdex/adapters/memory/config.py` — In-memory config adapters
 - `src/semdex/adapters/memory/email.py` — In-memory email adapters
-- `src/semdex/adapters/memory/logging.py` — In-memory logging (no-op)
+- `src/semdex/adapters/memory/logging.py` - In-memory logging (a quiet lib_log_rich runtime for tests, started with every `LOG_*` variable hidden)
 
 ### Composition Layer
 - `src/semdex/composition/__init__.py` — Wires adapters to ports
@@ -60,10 +61,19 @@ Complete (v1.1.2+)
 - `tests/test_behaviors.py` — Domain function tests
 - `tests/test_cache_effectiveness.py` — LRU cache behavior tests
 - `tests/test_cli.py` — CLI command tests
+- `tests/test_cli_main_exit.py` - Exit codes and stderr through the real `main()` entry point
+- `tests/test_cli_config_errors.py` - Which commands refuse and which still run when the configuration cannot be loaded
+- `tests/test_deploy_mode_safety.py` - `--dir-mode`/`--file-mode` literal, range and safety checks
+- `tests/test_permission_defaults.py` - `config-deploy` hands permissions to lib_layered_config: `--set` overrides, `.env` and deployed destinations never decide a mode, refusals exit 78
 - `tests/test_config_overrides.py` — `--set` parsing tests
 - `tests/test_display.py` — Config display formatting tests
 - `tests/test_exit_codes.py` — ExitCode enum tests
+- `tests/test_logging_dotenv_isolation.py` - Logging takes only `LOG_*` from a `.env`; an invalid `[lib_log_rich]` section or `LOG_*` variable is a configuration failure that leaves logging running
 - `tests/test_mail.py` — Email configuration and sending tests
+- `tests/test_cli_email_config_errors.py` - An invalid `[email]` section or option value: one `Error:` line per problem
+- `tests/test_cli_attachment_refused.py` - An attachment btx_lib_mail's security checks refuse exits 77 with one `Error:` line, nothing delivered
+- `tests/test_memory_logging.py` - Testing-composition logging runtime and the per-test logging reset
+- `tests/test_declared_dependencies.py` - Every module the package imports at run time is a declared dependency
 - `tests/test_metadata.py` — Package metadata tests
 - `tests/test_module_entry.py` — `python -m` entry tests
 - `tests/test_ports.py` — Protocol conformance tests
@@ -100,19 +110,20 @@ Run `lint-imports` to verify compliance.
 
 POSIX-conventional exit codes defined in `adapters/cli/exit_codes.py`:
 
-| Code | Name                | Usage                                     |
-|------|---------------------|-------------------------------------------|
-| 0    | `SUCCESS`           | Command completed successfully            |
-| 1    | `GENERAL_ERROR`     | Unhandled exception, general failure      |
-| 2    | `FILE_NOT_FOUND`    | Attachment or file not found              |
-| 13   | `PERMISSION_DENIED` | Cannot write to target directory          |
-| 22   | `INVALID_ARGUMENT`  | Invalid CLI argument or section not found |
-| 69   | `SMTP_FAILURE`      | SMTP delivery failed                      |
-| 78   | `CONFIG_ERROR`      | Missing required configuration            |
-| 110  | `TIMEOUT`           | Operation timed out                       |
-| 130  | `SIGNAL_INT`        | Interrupted (SIGINT/Ctrl+C)               |
-| 141  | `BROKEN_PIPE`       | Output pipe closed                        |
-| 143  | `SIGNAL_TERM`       | Terminated (SIGTERM)                      |
+| Code | Name                 | Usage                                                                                                     |
+|------|----------------------|-----------------------------------------------------------------------------------------------------------|
+| 0    | `SUCCESS`            | Command completed successfully                                                                            |
+| 1    | `GENERAL_ERROR`      | Unhandled exception, general failure                                                                      |
+| 2    | `FILE_NOT_FOUND`     | Attachment or file not found                                                                              |
+| 13   | `PERMISSION_DENIED`  | Cannot write to target directory                                                                          |
+| 22   | `INVALID_ARGUMENT`   | Invalid CLI argument or section not found                                                                 |
+| 69   | `SMTP_FAILURE`       | SMTP delivery failed                                                                                      |
+| 77   | `ATTACHMENT_REFUSED` | Attachment refused by btx_lib_mail's security checks (blocked extension or directory, symlink, size, ...) |
+| 78   | `CONFIG_ERROR`       | Configuration missing or not loadable                                                                     |
+| 110  | `TIMEOUT`            | Operation timed out                                                                                       |
+| 130  | `SIGNAL_INT`         | Interrupted (SIGINT/Ctrl+C)                                                                               |
+| 141  | `BROKEN_PIPE`        | Output pipe closed                                                                                        |
+| 143  | `SIGNAL_TERM`        | Terminated (SIGTERM)                                                                                      |
 
 ---
 
@@ -157,7 +168,7 @@ Display merged configuration from all sources.
 | `--format [human\|json]` | Output format (default: human) |
 | `--section NAME`         | Show only specific section     |
 
-**Exit codes:** 0, 22 (section not found)
+**Exit codes:** 0, 2 (usage error), 22 (section not found), 78 (configuration not loadable)
 
 ### config-deploy
 
@@ -169,7 +180,7 @@ Deploy default configuration to system or user directories.
 | `--force`                    | Overwrite existing files               |
 | `--profile NAME`             | Deploy to profile subdirectory         |
 
-**Exit codes:** 0, 1, 13 (permission denied)
+**Exit codes:** 0, 1, 2 (usage error, including a refused `--dir-mode`/`--file-mode` or `--profile` name, and `--no-permissions` together with a mode), 13 (permission denied), 78 (lib_layered_config refused the permission settings: a configured one, which both `--dir-mode` and `--file-mode` or `--no-permissions` deploy past, or a `--set` of `lib_layered_config.default_permissions`)
 
 ### config-generate-examples
 
@@ -200,7 +211,7 @@ Send email using configured SMTP settings.
 | `--use-starttls / --no-use-starttls` | Override STARTTLS               |
 | `--timeout SECONDS`                  | Override timeout                |
 
-**Exit codes:** 0, 2 (file not found), 22, 69 (SMTP failure), 78 (no SMTP hosts)
+**Exit codes:** 0, 2 (file not found, or usage error), 22 (invalid option value), 69 (SMTP failure), 77 (an attachment refused by btx_lib_mail's security checks), 78 (no SMTP hosts, an invalid `[email]` section, or configuration not loadable)
 
 ### send-notification
 
@@ -218,7 +229,7 @@ Send simple plain-text notification email.
 | `--use-starttls / --no-use-starttls` | Override STARTTLS               |
 | `--timeout SECONDS`                  | Override timeout                |
 
-**Exit codes:** 0, 22, 69 (SMTP failure), 78 (no SMTP hosts)
+**Exit codes:** 0, 2 (usage error), 22 (invalid option value), 69 (SMTP failure), 78 (no SMTP hosts, an invalid `[email]` section, or configuration not loadable)
 
 ### logdemo
 
@@ -299,7 +310,10 @@ The `EmailConfig` Pydantic model (`adapters/email/sender.py`) provides validated
 | `attachment_raise_on_security_violation` | `bool`                    | `True`       | Raise or skip on security violation           |
 
 **Notes:**
-- `None` values use `btx_lib_mail`'s OS-specific defaults (blocked extensions/directories)
+- `None` values use `btx_lib_mail`'s defaults: the POSIX and the Windows dangerous extensions on
+  every platform, and the blocked directories of the running platform
+- One send accepts at most 1000 recipients and 100 attachments (btx_lib_mail's own limits;
+  more are refused with a `ValueError` before any delivery)
 - Empty arrays `[]` in TOML configuration are coerced to `None`
 - `max_size_bytes = 0` is coerced to `None` (disable size checking)
 - String paths are converted to `Path` objects during validation

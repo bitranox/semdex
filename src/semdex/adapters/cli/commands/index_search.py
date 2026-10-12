@@ -30,10 +30,11 @@ from semdex.application.use_cases import index_sources, search
 from semdex.domain.errors import VectorStoreError
 from semdex.domain.models import CompactionPolicy
 
+from ..config_load import require_config
 from ..constants import CLICK_CONTEXT_SETTINGS
 from ..context import CLIContext, get_cli_context
 from ..exit_codes import ExitCode
-from ..typed_click import argument, option
+from ..typed_click import argument, get_current_context, option
 
 if TYPE_CHECKING:
     from semdex.adapters.config.index import IndexConfig
@@ -54,7 +55,7 @@ def _require_index_factory(cli_ctx: CLIContext) -> IndexServicesFactory:
     factory = cli_ctx.index_services_factory
     if factory is None:
         click.echo("Error: this build has no index backend wired.", err=True)
-        raise SystemExit(ExitCode.CONFIG_ERROR)
+        get_current_context().exit(ExitCode.CONFIG_ERROR)
     return factory
 
 
@@ -168,6 +169,8 @@ def cli_index(
     same sources replaces their chunks rather than duplicating them.
     """
     cli_ctx = get_cli_context(ctx)
+    # Every helper below reads cli_ctx.config; a load failure is reported before any of them.
+    require_config(ctx, cli_ctx)
     factory = _require_index_factory(cli_ctx)
     idx, store, target, model = _resolve(
         cli_ctx, store_dir=store_dir, collection=collection, embedding_model=embedding_model
@@ -225,6 +228,8 @@ def cli_search(
 ) -> None:
     """Search a collection and print ranked matches (score, path, snippet)."""
     cli_ctx = get_cli_context(ctx)
+    # Every helper below reads cli_ctx.config; a load failure is reported before any of them.
+    require_config(ctx, cli_ctx)
     factory = _require_index_factory(cli_ctx)
     idx, store, target, model = _resolve(
         cli_ctx, store_dir=store_dir, collection=collection, embedding_model=embedding_model
@@ -243,7 +248,7 @@ def cli_search(
             )
         except VectorStoreError as exc:
             click.echo(f"Error: {exc}. Run 'semdex index' first.", err=True)
-            raise SystemExit(ExitCode.GENERAL_ERROR) from exc
+            ctx.exit(ExitCode.GENERAL_ERROR)
     if not hits:
         click.echo("No matches.")
         return

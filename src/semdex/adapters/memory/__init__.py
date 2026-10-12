@@ -1,7 +1,7 @@
 """In-memory adapter implementations for testing.
 
 Provides lightweight implementations of all application ports that operate
-entirely in memory -- no filesystem, no SMTP, no logging framework.
+entirely in memory -- no filesystem and no SMTP; logging is a quiet lib_log_rich runtime.
 
 Contents:
     * :mod:`.config` - In-memory configuration adapters

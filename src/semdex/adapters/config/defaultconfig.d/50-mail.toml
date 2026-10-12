@@ -120,7 +120,7 @@ raise_on_invalid_recipient = true
 # .env: EMAIL__ATTACHMENTS__ALLOWED_EXTENSIONS=[".pdf",".txt",".docx"] (unquoted)
 #   or one key per extension: EMAIL__ATTACHMENTS__ALLOWED_EXTENSIONS__0=.pdf, ...
 # A comma-separated value is NOT a list: it arrives as one string and is refused
-# (the command fails naming the key) rather than read as "not configured".
+# (the command exits 78 naming the key) rather than read as "not configured".
 # Note: When set, ONLY these extensions are allowed (whitelist mode)
 #
 # Whitelist Mode Examples (recommended for maximum security):
@@ -134,35 +134,27 @@ allowed_extensions = []
 
 # Purpose: Blacklist of blocked file extensions (ignored when allowed_extensions is set)
 # Type: array of strings
-# Default: [] (uses OS-specific dangerous extensions from btx_lib_mail)
+# Default: [] (uses btx_lib_mail's dangerous extensions: the POSIX and the Windows list on
+#   every platform)
 # Environment Variable: SEMDEX___EMAIL__ATTACHMENTS__BLOCKED_EXTENSIONS='[".exe",".bat",".cmd"]'
 # .env: EMAIL__ATTACHMENTS__BLOCKED_EXTENSIONS=[".exe",".bat",".cmd"] (unquoted)
 #   or one key per extension: EMAIL__ATTACHMENTS__BLOCKED_EXTENSIONS__0=.exe, ...
 # A comma-separated value is NOT a list: it arrives as one string and is refused
-# (the command fails naming the key) rather than read as "not configured".
+# (the command exits 78 naming the key) rather than read as "not configured".
 # Note: Only used when allowed_extensions is empty (blacklist mode)
 #
-# btx_lib_mail Default Blocked Extensions by OS:
+# btx_lib_mail Default Blocked Extensions (both lists, on every platform):
+#   The recipient's system decides what an attachment runs as, so a Linux or macOS sender
+#   refuses the Windows list too, and a Windows sender the POSIX list.
 #
-#   Windows (executable/script dangers):
-#     Executables:  .exe, .com, .scr, .pif, .msi, .msp
-#     Scripts:      .bat, .cmd, .ps1, .psm1, .psd1, .vbs, .vbe, .js, .jse, .ws, .wsf, .wsh
-#     Libraries:    .dll, .ocx, .sys, .drv, .cpl
-#     Shortcuts:    .lnk, .url, .scf
-#     Office Macro: .docm, .xlsm, .pptm, .dotm, .xltm, .potm
-#     Registry:     .reg
-#     Installers:   .cab, .inf
-#     HTML Apps:    .hta, .chm
+#   DANGEROUS_EXTENSIONS_WINDOWS:
+#     .application, .bat, .cmd, .com, .cpl, .dll, .drv, .ear, .exe, .gadget, .hta, .inf,
+#     .jar, .js, .jse, .lnk, .msc, .msi, .msp, .ocx, .pif, .ps1, .ps2, .psc1, .psc2, .reg,
+#     .scf, .scr, .sys, .url, .vbe, .vbs, .war, .ws, .wsc, .wsf, .wsh
 #
-#   macOS (application/installer dangers):
-#     Applications: .app, .pkg, .dmg, .kext
-#     Scripts:      .command, .tool, .workflow, .action
-#
-#   Linux/POSIX (script dangers):
-#     Scripts:      .sh, .bash, .zsh, .fish, .csh, .ksh
-#     Binaries:     .bin, .run, .AppImage, .deb, .rpm
-#     Python:       .py, .pyc, .pyo, .pyw
-#     Other:        .pl, .rb, .so, .ko
+#   DANGEROUS_EXTENSIONS_POSIX:
+#     .apk, .appimage, .bash, .bin, .cjs, .csh, .deb, .dylib, .ear, .elf, .jar, .js, .ksh,
+#     .mjs, .out, .php, .pl, .pm, .py, .pyc, .pyo, .pyw, .rb, .rpm, .run, .sh, .so, .war, .zsh
 #
 blocked_extensions = []
 
@@ -173,7 +165,7 @@ blocked_extensions = []
 # .env: EMAIL__ATTACHMENTS__ALLOWED_DIRECTORIES=["/home/user/attachments","/tmp/exports"] (unquoted)
 #   or one key per directory: EMAIL__ATTACHMENTS__ALLOWED_DIRECTORIES__0=/home/user/attachments, ...
 # A comma-separated value is NOT a list: it arrives as one string and is refused
-# (the command fails naming the key) rather than read as "not configured".
+# (the command exits 78 naming the key) rather than read as "not configured".
 # Note: When set, attachments MUST reside under one of these directories
 #
 # Whitelist Mode Examples (recommended for maximum security):
@@ -189,7 +181,7 @@ allowed_directories = []
 # .env: EMAIL__ATTACHMENTS__BLOCKED_DIRECTORIES=["/etc","/root"] (unquoted)
 #   or one key per directory: EMAIL__ATTACHMENTS__BLOCKED_DIRECTORIES__0=/etc, ...
 # A comma-separated value is NOT a list: it arrives as one string and is refused
-# (the command fails naming the key) rather than read as "not configured".
+# (the command exits 78 naming the key) rather than read as "not configured".
 # Note: Only used when allowed_directories is empty (blacklist mode)
 #
 # btx_lib_mail Default Blocked Directories by OS:
@@ -234,5 +226,6 @@ allow_symlinks = false
 # Default: true (raise AttachmentSecurityError)
 # Environment Variable: SEMDEX___EMAIL__ATTACHMENTS__RAISE_ON_SECURITY_VIOLATION=true
 # .env: EMAIL__ATTACHMENTS__RAISE_ON_SECURITY_VIOLATION=true
-# Note: When false, violations log a warning and skip the attachment
+# Note: When true, send-email refuses the whole message and exits 77 (EX_NOPERM)
+#   naming the violation; when false, violations log a warning and skip the attachment
 raise_on_security_violation = true

@@ -10,19 +10,21 @@ import functools
 import logging
 import os
 from collections.abc import Callable
-from typing import Any, cast
+from typing import Any, NoReturn, cast
 
 import rich_click as click
+from btx_lib_mail import AttachmentSecurityError
 from lib_layered_config import Config
 from pydantic import ValidationError
 
 from semdex import __init__conf__
+from semdex.adapters.email.config import describe_validation_error
 from semdex.adapters.email.sender import EmailConfig
 from semdex.application.ports import LoadEmailConfigFromDict
 from semdex.domain.errors import ConfigurationError, DeliveryError
 
 from ...exit_codes import ExitCode
-from ...typed_click import option
+from ...typed_click import get_current_context, option
 
 logger = logging.getLogger(__name__)
 
@@ -117,9 +119,13 @@ def load_and_validate_email_config(config: Config, loader: LoadEmailConfigFromDi
         EmailConfig with validated SMTP configuration.
 
     Raises:
-        SystemExit: When SMTP hosts are not configured (exit code 78 / CONFIG_ERROR).
+        click.exceptions.Exit: When the ``[email]`` section is invalid, one ``Error:`` line per
+            problem, or when SMTP hosts are not configured (exit code 78 / CONFIG_ERROR).
     """
-    email_config = loader(config.as_dict())
+    try:
+        email_config = loader(config.as_dict())
+    except ValidationError as exc:
+        _refuse_email_config(exc, "Invalid configuration", exit_code=ExitCode.CONFIG_ERROR)
 
     if not email_config.smtp_hosts:
         logger.error("No SMTP hosts configured")
@@ -127,7 +133,7 @@ def load_and_validate_email_config(config: Config, loader: LoadEmailConfigFromDi
             "\nError: No SMTP hosts configured. Please configure email.smtp_hosts in your config file.", err=True
         )
         click.echo(f"See: {__init__conf__.shell_command} config-deploy --target user", err=True)
-        raise SystemExit(ExitCode.CONFIG_ERROR)
+        get_current_context().exit(ExitCode.CONFIG_ERROR)
 
     return email_config
 
@@ -149,17 +155,19 @@ def execute_with_email_error_handling(
             (needed for send-email with attachments).
 
     Raises:
-        SystemExit: On any error (unless DEVELOPMENT_MODE is set).
+        click.exceptions.Exit: On any error (unless DEVELOPMENT_MODE is set).
         Exception: Re-raised in development mode for debugging.
 
     Exception Priority Order:
         Exceptions are caught in specificity order (most specific first):
 
         1. ConfigurationError -> CONFIG_ERROR (78): Missing/invalid config
-        2. ValueError -> INVALID_ARGUMENT (2): Invalid parameters or email format
-        3. FileNotFoundError -> FILE_NOT_FOUND (66): Missing attachment (if enabled)
-        4. DeliveryError/RuntimeError -> SMTP_FAILURE (69): SMTP transport failures
-        5. Exception (catch-all) -> GENERAL_ERROR (1): Unexpected errors with traceback
+        2. ValueError -> INVALID_ARGUMENT (22): Invalid parameters or email format
+        3. FileNotFoundError -> FILE_NOT_FOUND (2): Missing attachment (if enabled)
+        4. AttachmentSecurityError -> ATTACHMENT_REFUSED (77): An attachment btx_lib_mail's
+           security checks refuse (blocked extension or directory, symlink, size, ...)
+        5. DeliveryError/RuntimeError -> SMTP_FAILURE (69): SMTP transport failures
+        6. Exception (catch-all) -> GENERAL_ERROR (1): Unexpected errors with traceback
 
         This ordering ensures specific exceptions aren't caught by broader handlers.
         When adding new exception types, insert them before the catch-all Exception handler.
@@ -171,7 +179,6 @@ def execute_with_email_error_handling(
     """
     try:
         result = operation()
-        _handle_send_result(result, recipients, message_type)
     except ConfigurationError as exc:
         _handle_send_error(
             exc,
@@ -195,6 +202,8 @@ def execute_with_email_error_handling(
             "Attachment file not found",
             exit_code=ExitCode.FILE_NOT_FOUND,
         )
+    except AttachmentSecurityError as exc:
+        _refuse_attachment(exc)
     except (DeliveryError, RuntimeError) as exc:
         _handle_send_error(
             exc,
@@ -213,18 +222,66 @@ def execute_with_email_error_handling(
             exit_code=ExitCode.GENERAL_ERROR,
             log_traceback=True,
         )
+    else:
+        # Outside the try on purpose: a failed send exits through click's Exit, which is a
+        # RuntimeError, so inside the try the DeliveryError/RuntimeError branch would catch it
+        # and report the same failure a second time as "SMTP delivery failed".
+        _handle_send_result(result, recipients, message_type)
 
 
-def handle_validation_error(exc: ValidationError) -> None:
-    """Handle Pydantic validation errors from config overrides.
+def handle_validation_error(exc: ValidationError) -> NoReturn:
+    """Refuse an invalid command-line override, one ``Error:`` line per problem.
 
     Args:
         exc: The validation error.
 
     Raises:
-        SystemExit: Always raises with INVALID_ARGUMENT exit code.
+        click.exceptions.Exit: Always raised, with the INVALID_ARGUMENT exit code.
     """
-    _handle_send_error(exc, "Invalid configuration", "Invalid option value", exit_code=ExitCode.INVALID_ARGUMENT)
+    _refuse_email_config(exc, "Invalid option value", exit_code=ExitCode.INVALID_ARGUMENT)
+
+
+def _refuse_email_config(exc: ValidationError, heading: str, *, exit_code: ExitCode) -> NoReturn:
+    """Log and print an EmailConfig validation error as one line per problem, then exit.
+
+    pydantic's own report spans several lines per problem and ends each with a documentation
+    URL; :func:`describe_validation_error` gives ``email.<key>: <reason>`` without the input,
+    which can be the SMTP password.
+
+    Args:
+        exc: The validation error.
+        heading: What was invalid, e.g. "Invalid configuration" for the file.
+        exit_code: The code to exit with.
+
+    Raises:
+        click.exceptions.Exit: Always raised, with ``exit_code``.
+    """
+    problems = describe_validation_error(exc)
+    logger.error(heading, extra={"problems": problems, "error_type": type(exc).__name__})
+    for problem in problems:
+        click.echo(f"Error: {heading}: {problem}", err=True)
+    get_current_context().exit(exit_code)
+
+
+def _refuse_attachment(exc: AttachmentSecurityError) -> NoReturn:
+    """Report an attachment btx_lib_mail refused on security grounds, then exit 77.
+
+    The refusal is policy working as configured, not a crash, so no traceback is logged. The
+    user sees the library's reason, which names the violation and the resolved path; it never
+    carries a credential.
+
+    Args:
+        exc: The refusal btx_lib_mail raised.
+
+    Raises:
+        click.exceptions.Exit: Always raised, with the ATTACHMENT_REFUSED exit code.
+    """
+    logger.error(
+        "Attachment refused by security policy",
+        extra={"reason": exc.reason, "violation_type": exc.violation_type.value},
+    )
+    click.echo(f"\nError: Attachment refused by security policy - {exc.reason}", err=True)
+    get_current_context().exit(ExitCode.ATTACHMENT_REFUSED)
 
 
 def _handle_send_result(result: bool, recipients: list[str] | None, message_type: str) -> None:
@@ -236,14 +293,14 @@ def _handle_send_result(result: bool, recipients: list[str] | None, message_type
         message_type: "Email" or "Notification" for display.
 
     Raises:
-        SystemExit: If send failed.
+        click.exceptions.Exit: If the send failed.
     """
     if result:
         click.echo(f"\n{message_type} sent successfully!")
         logger.info("%s sent via CLI", message_type, extra={"recipients": recipients})
     else:
         click.echo(f"\n{message_type} sending failed.", err=True)
-        raise SystemExit(ExitCode.SMTP_FAILURE)
+        get_current_context().exit(ExitCode.SMTP_FAILURE)
 
 
 def _handle_send_error(
@@ -264,7 +321,9 @@ def _handle_send_error(
         log_traceback: Whether to include traceback in logs.
 
     Raises:
-        SystemExit: Always raises with the given exit code.
+        click.exceptions.Exit: Always raised, with the given exit code. Commands exit through
+            click's context, never a bare ``SystemExit``, which ``main()`` would print as
+            ``SystemExit: N``.
     """
     logger.error(
         log_message,
@@ -272,7 +331,7 @@ def _handle_send_error(
         exc_info=log_traceback,
     )
     click.echo(f"\nError: {user_message} - {exc}", err=True)
-    raise SystemExit(exit_code)
+    get_current_context().exit(exit_code)
 
 
 __all__ = [

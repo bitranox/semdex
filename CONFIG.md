@@ -142,8 +142,8 @@ Deploy bundled default configuration to platform-specific directories.
 | `--target`         | Yes      | Target layer: `app`, `host`, or `user`. Can be specified multiple times.          |
 | `--force`          | No       | Overwrite existing configuration files. Without this, existing files are skipped. |
 | `--profile NAME`   | No       | Deploy to a profile-specific subdirectory (e.g., `profile/production/`).          |
-| `--permissions`    | No       | Enable Unix permission setting (default).                                         |
-| `--no-permissions` | No       | Disable permission setting; use system umask instead.                             |
+| `--permissions`    | No       | Set Unix permissions even when the configured `enabled` is false.                 |
+| `--no-permissions` | No       | Disable permission setting (system umask); not combinable with a mode option.     |
 | `--dir-mode MODE`  | No       | Override directory permissions (octal: `750` or `0o750`).                         |
 | `--file-mode MODE` | No       | Override file permissions (octal: `640` or `0o640`).                              |
 
@@ -239,13 +239,21 @@ semdex config-deploy --target user --dir-mode 750 --file-mode 640
 semdex config-deploy --target user --dir-mode 0o750
 ```
 
+A mode must be a plain octal literal (`750` or `0o750`; no sign, whitespace, `_` or other base)
+within `0`..`0o7777`. Because the deployed files can hold credentials, a mode is also refused when
+it sets the setuid, setgid or sticky bit, grants group or world write, puts an execute bit on a
+file, or takes the owner's access away (a directory needs owner `rwx`, a file owner `rw`). Group
+write is refused like world write because a group can hold every local account (on macOS all of
+them share `staff`), and a configuration file never needs `x`. A refused mode is a usage error
+(exit 2) that names the offending bits, and nothing is written.
+
 **Configurable defaults:**
 
 Permission defaults can be customized in `[lib_layered_config.default_permissions]`:
 
 ```toml
 [lib_layered_config.default_permissions]
-# Values: octal strings ("0o755", "755") or decimal integers (493)
+# Values: octal strings ("0o755", "755"); a bare integer is refused (see below)
 app_directory = "0o755"
 app_file = "0o644"
 host_directory = "0o755"
@@ -256,6 +264,39 @@ user_file = "0o600"
 # Set to false to disable permission setting by default
 enabled = true
 ```
+
+`config-deploy` decides none of this itself: it passes its options and any `--set` of this
+section to lib_layered_config, which applies each target's own layer modes. The library reads the
+section from the bundled defaults, the configuration files this deploy does not overwrite and the
+environment, with the `--set` values laid over them. It never reads `.env` for it (neither one
+found from the working directory nor an explicit `--env-file`), so a `.env` can neither change a
+deployed mode nor block a deploy. `--dir-mode`/`--file-mode` override the configured modes for
+every target, and a key left out falls back to the layer default in the table above. Without
+`--permissions`/`--no-permissions`, `enabled` decides; `enabled = false` behaves like
+`--no-permissions`, and `--permissions` sets the modes anyway.
+
+A configured mode follows the same rules as `--dir-mode`/`--file-mode`: a plain octal STRING
+(`"0o750"`, `"750"`), never setuid/setgid/sticky, group or world write, an execute bit on a file,
+or a directory without owner `rwx` / a file without owner `rw`. A bare integer is refused rather
+than reinterpreted: TOML `user_file = 400`, `--set ...user_file=400` and an environment value `400`
+all arrive as the DECIMAL integer 400, which is `0o620`, not the owner-read-only mode the digits
+suggest. Quote it in TOML (`user_file = "640"`); in an environment variable or `--set`, use the
+`0o` prefix (`0o640`), which is never read as a number. `enabled` must be a real boolean
+(`true`/`false` in TOML, an environment variable or `--set`); `"no"`, `"off"`, `0` or `1` are
+refused rather than read as one. An unknown key in the section is refused rather than ignored.
+Any violation stops `config-deploy` before it writes anything, with exit 78, one line per problem
+naming the key and where it was set, and a hint, for example:
+
+```text
+Error: lib_layered_config.default_permissions.user_file: a bare integer is read as decimal (400 = 0o620); write the mode as an octal string: "0o640" (quoted) in a file, 0o640 in the environment or a runtime override (such as an application's --set) (source: env)
+Hint: to deploy anyway, pass both --dir-mode and --file-mode (the built-in modes are 700 and 600 for user, 755 and 644 for app and host); --no-permissions also deploys, but leaves every mode to the umask, which can make a user file that holds secrets readable by other accounts.
+```
+
+The same refusal applies when a file the library reads cannot be loaded: `config-deploy` never
+falls back to the layer defaults, which may be wider than what was configured. A refused `--set`
+of the section names `(source: override)` and has no hint, since no option gets past it: fix or
+drop the `--set`. The files a deploy writes are never read for it, so `config-deploy --force`
+replaces a destination that carries a bad value, or does not parse at all, without further options.
 
 ### Generate Example Configuration Files
 
@@ -404,17 +445,23 @@ Configuration can be overridden via environment variables using two methods:
 For logging configuration, use the native `LOG_*` variables (highest precedence):
 
 ```bash
-LOG_CONSOLE_LEVEL=DEBUG semdex hello
-LOG_ENABLE_GRAYLOG=true LOG_GRAYLOG_ENDPOINT="logs.example.com:12201" semdex hello
+LOG_CONSOLE_LEVEL=DEBUG semdex info
+LOG_ENABLE_GRAYLOG=true LOG_GRAYLOG_ENDPOINT="logs.example.com:12201" semdex info
 ```
+
+A value lib_log_rich refuses, in a `LOG_*` variable or in the `[lib_log_rich]` section, is a
+configuration failure: `config`, `index`, `search`, `serve`, `send-email` and `send-notification`
+exit 78 with one `Error:` line, and the other commands (`info`, `config-deploy`, ...) run with
+logging on its defaults. A refused `LOG_*` variable is ignored for that start together with every
+other `LOG_*` variable; a refused section value leaves the valid `LOG_*` variables in force.
 
 ### Method 2: Application-Prefixed Variables
 
 For any configuration section, use the format: `<PREFIX>___<SECTION>__<KEY>=value`
 
 ```bash
-SEMDEX___LIB_LOG_RICH__CONSOLE_LEVEL=DEBUG semdex hello
-SEMDEX___EMAIL__SMTP_HOSTS='["smtp.example.com:587"]' semdex hello
+SEMDEX___LIB_LOG_RICH__CONSOLE_LEVEL=DEBUG semdex info
+SEMDEX___EMAIL__SMTP_HOSTS='["smtp.example.com:587"]' semdex config --section email
 ```
 
 **Separator reference:**
@@ -435,6 +482,13 @@ LOG_ENABLE_GRAYLOG=false
 ```
 
 By default, the application searches upward from the current directory to discover `.env` files.
+
+Logging reads the `LOG_*` lines of the same `.env` (the `--env-file` when one is given, otherwise the
+nearest `.env` up to the project root) and copies only those into the environment, never over a
+variable that is already set. No other `.env` line reaches the environment, so a `.env` cannot act
+as the environment layer for a later configuration load. A variable semdex reads from the process
+environment itself - `SEMDEX_MCP_BEARER_TOKENS`, `SEMDEX_MCP_OAUTH_CLIENT_SECRET`,
+`FASTEMBED_CACHE_PATH`, `DEVELOPMENT_MODE` - must therefore be exported, not written into `.env`.
 
 To load a specific `.env` file instead, use `--env-file`:
 
