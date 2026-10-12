@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -9,6 +9,9 @@ from semdex.application.use_cases.searching import search
 from semdex.application.use_cases.writing import forget, remember
 from semdex.composition import DatasetServices, build_dataset_services
 from semdex.domain.enums import EmbeddingBackend, Partition, StoreBackend
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def _knowledge(tmp_path: Path) -> DatasetServices:

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import pytest
 from fastmcp import Client
@@ -11,6 +10,9 @@ from semdex.adapters.config.dataset import DatasetConfig
 from semdex.adapters.mcp.server import build_mcp_server
 from semdex.composition import DatasetServices, build_dataset_services
 from semdex.domain.enums import EmbeddingBackend, Partition, StoreBackend
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def _services(tmp_path: Path, *, read_only: bool = False) -> DatasetServices:

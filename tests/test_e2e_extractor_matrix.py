@@ -34,7 +34,6 @@ import re
 import shutil
 import subprocess
 import time
-from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -54,6 +53,8 @@ from semdex.domain.errors import ExtractionError
 from semdex.domain.models import SourceRef
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from semdex.application.ports import Extract
 
 pytestmark = [pytest.mark.local_only, pytest.mark.os_agnostic]

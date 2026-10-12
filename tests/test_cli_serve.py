@@ -8,17 +8,20 @@ with, so the test asserts the flag-over-config resolution without a socket.
 from __future__ import annotations
 
 import dataclasses
-from collections.abc import Callable
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
-from click.testing import CliRunner
 from lib_layered_config import Config
 
 from semdex.adapters import cli as cli_mod
 from semdex.adapters.cli.commands import serve as serve_mod
 from semdex.composition import Bootstrap, build_index_production, build_production
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from pathlib import Path
+
+    from click.testing import CliRunner
 
 
 class _Recorder:

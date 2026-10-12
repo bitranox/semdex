@@ -7,11 +7,14 @@ path to read. These must round-trip, including paths with spaces/unicode.
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from semdex.adapters.discovery.location import from_uri, to_uri
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def test_file_uri_round_trips_through_path(tmp_path: Path) -> None:

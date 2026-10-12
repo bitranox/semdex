@@ -79,6 +79,7 @@ skipped; vectors are filled into a memmap in batches, never all in RAM.
 from __future__ import annotations
 
 import json
+import math
 import os
 import tempfile
 import time
@@ -105,11 +106,14 @@ os.environ.setdefault(
 )
 
 import numpy as np
+import orjson
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from semdex.application.use_cases.searching import search
 from semdex.composition import build_chunker, build_embedding, build_vector_store
 from semdex.domain.enums import ChunkStrategy, EmbeddingBackend, StoreBackend
+from semdex.domain.errors import EmbeddingError
 from semdex.domain.models import Chunk, Collection, ExtractedDocument, SourceRef
 
 # --- registries (copied from tests/test_e2e_matrix.py, which are test-only/private) ---
@@ -256,7 +260,6 @@ def _load_msmarco(scale: int) -> tuple[dict[str, str], dict[str, str], dict[str,
     Mirrors scripts/bench_msmarco_scale.load_corpus: skip the qrels header, keep every judged doc
     plus fill to ``scale`` others, breaking out of the 8.8M-doc corpus.jsonl scan once done.
     """
-    import orjson
 
     base = Path(os.environ.get("SEMDEX_MSMARCO_DIR", "/corpora/bench-msmarco/msmarco"))
     split = os.environ.get("SEMDEX_MSMARCO_SPLIT", "dev")
@@ -331,7 +334,6 @@ def _load_frozen_slice(name: str) -> tuple[dict[str, str], dict[str, str], dict[
     base = root / name
     if not (base / "corpus.jsonl").exists():
         raise SystemExit(f"slice {name} not built - run scripts/{builder} first")
-    import orjson
 
     docs: dict[str, str] = {}
     with (base / "corpus.jsonl").open("rb") as fh:
@@ -355,7 +357,7 @@ def _load_corpus(corpus: str) -> tuple[dict[str, str], dict[str, str], dict[str,
     if corpus.startswith(_SLICE_FAMILIES) and corpus.endswith("_slice"):
         return _load_frozen_slice(corpus)
     os.environ.setdefault("IR_DATASETS_HOME", "/corpora/ir_datasets")
-    import ir_datasets
+    import ir_datasets  # noqa: PLC0415 - ir_datasets (bench extra) is imported after IR_DATASETS_HOME is set, which it reads at import
 
     dataset = ir_datasets.load(_CORPORA[corpus])
     qrels: dict[str, dict[str, int]] = {}
@@ -398,9 +400,9 @@ def _build_run_chunker() -> Any:
     strategy = ChunkStrategy(_chunker_id())
     label = _semantic_model()
     if strategy is ChunkStrategy.SEMANTIC and label:
-        from _bench_breakpoint_embeddings import build_breakpoint_embeddings
+        from _bench_breakpoint_embeddings import build_breakpoint_embeddings  # noqa: PLC0415 - chonkie (chunk extra) via the sibling _bench_breakpoint_embeddings, loaded only for the semantic strategy
 
-        from semdex.adapters.chunker import ChonkieChunker
+        from semdex.adapters.chunker import ChonkieChunker  # noqa: PLC0415 - optional dependency chonkie (chunk extra), loaded only for the semantic strategy
 
         embedder = build_breakpoint_embeddings(label, endpoint=os.environ.get("SEMDEX_PREEMBED_SEMANTIC_ENDPOINT"))
         print(f"[chunks] semantic breakpoint model: {label} ({embedder!r})", flush=True)
@@ -491,7 +493,6 @@ def _embed_batch(embedding: Any, texts: list[str], retries: int = 6) -> Any:
     transient disconnect or timeout must not kill hours of work. Retries the batch up to
     ``retries`` times (2s, 4s, ... capped at 60s), then re-raises a persistent failure.
     """
-    from semdex.domain.errors import EmbeddingError
 
     delay = 2.0
     for attempt in range(1, retries + 1):
@@ -612,7 +613,6 @@ def _write_catalog() -> None:
 
 
 def _ndcg(ranked: list[str], rels: dict[str, int], k: int) -> float:
-    import math
 
     dcg = sum((rels.get(doc_id, 0)) / math.log2(i + 2) for i, doc_id in enumerate(ranked[:k]))
     ideal = sorted(rels.values(), reverse=True)[:k]
@@ -647,7 +647,6 @@ def _iter_cell_chunks(cell: str, batch: int) -> Any:
 
 
 def _loadstore() -> None:
-    from semdex.application.use_cases.searching import search
 
     cell = os.environ["SEMDEX_LOADSTORE_CELL"]
     meta = _read_json(_cache_root() / "vectors" / cell / "meta.json")

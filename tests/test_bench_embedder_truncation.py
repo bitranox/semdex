@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import importlib.util
 import sys
-from collections.abc import Sequence
 from pathlib import Path
 from types import SimpleNamespace
 from typing import TYPE_CHECKING, Any
@@ -28,6 +27,7 @@ import pytest
 # under TYPE_CHECKING types every call site below without suppressing anything: the checker reads
 # these declarations, the runtime binds the real functions. Drop it when pyarrow ships stubs.
 if TYPE_CHECKING:
+    from collections.abc import Sequence
 
     def _arrow_table(columns: dict[str, list[str]]) -> Any: ...
 

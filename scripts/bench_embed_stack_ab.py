@@ -32,9 +32,11 @@ import statistics
 import subprocess
 import sys
 import tempfile
-from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
 
 _BASELINE = "1.28.0"
 _MODEL = "BAAI/bge-base-en-v1.5"
@@ -121,7 +123,7 @@ def exit_code(result: str) -> int:
 
 def _sample(parquet: Path, rows: int) -> list[str]:
     """Real chunk texts, because a synthetic fixed-length probe overstates throughput."""
-    import pyarrow.parquet as pq
+    import pyarrow.parquet as pq  # noqa: PLC0415 - optional dependency pyarrow (lance extra), loaded only when _sample needs it
 
     batch = next(pq.ParquetFile(parquet).iter_batches(batch_size=rows + _WARMUP, columns=["text"]))
     return batch.column("text").to_pylist()[: rows + _WARMUP]

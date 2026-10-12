@@ -12,7 +12,6 @@ from __future__ import annotations
 import importlib.util
 import sys
 import time
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
@@ -20,10 +19,12 @@ import pytest
 from semdex.adapters.watch import WatchfilesWatcher
 from semdex.domain.enums import ChangeKind, WatchMode
 from semdex.domain.errors import WatchError
-from semdex.domain.models import ChangeEvent
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from pathlib import Path
+
+    from semdex.domain.models import ChangeEvent
 
 pytestmark = pytest.mark.os_agnostic
 

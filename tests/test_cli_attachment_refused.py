@@ -1,10 +1,9 @@
 """An attachment btx_lib_mail refuses on security grounds exits 77, through the real ``main()``.
 
-The refusal is btx_lib_mail's own check, run by the real ``send_email`` adapter and fed by the
-real ``[email]`` loader: only the SMTP transport is replaced, by a recorder, so a test proves
-both the exit code and that nothing was delivered. ``AttachmentSecurityError`` is neither a
-``ValueError`` nor a ``RuntimeError``, so without its own branch it fell into the catch-all as
-exit 1, "Unexpected error".
+The refusal is btx_lib_mail's own check, run by the real ``send_email`` adapter: only the SMTP
+transport is replaced, by a recorder, so a test proves both the exit code and that nothing was
+delivered. ``AttachmentSecurityError`` is neither a ``ValueError`` nor a ``RuntimeError``, so
+without its own branch it fell into the catch-all as exit 1, "Unexpected error".
 """
 
 from __future__ import annotations
@@ -21,7 +20,6 @@ from lib_layered_config import Config
 
 from semdex.adapters.cli.exit_codes import ExitCode
 from semdex.adapters.cli.main import main
-from semdex.adapters.email.config import load_email_config_from_dict
 from semdex.adapters.email.transport import send_email
 from semdex.composition import AppServices, build_testing
 
@@ -81,14 +79,7 @@ def _services(transport: _Recording, data: dict[str, Any]) -> Callable[[], AppSe
         return config
 
     def build() -> AppServices:
-        # The real loader, not the testing one: only the real loader reads the nested
-        # [email.attachments] table, which the warn-mode arm sets.
-        return dataclasses.replace(
-            build_testing(),
-            get_config=get_config,
-            send_email=_real_send_email(transport),
-            load_email_config_from_dict=load_email_config_from_dict,
-        )
+        return dataclasses.replace(build_testing(), get_config=get_config, send_email=_real_send_email(transport))
 
     return build
 

@@ -10,15 +10,18 @@ installs it, so these run in the normal suite.
 
 from __future__ import annotations
 
-from pathlib import Path
-
 import pytest
 
 pytest.importorskip("sqlite_vec")
 
+from typing import TYPE_CHECKING
+
 from semdex.adapters.vectorstore import SqliteVecStore
 from semdex.domain.errors import CollectionModelMismatchError, VectorStoreError
 from semdex.domain.models import Chunk, Collection, SourceRef
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def _chunk(text: str, path: str, *, ordinal: int = 0) -> Chunk:

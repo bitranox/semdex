@@ -8,19 +8,11 @@ the contract-test suite every real adapter will later be run against.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Sequence
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
-from semdex.application.ports import (
-    ChunkText,
-    EmbeddingProvider,
-    Extract,
-    VectorStoreReader,
-    VectorStoreWriter,
-    Watcher,
-)
 from semdex.domain.enums import ChangeKind
 from semdex.domain.models import (
     ChangeEvent,
@@ -31,6 +23,18 @@ from semdex.domain.models import (
     SourceRef,
     Vector,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Sequence
+
+    from semdex.application.ports import (
+        ChunkText,
+        EmbeddingProvider,
+        Extract,
+        VectorStoreReader,
+        VectorStoreWriter,
+        Watcher,
+    )
 
 # --------------------------- fakes (adapters) ---------------------------
 

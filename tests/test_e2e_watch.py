@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import importlib.util
 import time
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
@@ -25,6 +24,7 @@ from semdex.domain.enums import EmbeddingBackend, Partition, StoreBackend, Watch
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from pathlib import Path
 
 pytestmark = [
     pytest.mark.local_only,

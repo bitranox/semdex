@@ -51,9 +51,8 @@ import os
 import shutil
 import sys
 import time
-from collections.abc import Iterator
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
@@ -64,6 +63,9 @@ from _score_kernel import normalize_rows, topk_stream
 from semdex.composition import build_vector_store
 from semdex.domain.enums import StoreBackend
 from semdex.domain.models import Chunk, Collection, SourceRef
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 _COLLECTION = "dimx"
 

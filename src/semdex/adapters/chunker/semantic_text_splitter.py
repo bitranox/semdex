@@ -46,7 +46,7 @@ class StsChunker:
 
     def _build(self, max_tokens: int) -> Any:
         try:
-            from semantic_text_splitter import MarkdownSplitter, TextSplitter
+            from semantic_text_splitter import MarkdownSplitter, TextSplitter  # noqa: PLC0415 - optional dependency semantic-text-splitter (extra chunk), loaded only when the sts chunker builds
         except ImportError as exc:
             raise ChunkingError("semantic-text-splitter is not installed; install semdex[chunk]") from exc
         counter: Callable[[str], int] = self._count

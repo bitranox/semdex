@@ -114,7 +114,7 @@ class VisionOcrExtractor:
     def _render_pdf(self, pdf_bytes: bytes, source: SourceRef) -> Iterator[bytes]:
         """Yield one PNG per PDF page (rendered at ``dpi``); bounded memory."""
         try:
-            import pymupdf  # type: ignore  # optional dep; see module docstring
+            import pymupdf  # type: ignore  # optional dep; see module docstring  # noqa: PLC0415 - optional dependency pymupdf (extra vision), loaded only when the vision OCR extractor renders a PDF
         except ImportError as exc:  # pragma: no cover - only without semdex[vision]
             raise ExtractionError("pymupdf is not installed; install semdex[vision]") from exc
         fitz: Any = pymupdf
@@ -151,7 +151,7 @@ class VisionOcrExtractor:
 
     def _post(self, payload: dict[str, Any]) -> Any:
         try:
-            import httpx
+            import httpx  # noqa: PLC0415 - optional dependency httpx (in every HTTP-backed provider and extractor extra), loaded only when one is selected
         except ImportError as exc:  # pragma: no cover - only without httpx
             raise ExtractionError("httpx is not installed; install semdex[vision]") from exc
         owns_client = self._client is None

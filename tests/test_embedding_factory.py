@@ -7,7 +7,7 @@ is unit-tested with injected callables.
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -16,6 +16,9 @@ from semdex.adapters.embedding import CallableEmbedding
 from semdex.composition import build_embedding
 from semdex.domain.enums import EmbeddingBackend
 from semdex.domain.errors import EmbeddingError
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 pytestmark = pytest.mark.os_agnostic
 

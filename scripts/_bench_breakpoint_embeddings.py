@@ -15,6 +15,7 @@ from typing import Any
 import numpy as np
 from chonkie.embeddings.base import BaseEmbeddings
 
+from semdex.adapters.chunker.chonkie import resolve_tokenizer
 from semdex.composition import build_embedding
 from semdex.domain.enums import EmbeddingBackend
 
@@ -145,7 +146,6 @@ def build_breakpoint_embeddings(
     the ollama-backed models; the shim-backed ones ignore it. It must cover the served context,
     otherwise ollama truncates every longer merged group to its physical batch without saying so.
     """
-    from semdex.adapters.chunker.chonkie import resolve_tokenizer
 
     if label not in BREAKPOINT_MODELS:
         raise SystemExit(f"unknown breakpoint model {label!r}; known: {sorted(BREAKPOINT_MODELS)}")

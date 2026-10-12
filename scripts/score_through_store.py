@@ -38,7 +38,7 @@ import shutil
 import sys
 import time
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pyarrow.parquet as pq
@@ -53,9 +53,11 @@ from score_chunk_sweep import _dirsafe, _metrics, _query_vectors
 
 from semdex.adapters.config.vectorstore import VectorStoreConfig
 from semdex.composition import build_vector_store
-from semdex.domain.ann_tuning import AnnParams
 from semdex.domain.enums import StoreBackend
 from semdex.domain.models import Chunk, Collection, SourceRef
+
+if TYPE_CHECKING:
+    from semdex.domain.ann_tuning import AnnParams
 
 _METRICS = ("ndcg@10", "recall@10", "mrr", "p@1")
 _COLLECTION = "storeq"

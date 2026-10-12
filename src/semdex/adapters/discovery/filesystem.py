@@ -9,12 +9,14 @@ phase-1 selector; gitignore-style include/exclude via ``igittigitt`` (per
 from __future__ import annotations
 
 import hashlib
-from collections.abc import Iterator, Sequence
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 from ...domain.models import SourceRef
 from .location import to_uri
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator, Sequence
+    from pathlib import Path
 
 _DEFAULT_EXTENSIONS = (".md", ".txt")
 _HASH_CHUNK_SIZE = 65536  # hash in fixed chunks so memory stays bounded on huge files

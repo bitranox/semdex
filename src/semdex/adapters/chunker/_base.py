@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from ...domain.errors import ChunkingError
 from ...domain.models import Chunk
 
 if TYPE_CHECKING:
@@ -100,10 +101,8 @@ def token_counter(tokenizer: str) -> Callable[[str], int]:
     ``semdex[chunk]``), so reusing its tokenizer keeps token counts consistent
     across strategies. Offline for ``gpt2``/``character``.
     """
-    from ...domain.errors import ChunkingError
-
     try:
-        from chonkie import RecursiveChunker
+        from chonkie import RecursiveChunker  # noqa: PLC0415 - optional dependency chonkie (extra chunk), loaded only when a semantic-text-splitter chunker needs its tokenizer
     except ImportError as exc:  # pragma: no cover - only without semdex[chunk]
         raise ChunkingError("chonkie is not installed; install semdex[chunk]") from exc
     counter: Callable[[str], int] = RecursiveChunker(tokenizer=tokenizer, chunk_size=2048).tokenizer.count_tokens

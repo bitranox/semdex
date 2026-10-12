@@ -43,6 +43,8 @@ from __future__ import annotations
 import json
 import math
 import os
+import shutil
+import socket
 import subprocess
 import time
 from pathlib import Path
@@ -148,7 +150,6 @@ def load_corpus(beir_dir: Path, split: str, max_docs: int, max_q: int):
 
 # ----------------------------------------------------------------- docker DB helpers
 def _free_port() -> int:
-    import socket
 
     with socket.socket() as s:
         s.bind(("127.0.0.1", 0))
@@ -181,7 +182,7 @@ def _du_bytes(cid, datadir):
 
 
 def _pg_ready(port):
-    import psycopg
+    import psycopg  # noqa: PLC0415 - optional dependency psycopg (pg extra), loaded only when a Postgres store backend needs it
 
     try:
         psycopg.connect(
@@ -193,7 +194,7 @@ def _pg_ready(port):
 
 
 def _maria_ready(port):
-    import pymysql
+    import pymysql  # noqa: PLC0415 - optional dependency pymysql (mariadb extra), loaded only when a MariaDB store backend needs it
 
     try:
         pymysql.connect(
@@ -450,8 +451,6 @@ def main():
     backends = [StoreBackend(s.strip()) for s in store_names if s.strip()]
     out = Path(os.environ.get("OUT", "msmarco-bench-results.json"))
     workroot = Path(os.environ.get("WORKROOT", "./bench-data/stores"))
-
-    import shutil
 
     results = []
     for scale in scales:

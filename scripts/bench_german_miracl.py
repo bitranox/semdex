@@ -17,12 +17,14 @@ Env: N_QUERIES (default 30), FILL_DOCS (total slice size, default 2000), OUT (js
 
 from __future__ import annotations
 
+import json
 import math
 import os
 import time
 from pathlib import Path
 
 import ir_datasets
+import numpy as np
 
 from semdex.composition import build_embedding
 from semdex.domain.enums import EmbeddingBackend
@@ -106,7 +108,6 @@ def load_slice(n_queries: int, fill_docs: int):
 
 
 def cosine_rank(qvec, doc_ids, doc_mat):
-    import numpy as np
 
     q = np.asarray(qvec, dtype="float32")
     q /= np.linalg.norm(q) or 1.0
@@ -116,7 +117,6 @@ def cosine_rank(qvec, doc_ids, doc_mat):
 
 
 def evaluate(model_label, backend, *, model_id, queries, qrels, docs, endpoint):
-    import numpy as np
 
     embedding = build_embedding(backend, model=model_id, endpoint=endpoint, allow_fallback=False)
     doc_ids = list(docs)
@@ -156,7 +156,6 @@ def evaluate(model_label, backend, *, model_id, queries, qrels, docs, endpoint):
 
 
 def main():
-    import json
 
     n_queries = int(os.environ.get("N_QUERIES", "30"))
     fill_docs = int(os.environ.get("FILL_DOCS", "2000"))

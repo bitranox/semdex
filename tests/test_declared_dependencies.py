@@ -18,14 +18,16 @@ from __future__ import annotations
 import ast
 import re
 import sys
-from collections.abc import Mapping
 from functools import cache
 from importlib.metadata import packages_distributions
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
 import rtoml
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 _ROOT = Path(__file__).parent.parent
 _PACKAGE = "semdex"

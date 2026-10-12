@@ -8,11 +8,14 @@ application layer and ports pass them across boundaries instead of raw dicts.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from pathlib import Path
-from typing import TypeAlias
+from typing import TYPE_CHECKING, TypeAlias
 
-from .enums import ChangeKind
 from .errors import InvalidCollectionError
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from .enums import ChangeKind
 
 # A dense embedding vector. A bare tuple of floats is the most convenient shape
 # for the inner layers; adapters convert to and from their store's native form.

@@ -3,16 +3,19 @@
 from __future__ import annotations
 
 import dataclasses
-from collections.abc import Callable
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
-from click.testing import CliRunner
 from lib_layered_config import Config
 
 from semdex.adapters import cli as cli_mod
 from semdex.composition import AppServices, Bootstrap, build_index_production, build_production
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from pathlib import Path
+
+    from click.testing import CliRunner
 
 # Pin the offline placeholder embedding + whitespace chunker so these end-to-end
 # tests are deterministic and never download a model or fetch a chunking recipe

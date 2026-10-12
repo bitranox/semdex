@@ -60,7 +60,7 @@ def _load_queries_qrels(lang: str) -> tuple[dict[str, str], dict[str, dict[str, 
     the tiny topics/qrels files without downloading the big docs corpus.
     """
     os.environ.setdefault("IR_DATASETS_HOME", "/corpora/ir_datasets")
-    import ir_datasets
+    import ir_datasets  # noqa: PLC0415 - ir_datasets (bench extra) is imported after IR_DATASETS_HOME is set, which it reads at import
 
     dataset = ir_datasets.load(f"miracl/{lang}/dev")
     qrels: dict[str, dict[str, int]] = {}

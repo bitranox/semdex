@@ -6,17 +6,20 @@ the CLI, and delivered to deploy_configuration.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
-from click.testing import CliRunner, Result
 
 from semdex.adapters import cli as cli_mod
 from semdex.composition import AppServices, build_production
 from semdex.domain.enums import DeployTarget
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping
+    from pathlib import Path
+
+    from click.testing import CliRunner, Result
 
 # ======================== CLI Option Parsing Tests ========================
 
@@ -74,6 +77,7 @@ def inject_deploy_with_permission_capture(
             send_notification=prod.send_notification,
             load_email_config_from_dict=prod.load_email_config_from_dict,
             init_logging=prod.init_logging,
+            check_logging_config=prod.check_logging_config,
         )
         return lambda: test_services
 

@@ -10,13 +10,16 @@ from __future__ import annotations
 
 import hashlib
 import math
-from collections.abc import Callable, Mapping, Sequence
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 from ...domain.errors import CollectionModelMismatchError, ExtractionError, VectorStoreError
 from ...domain.models import ChangeEvent, Chunk, Collection, ExtractedDocument, Hit, SourceRef, Vector
+from ..chunker._base import window_chunks
 from ..discovery.location import from_uri
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping, Sequence
+    from pathlib import Path
 
 _DEFAULT_DIM = 256
 
@@ -196,8 +199,6 @@ def chunk_in_memory(document: ExtractedDocument, *, max_tokens: int = _DEFAULT_D
     The in-memory (testing) chunker; delegates to the same window helper the
     production ``WhitespaceChunker`` fallback uses.
     """
-    from ..chunker._base import window_chunks
-
     return window_chunks(document, max_tokens=max_tokens)
 
 

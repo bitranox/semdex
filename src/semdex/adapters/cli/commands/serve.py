@@ -33,6 +33,7 @@ from semdex.application.use_cases.reconciling import reconcile
 from semdex.domain.enums import EmbeddingBackend, McpTransport, SummaryBackend
 from semdex.domain.errors import ConfigurationError, WatchError
 
+from .. import safe_console
 from ..config_load import require_config
 from ..constants import CLICK_CONTEXT_SETTINGS
 from ..context import get_cli_context
@@ -63,7 +64,7 @@ def _require_dataset_factory(cli_ctx: CLIContext) -> DatasetServicesFactory:
     """
     factory = cli_ctx.dataset_services_factory
     if factory is None:
-        click.echo("Error: this build has no dataset backend wired.", err=True)
+        safe_console.echo("Error: this build has no dataset backend wired.", err=True)
         get_current_context().exit(ExitCode.CONFIG_ERROR)
     return factory
 
@@ -118,7 +119,7 @@ def cli_serve(
             services, auth=auth, rrf_k=mcp_cfg.rrf_k, mask_error_details=mcp_cfg.mask_error_details
         )
     except ConfigurationError as exc:
-        click.echo(f"Error: {exc}", err=True)
+        safe_console.echo(f"Error: {exc}", err=True)
         ctx.exit(ExitCode.CONFIG_ERROR)
 
     watchers = _start_watchers(cli_ctx, config, services)

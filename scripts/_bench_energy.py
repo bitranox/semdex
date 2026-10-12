@@ -24,9 +24,12 @@ number if ignored:
 from __future__ import annotations
 
 import itertools
-from collections.abc import Sequence
 from dataclasses import dataclass
 from statistics import median
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 # Reported alongside every figure. A marginal energy smaller than the idle spread it was extracted
 # from is arithmetic, not a measurement, and has to say so rather than be quoted to three digits.

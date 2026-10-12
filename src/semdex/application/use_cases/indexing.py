@@ -9,13 +9,14 @@ from __future__ import annotations
 
 import dataclasses
 import time
-from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from ...domain.models import Collection
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Sequence
+
     from ...domain.models import CompactionPolicy, SourceRef
     from ..ports import ChunkText, EmbeddingProvider, Extract, SummaryProvider, VectorStoreWriter
 

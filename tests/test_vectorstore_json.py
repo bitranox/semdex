@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from semdex.adapters.vectorstore import JsonVectorStore
 from semdex.domain.errors import CollectionModelMismatchError, VectorStoreError
 from semdex.domain.models import Chunk, Collection, SourceRef
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def _chunk(text: str, path: str) -> Chunk:

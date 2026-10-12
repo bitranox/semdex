@@ -38,6 +38,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from _bench_energy import EnergyResult, cost_per_million, idle_estimate, integrate_power_w
 
+from semdex.composition import build_embedding
+from semdex.domain.enums import EmbeddingBackend
+
 # Optional: unset leaves the identity to ssh's own config and agent, which is the usual setup.
 _KEY = os.environ.get("GPU_SSH_KEY", "")
 # Written and read only on the REMOTE host, never opened locally, so the usual local-tempfile
@@ -131,7 +134,7 @@ class GpuSampler:
 
 
 def load_documents(n: int) -> list[str]:
-    import ir_datasets
+    import ir_datasets  # noqa: PLC0415 - optional dependency ir_datasets (bench extra), loaded only when load_documents needs it
 
     out: list[str] = []
     for doc in ir_datasets.load("beir/nfcorpus/test").docs_iter():
@@ -142,8 +145,6 @@ def load_documents(n: int) -> list[str]:
 
 
 def measure_model(model: str, documents: list[str], host: str, *, repeats: int, idle_seconds: float) -> dict[str, Any]:
-    from semdex.composition import build_embedding
-    from semdex.domain.enums import EmbeddingBackend
 
     embedding = build_embedding(
         EmbeddingBackend.OLLAMA,

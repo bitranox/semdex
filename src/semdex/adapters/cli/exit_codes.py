@@ -5,12 +5,12 @@ command carries a meaningful, grep-friendly integer instead of a bare ``1``.
 Commands exit through click's ``Exit`` (what ``ctx.exit()`` raises), never a bare
 ``SystemExit``; ``adapters/cli/main.py`` turns it into the process exit code.
 
-Signal codes (130, 141, 143) are informational constants only — the application
+Signal codes (130, 141, 143) are informational constants only - the application
 never exits with these values itself; ``lib_cli_exit_tools`` handles
 signal-to-exit-code translation automatically.
 
 Contents:
-    * :class:`ExitCode` — IntEnum of all exit codes used by this application.
+    * :class:`ExitCode` - IntEnum of all exit codes used by this application.
 """
 
 from __future__ import annotations
@@ -23,8 +23,8 @@ class ExitCode(IntEnum):
 
     Values follow sysexits.h and errno conventions where applicable:
 
-    * 0–1: generic success / failure
-    * 2–13: errno-derived codes (ENOENT, EACCES)
+    * 0-1: generic success / failure
+    * 2-13: errno-derived codes (ENOENT, EACCES)
     * 22: EINVAL
     * 69: EX_UNAVAILABLE (sysexits.h)
     * 77: EX_NOPERM (sysexits.h): refused by policy, such as an email attachment

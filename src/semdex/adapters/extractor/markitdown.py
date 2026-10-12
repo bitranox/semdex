@@ -12,6 +12,7 @@ container is CPU-only. Needs the optional ``semdex[markitdown]`` extra
 
 from __future__ import annotations
 
+import asyncio
 import base64
 from collections.abc import Callable
 from typing import TYPE_CHECKING
@@ -69,8 +70,6 @@ def _mcp_converter(url: str, timeout: float) -> ConvertFn:
     """Build the production converter that calls the markitdown MCP server."""
 
     def convert(data_uri: str) -> str:
-        import asyncio
-
         return asyncio.run(_call_convert_tool(url, data_uri, timeout))
 
     return convert
@@ -83,9 +82,9 @@ async def _call_convert_tool(url: str, data_uri: str, timeout: float) -> str:
         # interchangeable with httpx's, so an httpx.AsyncClient here is rejected by
         # streamable_http_client. Every other adapter in this package talks plain REST and
         # stays on httpx; only this one follows the SDK.
-        import httpx2
-        from mcp import ClientSession
-        from mcp.client.streamable_http import streamable_http_client
+        import httpx2  # noqa: PLC0415 - optional dependency httpx2/mcp (extra markitdown), loaded only when the markitdown extractor converts a document
+        from mcp import ClientSession  # noqa: PLC0415 - optional dependency mcp (extra markitdown), loaded only when the markitdown extractor converts a document
+        from mcp.client.streamable_http import streamable_http_client  # noqa: PLC0415 - optional dependency mcp (extra markitdown), loaded only when the markitdown extractor converts a document
     except ImportError as exc:  # pragma: no cover - only hit without the extra installed
         raise ExtractionError("mcp is not installed; install semdex[markitdown]") from exc
     try:
@@ -114,7 +113,7 @@ def _text_of(result: CallToolResult, url: str) -> str:
     Only ``TextContent`` blocks are read for text, so an image/audio block is
     skipped rather than silently read as empty text.
     """
-    from mcp.types import TextContent
+    from mcp.types import TextContent  # noqa: PLC0415 - optional dependency mcp (extra markitdown), loaded only when the markitdown extractor reads a tool result
 
     if result.is_error:
         raise ExtractionError(f"markitdown MCP at {url} reported an error")

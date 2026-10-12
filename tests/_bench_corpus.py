@@ -13,12 +13,15 @@ the scheduled workflow, which is how a broken mapping once went unseen until tha
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Mapping
+from typing import TYPE_CHECKING
 from urllib.parse import quote, unquote
 
 from semdex.adapters.discovery.location import from_uri
 from semdex.adapters.memory.index import InMemoryExtractor
 from semdex.domain.models import Hit, SourceRef
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Mapping
 
 __all__ = ["corpus_extractor", "corpus_sources", "doc_id_from_uri", "doc_uri", "ranked_doc_ids"]
 

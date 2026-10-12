@@ -27,17 +27,20 @@ import os
 import stat
 import subprocess
 import sys
-from collections.abc import Callable
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
-from click.testing import CliRunner
 from lib_layered_config import Config, ConfigError, DeployPermissionsError, PermissionProblem
 
 from semdex import __init__conf__
 from semdex.adapters import cli as cli_mod
 from semdex.composition import AppServices, build_production, build_testing
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from pathlib import Path
+
+    from click.testing import CliRunner
 
 BROKEN_TOML = "Invalid TOML in /etc/xdg/app/config.toml: expected a right bracket"
 BROKEN_PROFILE_TOML = "Invalid TOML in /etc/xdg/app/profile/prod/config.toml"

@@ -42,7 +42,7 @@ class HttpHealthProbe:
         raises - the caller treats a ``False`` as "backend down".
         """
         try:
-            import httpx
+            import httpx  # noqa: PLC0415 - optional dependency httpx (in every HTTP-backed provider and extractor extra), loaded only when one is selected
         except ImportError:  # pragma: no cover - only without the httpx extra
             logger.warning("httpx is not installed; cannot probe %s", self._url)
             return False

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -10,6 +10,9 @@ from semdex.adapters.discovery.location import to_uri
 from semdex.adapters.extractor import TextExtractor
 from semdex.domain.errors import ExtractionError
 from semdex.domain.models import ExtractedDocument, SourceRef
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def _source(path: Path) -> SourceRef:

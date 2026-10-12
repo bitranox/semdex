@@ -70,7 +70,7 @@ CHUNK_MAX_TOKENS = 256
 
 
 def load_docs(dataset_id: str, n: int) -> list[str]:
-    import ir_datasets
+    import ir_datasets  # noqa: PLC0415 - optional dependency ir_datasets (bench extra), loaded only when load_docs needs it
 
     out = []
     for d in ir_datasets.load(dataset_id).docs_iter():

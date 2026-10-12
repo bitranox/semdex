@@ -7,8 +7,8 @@ deterministic.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -20,6 +20,9 @@ from semdex.adapters.memory.index import (
 )
 from semdex.application.use_cases import reconcile
 from semdex.domain.models import SourceRef, Vector
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class FakeConnector:

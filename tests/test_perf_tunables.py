@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import hashlib
 import time
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -24,6 +24,9 @@ from semdex.adapters.discovery import discover_sources
 from semdex.adapters.discovery.location import to_uri
 from semdex.application.use_cases import index_sources, search
 from semdex.composition import build_index_production
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 pytestmark = [pytest.mark.local_only, pytest.mark.os_agnostic]
 

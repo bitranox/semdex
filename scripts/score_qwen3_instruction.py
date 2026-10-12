@@ -39,6 +39,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
@@ -84,7 +86,7 @@ def load_slice(n_queries: int, n_docs: int) -> tuple[dict[str, str], dict[str, d
     Judged documents are taken unconditionally. Without them a query has nothing to find and the
     run measures the fill rather than the model.
     """
-    import ir_datasets
+    import ir_datasets  # noqa: PLC0415 - optional dependency ir_datasets (bench extra), loaded only when load_corpus needs it
 
     ds = ir_datasets.load("beir/nfcorpus/test")
     qrels: dict[str, dict[str, int]] = {}
@@ -134,7 +136,6 @@ def provider_for(query_prefix: str, passage_prefix: str) -> Any:
 
 def embed_all(provider: Any, texts: list[str], label: str) -> Any:
     """Embed in sub-batches: one giant call to a slow model exceeds the adapter's HTTP timeout."""
-    import numpy as np
 
     batch = int(os.environ.get("EMBED_BATCH", "128"))
     started = time.perf_counter()
@@ -157,7 +158,6 @@ def score_arm(
     qrels: dict[str, dict[str, int]],
 ) -> dict[str, dict[str, float]]:
     """Per-query scores, keyed by query id so the arms can be differenced pairwise."""
-    import numpy as np
 
     per_query: dict[str, dict[str, float]] = {}
     for qid, text in queries.items():

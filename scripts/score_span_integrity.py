@@ -41,11 +41,10 @@ import os
 import platform
 import sys
 from bisect import bisect_right
-from collections.abc import Callable, Iterator, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Protocol, cast
+from typing import TYPE_CHECKING, Any, Protocol, cast
 
 import numpy as np
 import pyarrow.parquet as pq  # pyright: ignore[reportMissingTypeStubs] - pyarrow ships none; drop when it does
@@ -54,11 +53,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from _provenance import source_git_sha
+from _score_kernel import topk_stream
 from _score_stats import bootstrap_ci, paired_ci
 
 from semdex.composition import build_chunker, build_embedding
 from semdex.domain.enums import ChunkStrategy, EmbeddingBackend
 from semdex.domain.models import ExtractedDocument, SourceRef
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterator, Sequence
 
 _HUB = Path(os.environ.get("SEMDEX_SPAN_HUB", "/corpora/hf/hub"))
 _OUT = Path(__file__).resolve().parents[1] / "tests" / "benchmarks" / "raw" / "span-integrity.json"
@@ -141,9 +144,9 @@ def read_squad_columns(path: Path) -> tuple[list[str], list[str], list[dict[str,
     """The three SQuAD columns as typed Python lists."""
     table = _read_table(path)
     return (
-        cast(list[str], table.column("context").to_pylist()),
-        cast(list[str], table.column("question").to_pylist()),
-        cast(list[dict[str, Any]], table.column("answers").to_pylist()),
+        cast("list[str]", table.column("context").to_pylist()),
+        cast("list[str]", table.column("question").to_pylist()),
+        cast("list[dict[str, Any]]", table.column("answers").to_pylist()),
     )
 
 
@@ -386,7 +389,6 @@ def retrieval_row(
     ``doc_hit`` is the verdict the existing benchmarks record; ``span_hit`` is whether the answer
     survived intact inside something actually retrieved. Their difference is the blind spot.
     """
-    from _score_kernel import topk_stream
 
     passages = np.asarray(embedding.embed_passages(chunked.texts), dtype=np.float32)
     # The port exposes embed_query one at a time (queries arrive singly in real use); batching is
@@ -490,13 +492,13 @@ def _effect_row(left: dict[str, Any], right: dict[str, Any], axis: str) -> dict[
         "held_fixed": held,
         "from_level": left[axis],
         "to_level": right[axis],
-        "mean_delta": round(float(cast(float, paired["mean_delta"])), 4),
-        "ci_lo": round(float(cast(float, paired["ci_lo"])), 4),
-        "ci_hi": round(float(cast(float, paired["ci_hi"])), 4),
-        "wins": int(cast(int, paired["wins"])),
-        "losses": int(cast(int, paired["losses"])),
-        "ties": int(cast(int, paired["ties"])),
-        "n_shared": int(cast(int, paired["n_shared"])),
+        "mean_delta": round(float(cast("float", paired["mean_delta"])), 4),
+        "ci_lo": round(float(cast("float", paired["ci_lo"])), 4),
+        "ci_hi": round(float(cast("float", paired["ci_hi"])), 4),
+        "wins": int(cast("int", paired["wins"])),
+        "losses": int(cast("int", paired["losses"])),
+        "ties": int(cast("int", paired["ties"])),
+        "n_shared": int(cast("int", paired["n_shared"])),
         "resolved": bool(paired["resolved"]),
     }
 
@@ -523,8 +525,8 @@ def merge_payload(existing: dict[str, Any], fresh: dict[str, Any]) -> dict[str, 
     """
     merged = dict(fresh)
     for phase in ("integrity", "retrieval"):
-        old_rows = cast(list[dict[str, Any]], existing.get(phase) or [])
-        new_rows = cast(list[dict[str, Any]], fresh.get(phase) or [])
+        old_rows = cast("list[dict[str, Any]]", existing.get(phase) or [])
+        new_rows = cast("list[dict[str, Any]]", fresh.get(phase) or [])
         if not old_rows and not new_rows:
             continue
         by_key = {row_key(row): row for row in old_rows}

@@ -87,7 +87,7 @@ def load_sentence_transformer_embedding(
     ``semdex[embed]`` dependency is not installed.
     """
     try:
-        from sentence_transformers import SentenceTransformer  # type: ignore  # optional dep; see module docstring
+        from sentence_transformers import SentenceTransformer  # type: ignore  # optional dep; see module docstring  # noqa: PLC0415 - optional dependency sentence-transformers (extra embed), loaded only when the sentence-transformers provider is selected
     except ImportError as exc:
         raise EmbeddingError("sentence-transformers is not installed; install semdex[embed]") from exc
 

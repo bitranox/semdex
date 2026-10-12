@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -16,6 +16,9 @@ from semdex.adapters.extractor import (
 from semdex.composition import build_extractor, build_index_production
 from semdex.domain.enums import ExtractorBackend
 from semdex.domain.errors import ExtractionError
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 pytestmark = pytest.mark.os_agnostic
 

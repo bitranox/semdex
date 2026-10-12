@@ -42,12 +42,11 @@ import sys
 import tempfile
 import time
 from collections import Counter, defaultdict
-from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from difflib import SequenceMatcher
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -57,6 +56,9 @@ from _provenance import source_git_sha
 from semdex.composition import build_extractor
 from semdex.domain.enums import ExtractorBackend
 from semdex.domain.models import SourceRef
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 _BENCH = Path.home() / "bench-ocr" / "datasets" / "OmniDocBench"
 _OUT = Path(__file__).resolve().parents[1] / "tests" / "benchmarks" / "raw" / "extraction-omnidocbench.json"
@@ -228,7 +230,7 @@ def stratified_sample(pages: Sequence[Page], total: int, seed: int) -> list[Page
 
 def as_single_page_pdf(image: Path, destination: Path) -> Path:
     """Wrap a page image in a one-page PDF, so every backend is handed the same file."""
-    from PIL import Image
+    from PIL import Image  # noqa: PLC0415 - optional dependency Pillow, loaded only when wrapping a page image into a PDF needs it
 
     with Image.open(image) as handle:
         page = handle.convert("RGB")

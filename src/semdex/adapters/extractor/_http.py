@@ -65,7 +65,7 @@ def source_name(source: SourceRef) -> str:
 def require_httpx() -> Any:
     """Import httpx or raise a clear ExtractionError naming the missing extra."""
     try:
-        import httpx
+        import httpx  # noqa: PLC0415 - optional dependency httpx (in every HTTP-backed provider and extractor extra), loaded only when one is selected
     except ImportError as exc:  # pragma: no cover - only hit without the extra installed
         raise ExtractionError("httpx is not installed; install the extractor's optional extra") from exc
     return httpx

@@ -13,8 +13,10 @@ and every way of getting it wrong yields a plausible number rather than an error
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 # Below this the observed effect is indistinguishable from exactly zero at any query count worth
 # collecting, so it is reported as unresolvable rather than as a very large number. A delta of

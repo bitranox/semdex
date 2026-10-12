@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import os
 import shutil
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
@@ -22,6 +21,7 @@ from semdex.domain.models import SourceRef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from pathlib import Path
 
 pytestmark = [pytest.mark.local_only, pytest.mark.os_agnostic]
 

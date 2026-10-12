@@ -30,11 +30,13 @@ from __future__ import annotations
 import importlib
 import os
 import random
-from collections.abc import Callable
 from pathlib import Path
-from typing import Protocol, cast
+from typing import TYPE_CHECKING, Protocol, cast
 
 import orjson
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 _DEFAULT_OUT = "/corpora/gerdalir-slices"
 _DEFAULT_DOCS = 12_000
@@ -75,7 +77,7 @@ def _hub_snapshot_download() -> Callable[..., str]:
     call site typed.
     """
     hub = importlib.import_module("huggingface_hub")
-    return cast(Callable[..., str], hub.snapshot_download)
+    return cast("Callable[..., str]", hub.snapshot_download)
 
 
 def _parquet() -> _ParquetReader:
@@ -86,7 +88,7 @@ def _parquet() -> _ParquetReader:
     this, so an incomplete stub would break them. Declaring only the surface used here types these
     call sites without taking that risk.
     """
-    return cast(_ParquetReader, importlib.import_module("pyarrow.parquet"))
+    return cast("_ParquetReader", importlib.import_module("pyarrow.parquet"))
 
 
 def _read(snapshot: Path, part: str, columns: list[str]) -> list[dict[str, str]]:

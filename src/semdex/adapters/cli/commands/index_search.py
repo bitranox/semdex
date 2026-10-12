@@ -30,6 +30,7 @@ from semdex.application.use_cases import index_sources, search
 from semdex.domain.errors import VectorStoreError
 from semdex.domain.models import CompactionPolicy
 
+from .. import safe_console
 from ..config_load import require_config
 from ..constants import CLICK_CONTEXT_SETTINGS
 from ..context import CLIContext, get_cli_context
@@ -54,7 +55,7 @@ def _require_index_factory(cli_ctx: CLIContext) -> IndexServicesFactory:
     """Return the injected index-services factory or fail with a clear message."""
     factory = cli_ctx.index_services_factory
     if factory is None:
-        click.echo("Error: this build has no index backend wired.", err=True)
+        safe_console.echo("Error: this build has no index backend wired.", err=True)
         get_current_context().exit(ExitCode.CONFIG_ERROR)
     return factory
 
@@ -194,7 +195,7 @@ def cli_index(
             compaction=CompactionPolicy(after_records=vs.compact_after_records, after_seconds=vs.compact_after_seconds),
             summarize=services.summarize,
         )
-    click.echo(
+    safe_console.echo(
         f"Indexed {report.sources_indexed} source(s), {report.chunks_indexed} chunk(s) into '{target}' at {store}."
     )
 
@@ -247,13 +248,13 @@ def cli_search(
                 k=resolved_k,
             )
         except VectorStoreError as exc:
-            click.echo(f"Error: {exc}. Run 'semdex index' first.", err=True)
+            safe_console.echo(f"Error: {exc}. Run 'semdex index' first.", err=True)
             ctx.exit(ExitCode.GENERAL_ERROR)
     if not hits:
-        click.echo("No matches.")
+        safe_console.echo("No matches.")
         return
     for hit in hits:
-        click.echo(f"{hit.score:.3f}  {hit.uri}  {_snippet(hit.chunk_text, idx.snippet_chars)}")
+        safe_console.echo(f"{hit.score:.3f}  {hit.uri}  {_snippet(hit.chunk_text, idx.snippet_chars)}")
 
 
 __all__ = ["cli_index", "cli_search"]

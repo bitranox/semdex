@@ -7,7 +7,7 @@ runs it on every platform.
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 from _bench_corpus import corpus_extractor, corpus_sources, ranked_doc_ids
@@ -15,6 +15,9 @@ from _bench_corpus import corpus_extractor, corpus_sources, ranked_doc_ids
 from semdex.application.use_cases import index_sources, search
 from semdex.composition import build_chunker, build_embedding, build_vector_store
 from semdex.domain.enums import ChunkStrategy, EmbeddingBackend, StoreBackend
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # Doc ids in the shapes real corpora use: BEIR NFCorpus ("MED-4972"), CQADupStack (bare
 # digits), DBpedia-entity (angle brackets, a colon and a slash), plus the characters a URI

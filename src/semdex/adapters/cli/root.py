@@ -15,6 +15,7 @@ import rich_click as click
 
 from semdex import __init__conf__
 
+from . import safe_console
 from .config_load import load_config, start_logging
 from .constants import CLICK_CONTEXT_SETTINGS
 from .context import apply_traceback_preferences, store_cli_context
@@ -118,14 +119,14 @@ def cli(
     apply_traceback_preferences(traceback)
 
     if ctx.invoked_subcommand is None:
-        click.echo(ctx.get_help())
+        safe_console.echo(ctx.get_help())
 
 
 # Deferred import required to break a circular dependency: this module defines
 # the ``cli`` group, commands register themselves onto it, and those command
 # modules import from package ancestors. This is the standard Click pattern.
 def _register_commands() -> None:
-    from .commands import (
+    from .commands import (  # noqa: PLC0415 - deferred: breaks the root<->commands circular import (see above)
         cli_config,
         cli_config_deploy,
         cli_config_generate_examples,

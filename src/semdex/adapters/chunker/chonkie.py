@@ -160,7 +160,7 @@ class ChonkieChunker:
 
     def _build(self, max_tokens: int) -> Any:
         try:
-            import chonkie
+            import chonkie  # noqa: PLC0415 - optional dependency chonkie (extra chunk), loaded only when the chonkie chunker builds
         except ImportError as exc:
             raise ChunkingError("chonkie is not installed; install semdex[chunk]") from exc
         if self._strategy is ChunkStrategy.RECURSIVE:
@@ -191,7 +191,7 @@ class ChonkieChunker:
         return chonkie.RecursiveChunker(tokenizer=tokenizer, chunk_size=max_tokens)
 
     def _overlapped(self, raw: Any) -> Any:
-        import chonkie
+        import chonkie  # noqa: PLC0415 - optional dependency chonkie (extra chunk), loaded only when the chonkie chunker applies overlap
 
         return chonkie.OverlapRefinery(tokenizer=resolve_tokenizer(self._tokenizer), context_size=self._overlap)(raw)
 

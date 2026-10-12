@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS collections (
 
 def _connect(dsn: str) -> Any:
     try:
-        import psycopg  # type: ignore  # optional dep; see module docstring
-        from pgvector.psycopg import register_vector  # type: ignore
+        import psycopg  # type: ignore  # optional dep; see module docstring  # noqa: PLC0415 - optional dependency psycopg (extra pg), loaded only when a pgvector store connects
+        from pgvector.psycopg import register_vector  # type: ignore  # noqa: PLC0415 - optional dependency pgvector (extra pg), loaded only when a pgvector store connects
     except ImportError as exc:
         raise VectorStoreError("pgvector/psycopg is not installed; install semdex[pg]") from exc
     connection = psycopg.connect(dsn, autocommit=True)  # type: ignore[no-untyped-call]
@@ -44,7 +44,7 @@ def _connect(dsn: str) -> Any:
 
 
 def _to_vector(vector: Vector) -> Any:
-    from pgvector import Vector as PgVector  # type: ignore
+    from pgvector import Vector as PgVector  # type: ignore  # noqa: PLC0415 - optional dependency pgvector (extra pg), loaded only when a pgvector store converts a vector
 
     return PgVector(list(vector))  # type: ignore[no-untyped-call]
 

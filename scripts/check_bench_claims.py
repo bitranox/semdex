@@ -134,7 +134,7 @@ class DerivationError(Exception):
 def _generator() -> Any:
     """The table generator module, imported late because ``scripts`` reaches sys.path above."""
     # Deferred: the sibling script is importable only after the sys.path insert at module load.
-    import gen_bench_tables
+    import gen_bench_tables  # noqa: PLC0415 - imported after the sys.path insert of scripts/ it depends on
 
     return gen_bench_tables
 
@@ -415,7 +415,7 @@ def load_rows(rowset: RowSet, raw_dir: Path = _RAW) -> list[Row]:
         rows = [rows]
     if not isinstance(rows, list):
         raise ClaimFileError(f"rowset {rowset.name!r}: {rowset.source}[{rowset.path}] is not a list of records")
-    records = cast(list[Row], rows)
+    records = cast("list[Row]", rows)
     return orient_rows(records) if rowset.orient else records
 
 
@@ -430,7 +430,7 @@ def _get(row: Row, dotted: str) -> Any:
     for part in dotted.split("."):
         if not isinstance(value, dict):
             return _MISSING
-        table = cast(Row, value)
+        table = cast("Row", value)
         if part not in table:
             return _MISSING
         value = table[part]

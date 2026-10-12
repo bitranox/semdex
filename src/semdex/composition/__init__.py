@@ -6,13 +6,16 @@ import importlib.util
 import logging
 import threading
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Protocol
 
+from ..adapters.chunker import ChonkieChunker, StsChunker, WhitespaceChunker
 from ..adapters.config.deploy import deploy_configuration
 from ..adapters.config.display import display_config
 
 # Configuration services
 from ..adapters.config.loader import get_config, get_default_config_path
+from ..adapters.discovery.filesystem import FilesystemConnector
 
 # Email services
 from ..adapters.email.sender import (
@@ -20,11 +23,31 @@ from ..adapters.email.sender import (
     send_email,
     send_notification,
 )
+from ..adapters.extractor import (
+    DoclingExtractor,
+    MarkitdownExtractor,
+    MineruExtractor,
+    TextExtractor,
+    VisionOcrExtractor,
+    XbergExtractor,
+)
+from ..adapters.extractor._http import DEFAULT_MAX_BYTES
+from ..adapters.extractor.router import RoutingExtractor
+from ..adapters.health import (
+    HttpHealthProbe,
+    probe_url_for,
+    restart_hook_from_command,
+    warmup_embedding,
+    warmup_summary,
+)
 
 # Logging services
-from ..adapters.logging.setup import init_logging
+from ..adapters.logging.setup import check_logging_config, init_logging
+from ..adapters.sanitize import SanitizingExtractor
+from ..adapters.summarizer import load_ollama_summarizer, load_openai_summarizer
+from ..adapters.watch import WatchfilesWatcher
 from ..application.batching import BatchingEmbedding
-from ..domain.ann_tuning import AnnParams
+from ..application.resilience import ResilientEmbedding, ResilientSummary
 from ..domain.enums import (
     ChunkStrategy,
     EmbeddingBackend,
@@ -34,7 +57,7 @@ from ..domain.enums import (
     SummaryBackend,
     WatchMode,
 )
-from ..domain.errors import ConfigurationError
+from ..domain.errors import ConfigurationError, EmbeddingError, VectorStoreError
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +65,6 @@ logger = logging.getLogger(__name__)
 # structurally satisfies its corresponding Protocol at type-check time.
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping
-    from pathlib import Path
 
     from ..adapters.config.dataset import DatasetConfig
     from ..adapters.config.health import HealthConfig
@@ -50,6 +72,7 @@ if TYPE_CHECKING:
     from ..adapters.config.summary import SummaryConfig
     from ..adapters.memory.email import EmailSpy
     from ..application.ports import (
+        CheckLoggingConfig,
         ChunkText,
         DeployConfiguration,
         DisplayConfig,
@@ -68,6 +91,7 @@ if TYPE_CHECKING:
         VectorStoreWriter,
         Watcher,
     )
+    from ..domain.ann_tuning import AnnParams
 
     _assert_get_config: GetConfig = get_config
     _assert_get_default_config_path: GetDefaultConfigPath = get_default_config_path
@@ -77,6 +101,7 @@ if TYPE_CHECKING:
     _assert_send_notification: SendNotification = send_notification
     _assert_load_email_config_from_dict: LoadEmailConfigFromDict = load_email_config_from_dict
     _assert_init_logging: InitLogging = init_logging
+    _assert_check_logging_config: CheckLoggingConfig = check_logging_config
 
 
 @dataclass(frozen=True, slots=True)
@@ -91,6 +116,7 @@ class AppServices:
     send_notification: SendNotification
     load_email_config_from_dict: LoadEmailConfigFromDict
     init_logging: InitLogging
+    check_logging_config: CheckLoggingConfig
 
 
 def build_production() -> AppServices:
@@ -104,6 +130,7 @@ def build_production() -> AppServices:
         send_notification=send_notification,
         load_email_config_from_dict=load_email_config_from_dict,
         init_logging=init_logging,
+        check_logging_config=check_logging_config,
     )
 
 
@@ -118,14 +145,14 @@ def build_testing(*, spy: EmailSpy | None = None) -> AppServices:
     Returns:
         AppServices container with in-memory adapters.
     """
-    from ..adapters.memory import (
+    from ..adapters.memory import (  # noqa: PLC0415 - deferred: keeps in-memory test doubles out of the production import path
         EmailSpy,
+        check_logging_config_in_memory,
         deploy_configuration_in_memory,
         display_config_in_memory,
         get_config_in_memory,
         get_default_config_path_in_memory,
         init_logging_in_memory,
-        load_email_config_from_dict_in_memory,
     )
 
     email_spy = spy if spy is not None else EmailSpy()
@@ -137,8 +164,10 @@ def build_testing(*, spy: EmailSpy | None = None) -> AppServices:
         display_config=display_config_in_memory,
         send_email=email_spy.send_email,
         send_notification=email_spy.send_notification,
-        load_email_config_from_dict=load_email_config_from_dict_in_memory,
+        # The real translation: an in-memory one would let every CLI test skip it.
+        load_email_config_from_dict=load_email_config_from_dict,
         init_logging=init_logging_in_memory,
+        check_logging_config=check_logging_config_in_memory,
     )
 
 
@@ -176,7 +205,7 @@ def build_index_testing(*, documents: Mapping[Path, str] | None = None) -> Index
         ``build_index_production`` (LanceDB + a local embedding provider, etc.)
         lands with the phase-2 adapters; only the testing wiring exists today.
     """
-    from ..adapters.memory.index import (
+    from ..adapters.memory.index import (  # noqa: PLC0415 - deferred: keeps in-memory test doubles out of the production import path
         InMemoryEmbeddingProvider,
         InMemoryExtractor,
         InMemoryVectorStore,
@@ -214,31 +243,27 @@ def build_vector_store(
     recall/latency knob, consumed only by the approximate stores (lancedb /
     pgvector / mariadb); the exact stores (json / sqlite_vec) ignore it.
     """
-    from ..domain.errors import VectorStoreError
+    from ..adapters.vectorstore import (  # noqa: PLC0415 - deferred: JsonVectorStore builds on adapters.memory.index, whose package brings the in-memory test doubles
+        JsonVectorStore,
+        LanceVectorStore,
+        MariaDbVectorStore,
+        PgVectorStore,
+        SqliteVecStore,
+    )
 
     if backend is StoreBackend.JSON:
-        from ..adapters.vectorstore import JsonVectorStore
-
         return JsonVectorStore(store_dir)
     if backend is StoreBackend.SQLITE_VEC:
-        from ..adapters.vectorstore import SqliteVecStore
-
         return SqliteVecStore(store_dir)
     if backend is StoreBackend.LANCEDB:
-        from ..adapters.vectorstore import LanceVectorStore
-
         if lance_index_threshold is None:
             return LanceVectorStore(store_dir, ann_params=ann_params)
         return LanceVectorStore(store_dir, index_threshold=lance_index_threshold, ann_params=ann_params)
     if backend is StoreBackend.PGVECTOR:
-        from ..adapters.vectorstore import PgVectorStore
-
         if dsn is None:
             raise VectorStoreError("pgvector backend requires [vector_store].dsn")
         return PgVectorStore(dsn, ann_params=ann_params)
     if backend is StoreBackend.MARIADB:
-        from ..adapters.vectorstore import MariaDbVectorStore
-
         if dsn is None:
             raise VectorStoreError("mariadb backend requires [vector_store].dsn")
         return MariaDbVectorStore(dsn, ann_params=ann_params)
@@ -274,16 +299,6 @@ def build_extractor(
     a 16 GB card's spare VRAM mid-inference. This function is the injected
     ``ExtractorFactory`` the RoutingExtractor calls per backend.
     """
-    from ..adapters.extractor import (
-        DoclingExtractor,
-        MarkitdownExtractor,
-        MineruExtractor,
-        TextExtractor,
-        VisionOcrExtractor,
-        XbergExtractor,
-    )
-    from ..adapters.extractor._http import DEFAULT_MAX_BYTES
-
     if backend is ExtractorBackend.TEXT:
         return TextExtractor(max_bytes=max_bytes) if max_bytes is not None else TextExtractor()
     resolved_max = max_bytes if max_bytes is not None else DEFAULT_MAX_BYTES
@@ -327,8 +342,6 @@ def build_chunker(
     the zero-dependency whitespace chunker with a warning (per coding-resilience),
     so a missing extra never makes indexing fail.
     """
-    from ..adapters.chunker import WhitespaceChunker
-
     if strategy is ChunkStrategy.WHITESPACE:
         return WhitespaceChunker()
     if strategy in (ChunkStrategy.RECURSIVE, ChunkStrategy.SEMANTIC, ChunkStrategy.LATE):
@@ -337,7 +350,6 @@ def build_chunker(
                 "chonkie missing (install semdex[chunk]); chunker %r falls back to whitespace", strategy.value
             )
             return WhitespaceChunker()
-        from ..adapters.chunker import ChonkieChunker
 
         return ChonkieChunker(
             strategy,
@@ -353,7 +365,6 @@ def build_chunker(
             strategy.value,
         )
         return WhitespaceChunker()
-    from ..adapters.chunker import StsChunker
 
     return StsChunker(strategy, overlap=overlap, tokenizer=tokenizer)
 
@@ -419,8 +430,6 @@ def build_index_production(
     the CLI threads them, ``backend``/``dsn``, and the ``extractor_*`` selection
     from config. The watcher is a stub.
     """
-    from ..adapters.memory.index import InMemoryWatcher
-
     # The size cap is per concern: the embedded TEXT backend uses the text-reader
     # cap ([index].max_file_bytes); the HTTP doc converters use their own, larger
     # cap ([extractor].max_file_bytes). None keeps the adapter's built-in default.
@@ -434,12 +443,12 @@ def build_index_production(
         ocr_language=extractor_ocr_language,
     )
     if sanitize is not None and sanitize.enabled:
-        from ..adapters.sanitize import SanitizingExtractor
-
         extractor = SanitizingExtractor(extractor, sanitize)
     store = build_vector_store(
         backend, store_dir, dsn=dsn, lance_index_threshold=lance_index_threshold, ann_params=ann_params
     )
+    from ..adapters.memory.index import InMemoryWatcher  # noqa: PLC0415 - deferred: keeps in-memory test doubles out of the production import path
+
     return IndexServices(
         extract=extractor,
         chunk=build_chunker(
@@ -519,8 +528,6 @@ class DatasetServices:
 
 def _default_dataset_store_dir() -> Path:
     """Default embedded-store directory when a dataset sets no ``store_dir``."""
-    from pathlib import Path
-
     return Path.home() / ".semdex"
 
 
@@ -554,11 +561,6 @@ def build_dataset_services(
     ``restart_command`` is set, and warms each http provider at build time (default
     on). When ``health`` is ``None`` the behaviour is identical to before.
     """
-    from pathlib import Path
-
-    from ..adapters.discovery.filesystem import FilesystemConnector
-    from ..adapters.extractor.router import RoutingExtractor
-
     keep_alive = health.keep_alive if health else None
     partition = dataset.partition or default_partition
     store_dir = Path(dataset.store_dir).expanduser() if dataset.store_dir else _default_dataset_store_dir()
@@ -648,8 +650,6 @@ def _resilient_embedding(
     """
     if health is None or not health.restart_command or not _is_http_embedding(dataset.embedding_provider):
         return embedding
-    from ..adapters.health import HttpHealthProbe, probe_url_for, restart_hook_from_command
-    from ..application.resilience import ResilientEmbedding
 
     hook = restart_hook_from_command(health.restart_command, health.restart_timeout)
     probe = HttpHealthProbe(probe_url_for(dataset.embedding_provider.value, dataset.embedding_endpoint))
@@ -669,8 +669,6 @@ def _resilient_summary(
     """
     if summarize is None or summary is None or health is None or not health.restart_command:
         return summarize
-    from ..adapters.health import HttpHealthProbe, probe_url_for, restart_hook_from_command
-    from ..application.resilience import ResilientSummary
 
     hook = restart_hook_from_command(health.restart_command, health.restart_timeout)
     endpoint = dataset.summary_endpoint or summary.endpoint
@@ -691,7 +689,6 @@ def _warmup_dataset_providers(
     """
     if health is not None and not health.warmup:
         return
-    from ..adapters.health import warmup_embedding, warmup_summary
 
     if _is_http_embedding(dataset.embedding_provider):
         warmup_embedding(embedding)
@@ -707,8 +704,6 @@ def build_watcher(mode: WatchMode = WatchMode.AUTO, *, debounce_ms: int = 400) -
     import is deferred to ``start()``, so constructing a watcher never requires
     ``semdex[watch]`` - only starting one does.
     """
-    from ..adapters.watch import WatchfilesWatcher
-
     return WatchfilesWatcher(mode=mode, debounce_ms=debounce_ms)
 
 
@@ -758,8 +753,7 @@ def build_embedding(
     if provider is EmbeddingBackend.PLACEHOLDER:
         return _placeholder_embedding(dim)
     if provider is EmbeddingBackend.FASTEMBED:
-        from ..adapters.embedding import load_fastembed_embedding
-        from ..domain.errors import EmbeddingError
+        from ..adapters.embedding import load_fastembed_embedding  # noqa: PLC0415 - monkeypatch seam: tests/test_embedding_factory.py patches semdex.adapters.embedding.load_*_embedding, which a module-level binding would bypass
 
         try:
             return load_fastembed_embedding(model, threads=threads)
@@ -769,7 +763,7 @@ def build_embedding(
             logger.warning("fastembed unavailable (%s); falling back to the placeholder embedding", exc)
             return _placeholder_embedding(dim)
     if provider is EmbeddingBackend.MODEL2VEC:
-        from ..adapters.embedding import load_model2vec_embedding
+        from ..adapters.embedding import load_model2vec_embedding  # noqa: PLC0415 - monkeypatch seam: tests/test_embedding_factory.py patches semdex.adapters.embedding.load_*_embedding, which a module-level binding would bypass
 
         return load_model2vec_embedding(model)
     server_providers = (
@@ -791,7 +785,7 @@ def build_embedding(
             query_prefix=query_prefix,
             passage_prefix=passage_prefix,
         )
-    from ..adapters.embedding import load_sentence_transformer_embedding
+    from ..adapters.embedding import load_sentence_transformer_embedding  # noqa: PLC0415 - monkeypatch seam: tests/test_embedding_factory.py patches semdex.adapters.embedding.load_*_embedding, which a module-level binding would bypass
 
     st_kwargs: dict[str, Any] = {"query_prefix": query_prefix, "passage_prefix": passage_prefix}
     return (
@@ -891,12 +885,12 @@ def _build_http_embedding(
     if retries is not None:
         http_kwargs["retries"] = retries
     if provider is EmbeddingBackend.OLLAMA:
-        from ..adapters.embedding import load_ollama_embedding
+        from ..adapters.embedding import load_ollama_embedding  # noqa: PLC0415 - monkeypatch seam: tests/test_embedding_factory.py patches semdex.adapters.embedding.load_*_embedding, which a module-level binding would bypass
 
         if num_batch is not None:
             http_kwargs["num_batch"] = num_batch
         return load_ollama_embedding(model, endpoint=endpoint, keep_alive=keep_alive, **http_kwargs)
-    from ..adapters.embedding import load_openai_embedding
+    from ..adapters.embedding import load_openai_embedding  # noqa: PLC0415 - monkeypatch seam: tests/test_embedding_factory.py patches semdex.adapters.embedding.load_*_embedding, which a module-level binding would bypass
 
     return load_openai_embedding(model, endpoint=endpoint, api_key=api_key, **http_kwargs)
 
@@ -925,17 +919,17 @@ def _build_cloud_embedding(
     if retries is not None:
         http_kwargs["retries"] = retries
     if provider is EmbeddingBackend.GEMINI:
-        from ..adapters.embedding import load_gemini_embedding
+        from ..adapters.embedding import load_gemini_embedding  # noqa: PLC0415 - monkeypatch seam: tests/test_embedding_factory.py patches semdex.adapters.embedding.load_*_embedding, which a module-level binding would bypass
 
         return load_gemini_embedding(model, endpoint=endpoint, api_key=api_key, **http_kwargs)
-    from ..adapters.embedding import load_cohere_embedding
+    from ..adapters.embedding import load_cohere_embedding  # noqa: PLC0415 - monkeypatch seam: tests/test_embedding_factory.py patches semdex.adapters.embedding.load_*_embedding, which a module-level binding would bypass
 
     return load_cohere_embedding(model, endpoint=endpoint, api_key=api_key, **http_kwargs)
 
 
 def _placeholder_embedding(dim: int | None) -> EmbeddingProvider:
     """The deterministic, dependency-free token-hash provider (dim tunable)."""
-    from ..adapters.memory.index import InMemoryEmbeddingProvider
+    from ..adapters.memory.index import InMemoryEmbeddingProvider  # noqa: PLC0415 - deferred: keeps in-memory test doubles out of the production import path
 
     return InMemoryEmbeddingProvider(dim=dim) if dim is not None else InMemoryEmbeddingProvider()
 
@@ -1005,8 +999,6 @@ def _build_http_summarizer(
     if retries is not None:
         http_kwargs["retries"] = retries
     if provider is SummaryBackend.OLLAMA:
-        from ..adapters.summarizer import load_ollama_summarizer
-
         return load_ollama_summarizer(
             model,
             endpoint=endpoint,
@@ -1016,7 +1008,6 @@ def _build_http_summarizer(
             max_input_chars=resolved_clip,
             **http_kwargs,
         )
-    from ..adapters.summarizer import load_openai_summarizer
 
     return load_openai_summarizer(
         model,
@@ -1127,18 +1118,6 @@ class Bootstrap:
 
 
 __all__ = [
-    # Configuration
-    "get_config",
-    "get_default_config_path",
-    "deploy_configuration",
-    "display_config",
-    # Email
-    "send_email",
-    "send_notification",
-    "load_email_config_from_dict",
-    # Logging
-    "init_logging",
-    # Composition
     "AppServices",
     "Bootstrap",
     "DatasetServices",
@@ -1152,9 +1131,18 @@ __all__ = [
     "build_extractor",
     "build_index_production",
     "build_index_testing",
+    "build_production",
     "build_summarizer",
+    "build_testing",
     "build_vector_store",
     "build_watcher",
-    "build_production",
-    "build_testing",
+    "check_logging_config",
+    "deploy_configuration",
+    "display_config",
+    "get_config",
+    "get_default_config_path",
+    "init_logging",
+    "load_email_config_from_dict",
+    "send_email",
+    "send_notification",
 ]

@@ -10,8 +10,10 @@ use. Pyright checks every call site against those Protocols with or without the 
 from __future__ import annotations
 
 import importlib
-from collections.abc import Iterable, Sequence
-from typing import Protocol, cast
+from typing import TYPE_CHECKING, Protocol, cast
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
 
 __all__ = ["CrossEncoderModel", "load_cross_encoder", "set_torch_threads"]
 

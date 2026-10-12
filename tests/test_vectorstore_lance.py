@@ -12,15 +12,19 @@ Skipped when the optional ``lancedb`` dependency is absent (run with
 from __future__ import annotations
 
 import random
-from pathlib import Path
 
 import pytest
 
 pytest.importorskip("lancedb")
 
+from typing import TYPE_CHECKING
+
 from semdex.adapters.vectorstore import LanceVectorStore
 from semdex.domain.errors import CollectionModelMismatchError, VectorStoreError
 from semdex.domain.models import Chunk, Collection, SourceRef
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def _chunk(text: str, path: str) -> Chunk:

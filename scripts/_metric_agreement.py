@@ -20,9 +20,12 @@ question a reader might have:
 from __future__ import annotations
 
 import itertools
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 # Below this the two metrics are ordering the cells almost identically, which is the threshold at
 # which a second column stops informing a decision and starts padding a table.

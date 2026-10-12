@@ -20,10 +20,13 @@ from __future__ import annotations
 
 import hashlib
 import zipfile
-from collections.abc import Mapping
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+    from pathlib import Path
 
 __all__ = ["write_per_query"]
 

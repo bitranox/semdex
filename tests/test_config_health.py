@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
-from lib_layered_config import Config
 from pydantic import ValidationError
 
 from semdex.adapters.config.health import get_health_config
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from lib_layered_config import Config
 
 pytestmark = pytest.mark.os_agnostic
 

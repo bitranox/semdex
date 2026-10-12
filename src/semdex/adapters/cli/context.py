@@ -6,10 +6,11 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 import lib_cli_exit_tools
-import rich_click as click
-from lib_layered_config import Config
 
 if TYPE_CHECKING:
+    import rich_click as click
+    from lib_layered_config import Config
+
     from semdex.composition import AppServices, DatasetServicesFactory, IndexServicesFactory, WatcherFactory
 
 TracebackState = tuple[bool, bool]

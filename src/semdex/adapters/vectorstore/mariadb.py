@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 
 def _connect(dsn: str) -> Any:
     try:
-        import pymysql  # type: ignore  # optional dep; see module docstring
+        import pymysql  # type: ignore  # optional dep; see module docstring  # noqa: PLC0415 - optional dependency pymysql (extra mariadb), loaded only when a MariaDB store connects
     except ImportError as exc:
         raise VectorStoreError("PyMySQL is not installed; install semdex[mariadb]") from exc
     url = urlparse(dsn)

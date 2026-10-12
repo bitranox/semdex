@@ -40,6 +40,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from _bench_energy import EnergyResult, cost_per_million, counter_delta_uj, idle_estimate, window_plan
 
+from semdex.composition import build_embedding
+from semdex.domain.enums import EmbeddingBackend
+
 _RAPL = Path("/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0")
 
 DEFAULT_PROVIDERS = ("placeholder", "model2vec", "fastembed", "sentence_transformers")
@@ -78,7 +81,7 @@ class RaplCounter:
 
 def load_documents(n: int) -> list[str]:
     """Real corpus text, so the per-document figure maps onto the quality tables."""
-    import ir_datasets
+    import ir_datasets  # noqa: PLC0415 - optional dependency ir_datasets (bench extra), loaded only when load_documents needs it
 
     out: list[str] = []
     for doc in ir_datasets.load("beir/nfcorpus/test").docs_iter():
@@ -110,8 +113,6 @@ def _probe_rate(embedding: Any, documents: list[str]) -> float:
 
 def measure_provider(provider: str, documents: list[str], *, repeats: int, idle_seconds: float) -> dict[str, Any]:
     """Interleave idle and work windows for one provider and reduce them to one row."""
-    from semdex.composition import build_embedding
-    from semdex.domain.enums import EmbeddingBackend
 
     counter = RaplCounter()
     embedding = build_embedding(EmbeddingBackend(provider), allow_fallback=False)

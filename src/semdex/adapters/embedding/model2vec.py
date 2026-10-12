@@ -29,7 +29,7 @@ def load_model2vec_embedding(model_id: str | None = None) -> EmbeddingProvider:
     """
     resolved = model_id or _DEFAULT_MODEL
     try:
-        from model2vec import StaticModel  # type: ignore  # optional dep; see module docstring
+        from model2vec import StaticModel  # type: ignore  # optional dep; see module docstring  # noqa: PLC0415 - optional dependency model2vec (extra model2vec), loaded only when the model2vec provider is selected
     except ImportError as exc:  # pragma: no cover - only without semdex[model2vec]
         raise EmbeddingError("model2vec is not installed; install semdex[model2vec]") from exc
     try:

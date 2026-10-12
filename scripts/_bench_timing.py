@@ -17,8 +17,11 @@ import os
 import statistics
 import sys
 import time
-from collections.abc import Callable
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 # A single pass shorter than this is re-run back to back until the total exceeds it, and the rate
 # is computed over the whole batch. Well above the clock resolution and long enough that one

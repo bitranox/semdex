@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 
+from ...domain.errors import SummaryError
 from .._http_retry import DEFAULT_RETRIES
 from ._base import CallableSummarizer, post_chat_request
 
@@ -116,8 +117,6 @@ def load_openai_summarizer(
             retries=retries,
         )
         if not body.choices:
-            from ...domain.errors import SummaryError
-
             raise SummaryError(f"openai at {url} returned no choices")
         return body.choices[0].message.content.strip()
 

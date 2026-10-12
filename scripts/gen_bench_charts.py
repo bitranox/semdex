@@ -22,6 +22,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 _ROOT = Path(__file__).resolve().parents[1]
 _RAW = _ROOT / "tests" / "benchmarks" / "raw"
 
@@ -360,8 +362,6 @@ def render_store_memory(d: dict[str, Any]) -> None:
     mem_ax.legend(fontsize=8, frameon=False, loc="upper left")
     mem_ax.set_title("Store memory: solid serving, dotted ingest peak", fontsize=11, color=_ink(), loc="left")
 
-    import numpy as np
-
     names = [e[0] for e in d["embedders"]]
     y = np.arange(len(names))
     emb_ax.barh(y, [e[1] for e in d["embedders"]], height=0.55, color=_BLUE, zorder=3)
@@ -428,10 +428,10 @@ def _manifest(data: dict[str, Any]) -> dict[str, str]:
 
 ##### rendering (matplotlib; not needed by the drift test) #####
 def _style() -> Any:
-    import matplotlib
+    import matplotlib  # noqa: PLC0415 - optional dependency matplotlib (charts extra), loaded only when rendering needs it
 
     matplotlib.use("svg")
-    import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt  # noqa: PLC0415 - optional dependency matplotlib (charts extra), loaded only when rendering needs it
 
     dark = _is_dark()
     matplotlib.rcParams.update(
@@ -535,7 +535,7 @@ def _provider_of(label: str) -> str:
 
 def _embed_hbar(name: str, labels: list[str], values: list[float], title: str, xmax: float) -> None:
     plt = _style()
-    from matplotlib.patches import Patch
+    from matplotlib.patches import Patch  # noqa: PLC0415 - optional dependency matplotlib (charts extra), loaded only when rendering needs it
 
     colors = [_PROVIDER_COLOR.get(_provider_of(lbl), _MUTED) for lbl in labels]
     fig, ax = plt.subplots(figsize=(6.6, 0.34 * len(labels) + 1.3))
@@ -582,7 +582,6 @@ def render_embedding_german_ranking(d: dict[str, Any]) -> None:
 
 def render_chunker_quality(d: dict[str, Any]) -> None:
     plt = _style()
-    import numpy as np
 
     corpora, chunkers, embeddings = d["corpora"], d["chunkers"], d["embeddings"]
     ecolor = {"fastembed": _BLUE, "model2vec": _AQUA}
@@ -624,7 +623,6 @@ def render_chunker_throughput(d: dict[str, Any]) -> None:
 
 
 def _render_throughput_rates(ax: Any, d: dict[str, Any]) -> None:
-    import numpy as np
 
     strategies, corpora = d["strategies"], d["corpora"]
     y = np.arange(len(strategies))
@@ -676,8 +674,7 @@ def _render_worker_scaling(ax: Any, workers: dict[str, Any]) -> None:
 
 def render_extractor_latency(d: dict[str, Any]) -> None:
     plt = _style()
-    import numpy as np
-    from matplotlib.colors import LogNorm
+    from matplotlib.colors import LogNorm  # noqa: PLC0415 - optional dependency matplotlib (charts extra), loaded only when rendering needs it
 
     extractors, formats = d["extractors"], d["formats"]
     grid = np.full((len(extractors), len(formats)), np.nan)
@@ -735,7 +732,6 @@ def render_end_to_end_quality(d: dict[str, Any]) -> None:
 
 def render_ocr_badscans(d: dict[str, Any]) -> None:
     plt = _style()
-    import numpy as np
 
     engines = d["engines"]
     metrics = [
@@ -1162,7 +1158,6 @@ def _span_mechanism_panel(ax: Any, d: dict[str, Any]) -> None:
 
 def _span_blind_panel(ax: Any, d: dict[str, Any]) -> None:
     """Stacked by CAUSE, because the total alone would read as chunking's failure."""
-    import numpy as np
 
     labels = d["blind_labels"]
     if not labels:
@@ -1256,7 +1251,6 @@ def render_extraction_real(d: dict[str, Any]) -> None:
     """Grouped bars: document type along y, one bar per extractor, word recall on x."""
     if not d:
         return
-    import numpy as np
 
     plt = _style()
     extractors, sources = d["extractors"], d["sources"]

@@ -29,14 +29,16 @@ from __future__ import annotations
 import json
 import os
 import sys
-from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _metric_agreement import NEAR_DUPLICATE_RHO, correlation_matrix, effective_views, pairwise_disagreement
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 _RAW = Path(__file__).resolve().parents[1] / "tests" / "benchmarks" / "raw"
 _SWEEPS = ("chunk-sweep-mldr.json", "chunk-sweep-beir.json", "chunk-sweep-miracl.json")
@@ -81,7 +83,7 @@ def judged_per_query(corpus: str) -> float | None:
     if not dataset_id:
         return None
     try:
-        import ir_datasets
+        import ir_datasets  # noqa: PLC0415 - optional dependency ir_datasets (bench extra), loaded only when a qrels lookup needs it
 
         counts: dict[str, int] = {}
         for qrel in ir_datasets.load(dataset_id).qrels_iter():

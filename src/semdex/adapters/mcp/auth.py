@@ -103,7 +103,7 @@ def _build_oauth(config: McpConfig, *, env: Mapping[str, str]) -> JWTVerifier | 
 
 def _import_static_token_verifier() -> type[StaticTokenVerifier]:
     try:
-        from fastmcp.server.auth import StaticTokenVerifier
+        from fastmcp.server.auth import StaticTokenVerifier  # noqa: PLC0415 - optional dependency fastmcp (extra mcp-server), loaded only when an MCP auth provider is built
     except ImportError as exc:  # pragma: no cover - exercised only without the extra
         raise ConfigurationError("MCP server needs fastmcp; install semdex[mcp-server].") from exc
     return StaticTokenVerifier
@@ -111,7 +111,7 @@ def _import_static_token_verifier() -> type[StaticTokenVerifier]:
 
 def _import_jwt_verifier() -> type[JWTVerifier]:
     try:
-        from fastmcp.server.auth.providers.jwt import JWTVerifier
+        from fastmcp.server.auth.providers.jwt import JWTVerifier  # noqa: PLC0415 - optional dependency fastmcp (extra mcp-server), loaded only when an MCP auth provider is built
     except ImportError as exc:  # pragma: no cover - exercised only without the extra
         raise ConfigurationError("MCP server needs fastmcp; install semdex[mcp-server].") from exc
     return JWTVerifier
@@ -119,7 +119,7 @@ def _import_jwt_verifier() -> type[JWTVerifier]:
 
 def _import_oauth_proxy() -> type[OAuthProxy]:
     try:
-        from fastmcp.server.auth import OAuthProxy
+        from fastmcp.server.auth import OAuthProxy  # noqa: PLC0415 - optional dependency fastmcp (extra mcp-server), loaded only when an MCP auth provider is built
     except ImportError as exc:  # pragma: no cover - exercised only without the extra
         raise ConfigurationError("MCP server needs fastmcp; install semdex[mcp-server].") from exc
     return OAuthProxy

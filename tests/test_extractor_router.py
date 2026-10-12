@@ -7,7 +7,6 @@ extractors and assert the routing decisions with paths that need not exist.
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
@@ -21,6 +20,7 @@ from semdex.domain.models import ExtractedDocument, SourceRef
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
+    from pathlib import Path
 
 pytestmark = pytest.mark.os_agnostic
 

@@ -13,9 +13,7 @@ import dataclasses
 import os
 import subprocess
 import sys
-from collections.abc import Callable
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from lib_layered_config import Config
@@ -24,6 +22,10 @@ from semdex import __init__conf__
 from semdex.adapters.cli.main import main
 from semdex.adapters.email.config import load_email_config_from_dict
 from semdex.composition import AppServices, build_testing
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from pathlib import Path
 
 VALID = {"smtp_hosts": ["smtp.example.com:587"], "from_address": "sender@example.com"}
 SEND_EMAIL = ["send-email", "--to", "recipient@example.com", "--subject", "s", "--body", "b"]
@@ -63,12 +65,22 @@ def test_an_invalid_email_section_exits_78_with_one_line_per_problem(
 
 
 @pytest.mark.os_agnostic
-def test_a_model_level_problem_names_the_section_and_the_reason(capsys: pytest.CaptureFixture[str]) -> None:
+def test_a_refused_value_names_its_file_key(capsys: pytest.CaptureFixture[str]) -> None:
     exit_code = main(SEND_EMAIL, services_factory=_services({**VALID, "timeout": -5}))
 
     err = capsys.readouterr().err
     assert exit_code == 78, err
-    assert _error_lines(err) == ["Error: Invalid configuration: email: timeout must be positive, got -5.0"]
+    assert _error_lines(err) == ["Error: Invalid configuration: email.timeout: timeout must be positive, got -5.0"]
+
+
+@pytest.mark.os_agnostic
+@pytest.mark.parametrize("command", [SEND_EMAIL, SEND_NOTIFICATION], ids=["send-email", "send-notification"])
+def test_an_unknown_email_key_exits_78_naming_it(capsys: pytest.CaptureFixture[str], command: list[str]) -> None:
+    exit_code = main(command, services_factory=_services({**VALID, "smtp_host": "smtp.example.com"}))
+
+    err = capsys.readouterr().err
+    assert exit_code == 78, err
+    assert _error_lines(err) == ["Error: Invalid configuration: email.smtp_host: unknown key"]
 
 
 @pytest.mark.os_agnostic
@@ -99,7 +111,7 @@ def test_an_invalid_option_value_exits_22_with_one_line(capsys: pytest.CaptureFi
 
     err = capsys.readouterr().err
     assert exit_code == 22, err
-    assert _error_lines(err) == ["Error: Invalid option value: email: timeout must be positive, got -5.0"]
+    assert _error_lines(err) == ["Error: Invalid option value: email.timeout: timeout must be positive, got -5.0"]
     assert "errors.pydantic.dev" not in err
 
 
@@ -120,5 +132,5 @@ def test_a_real_invalid_email_section_exits_78_before_sending(tmp_path: Path) ->
 
     stderr = completed.stderr.decode("utf-8", "replace")
     assert completed.returncode == 78, stderr
-    assert "Error: Invalid configuration: email: timeout must be positive, got -5.0" in stderr
+    assert "Error: Invalid configuration: email.timeout: timeout must be positive, got -5.0" in stderr
     assert "Traceback" not in stderr

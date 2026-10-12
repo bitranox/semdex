@@ -7,7 +7,6 @@ isolation. The real containers are covered by the ``local_only`` Docker tests.
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import TYPE_CHECKING, Protocol
 
 import httpx
@@ -20,6 +19,7 @@ from semdex.domain.models import SourceRef
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from pathlib import Path
 
     from semdex.application.ports import Extract
 

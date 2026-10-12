@@ -60,7 +60,7 @@ def post_embedding_request(
     failure so callers never see a raw httpx/pydantic error.
     """
     try:
-        import httpx
+        import httpx  # noqa: PLC0415 - optional dependency httpx (in every HTTP-backed provider and extractor extra), loaded only when one is selected
     except ImportError as exc:  # pragma: no cover - only without the httpx extra
         raise EmbeddingError(f"httpx is not installed; install semdex[{install_extra}]") from exc
     owns_client = client is None

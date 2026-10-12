@@ -18,17 +18,17 @@ System Role:
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping, Sequence
-from pathlib import Path
 from typing import TYPE_CHECKING, Any, Protocol
 
-from ..domain.enums import DeployTarget, OutputFormat
-from ..domain.models import ChangeEvent, Chunk, Collection, ExtractedDocument, Hit, SourceRef, Vector
-
 if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping, Sequence
+    from pathlib import Path
+
     from lib_layered_config import Config
 
     from ..adapters.email.sender import EmailConfig
+    from ..domain.enums import DeployTarget, OutputFormat
+    from ..domain.models import ChangeEvent, Chunk, Collection, ExtractedDocument, Hit, SourceRef, Vector
 
 
 class GetConfig(Protocol):
@@ -114,6 +114,16 @@ class InitLogging(Protocol):
     """
 
     def __call__(self, config: Config, *, dotenv_path: str | None = None) -> None: ...
+
+
+class CheckLoggingConfig(Protocol):
+    """Refuse ``config``'s logging settings as ``InitLogging`` would, leaving the running runtime alone.
+
+    For a configuration loaded after logging is running; a refused setting raises
+    ``InvalidLoggingConfigError`` and logging keeps running with the settings it started with.
+    """
+
+    def __call__(self, config: Config) -> None: ...
 
 
 # --- Semantic index ports (patterns ported from the document-mcp reference) ---
@@ -299,6 +309,7 @@ class Watcher(Protocol):
 
 
 __all__ = [
+    "CheckLoggingConfig",
     "ChunkText",
     "DeployConfiguration",
     "DisplayConfig",

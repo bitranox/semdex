@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from semdex.adapters.config.dataset import DatasetConfig
 from semdex.composition import build_dataset_services
 from semdex.domain.enums import EmbeddingBackend, Partition, StoreBackend
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @pytest.mark.os_agnostic

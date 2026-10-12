@@ -50,8 +50,10 @@ from _perquery import write_per_query
 from _provenance import stamped
 from _score_kernel import topk_stream
 from _score_stats import bootstrap_ci
-from preembed_vectors import _cache_root, _read_json
+from preembed_vectors import _EMBED_MODELS, _cache_root, _read_json
 from score_chunk_sweep import _dirsafe, _metrics, _query_vectors
+
+from semdex.domain.enums import EmbeddingBackend
 
 _METRICS = ("ndcg@10", "recall@10", "mrr", "p@1")
 _CPU_EMBEDDERS = [
@@ -100,8 +102,8 @@ def build_bm25(texts: list[str], language: str) -> tuple[Any, Any]:
     Stemming is on because a lexical system that cannot match "cats" to "cat" understates what
     lexical retrieval contributes, which would bias the very comparison this script exists to make.
     """
-    import bm25s
-    import Stemmer
+    import bm25s  # noqa: PLC0415 - optional dependency bm25s (bench extra), loaded only when the lexical arm needs it
+    import Stemmer  # noqa: PLC0415 - optional dependency PyStemmer (bench extra), loaded only when the lexical arm needs it
 
     stemmer = Stemmer.Stemmer(language)
     stopwords = "de" if language == "german" else "en"
@@ -113,7 +115,7 @@ def build_bm25(texts: list[str], language: str) -> tuple[Any, Any]:
 
 def bm25_rankings(index: Any, analyzer: Any, queries: list[str], depth: int, n_chunks: int) -> np.ndarray:
     """Retrieve with the SAME analyzer the index was built with; a mismatch retrieves nothing."""
-    import bm25s
+    import bm25s  # noqa: PLC0415 - optional dependency bm25s (bench extra), loaded only when the lexical arm needs it
 
     stemmer, stopwords = analyzer
     tokens = bm25s.tokenize(queries, stopwords=stopwords, stemmer=stemmer, show_progress=False)
@@ -238,9 +240,6 @@ def _context_for(corpus: str, profile: str, config: dict[str, Any]) -> dict[str,
 
 
 def _endpoints() -> dict[str, str | None]:
-    from preembed_vectors import _EMBED_MODELS
-
-    from semdex.domain.enums import EmbeddingBackend
 
     ollama = os.environ.get("SEMDEX_BENCH_OLLAMA_URL")
     openai = os.environ.get("SEMDEX_BENCH_OPENAI_URL")

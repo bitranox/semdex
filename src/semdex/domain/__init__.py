@@ -26,28 +26,25 @@ from .errors import (
 from .models import ChangeEvent, Chunk, Collection, ExtractedDocument, Hit, SourceRef, Vector
 
 __all__ = [
-    # Enums
-    "ChangeKind",
-    "DeployTarget",
-    "OutputFormat",
-    "StoreBackend",
-    "WatchMode",
-    # Value objects
     "ChangeEvent",
+    "ChangeKind",
     "Chunk",
     "Collection",
-    "ExtractedDocument",
-    "Hit",
-    "SourceRef",
-    "Vector",
-    # Errors
     "CollectionModelMismatchError",
     "ConfigurationError",
     "DeliveryError",
+    "DeployTarget",
     "EmbeddingError",
+    "ExtractedDocument",
     "ExtractionError",
+    "Hit",
     "InvalidCollectionError",
     "InvalidRecipientError",
+    "OutputFormat",
+    "SourceRef",
+    "StoreBackend",
+    "Vector",
     "VectorStoreError",
     "WatchError",
+    "WatchMode",
 ]

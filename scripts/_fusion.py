@@ -15,7 +15,10 @@ document, which is why it needs no per-system calibration and why it is the usua
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 __all__ = ["RRF_K", "reciprocal_rank_fusion"]
 

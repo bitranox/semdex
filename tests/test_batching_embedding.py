@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import pytest
 
 from semdex.application.batching import BatchingEmbedding
-from semdex.domain.models import Vector
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from semdex.domain.models import Vector
 
 pytestmark = pytest.mark.os_agnostic
 

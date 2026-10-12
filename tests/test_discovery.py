@@ -3,13 +3,16 @@
 from __future__ import annotations
 
 import hashlib
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from semdex.adapters.discovery import FilesystemConnector, discover_sources
 from semdex.adapters.discovery.location import from_uri, to_uri
 from semdex.adapters.extractor._http import guess_mime, source_name
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @pytest.mark.os_agnostic

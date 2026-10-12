@@ -10,9 +10,7 @@ with the services replaced at the composition seam.
 from __future__ import annotations
 
 import dataclasses
-from collections.abc import Callable
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import click
 import pytest
@@ -21,6 +19,10 @@ from lib_layered_config import Config
 from semdex.adapters.cli.main import main
 from semdex.adapters.memory.email import EmailSpy
 from semdex.composition import AppServices, build_testing
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from pathlib import Path
 
 EMAIL = {"email": {"smtp_hosts": ["smtp.test.com:587"], "from_address": "sender@test.com"}}
 SEND_EMAIL = ["send-email", "--to", "recipient@test.com", "--subject", "Test", "--body", "Hello"]

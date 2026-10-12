@@ -66,9 +66,9 @@ DEFAULT_EMBEDDERS = ("placeholder", "model2vec", "fastembed", "sentence_transfor
 
 def _synthetic(n: int, dim: int) -> tuple[list[Any], list[Any]]:
     """Deterministic vectors and chunks. Content is irrelevant to memory; SIZE is the variable."""
-    import numpy as np
+    import numpy as np  # noqa: PLC0415 - memory cell child: imports only what its backend needs so its peak is not charged for the rest
 
-    from semdex.domain.models import Chunk, SourceRef
+    from semdex.domain.models import Chunk, SourceRef  # noqa: PLC0415 - memory cell child: imports only what its backend needs so its peak is not charged for the rest
 
     rng = np.random.default_rng(20260811)
     vectors = rng.random((n, dim), dtype=np.float32)
@@ -95,9 +95,9 @@ def ingest_cell() -> None:
     Reports the peak reached while building, which is the ingest-side answer: a machine that can
     serve an index may still not have the memory to create one.
     """
-    from semdex.composition import build_vector_store
-    from semdex.domain.enums import StoreBackend
-    from semdex.domain.models import Collection
+    from semdex.composition import build_vector_store  # noqa: PLC0415 - memory cell child: imports only what its backend needs so its peak is not charged for the rest
+    from semdex.domain.enums import StoreBackend  # noqa: PLC0415 - memory cell child: imports only what its backend needs so its peak is not charged for the rest
+    from semdex.domain.models import Collection  # noqa: PLC0415 - memory cell child: imports only what its backend needs so its peak is not charged for the rest
 
     backend = StoreBackend(os.environ["CELL_BACKEND"])
     n, dim = int(os.environ["CELL_N"]), int(os.environ["CELL_DIM"])
@@ -132,12 +132,12 @@ def serve_cell() -> None:
     That is the point: whatever this reaches is the store plus its library, with none of the
     harness that loaded it, which is what a serving container has to hold.
     """
-    from semdex.composition import build_vector_store
-    from semdex.domain.enums import StoreBackend
+    from semdex.composition import build_vector_store  # noqa: PLC0415 - memory cell child: imports only what its backend needs so its peak is not charged for the rest
+    from semdex.domain.enums import StoreBackend  # noqa: PLC0415 - memory cell child: imports only what its backend needs so its peak is not charged for the rest
 
     backend = StoreBackend(os.environ["CELL_BACKEND"])
     dim, n_queries = int(os.environ["CELL_DIM"]), int(os.environ.get("CELL_QUERIES", "20"))
-    import numpy as np
+    import numpy as np  # noqa: PLC0415 - memory cell child: imports only what its backend needs so its peak is not charged for the rest
 
     rng = np.random.default_rng(11)
     probes = rng.random((n_queries, dim), dtype=np.float32)
@@ -168,8 +168,8 @@ def serve_cell() -> None:
 
 def embedder_cell() -> None:
     """Load ONE embedding provider, embed a batch, and report peak memory."""
-    from semdex.composition import build_embedding
-    from semdex.domain.enums import EmbeddingBackend
+    from semdex.composition import build_embedding  # noqa: PLC0415 - memory cell child: imports only what its backend needs so its peak is not charged for the rest
+    from semdex.domain.enums import EmbeddingBackend  # noqa: PLC0415 - memory cell child: imports only what its backend needs so its peak is not charged for the rest
 
     provider = EmbeddingBackend(os.environ["CELL_PROVIDER"])
     texts = [f"passage number {i} about vector search and retrieval quality" for i in range(64)]

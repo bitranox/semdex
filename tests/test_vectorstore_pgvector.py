@@ -9,16 +9,19 @@ the module; each test uses its own collection.
 
 from __future__ import annotations
 
-from collections.abc import Callable
-
 import pytest
 
 pytest.importorskip("psycopg")
 pytest.importorskip("pgvector")
 
+from typing import TYPE_CHECKING
+
 from semdex.adapters.vectorstore import PgVectorStore
 from semdex.domain.errors import CollectionModelMismatchError, VectorStoreError
 from semdex.domain.models import Chunk, Collection, SourceRef
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 pytestmark = [pytest.mark.integration, pytest.mark.os_agnostic]
 

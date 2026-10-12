@@ -9,11 +9,9 @@ real command path rather than through the private helper that does the threading
 from __future__ import annotations
 
 import dataclasses
-from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import pytest
-from click.testing import CliRunner
 from lib_layered_config import Config
 
 from semdex.adapters import cli as cli_mod
@@ -21,6 +19,9 @@ from semdex.composition import Bootstrap, IndexServices, build_index_production,
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from pathlib import Path
+
+    from click.testing import CliRunner
 
 # Knobs the [embedding] section resolves, and the factory keyword each must arrive as.
 _EXPECTED: dict[str, object] = {

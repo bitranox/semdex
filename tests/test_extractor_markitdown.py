@@ -12,7 +12,7 @@ behind a stub that mirrors the adapter's own (wrong) expectations.
 from __future__ import annotations
 
 import base64
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 from mcp.types import CallToolResult, TextContent
@@ -25,6 +25,9 @@ from semdex.adapters.extractor.markitdown import (
 )
 from semdex.domain.errors import ExtractionError
 from semdex.domain.models import SourceRef
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 pytestmark = pytest.mark.os_agnostic
 

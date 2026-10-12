@@ -57,7 +57,7 @@ def _getrusage_peak_kb() -> int | None:
     """
     if sys.platform == "win32":
         return None
-    import resource
+    import resource  # noqa: PLC0415 - platform-only module, absent on Windows
 
     raw = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     return raw // 1024 if sys.platform == "darwin" else raw

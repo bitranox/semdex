@@ -16,7 +16,10 @@
 `semdex` is a read-only, file-watching semantic-search MCP server and CLI that indexes a folder of markdown/text (and, optionally, any document format) into a local vector store and never mutates the sources. While `semdex serve` runs, it watches each filesystem source dataset for changes cross-platform (native OS events with a polling fallback, via the optional `semdex[watch]` extra) and auto-reindexes on change, so search stays fresh; set `[watch].enabled = false` to index only on an explicit `reindex`. It is model- and store-agnostic and built on the bitranox clean-architecture stack (rich-click CLI, layered configuration, structured logging).
 - Pluggable extraction with per-directory routing: the backend for each file is chosen by subtree x filetype x scan-detection (`[[dataset.route]]`). Plain text and markdown read as-is; office/PDF go through a document converter (markitdown / xberg / docling / mineru); a scanned page (an image, or a PDF with a thin text layer) escalates to a vision-OCR backend (olmOCR/vLLM or any OpenAI-vision `/v1`). All config-driven with sensible defaults - see `defaultconfig.d/16-datasets.toml`.
 - CLI entry point styled with rich-click (rich output + click ergonomics).
-- Layered configuration system with lib_layered_config (defaults → app → host → user → .env → env).
+- Layered configuration system with lib_layered_config (defaults -> app -> host -> user -> .env -> env).
+  The `.env` is the first one found from the current directory upward; when there is none,
+  `$XDG_CONFIG_HOME/semdex/.env` (`~/.config/...` when unset) is read on Linux
+  (see [CONFIG.md](CONFIG.md) for macOS and Windows).
 - Rich structured logging with lib_log_rich (console, journald, eventlog, Graylog/GELF).
 - Exit-code and messaging helpers powered by lib_cli_exit_tools.
 - Metadata helpers ready for packaging, testing, and release automation.
@@ -25,9 +28,8 @@
 ### Python 3.11+ Baseline
 
 - The project targets **Python 3.11 and newer**.
-- Runtime dependencies require current stable releases (`rich-click>=1.9.6`
-  and `lib_cli_exit_tools>=2.2.4`). Dev dependencies (pytest, ruff, pyright,
-  bandit, etc.) specify minimum version constraints to ensure compatibility.
+- Runtime dependencies are declared with >= floors in pyproject.toml. Dev
+  dependencies (pytest, ruff, pyright, bandit, etc.) are declared the same way.
 - CI workflows exercise GitHub's rolling runner images (`ubuntu-latest`,
   `macos-latest`, `windows-latest`) and cover CPython 3.11 through 3.14
   alongside the latest available 3.x release provided by Actions.
@@ -63,27 +65,15 @@ uvx semdex@latest --help
 ### Persistent install as CLI tool
 
 ```bash
-# Install latest python
-install_latest_python_gcc.sh
-# pin uv to the latest python
-uv python pin /opt/python-latest/bin/python3
-# One-time install, persists from the git repo
-uv tool install --python /opt/python-latest/bin/python3 --from "git+https://github.com/bitranox/semdex.git" semdex
-# or One-time install, persists from PyPi
-uv tool install --python /opt/python-latest/bin/python3 semdex
+# One-time install from PyPI (isolated environment, added to PATH)
+uv tool install semdex
+# or from the git repository
+uv tool install --from "git+https://github.com/bitranox/semdex.git" semdex
+# Pick the interpreter explicitly if needed, e.g. --python 3.14
 # Update (requires network)
 uv tool upgrade semdex
 # Run
 semdex --help
-```
-
-### Persistent install as CLI tool
-```bash
-# install the CLI tool (isolated environment, added to PATH)
-uv tool install semdex
-
-# upgrade to latest
-uv tool upgrade semdex
 ```
 
 ### Install as project dependency
@@ -114,8 +104,8 @@ uv tool install semdex
 # Verify
 semdex --version
 
-# deploy config files
-semdex deploy-config --target app
+# deploy config files (user level; --target app or host needs sudo)
+semdex config-deploy --target user
 
 # Try it out
 semdex info
@@ -142,14 +132,14 @@ semdex config --profile production    # Use a named profile
 
 # Deploy configuration templates to target directories
 # Without profile:
-semdex config-deploy --target app    # → /etc/xdg/{slug}/config.toml
-semdex config-deploy --target host   # → /etc/xdg/{slug}/hosts/{hostname}.toml
-semdex config-deploy --target user   # → ~/.config/{slug}/config.toml
+semdex config-deploy --target app    # -> /etc/xdg/{slug}/config.toml
+semdex config-deploy --target host   # -> /etc/xdg/{slug}/hosts/{hostname}.toml
+semdex config-deploy --target user   # -> ~/.config/{slug}/config.toml
 
 # With profile:
-semdex config-deploy --target app --profile production   # → /etc/xdg/{slug}/profile/production/config.toml
-semdex config-deploy --target host --profile production  # → /etc/xdg/{slug}/profile/production/hosts/{hostname}.toml
-semdex config-deploy --target user --profile production  # → ~/.config/{slug}/profile/production/config.toml
+semdex config-deploy --target app --profile production   # -> /etc/xdg/{slug}/profile/production/config.toml
+semdex config-deploy --target host --profile production  # -> /etc/xdg/{slug}/profile/production/hosts/{hostname}.toml
+semdex config-deploy --target user --profile production  # -> ~/.config/{slug}/profile/production/config.toml
 
 # With custom permissions (POSIX only):
 semdex config-deploy --target user --file-mode 640       # Files with rw-r----- (640)
@@ -240,25 +230,42 @@ from_address = "alerts@myapp.com"
 smtp_username = "myuser@gmail.com"
 smtp_password = "secret_password"  # Consider using environment variables for sensitive data
 use_starttls = true
+starttls_verify = true   # false accepts any certificate: only for a known internal relay
 timeout = 60.0
+# local_hostname = "mail.example.com"   # EHLO name; set it where reverse DNS is slow
+# delivery_deadline = 300               # upper bound in seconds for one SMTP session; 0 = none
 ```
 
-**`.env` File:**
+A key `[email]` or `[email.attachments]` does not know is refused (exit 78,
+`email.<key>: unknown key`), whichever layer it comes from, so a typo cannot leave a setting at
+its default.
+
+**`.env` File** (no prefix in .env; a prefixed key is not recognised):
 ```bash
 # Email configuration for local testing
-SEMDEX___EMAIL__SMTP_HOSTS=smtp.gmail.com:587
-SEMDEX___EMAIL__FROM_ADDRESS=noreply@example.com
+EMAIL__SMTP_HOSTS=["smtp.gmail.com:587"]
+EMAIL__FROM_ADDRESS=noreply@example.com
 ```
 
 #### Gmail Configuration Example
 
-For Gmail, create an [App Password](https://support.google.com/accounts/answer/185833) instead of using your account password:
+For Gmail, create an [App Password](https://support.google.com/accounts/answer/185833) instead of using your account password.
+In a `.env` file (no prefix in .env; a prefixed key is not recognised):
 
 ```bash
-SEMDEX___EMAIL__SMTP_HOSTS=smtp.gmail.com:587
-SEMDEX___EMAIL__FROM_ADDRESS=your-email@gmail.com
-SEMDEX___EMAIL__SMTP_USERNAME=your-email@gmail.com
-SEMDEX___EMAIL__SMTP_PASSWORD=your-16-char-app-password
+EMAIL__SMTP_HOSTS=["smtp.gmail.com:587"]
+EMAIL__FROM_ADDRESS=your-email@gmail.com
+EMAIL__SMTP_USERNAME=your-email@gmail.com
+EMAIL__SMTP_PASSWORD=your-16-char-app-password
+```
+
+or as environment variables (these need the prefix):
+
+```bash
+export SEMDEX___EMAIL__SMTP_HOSTS='["smtp.gmail.com:587"]'
+export SEMDEX___EMAIL__FROM_ADDRESS=your-email@gmail.com
+export SEMDEX___EMAIL__SMTP_USERNAME=your-email@gmail.com
+export SEMDEX___EMAIL__SMTP_PASSWORD=your-16-char-app-password
 ```
 
 #### Send Simple Email
@@ -312,16 +319,23 @@ semdex send-notification \
 #### Programmatic Email Usage
 
 ```python
+from pydantic import SecretStr
+
 from semdex.adapters.email.sender import EmailConfig
 from semdex.composition import send_email, send_notification
 
-# Configure email
+# Configure email. EmailConfig is a btx_lib_mail ConfMail, so in Python the fields use the
+# library's names (smtphosts, smtp_use_starttls, smtp_timeout, smtp_starttls_verify,
+# smtp_local_hostname, smtp_delivery_deadline); configuration files keep their keys (smtp_hosts,
+# use_starttls, timeout, starttls_verify, local_hostname, delivery_deadline). smtp_password is a SecretStr: it prints as
+# '**********' in logs, reprs and dumps, and config.smtp_password.get_secret_value() returns
+# the plain text.
 config = EmailConfig(
-    smtp_hosts=["smtp.gmail.com:587"],
+    smtphosts=["smtp.gmail.com:587"],
     from_address="alerts@myapp.com",
     smtp_username="myuser@gmail.com",
-    smtp_password="app-password",
-    timeout=60.0,
+    smtp_password=SecretStr("app-password"),
+    smtp_timeout=60.0,
 )
 
 # Send simple email

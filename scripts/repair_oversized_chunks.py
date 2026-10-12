@@ -48,6 +48,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import numpy as np
+
+from semdex.adapters.chunker._base import split_oversized
+from semdex.composition import build_embedding
+from semdex.domain.enums import ChunkStrategy, EmbeddingBackend
+
 OffsetsOf = Callable[[str], list[tuple[int, int]]]
 
 
@@ -60,7 +66,6 @@ def plan_repair(
     Non-oversized chunks pass through unchanged (carry = their old index); an oversized chunk is
     replaced by its lossless <=max_tokens split pieces (each carry = -1).
     """
-    from semdex.adapters.chunker._base import split_oversized
 
     new_chunks: list[tuple[str, int]] = []
     carry: list[int] = []
@@ -78,8 +83,7 @@ def plan_repair(
 
 def _offsets_of(tokenizer: str) -> OffsetsOf:
     """The token-offset function the size-guard uses (reused from the chonkie adapter)."""
-    from semdex.adapters.chunker.chonkie import ChonkieChunker
-    from semdex.domain.enums import ChunkStrategy
+    from semdex.adapters.chunker.chonkie import ChonkieChunker  # noqa: PLC0415 - optional dependency chonkie (chunk extra) behind the adapter, loaded only when the tokenizer offsets are needed
 
     return ChonkieChunker(ChunkStrategy.SEMANTIC, tokenizer=tokenizer)._offsets_of
 
@@ -160,7 +164,7 @@ def cap_for(chunk_dir: Path, override: int | None) -> int:
 
 def _oversized_sets(cache_root: Path, override: int | None) -> list[tuple[Path, int]]:
     """Every chunk set holding a chunk above ITS OWN cap, with that cap."""
-    import pyarrow.parquet as pq
+    import pyarrow.parquet as pq  # noqa: PLC0415 - optional dependency pyarrow (lance extra), loaded only when _oversized_sets needs it
 
     hits: list[tuple[Path, int]] = []
     for meta in sorted((cache_root / "chunks").glob("*/meta.json")):
@@ -176,20 +180,15 @@ def _oversized_sets(cache_root: Path, override: int | None) -> list[tuple[Path, 
 
 def _embedder_for(label: str):
     """Map a cell's dir-safe embedder label back to (backend, model_id) via preembed's registry."""
-    from preembed_vectors import _EMBED_MODELS, _dirsafe
+    from preembed_vectors import _EMBED_MODELS, _dirsafe  # noqa: PLC0415 - preembed_vectors sets HF_HUB_OFFLINE and loads pyarrow at import, so only the embedding path imports it
 
     reverse = {_dirsafe(key): value for key, value in _EMBED_MODELS.items()}
     return reverse.get(label)
 
 
 def _repair_set(chunk_dir: Path, cache_root: Path, max_tokens: int, tokenizer: str) -> None:
-    import numpy as np
-    import pyarrow as pa
-    import pyarrow.parquet as pq
-
-    from semdex.adapters.chunker._base import split_oversized
-    from semdex.composition import build_embedding
-    from semdex.domain.enums import EmbeddingBackend
+    import pyarrow as pa  # noqa: PLC0415 - optional dependency pyarrow (lance extra), loaded only when _repair_set needs it
+    import pyarrow.parquet as pq  # noqa: PLC0415 - optional dependency pyarrow (lance extra), loaded only when _repair_set needs it
 
     table = pq.read_table(chunk_dir / "chunks.parquet")
     texts = table.column("text").to_pylist()

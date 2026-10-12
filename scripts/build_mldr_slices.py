@@ -76,7 +76,7 @@ def _splits() -> list[str]:
 
 def _repo_files(lang: str, split: str) -> tuple[Path, Path, Path]:
     """Return (corpus.jsonl.gz, <split>.jsonl.gz, qrels.tsv) for ``lang``, fetching if absent."""
-    from huggingface_hub import hf_hub_download
+    from huggingface_hub import hf_hub_download  # noqa: PLC0415 - optional dependency huggingface_hub (via datasets, bench extra), loaded only when a slice download needs it
 
     repo = os.environ.get("SEMDEX_MLDR_REPO", "Shitao/MLDR")
     cache = os.environ.get("SEMDEX_MLDR_HF_CACHE", "/corpora/hf/hub")

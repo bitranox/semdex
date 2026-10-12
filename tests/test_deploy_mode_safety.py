@@ -12,15 +12,19 @@ reach ``chmod(-1)`` and leave the directory at 0o7777. Every refusal is a click 
 
 from __future__ import annotations
 
-from collections.abc import Callable
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
-from click.testing import CliRunner
 
 from semdex.adapters import cli as cli_mod
-from semdex.composition import AppServices
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from pathlib import Path
+
+    from click.testing import CliRunner
+
+    from semdex.composition import AppServices
 
 #: Each parses under a bare ``int(value, 8)`` although it is no mode literal: int() strips
 #: whitespace, accepts ``_`` separators and converts non-ASCII decimal digits.

@@ -74,7 +74,7 @@ class WatchfilesWatcher:
         self._thread.start()
 
     def _run(self, roots: Sequence[Path], on_change: Callable[[ChangeEvent], None]) -> None:
-        import watchfiles
+        import watchfiles  # noqa: PLC0415 - optional dependency watchfiles (extra watch), loaded only when the live watcher runs
 
         kind_of = {
             watchfiles.Change.added: ChangeKind.CREATED,

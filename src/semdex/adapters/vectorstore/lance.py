@@ -17,6 +17,7 @@ and it keeps new docs immediately searchable.
 
 from __future__ import annotations
 
+from datetime import timedelta
 from typing import TYPE_CHECKING, Any
 
 import orjson
@@ -58,14 +59,14 @@ class _LanceMeta(BaseModel):
 
 def _connect(uri: str) -> Any:
     try:
-        import lancedb  # type: ignore  # optional dep; see module docstring
+        import lancedb  # type: ignore  # optional dep; see module docstring  # noqa: PLC0415 - optional dependency lancedb (extra lance), loaded only when a LanceDB store connects
     except ImportError as exc:
         raise VectorStoreError("lancedb is not installed; install semdex[lance]") from exc
     return lancedb.connect(uri)  # type: ignore[no-untyped-call]
 
 
 def _schema(dim: int) -> Any:
-    import pyarrow as pa  # type: ignore  # comes with lancedb; see module docstring
+    import pyarrow as pa  # type: ignore  # comes with lancedb; see module docstring  # noqa: PLC0415 - optional dependency pyarrow (extra lance), loaded only when a LanceDB store builds its schema
 
     p: Any = pa  # untyped optional dep (no stubs): treat as Any so member access is not flagged
     return p.schema(
@@ -189,7 +190,7 @@ class LanceVectorStore:
             # num_partitions fixes how many IVF cells the vectors are clustered into, and it is
             # what nprobes is later counted against: a probe count only means something relative
             # to the partition count, so tuning one without pinning the other moves two things.
-            from lancedb.index import IvfPq  # type: ignore  # optional dep; see module docstring
+            from lancedb.index import IvfPq  # type: ignore  # optional dep; see module docstring  # noqa: PLC0415 - optional dependency lancedb (extra lance), loaded only when an ANN index is created
 
             partitions = self._ann.num_partitions
             config = (
@@ -200,8 +201,6 @@ class LanceVectorStore:
             table.create_index("vector", config=config)
             return
         if existing[0].num_unindexed_rows > 0:
-            from datetime import timedelta
-
             table.optimize(cleanup_older_than=timedelta(0))
 
     # --- reader slice ---

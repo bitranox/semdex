@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from platformdirs import user_cache_dir
+
 from ...domain.errors import EmbeddingError
 from ._base import CallableEmbedding, to_vector, to_vectors
 
@@ -40,8 +42,6 @@ def resolve_cache_dir(cache_dir: str | None) -> str:
     env = os.environ.get("FASTEMBED_CACHE_PATH")
     if env:
         return env
-    from platformdirs import user_cache_dir
-
     return str(Path(user_cache_dir("semdex")) / "fastembed")
 
 
@@ -63,7 +63,7 @@ def load_fastembed_embedding(
     resolved_threads = threads if threads is not None else os.cpu_count()
     resolved_cache = resolve_cache_dir(cache_dir)
     try:
-        from fastembed import TextEmbedding  # type: ignore  # optional-at-runtime; see module docstring
+        from fastembed import TextEmbedding  # type: ignore  # optional-at-runtime; see module docstring  # noqa: PLC0415 - heavy start-up cost: fastembed pulls onnxruntime, loaded only when a fastembed model is actually built
     except ImportError as exc:  # pragma: no cover - fastembed is a core dep
         raise EmbeddingError("fastembed is not installed; install semdex[fastembed]") from exc
     try:

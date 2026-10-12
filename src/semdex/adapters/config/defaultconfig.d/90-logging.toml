@@ -4,7 +4,7 @@
 #
 # Documentation: https://github.com/bitranox/lib_log_rich
 # Settings are loaded via lib_layered_config and can be overridden via:
-#   - Host/User config files (see precedence list in defaultconfig.toml)
+#   - App/Host/User config files (see precedence list in defaultconfig.toml)
 #   - Environment variables (see below)
 #
 # Environment Variable Naming
@@ -26,7 +26,10 @@
 #   LIB_LOG_RICH__ENABLE_GRAYLOG=false
 #   LIB_LOG_RICH__CONSOLE_FORMAT_PRESET=short
 #
-# Every .env value is text; the setting's own validation reads true/false and numbers.
+# An unquoted value (in .env and in the environment alike) is converted: true/false become
+# booleans, null/none become None (except for secret keys such as passwords), a JSON array or
+# object is parsed, and a number becomes a number only when it converts back to the same text.
+# Quote a .env value to keep it as text.
 # A table is a JSON object written unquoted, or one key per entry
 # (LIB_LOG_RICH__SCRUB_PATTERNS__API_KEY=.+); comma-separated pairs are one string.
 #
@@ -205,10 +208,12 @@ enable_eventlog = false
 enable_graylog = false
 
 # Purpose: Graylog server host and port for GELF protocol
-# Type: array [host, port] or string "host:port"
+# Type: array [host, port], e.g. ["graylog.example.com", 12201]; a "host:port" string is
+#       refused (config, index, search, serve, send-email and send-notification exit 78;
+#       only the native LOG_GRAYLOG_ENDPOINT variable takes host:port)
 # Default: None (no endpoint); empty list is coerced to None
-# Environment Variable: SEMDEX___LIB_LOG_RICH__GRAYLOG_ENDPOINT=graylog.example.com:12201
-# .env: LIB_LOG_RICH__GRAYLOG_ENDPOINT=graylog.example.com:12201
+# Environment Variable: SEMDEX___LIB_LOG_RICH__GRAYLOG_ENDPOINT='["graylog.example.com",12201]'
+# .env: LIB_LOG_RICH__GRAYLOG_ENDPOINT=["graylog.example.com",12201]
 graylog_endpoint = []
 
 # Purpose: Transport protocol for Graylog connection
@@ -335,10 +340,12 @@ scrub_patterns = { password = ".+", secret = ".+", token = ".+" }
 # ------------------------------------------------------------------------------
 
 # Purpose: Throttle log emissions (max_events per window_seconds)
-# Type: array [max_events, window_seconds]
+# Type: array [max_events, window_seconds], e.g. [100, 60]; a "100:60" string is refused
+#       (config, index, search, serve, send-email and send-notification exit 78; only the
+#       native LOG_RATE_LIMIT variable takes MAX:WINDOW_SECONDS)
 # Default: None (no rate limiting); empty list is coerced to None
-# Environment Variable: SEMDEX___LIB_LOG_RICH__RATE_LIMIT=100:60
-# .env: LIB_LOG_RICH__RATE_LIMIT=100:60
+# Environment Variable: SEMDEX___LIB_LOG_RICH__RATE_LIMIT='[100,60]'
+# .env: LIB_LOG_RICH__RATE_LIMIT=[100,60]
 rate_limit = []
 
 # ------------------------------------------------------------------------------

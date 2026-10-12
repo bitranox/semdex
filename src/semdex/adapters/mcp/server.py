@@ -27,6 +27,7 @@ from ...application.use_cases.reconciling import reconcile
 from ...application.use_cases.searching import DatasetSearchTarget, search, search_across_datasets
 from ...application.use_cases.writing import forget as _forget_knowledge
 from ...application.use_cases.writing import remember as _remember_knowledge
+from ...domain.errors import ConfigurationError
 from .schemas import DatasetInfo, ForgetResult, FusedSearchHit, ReindexResult, RememberResult, SearchHit
 
 if TYPE_CHECKING:
@@ -258,17 +259,15 @@ def search_use_case(svc: DatasetServices, query: str, k: int) -> list[Hit]:
 
 
 def _tool_error(message: str) -> Exception:
-    from fastmcp.exceptions import ToolError
+    from fastmcp.exceptions import ToolError  # noqa: PLC0415 - optional dependency fastmcp (extra mcp-server), loaded only when a tool reports an error
 
     return ToolError(message)
 
 
 def _import_fastmcp() -> type[FastMCP]:
     try:
-        from fastmcp import FastMCP
+        from fastmcp import FastMCP  # noqa: PLC0415 - optional dependency fastmcp (extra mcp-server), loaded only when the MCP server is built
     except ImportError as exc:  # pragma: no cover - exercised only without the extra
-        from ...domain.errors import ConfigurationError
-
         raise ConfigurationError("MCP server needs fastmcp; install semdex[mcp-server].") from exc
     return FastMCP
 

@@ -13,12 +13,14 @@ developers (multi-paragraph, RST markup, deployment advice), not for an MCP clie
 
 from __future__ import annotations
 
-from enum import StrEnum
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
 
 from pydantic import BaseModel, ConfigDict, Field, WithJsonSchema
 
 from ...domain.enums import Partition, StoreBackend
+
+if TYPE_CHECKING:
+    from enum import StrEnum
 
 
 def _wire_enum(enum: type[StrEnum], description: str) -> WithJsonSchema:

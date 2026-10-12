@@ -23,9 +23,12 @@ because duplicate chunk text is real in MIRACL and msmarco, so exact score ties 
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 __all__ = ["normalize_rows", "topk_stream"]
 

@@ -12,18 +12,23 @@ from __future__ import annotations
 
 import logging
 import os
-from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import lib_log_rich.runtime
 import pytest
-from click.testing import CliRunner
 from lib_layered_config import Config
 
 from semdex.adapters import cli as cli_mod
 from semdex.adapters.logging.setup import init_logging
-from semdex.composition import AppServices, build_testing
+from semdex.composition import build_testing
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from click.testing import CliRunner
+
+    from semdex.composition import AppServices
 
 
 @pytest.mark.os_agnostic

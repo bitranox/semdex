@@ -37,8 +37,6 @@ Isolation is asserted (a write in one KB is invisible in another), fan-out is as
 from __future__ import annotations
 
 import uuid
-from collections.abc import Callable
-from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import pytest
@@ -50,6 +48,9 @@ from semdex.composition import DatasetServices, build_dataset_services
 from semdex.domain.enums import EmbeddingBackend, Partition, StoreBackend
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+    from pathlib import Path
+
     from semdex.application.ports import EmbeddingProvider
 
 # --- embedded-backend availability (skip a cell whose optional extra is absent) -------

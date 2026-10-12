@@ -11,7 +11,7 @@ they build real chunkers and download embedding models, so run via ``make ti`` /
 from __future__ import annotations
 
 import time
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -21,6 +21,9 @@ from semdex.application.use_cases import index_sources, search
 from semdex.composition import build_chunker, build_index_production
 from semdex.domain.enums import ChunkStrategy, EmbeddingBackend
 from semdex.domain.models import ExtractedDocument, SourceRef
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 pytestmark = [pytest.mark.local_only, pytest.mark.os_agnostic]
 

@@ -3,14 +3,17 @@
 from __future__ import annotations
 
 import importlib.util
-from collections.abc import Callable
-from importlib.machinery import ModuleSpec
+from typing import TYPE_CHECKING
 
 import pytest
 
 from semdex.adapters.chunker import ChonkieChunker, StsChunker, WhitespaceChunker
 from semdex.composition import build_chunker
 from semdex.domain.enums import ChunkStrategy
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from importlib.machinery import ModuleSpec
 
 pytestmark = pytest.mark.os_agnostic
 

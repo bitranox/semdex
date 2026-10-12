@@ -25,9 +25,8 @@ from __future__ import annotations
 import math
 import os
 import time
-from collections.abc import Callable, Mapping
 from pathlib import Path
-from typing import NamedTuple
+from typing import TYPE_CHECKING, NamedTuple
 
 import pytest
 from _bench_corpus import corpus_extractor, corpus_sources, ranked_doc_ids
@@ -36,6 +35,9 @@ from _benchmark_report import ResultStatus, record
 from semdex.application.use_cases import index_sources, search
 from semdex.composition import build_chunker, build_embedding, build_vector_store
 from semdex.domain.enums import ChunkStrategy, EmbeddingBackend, StoreBackend
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping
 
 # integration (not local_only): the store/quality/embedding matrices spin Docker DBs, download
 # up to 10 embedding models, and run the slow `late` chunker - minutes, too long for `make test`.

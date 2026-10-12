@@ -6,12 +6,15 @@ sentence-transformers is not installed.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import pytest
 
 from semdex.adapters.embedding import SentenceTransformerEmbedding
 from semdex.domain.errors import EmbeddingError
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class FakeEncoder:

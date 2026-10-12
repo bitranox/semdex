@@ -45,7 +45,7 @@ def is_transient(exc: BaseException) -> bool:
     4xx status other than 429, a pydantic ``ValidationError``, a JSON decode
     error, or any other exception - retrying those never helps.
     """
-    import httpx
+    import httpx  # noqa: PLC0415 - optional dependency httpx (in every HTTP-backed provider and extractor extra), loaded only when one is selected
 
     if isinstance(exc, httpx.TransportError):
         return True
@@ -73,7 +73,7 @@ def retry_http(
     own parsing and error mapping run on it unretried. ``sleep`` is injected so
     tests exercise the backoff without real delay.
     """
-    import httpx
+    import httpx  # noqa: PLC0415 - optional dependency httpx (in every HTTP-backed provider and extractor extra), loaded only when one is selected
 
     attempt = 0
     delay = base_delay

@@ -7,6 +7,28 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 ## [Unreleased]
 
 ### Changed
+- **Synced with bitranox_template_py_cli 2.4.0** (a three-way merge from the template of
+  2026-07-24, the version this app last matched before the 2.0 fixes were ported by hand). The
+  hand-ported fixes are replaced by the template's own versions; what only this app has stays: the
+  `index`, `search` and `serve` commands, the indexing, search, MCP, watch and health services and
+  their configuration files, and the `--env-file` option. semdex keeps having no `hello` command.
+- `EmailConfig` is a subclass of btx_lib_mail's `ConfMail` (`btx_lib_mail>=4.0.0`). The Python
+  field names follow ConfMail (`smtphosts`, `smtp_use_starttls`, `smtp_timeout`); the keys in the
+  configuration files stay the same.
+- An unknown key in `[email]` or `[email.attachments]` is refused (exit 78), with one `Error:` line
+  per problem that names the file key (`email.timeout`, not `email`). A refused SMTP host no longer
+  repeats the host in the message, since a host entry can carry credentials.
+- New `[email]` keys: `starttls_verify`, `local_hostname`, `delivery_deadline`,
+  `recipient_max_count`, and `attachments.max_count`.
+- A delivery error keeps the library's message; it is no longer replaced when it contains a word
+  such as "password".
+- `config --profile` checks the logging configuration with `lib_log_rich.validate_config` and
+  refuses what `config` without a profile refuses.
+- A `--set` value appears in the `config` output with the source `cli`.
+- `send-notification` no longer offers `--raise-on-missing-attachments`; it takes no attachments.
+  `send-email` keeps it.
+- Console output, `index`, `search` and `serve` included, goes through one adapter that replaces a
+  character the console codepage cannot show instead of crashing on it (a cp1252 Windows console).
 - **A refused attachment exits 77, not 1 with a traceback (exit code change).** An attachment
   btx_lib_mail's security checks refuse (a blocked extension such as `.exe`, a file under a
   blocked directory, a symlink, a file over the size limit) made `send-email` exit 1 with

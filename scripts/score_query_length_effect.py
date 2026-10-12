@@ -36,9 +36,8 @@ from __future__ import annotations
 import json
 import os
 import sys
-from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
@@ -47,6 +46,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _provenance import MEASURED_ON
 from _score_stats import paired_ci
 from export_bench_raw import measured_on_summary
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Mapping
 
 _ROOT = Path(__file__).resolve().parent.parent
 _PROFILE = "recursive-t256-o{overlap}-gpt2"

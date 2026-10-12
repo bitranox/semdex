@@ -13,7 +13,6 @@ id, not its name, so blue-green ``swap`` is a rename with no table move.
 from __future__ import annotations
 
 import sqlite3
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 from ...domain.errors import CollectionModelMismatchError, VectorStoreError
@@ -21,6 +20,7 @@ from ...domain.models import Collection, Hit
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+    from pathlib import Path
 
     from ...application.ports import VectorStore
     from ...domain.models import Chunk, Vector
@@ -52,7 +52,7 @@ CREATE INDEX IF NOT EXISTS chunks_by_source ON chunks (collection, path);
 
 def _connect(path: Path) -> sqlite3.Connection:
     try:
-        import sqlite_vec  # type: ignore  # optional dep; see module docstring
+        import sqlite_vec  # type: ignore  # optional dep; see module docstring  # noqa: PLC0415 - optional dependency sqlite-vec (extra sqlite), loaded only when a sqlite-vec store connects
     except ImportError as exc:
         raise VectorStoreError("sqlite-vec is not installed; install semdex[sqlite]") from exc
     # check_same_thread=False: the MCP server runs tools in a worker thread while the
@@ -66,7 +66,7 @@ def _connect(path: Path) -> sqlite3.Connection:
 
 
 def _serialize(vector: Vector) -> bytes:
-    import sqlite_vec  # type: ignore  # optional dep; see module docstring
+    import sqlite_vec  # type: ignore  # optional dep; see module docstring  # noqa: PLC0415 - optional dependency sqlite-vec (extra sqlite), loaded only when a sqlite-vec store serializes a vector
 
     return sqlite_vec.serialize_float32(list(vector))  # type: ignore[no-untyped-call, no-any-return]
 

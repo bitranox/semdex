@@ -47,12 +47,14 @@ from __future__ import annotations
 import json
 import os
 import sys
-from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Protocol, cast
+from typing import TYPE_CHECKING, Any, Protocol, cast
 
 import pyarrow.parquet as pq
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable, Sequence
 
 _ROOT = Path(__file__).resolve().parent.parent
 _BATCH = 4096
@@ -184,9 +186,9 @@ def _fastembed_probe(label: str, model_id: str) -> Probe:
     sweep actually used.
     """
     # Function-local: fastembed and semdex's adapter are only needed for a requested label.
-    from fastembed import TextEmbedding
+    from fastembed import TextEmbedding  # noqa: PLC0415 - fastembed is heavy, loaded only when a requested label needs it
 
-    from semdex.adapters.embedding.fastembed import resolve_cache_dir
+    from semdex.adapters.embedding.fastembed import resolve_cache_dir  # noqa: PLC0415 - semdex fastembed adapter imports fastembed at module level, loaded only when a requested label needs it
 
     model = TextEmbedding(model_id, cache_dir=resolve_cache_dir(None), threads=_THREADS)
     # `TextEmbeddingBase` declares no `tokenizer`, though every ONNX text model carries one.
@@ -251,7 +253,7 @@ def model2vec_probe_for(label: str, model: Any) -> Probe:
 def _model2vec_probe(label: str, repo_id: str) -> Probe:
     """Load a model2vec model and build its probe."""
     # Function-local: model2vec is an optional bench dependency, and only a requested label loads it.
-    from model2vec import StaticModel
+    from model2vec import StaticModel  # noqa: PLC0415 - optional dependency model2vec, loaded only when a requested label needs it
 
     return model2vec_probe_for(label, StaticModel.from_pretrained(repo_id))
 

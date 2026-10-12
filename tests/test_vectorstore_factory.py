@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -10,6 +10,9 @@ from semdex.adapters.vectorstore import JsonVectorStore
 from semdex.composition import build_vector_store
 from semdex.domain.enums import StoreBackend
 from semdex.domain.errors import VectorStoreError
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @pytest.mark.os_agnostic
