@@ -9,7 +9,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+
+from ._section import ConfigSection
 
 if TYPE_CHECKING:
     from lib_layered_config import Config
@@ -25,7 +27,7 @@ _DEFAULT_HASH_CHUNK_BYTES = 65536
 _DEFAULT_EXTENSIONS = (".md", ".txt")
 
 
-class IndexConfig(BaseModel):
+class IndexConfig(ConfigSection):
     """Validated, immutable defaults for the index/search commands.
 
     Example:

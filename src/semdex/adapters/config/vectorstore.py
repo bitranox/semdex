@@ -8,16 +8,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
 
 from ...domain.ann_tuning import AnnParams, resolve_ann_params
 from ...domain.enums import AnnRecall, Partition, StoreBackend
+from ._section import ConfigSection
 
 if TYPE_CHECKING:
     from lib_layered_config import Config
 
 
-class LancedbParams(BaseModel):
+class LancedbParams(ConfigSection):
     """Raw lancedb ANN overrides (``[vector_store.lancedb]``); an unset field uses the ann_recall preset."""
 
     model_config = ConfigDict(frozen=True)
@@ -25,21 +26,21 @@ class LancedbParams(BaseModel):
     refine_factor: int | None = Field(default=None, gt=0)  # query-time: re-rank multiplier
 
 
-class PgvectorParams(BaseModel):
+class PgvectorParams(ConfigSection):
     """Raw pgvector ANN overrides (``[vector_store.pgvector]``); an unset field uses the ann_recall preset."""
 
     model_config = ConfigDict(frozen=True)
     ef_search: int | None = Field(default=None, gt=0)  # query-time: HNSW candidate-list size
 
 
-class MariadbParams(BaseModel):
+class MariadbParams(ConfigSection):
     """Raw mariadb ANN overrides (``[vector_store.mariadb]``); an unset field uses the ann_recall preset."""
 
     model_config = ConfigDict(frozen=True)
     ef_search: int | None = Field(default=None, gt=0)  # query-time: MHNSW candidate-list size
 
 
-class VectorStoreConfig(BaseModel):
+class VectorStoreConfig(ConfigSection):
     """Validated, immutable vector-store backend selection.
 
     Example:

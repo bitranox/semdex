@@ -10,9 +10,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
 
 from ...domain.enums import ChunkStrategy
+from ._section import ConfigSection
 
 if TYPE_CHECKING:
     from lib_layered_config import Config
@@ -23,7 +24,7 @@ _DEFAULT_TOKENIZER = "gpt2"
 _DEFAULT_RECIPE = "markdown"
 
 
-class ChunkerConfig(BaseModel):
+class ChunkerConfig(ConfigSection):
     """Validated, immutable chunker selection.
 
     Example:

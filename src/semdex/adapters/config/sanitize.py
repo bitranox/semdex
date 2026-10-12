@@ -10,13 +10,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+
+from ._section import ConfigSection
 
 if TYPE_CHECKING:
     from lib_layered_config import Config
 
 
-class SanitizeConfig(BaseModel):
+class SanitizeConfig(ConfigSection):
     """Validated, immutable content-sanitizer settings.
 
     Example:

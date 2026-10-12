@@ -10,9 +10,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
 
 from ...domain.enums import SummaryBackend
+from ._section import ConfigSection
 
 if TYPE_CHECKING:
     from lib_layered_config import Config
@@ -27,7 +28,7 @@ _DEFAULT_PROMPT = (
 )
 
 
-class SummaryConfig(BaseModel):
+class SummaryConfig(ConfigSection):
     """Validated, immutable summary-tier selection.
 
     Example:

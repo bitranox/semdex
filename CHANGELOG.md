@@ -6,6 +6,15 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
 
+### Fixed
+- **A digit-only `.env` value no longer stops the program.** lib_layered_config 7.1 reads an
+  unquoted `.env` or environment value that spells a number losslessly as an int, so
+  `INDEX__COLLECTION=2026`, `EMBEDDING__API_KEY=123456` or `MCP__HOST=127` reached a text setting
+  as a number and failed with `Input should be a valid string`. Every configuration section model
+  (index, embedding, summary, extractor, chunker, health, mcp, vector store, sanitize, watch,
+  dataset), the email model and the logging model now turn such a number back into the text the
+  operator wrote. Numeric settings still read as numbers and out-of-range values are still refused.
+
 ### Changed
 - **Synced with bitranox_template_py_cli 2.4.0** (a three-way merge from the template of
   2026-07-24, the version this app last matched before the 2.0 fixes were ported by hand). The

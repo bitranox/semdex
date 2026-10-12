@@ -10,15 +10,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
 
 from ...domain.enums import WatchMode
+from ._section import ConfigSection
 
 if TYPE_CHECKING:
     from lib_layered_config import Config
 
 
-class WatchConfig(BaseModel):
+class WatchConfig(ConfigSection):
     """Validated, immutable filesystem-watch settings.
 
     Example:

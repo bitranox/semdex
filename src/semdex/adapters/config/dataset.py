@@ -11,10 +11,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import ConfigDict, Field, model_validator
 
 from ...domain.enums import AnnRecall, EmbeddingBackend, ExtractorBackend, Partition, StoreBackend
 from ...domain.errors import ConfigurationError
+from ._section import ConfigSection
 
 if TYPE_CHECKING:
     from lib_layered_config import Config
@@ -26,7 +27,7 @@ _SERVER_BACKENDS = frozenset({StoreBackend.PGVECTOR, StoreBackend.MARIADB})
 _DEFAULT_SCAN_MIN_CHARS = 24
 
 
-class ExtractorEndpoint(BaseModel):
+class ExtractorEndpoint(ConfigSection):
     """Where one extractor backend lives + its per-backend options (``[[dataset.extractor_config]]``).
 
     Routes name WHICH backend a file uses; this says WHERE that backend is and how
@@ -52,7 +53,7 @@ class ExtractorEndpoint(BaseModel):
     mineru_backend: str | None = None
 
 
-class Route(BaseModel):
+class Route(ConfigSection):
     """A per-directory-tree extractor rule (``[[dataset.route]]``).
 
     ``subtree`` is a path prefix under the dataset's source roots (longest prefix
@@ -69,7 +70,7 @@ class Route(BaseModel):
     on_scan: ExtractorBackend | None = None
 
 
-class DatasetConfig(BaseModel):
+class DatasetConfig(ConfigSection):
     """A validated, immutable dataset binding.
 
     Example:

@@ -10,9 +10,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
 
 from ...domain.enums import ExtractorBackend
+from ._section import ConfigSection
 
 if TYPE_CHECKING:
     from lib_layered_config import Config
@@ -24,7 +25,7 @@ _DEFAULT_TIMEOUT_SECONDS = 120.0
 _DEFAULT_MAX_FILE_BYTES = 25 * 1024 * 1024  # 25 MiB: doc files run larger than notes
 
 
-class ExtractorConfig(BaseModel):
+class ExtractorConfig(ConfigSection):
     """Validated, immutable extractor backend selection.
 
     Example:
