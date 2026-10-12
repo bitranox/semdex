@@ -428,3 +428,41 @@ def test_a_legacy_report_with_one_top_level_sample_is_read_as_per_row_samples(au
     )
     rows = audit._read_report(legacy)["rows"]
     assert rows[0]["sample"] == 0
+
+
+# A real, tiny model2vec model built in memory (no download): every word of the vocabulary is 12
+# characters long, so the model's median token length is 12 and, at max_length 5, encode first cuts
+# a text to 60 CHARACTERS. A fake cannot pin this: the cut lives in model2vec's own code, which moved
+# between releases (0.10 took it out of tokenize), and only the real library shows where it went.
+_TINY_WORDS = [f"word{i:08d}" for i in range(20)]
+
+
+@pytest.fixture
+def tiny_model2vec() -> Any:
+    model2vec = pytest.importorskip("model2vec")
+    numpy = pytest.importorskip("numpy")
+    tokenizers = pytest.importorskip("tokenizers")
+
+    vocab = {"[UNK]": 0, **{word: i + 1 for i, word in enumerate(_TINY_WORDS)}}
+    tokenizer = tokenizers.Tokenizer(tokenizers.models.WordLevel(vocab, unk_token="[UNK]"))
+    tokenizer.pre_tokenizer = tokenizers.pre_tokenizers.Whitespace()
+    vectors = numpy.zeros((len(vocab), 4), dtype=numpy.float32)
+    return model2vec.StaticModel(vectors, tokenizer, max_length=5)
+
+
+def test_the_model2vec_probe_reads_both_caps_from_the_model(audit: Any, tiny_model2vec: Any) -> None:
+    probe = audit.model2vec_probe_for("model2vec:tiny", tiny_model2vec)
+    assert probe.token_cap == tiny_model2vec.max_length == 5
+    assert probe.char_precut == 5 * tiny_model2vec.median_token_length == 60
+
+
+def test_the_real_model2vec_path_applies_the_character_cut(audit: Any, tiny_model2vec: Any) -> None:
+    probe = audit.model2vec_probe_for("model2vec:tiny", tiny_model2vec)
+    long_text = " ".join(_TINY_WORDS[:10])  # 10 tokens, 129 characters
+    short_text = " ".join(_TINY_WORDS[:2])  # 2 tokens, fits both cuts
+    counts = audit.count_batch([long_text, short_text], probe)
+    assert counts.tokens_full == 12
+    # 60 characters hold four whole words and a fragment the vocabulary maps to [UNK], which
+    # model2vec drops: 4 tokens survive, one fewer than the token cap of 5 alone would leave.
+    assert counts.tokens_kept == 4 + 2
+    assert counts.truncated == 1

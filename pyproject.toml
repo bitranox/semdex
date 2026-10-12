@@ -73,7 +73,7 @@ embed = [
 ]
 # Static embeddings: the lightest real provider (no torch, ~30MB model).
 model2vec = [
-  "model2vec>=0.9.0",
+  "model2vec>=0.10.0",
 ]
 # Embeddings from a local ollama server's native /api/embed (no ML deps).
 ollama = [
@@ -200,7 +200,7 @@ dev = [
   "mcp>=2.3.0",
   "watchfiles>=1.3.0",
   "pymupdf>=1.28.2",
-  "model2vec>=0.9.0",
+  "model2vec>=0.10.0",
   "chonkie>=1.7.0",
   "semantic-text-splitter>=0.33.0",
   # Optional-backend deps mirrored here so pyright (which type-checks against `.[dev]` in CI)
