@@ -18,8 +18,9 @@ anyone asked for. This names the rung where that begins.
 It is measured, never predicted: each chunk goes through the embedder's real tokenize path twice,
 once capped and once uncapped, and the two lengths are compared. ``model2vec`` in particular
 applies TWO cuts - a raw-CHARACTER cut to ``max_length * median_token_length`` before tokenizing,
-then an id slice to ``max_length`` - so counting tokens with the bare tokenizer sees neither, and
-which cut binds depends on the text. Driving the real method is the only way to be sure.
+then the tokenizer's truncation to ``max_length`` - so counting tokens with the bare tokenizer
+sees neither, and which cut binds depends on the text. Driving the real path is the only way to
+be sure.
 
 Coverage is explicit rather than assumed: ``_PROBES`` lists the embedder families whose cap this
 script knows how to drive. An embedder that is not listed is reported as ``uncovered``, never as
@@ -43,7 +44,6 @@ Env:
 
 from __future__ import annotations
 
-import inspect
 import json
 import os
 import sys
@@ -203,20 +203,57 @@ def _fastembed_probe(label: str, model_id: str) -> Probe:
     )
 
 
-def _model2vec_probe(label: str, repo_id: str) -> Probe:
-    """Load a model2vec model and read its caps from the library rather than restating them.
+class Model2VecCutPath:
+    """Tokenizes through the very path ``StaticModel.encode`` cuts its input on.
 
-    The cap is ``StaticModel.encode``'s own ``max_length`` default, because that is what a caller
-    who passes no ``max_length`` gets - which is exactly what the embedding adapter does.
+    ``StaticModel.tokenize`` alone applies neither cut: since model2vec 0.10 the CHARACTER pre-cut
+    and the tokenizer truncation both live in ``_encode_dispatch``, which ``encode`` runs with its
+    own embedding step as the batch function. Handing it ``tokenize`` as the batch function instead
+    returns the token ids ``encode`` would have embedded, with every cut applied by the library's
+    own code rather than restated here. It is a private method, so a model2vec release that renames
+    it fails this audit loudly (AttributeError) instead of letting it measure the wrong path; the
+    real-model test in tests/test_bench_embedder_truncation.py pins it.
     """
+
+    def __init__(self, model: Any) -> None:
+        self._model = model
+
+    def tokenize(self, texts: Sequence[str], /, max_length: int | None) -> list[list[int]]:
+        batches, _ = self._model._encode_dispatch(
+            list(texts),
+            max_length=max_length,
+            batch_size=_BATCH,
+            show_progress_bar=False,
+            use_multiprocessing=False,
+            multiprocessing_threshold=len(texts) + 1,
+            batch_fn=self._model.tokenize,
+        )
+        return [ids for batch in batches for ids in batch]
+
+
+def model2vec_probe_for(label: str, model: Any) -> Probe:
+    """Build the probe for a loaded model2vec ``StaticModel``, reading its caps from the model.
+
+    The cap is the model's own ``max_length``, because that is what ``encode`` applies when the
+    caller passes none - which is exactly what the embedding adapter does.
+    """
+    cap = model.max_length
+    if not isinstance(cap, int):
+        raise RuntimeError(f"{label}: StaticModel has no integer max_length (got {cap!r})")
+    return Probe(
+        label=label,
+        tokenizes=Model2VecCutPath(model),
+        token_cap=cap,
+        char_precut=cap * model.median_token_length,
+    )
+
+
+def _model2vec_probe(label: str, repo_id: str) -> Probe:
+    """Load a model2vec model and build its probe."""
     # Function-local: model2vec is an optional bench dependency, and only a requested label loads it.
     from model2vec import StaticModel
 
-    model = StaticModel.from_pretrained(repo_id)
-    cap = inspect.signature(StaticModel.encode).parameters["max_length"].default
-    if not isinstance(cap, int):
-        raise RuntimeError(f"{label}: StaticModel.encode has no integer max_length default (got {cap!r})")
-    return Probe(label=label, tokenizes=model, token_cap=cap, char_precut=cap * model.median_token_length)
+    return model2vec_probe_for(label, StaticModel.from_pretrained(repo_id))
 
 
 # Embedder families this script knows how to drive. Anything absent is reported `uncovered`.

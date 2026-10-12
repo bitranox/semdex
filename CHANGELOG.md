@@ -7,6 +7,13 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 ## [Unreleased]
 
 ### Fixed
+- **The embedder-truncation audit runs on model2vec 0.10.** model2vec 0.10 dropped
+  `StaticModel.tokenize`'s `max_length` and moved both of `encode`'s cuts (the character
+  pre-cut and the token truncation) into its batching step, so
+  `scripts/audit_embedder_truncation.py` failed type-checking and would have refused every
+  model2vec model at run time. It now tokenizes through that batching step and reads the cap
+  from the model's own `max_length`; a test on a real in-memory model pins the character cut.
+  The `model2vec` floor is now 0.10.0.
 - **`email.smtp_hosts` and `email.recipients` set to nothing mean not configured.** A bare YAML
   key or an environment `null` was refused as "Input should be a valid list" for both settings.
   Both now read `None` as an empty list.
