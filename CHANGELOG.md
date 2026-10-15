@@ -6,6 +6,15 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
 
+### Added
+- `uv.lock` is committed, and `[tool.uv] exclude-newer` sets a cooldown that keeps releases younger
+  than it out of the lock. CI installs exactly the locked tree on push and pull request; the nightly
+  scheduled run still resolves afresh to catch upstream breakage early.
+
+### Changed
+- The install section explains why installing with uv protects against supply-chain attacks and why
+  a plain `pip install` from PyPI does not.
+
 ## [1.5.5] 2026-10-12 20:12:11
 
 ### Fixed
