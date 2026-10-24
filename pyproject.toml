@@ -1,6 +1,6 @@
 [project]
 name = "semdex"
-version = "1.5.6"
+version = "1.5.7"
 description = "Read-only, file-watching semantic-search MCP server and CLI over local files"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -13,16 +13,16 @@ dependencies = [
     "rich>=15.0.0",
     "lib_cli_exit_tools>=2.4.1",
     # 6.4.2: validate_config, the check config --profile runs, refuses exactly what init() refuses.
-    "lib_log_rich>=6.5.2",
+    "lib_log_rich>=6.5.7",
     # The logging setup reads the LOG_* lines of a .env itself (adapters/logging/setup.py).
     "python-dotenv>=1.2.4",
-    "lib_layered_config>=7.1.9",
-    "btx_lib_mail>=4.3.0",
+    "lib_layered_config>=7.3.0",
+    "btx_lib_mail>=4.6.0",
     "pydantic>=2.14.1",
     "orjson>=3.13.0",
     # Cross-OS user cache dir for the fastembed model cache (persistent default,
     # not the reboot-wiped system temp dir fastembed uses out of the box).
-    "platformdirs>=4.13.0",
+    "platformdirs>=4.13.5",
     # Default embedding provider: light ONNX embeddings (no torch), offline after
     # the first model download. Composition falls back to the deterministic
     # placeholder if a model cannot be loaded.
@@ -71,7 +71,7 @@ Issues = "https://github.com/bitranox/semdex/issues"
 # opt-in for maximum model choice. fastembed (core) is the light default; the
 # deterministic token-hash placeholder is the offline fallback.
 embed = [
-  "sentence-transformers>=6.1.0",
+  "sentence-transformers>=6.2.0",
 ]
 # Static embeddings: the lightest real provider (no torch, ~30MB model).
 model2vec = [
@@ -124,7 +124,7 @@ bench = [
   # Lexical retrieval for the dense-vs-BM25-vs-hybrid comparison (scripts/score_hybrid_sweep.py).
   # PyStemmer supplies the snowball stemmers; the analyzer language follows the corpus, because an
   # English analyzer on German text understates BM25 and biases the comparison toward dense.
-  "bm25s>=0.3.13",
+  "bm25s>=0.3.15",
   "PyStemmer>=3.1.0",
 ]
 # Benchmark chart generation only (scripts/gen_bench_charts.py regenerates docs/benchmarks/img/*.png from
@@ -174,21 +174,21 @@ markitdown = [
   "mcp>=2.3.0",
   # mcp 2.x is built on httpx2 rather than httpx, and the two client types are not
   # interchangeable. The adapter imports it directly, so it is declared here.
-  "httpx2>=2.13.1",
+  "httpx2>=2.16.0",
 ]
 # Vision-LLM OCR extractor (olmocr / openai_vision): renders scans/PDF pages with
 # pymupdf and OCRs them via an OpenAI-vision /v1/chat/completions server. httpx +
 # pymupdf; the vision model runs as its own server (vLLM/olmOCR), not in semdex.
 vision = [
   "httpx>=0.28.1",
-  "pymupdf>=1.28.2",
+  "pymupdf>=2.0",
 ]
 # MCP server delivery surface: the `semdex serve` command exposes the search /
 # reindex use cases over stdio (local) and Streamable HTTP (network) via FastMCP.
 # Opt-in - the core CLI does not need it. Separate from the `markitdown`/`mcp`
 # client dep above (that is a converter client; this is the server).
 mcp-server = [
-  "fastmcp>=4.1.0",
+  "fastmcp>=4.1.3",
 ]
 # Live filesystem watching: watchfiles (Rust-backed, native OS events + polling
 # fallback). Enables auto-reindex on change while `semdex serve` runs.
@@ -201,7 +201,7 @@ dev = [
   # mcp 2.x, matching the markitdown extra; see the note there for why the old cap went.
   "mcp>=2.3.0",
   "watchfiles>=1.3.0",
-  "pymupdf>=1.28.2",
+  "pymupdf>=2.0",
   "model2vec>=0.10.0",
   "chonkie>=1.7.0",
   "semantic-text-splitter>=0.33.0",
@@ -215,17 +215,17 @@ dev = [
   "ir_datasets>=0.6.3",
   "datasets>=5.1.0",
   # bench extra: scripts/score_hybrid_sweep.py imports bm25s and Stemmer (PyStemmer).
-  "bm25s>=0.3.13",
+  "bm25s>=0.3.15",
   "PyStemmer>=3.1.0",
   "lancedb>=0.40.0",
   # MCP server (mcp-server extra) mirrored into dev so CI's `.[dev]` pyright run
   # can type-check the adapters/mcp/ modules and their tests.
-  "fastmcp>=4.1.0",
+  "fastmcp>=4.1.3",
   "pytest>=9.1.1",
   "pytest-asyncio>=1.4.0",  # in-memory async testing of the FastMCP server (Client(server))
   "pytest-cov>=7.1.0",
-  "hypothesis>=6.169.1",
-  "ruff>=0.17.0",
+  "hypothesis>=6.170.8",
+  "ruff>=0.17.2",
   "pyright[nodejs]>=1.1.414",
   "bandit>=1.9.4",
   "build>=1.6.1",
@@ -241,7 +241,7 @@ dev = [
   "textual>=8.2.8",
   "import-linter>=2.15",
   "rtoml>=0.14.0",
-  "httpx2>=2.13.1",
+  "httpx2>=2.16.0",
   # Transitive CVE pins
   "click>=8.5.0",                # CVE-2026-7246
   "jaraco-context>=6.1.2",       # CVE-2025-23949
@@ -249,7 +249,7 @@ dev = [
   "wheel>=0.48.0",               # CVE-2025-24049
   "pynacl>=1.6.2",               # CVE-2025-69277
   "urllib3>=2.8.0",              # CVE-2025-66471, CVE-2025-66418
-  "virtualenv>=21.14.7",         # CVE-2025-22702
+  "virtualenv>=21.14.13",         # CVE-2025-22702
 ]
 
 [project.scripts]
@@ -501,6 +501,46 @@ ignore-vulns = [
   "CVE-2025-8869",     # pip 24.3.1 - env-only, not a project dependency
   "CVE-2026-1703",     # pip 24.3.1 - env-only, not a project dependency
   "CVE-2026-25990",    # pillow 12.0.0 - env-only, fix in 12.1.1
+  # pillow 12.3.0: fixed in pillow 13.0.0, but fastembed 0.9.0 (newest) requires pillow<13.0,
+  # so the lock cannot move. semdex uses only fastembed.TextEmbedding, never its image path.
+  # Remove these when a fastembed release allows pillow 13 and the lock resolves pillow>=13.
+  "CVE-2026-112895",
+  "CVE-2026-112400",
+  "CVE-2026-112397",
+  "CVE-2026-112896",
+  "CVE-2026-112897",
+  "CVE-2026-112395",
+  "CVE-2026-112404",
+  "CVE-2026-112899",
+  "CVE-2026-112402",
+  "CVE-2026-112900",
+  "CVE-2026-112893",
+  "CVE-2026-112392",
+  "CVE-2026-112891",
+  "CVE-2026-112405",
+  "CVE-2026-112390",
+  "CVE-2026-112401",
+  "CVE-2026-112901",
+  "CVE-2026-112391",
+  "CVE-2026-112894",
+  "CVE-2026-112406",
+  "CVE-2026-112399",
+  "CVE-2026-112892",
+  "CVE-2026-112393",
+  "CVE-2026-112396",
+  "CVE-2026-96638",
+  "CVE-2026-96641",
+  "CVE-2026-96640",
+  "CVE-2026-96642",
+  "CVE-2026-96639",
+  "CVE-2026-96643",
+  "CVE-2026-96637",
+  "CVE-2026-96644",
+  "CVE-2026-96778",
+  "CVE-2026-96636",
+  "GHSA-78g4-xqwv-q3g8",
+  "CVE-2026-114501",
+  "CVE-2026-112398",
 ]
 
 [tool.bashate]

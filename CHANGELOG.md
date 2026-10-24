@@ -6,6 +6,17 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
 
+## [1.5.7] 2026-10-24 15:27:00
+
+### Changed
+- Raise the btx_lib_mail floor to 4.6.0.
+
+### Security
+- pip-audit ignores 37 vulnerabilities in pillow 12.3.0 (fixed in pillow 13.0.0). fastembed 0.9.0,
+  the newest release, requires `pillow<13.0`, so the lock cannot take the fix; semdex uses only
+  fastembed's `TextEmbedding` and never its image path. The ignores go when a fastembed release
+  allows pillow 13.
+
 ## [1.5.6] 2026-10-15 12:49:43
 
 ### Added

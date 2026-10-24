@@ -40,7 +40,7 @@ name = "semdex"
 #: Human-readable summary shown in CLI help output.
 title = "Read-only, file-watching semantic-search MCP server and CLI over local files"
 #: Current release version pulled from ``pyproject.toml`` by automation.
-version = "1.5.6"
+version = "1.5.7"
 #: Repository homepage presented to users.
 homepage = "https://github.com/bitranox/semdex"
 #: Author attribution surfaced in CLI output.
