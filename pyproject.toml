@@ -26,7 +26,7 @@ dependencies = [
     # Default embedding provider: light ONNX embeddings (no torch), offline after
     # the first model download. Composition falls back to the deterministic
     # placeholder if a model cannot be loaded.
-    "fastembed>=0.9.0",
+    "fastembed>=0.9.1",
     # CAPPED, not a floor bump: onnxruntime 1.29.0 embeds 8.5x slower on CPU than 1.28.0
     # (measured A/B interleaved on real GerDaLIR chunks, 886 vs 104 ms/row, bge-base).
     # It arrives transitively through fastembed, so only an explicit cap holds it back.
@@ -224,7 +224,7 @@ dev = [
   "pytest>=9.1.1",
   "pytest-asyncio>=1.4.0",  # in-memory async testing of the FastMCP server (Client(server))
   "pytest-cov>=7.1.0",
-  "hypothesis>=6.170.8",
+  "hypothesis>=6.170.9",
   "ruff>=0.17.2",
   "pyright[nodejs]>=1.1.414",
   "bandit>=1.9.4",
@@ -553,4 +553,4 @@ ignores = ["E003"]
 
 [tool.uv]
 exclude-newer = "1 day"
-exclude-newer-package = {btx-lib-mail = false, lib-cli-exit-tools = false, lib-layered-config = false, lib-log-rich = false}
+exclude-newer-package = {btx-lib-mail = false, lib-cli-exit-tools = false, lib-layered-config = false, lib-log-rich = false, semantic-text-splitter = "2026-09-24T09:14:48Z"}
