@@ -73,9 +73,9 @@ def _load_dotenv(directory: Path, line: str) -> Config:
 @pytest.mark.os_agnostic
 @pytest.mark.parametrize("case", _DIGIT_CASES, ids=lambda case: f"{case.section}.{case.key}")
 def test_a_digit_only_value_reaches_a_text_setting_as_its_text(
-    user_layer_in_tmp_path: Path, clear_config_cache: None, case: _DigitCase
+    tmp_path: Path, clear_config_cache: None, case: _DigitCase
 ) -> None:
-    config = _load_dotenv(user_layer_in_tmp_path, f"{case.section.upper()}__{case.key.upper()}={case.raw}")
+    config = _load_dotenv(tmp_path, f"{case.section.upper()}__{case.key.upper()}={case.raw}")
     # Premise: the library hands the value over as a number. Without it the test proves nothing.
     assert isinstance(config.get(case.section, {})[case.key], int)
 
@@ -90,9 +90,9 @@ def test_a_digit_only_value_reaches_a_text_setting_as_its_text(
     [("LIB_LOG_RICH__SERVICE", "service"), ("LIB_LOG_RICH__ENVIRONMENT", "environment")],
 )
 def test_a_digit_only_logging_name_is_read_as_its_digits(
-    user_layer_in_tmp_path: Path, clear_config_cache: None, env_key: str, attr: str
+    tmp_path: Path, clear_config_cache: None, env_key: str, attr: str
 ) -> None:
-    config = _load_dotenv(user_layer_in_tmp_path, f"{env_key}=2026")
+    config = _load_dotenv(tmp_path, f"{env_key}=2026")
     assert isinstance(config.get("lib_log_rich", {})[attr], int)
 
     runtime = _build_runtime_config(config)  # pyright: ignore[reportPrivateUsage]
@@ -110,10 +110,10 @@ def test_a_digit_only_logging_name_is_read_as_its_digits(
     ],
 )
 def test_a_digit_only_email_setting_is_read_as_its_digits(
-    user_layer_in_tmp_path: Path, clear_config_cache: None, env_key: str, attr: str, expected: object
+    tmp_path: Path, clear_config_cache: None, env_key: str, attr: str, expected: object
 ) -> None:
     raw = expected.get_secret_value() if isinstance(expected, SecretStr) else expected
-    config = _load_dotenv(user_layer_in_tmp_path, f"{env_key}={raw}")
+    config = _load_dotenv(tmp_path, f"{env_key}={raw}")
     assert isinstance(config.get("email", {})[env_key.split("__", 1)[1].lower()], int)
 
     loaded = load_email_config_from_dict(config.as_dict())
@@ -122,17 +122,15 @@ def test_a_digit_only_email_setting_is_read_as_its_digits(
 
 
 @pytest.mark.os_agnostic
-def test_a_numeric_setting_still_reads_as_a_number(user_layer_in_tmp_path: Path, clear_config_cache: None) -> None:
-    config = _load_dotenv(user_layer_in_tmp_path, "SANITIZE__WINDOW_CHARS=500")
+def test_a_numeric_setting_still_reads_as_a_number(tmp_path: Path, clear_config_cache: None) -> None:
+    config = _load_dotenv(tmp_path, "SANITIZE__WINDOW_CHARS=500")
 
     assert get_sanitize_config(config).window_chars == 500
 
 
 @pytest.mark.os_agnostic
-def test_an_out_of_range_digit_only_value_is_still_refused(
-    user_layer_in_tmp_path: Path, clear_config_cache: None
-) -> None:
-    config = _load_dotenv(user_layer_in_tmp_path, "SANITIZE__MIN_DETECTORS=9")
+def test_an_out_of_range_digit_only_value_is_still_refused(tmp_path: Path, clear_config_cache: None) -> None:
+    config = _load_dotenv(tmp_path, "SANITIZE__MIN_DETECTORS=9")
 
     with pytest.raises(ValidationError, match="min_detectors"):
         get_sanitize_config(config)

@@ -13,7 +13,7 @@ dependencies = [
     "rich>=15.0.0",
     "lib_cli_exit_tools>=2.4.1",
     # 6.4.2: validate_config, the check config --profile runs, refuses exactly what init() refuses.
-    "lib_log_rich>=6.5.7",
+    "lib_log_rich>=7.0.1",
     # The logging setup reads the LOG_* lines of a .env itself (adapters/logging/setup.py).
     "python-dotenv>=1.2.4",
     "lib_layered_config>=7.3.0",
@@ -109,7 +109,7 @@ summary = [
 # (markdown/fast). Light; covers every strategy except semantic/late.
 chunk = [
   "chonkie>=1.7.0",
-  "semantic-text-splitter>=0.33.0",
+  "semantic-text-splitter>=0.33.1",
 ]
 # The embedding-driven chunkers (semantic/SDPM + late); heavier (pulls a model).
 chunk-semantic = [
@@ -204,7 +204,7 @@ dev = [
   "pymupdf>=2.0",
   "model2vec>=0.10.0",
   "chonkie>=1.7.0",
-  "semantic-text-splitter>=0.33.0",
+  "semantic-text-splitter>=0.33.1",
   # Optional-backend deps mirrored here so pyright (which type-checks against `.[dev]` in CI)
   # can resolve the pg/mariadb/bench/lance imports in the SQL adapters, bench scripts, and their
   # tests. Without them CI reported reportMissingImports (psycopg/ir_datasets) + downstream
@@ -368,6 +368,7 @@ extraPaths = [
   # is unresolvable and every value derived from it degrades to Unknown (12 strict
   # errors). Declaring the path types the module properly instead of suppressing.
   "scripts",
+  "tests",
 ]
 # The benchmark fixture generator uses generate-time-only libs (reportlab/python-docx
 # /pptx/openpyxl/Pillow) that are not project deps and have no stubs; it is a dev
@@ -381,6 +382,7 @@ exclude = [
   "tests/fixtures",
   "scripts/gen_bench_charts.py",
 ]
+executionEnvironments = [{root = "tests"}]
 
 [tool.pytest.ini_options]
 # --ignore=tests/fixtures: the benchmark fixture generator (tests/fixtures/extract/
@@ -393,7 +395,7 @@ doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE"]
 # The MCP server is tested in-memory with an async fastmcp.Client; auto mode runs
 # `async def test_*` without a per-test decorator.
 asyncio_mode = "auto"
-pythonpath = ["src"]
+pythonpath = ["src", "tests"]
 markers = [
   "os_agnostic: test runs on every supported operating system",
   "os_windows: test exercises Windows-only behavior",
@@ -404,6 +406,7 @@ markers = [
   "integration: tests requiring external resources (SMTP, databases, APIs); run via 'bmk ti' or 'mktesti.sh'",
   "lan_rig: tests that need the private LAN test rig (real embedding servers or the persistent SQL test server); unreachable from GitHub-hosted runners, so the integration workflow deselects them with -m 'not lan_rig'",
 ]
+testpaths = ["src", "tests"]
 
 [tool.coverage.run]
 branch = true
@@ -553,4 +556,4 @@ ignores = ["E003"]
 
 [tool.uv]
 exclude-newer = "1 day"
-exclude-newer-package = {btx-lib-mail = false, lib-cli-exit-tools = false, lib-layered-config = false, lib-log-rich = false, semantic-text-splitter = "2026-09-24T09:14:48Z"}
+exclude-newer-package = {btx-lib-mail = false, lib-cli-exit-tools = false, lib-layered-config = false, lib-log-rich = false}
