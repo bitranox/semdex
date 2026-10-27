@@ -13,7 +13,7 @@ dependencies = [
     "rich>=15.0.0",
     "lib_cli_exit_tools>=2.4.1",
     # 6.4.2: validate_config, the check config --profile runs, refuses exactly what init() refuses.
-    "lib_log_rich>=7.3.0",
+    "lib_log_rich>=8.0.1",
     # The logging setup reads the LOG_* lines of a .env itself (adapters/logging/setup.py).
     "python-dotenv>=1.2.4",
     "lib_layered_config>=7.3.0",
@@ -188,7 +188,7 @@ vision = [
 # Opt-in - the core CLI does not need it. Separate from the `markitdown`/`mcp`
 # client dep above (that is a converter client; this is the server).
 mcp-server = [
-  "fastmcp>=4.1.3",
+  "fastmcp>=4.1.4",
 ]
 # Live filesystem watching: watchfiles (Rust-backed, native OS events + polling
 # fallback). Enables auto-reindex on change while `semdex serve` runs.
@@ -220,11 +220,12 @@ dev = [
   "lancedb>=0.40.0",
   # MCP server (mcp-server extra) mirrored into dev so CI's `.[dev]` pyright run
   # can type-check the adapters/mcp/ modules and their tests.
-  "fastmcp>=4.1.3",
+  "fastmcp>=4.1.4",
   "pytest>=9.1.1",
-  "pytest-asyncio>=1.4.0",  # in-memory async testing of the FastMCP server (Client(server))
+  "pytest-asyncio>=1.4.1",  # in-memory async testing of the FastMCP server (Client(server))
   "pytest-cov>=7.1.0",
-  "hypothesis>=6.170.9",
+  "pytest-xdist>=3.8.0",
+  "hypothesis>=6.170.11",
   "ruff>=0.17.2",
   "pyright[nodejs]>=1.1.414",
   "bandit>=1.9.4",
