@@ -1,6 +1,6 @@
 [project]
 name = "semdex"
-version = "1.5.7"
+version = "1.5.8"
 description = "Read-only, file-watching semantic-search MCP server and CLI over local files"
 readme = "README.md"
 requires-python = ">=3.11"

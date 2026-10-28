@@ -6,6 +6,8 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
 
+## [1.5.8] 2026-10-29 00:39:20
+
 ### Fixed
 
 - The `sqlite_vec` store refuses a Python whose `sqlite3` was built without SQLite extension loading
