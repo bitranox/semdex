@@ -1,7 +1,7 @@
 """Contract tests for the sqlite-vec embedded vector store.
 
-Skipped when the optional ``sqlite-vec`` dependency is absent; the ``dev`` extra
-installs it, so these run in the normal suite.
+Skipped when the optional ``sqlite-vec`` dependency is absent or this Python's sqlite3
+cannot load extensions; the ``dev`` extra installs it, so these run in the normal suite.
 """
 
 # pyright: basic
@@ -10,11 +10,10 @@ installs it, so these run in the normal suite.
 
 from __future__ import annotations
 
-import pytest
-
-pytest.importorskip("sqlite_vec")
-
 from typing import TYPE_CHECKING
+
+import pytest
+from _sqlite_vec_support import requires_sqlite_vec
 
 from semdex.adapters.vectorstore import SqliteVecStore
 from semdex.domain.errors import CollectionModelMismatchError, VectorStoreError
@@ -22,6 +21,8 @@ from semdex.domain.models import Chunk, Collection, SourceRef
 
 if TYPE_CHECKING:
     from pathlib import Path
+
+pytestmark = requires_sqlite_vec
 
 
 def _chunk(text: str, path: str, *, ordinal: int = 0) -> Chunk:

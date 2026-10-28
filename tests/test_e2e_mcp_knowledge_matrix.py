@@ -40,6 +40,7 @@ import uuid
 from typing import TYPE_CHECKING, Any
 
 import pytest
+from _sqlite_vec_support import requires_sqlite_vec
 from fastmcp import Client
 
 from semdex.adapters.config.dataset import DatasetConfig
@@ -127,7 +128,7 @@ _EMBEDDED_ROUNDTRIP = [
     pytest.param(
         EmbeddingBackend.PLACEHOLDER,
         StoreBackend.SQLITE_VEC,
-        marks=pytest.mark.skipif(not _importable("sqlite_vec"), reason="needs semdex[sqlite]"),
+        marks=requires_sqlite_vec,
         id="placeholder-sqlite_vec",
     ),
     pytest.param(
@@ -676,7 +677,7 @@ _EMBEDDED_BACKENDS = [
     pytest.param(StoreBackend.JSON, id="json"),
     pytest.param(
         StoreBackend.SQLITE_VEC,
-        marks=pytest.mark.skipif(not _importable("sqlite_vec"), reason="needs semdex[sqlite]"),
+        marks=requires_sqlite_vec,
         id="sqlite_vec",
     ),
     pytest.param(

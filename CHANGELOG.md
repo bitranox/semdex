@@ -8,6 +8,11 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ### Fixed
 
+- The `sqlite_vec` store refuses a Python whose `sqlite3` was built without SQLite extension loading
+  (the python.org macOS installer is one) with a `VectorStoreError` naming that reason. It raised
+  `AttributeError: 'sqlite3.Connection' object has no attribute 'enable_load_extension'` instead. The
+  sqlite-vec tests now ask one shared helper whether sqlite-vec is importable AND loadable here, and
+  skip with that reason where it is not.
 - `logdemo` refuses a `LOG_*` variable lib_log_rich refuses (`LOG_CONSOLE_LEVEL=bogus`) with exit 78
   and lib_log_rich's own line, as `config` does. The demo reads the variables itself, so its
   `ValueError` reached `main()` and exited with the OS errno (22 on POSIX, 87 on Windows).

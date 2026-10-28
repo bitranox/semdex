@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
+from _sqlite_vec_support import skip_unless_sqlite_vec
 
 from semdex.adapters.vectorstore import JsonVectorStore
 from semdex.composition import build_vector_store
@@ -25,7 +26,7 @@ def test_json_backend_returns_json_store(tmp_path: Path) -> None:
 @pytest.mark.os_agnostic
 def test_sqlite_backend_returns_sqlite_store(tmp_path: Path) -> None:
     """The sqlite_vec backend yields a SqliteVecStore (needs semdex[sqlite])."""
-    pytest.importorskip("sqlite_vec")
+    skip_unless_sqlite_vec()
     from semdex.adapters.vectorstore import SqliteVecStore
 
     store = build_vector_store(StoreBackend.SQLITE_VEC, tmp_path)

@@ -31,6 +31,7 @@ from typing import TYPE_CHECKING, NamedTuple
 import pytest
 from _bench_corpus import corpus_extractor, corpus_sources, ranked_doc_ids
 from _benchmark_report import ResultStatus, record
+from _sqlite_vec_support import skip_unless_sqlite_vec
 
 from semdex.application.use_cases import index_sources, search
 from semdex.composition import build_chunker, build_embedding, build_vector_store
@@ -387,7 +388,7 @@ def _store_dsn(backend: StoreBackend, service_container: Callable[..., int]) -> 
         )
         return f"mysql://root:semdex@127.0.0.1:{port}/semdex"
     if backend is StoreBackend.SQLITE_VEC:
-        pytest.importorskip("sqlite_vec")
+        skip_unless_sqlite_vec()
     if backend is StoreBackend.LANCEDB:
         pytest.importorskip("lancedb")
     return None

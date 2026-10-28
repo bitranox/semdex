@@ -50,18 +50,44 @@ CREATE INDEX IF NOT EXISTS chunks_by_source ON chunks (collection, path);
 """
 
 
-def _connect(path: Path) -> sqlite3.Connection:
+def load_sqlite_vec(db: sqlite3.Connection) -> None:
+    """Load the sqlite-vec extension into ``db``.
+
+    Args:
+        db: An open sqlite3 connection.
+
+    Raises:
+        VectorStoreError: this Python's sqlite3 cannot load extensions, or sqlite-vec
+            is not installed.
+    """
+    # Some CPython builds (the python.org macOS installer among them) compile sqlite3
+    # without loadable-extension support: the method is then absent, not failing, so
+    # calling it would surface as a bare AttributeError far from the cause.
+    if not hasattr(db, "enable_load_extension"):
+        raise VectorStoreError(
+            "this Python's sqlite3 module was built without SQLite extension loading "
+            "(sqlite3.Connection has no enable_load_extension), so sqlite-vec cannot be "
+            "loaded; use a Python built with loadable sqlite extensions or another store backend"
+        )
     try:
         import sqlite_vec  # type: ignore  # optional dep; see module docstring  # noqa: PLC0415 - optional dependency sqlite-vec (extra sqlite), loaded only when a sqlite-vec store connects
     except ImportError as exc:
         raise VectorStoreError("sqlite-vec is not installed; install semdex[sqlite]") from exc
+    db.enable_load_extension(True)
+    sqlite_vec.load(db)  # type: ignore[no-untyped-call]
+    db.enable_load_extension(False)
+
+
+def _connect(path: Path) -> sqlite3.Connection:
     # check_same_thread=False: the MCP server runs tools in a worker thread while the
     # connection is created on the main thread. sqlite3 (serialized threading mode) makes
     # cross-thread use safe; the strict same-thread guard would otherwise reject it.
     db = sqlite3.connect(path, check_same_thread=False)
-    db.enable_load_extension(True)
-    sqlite_vec.load(db)  # type: ignore[no-untyped-call]
-    db.enable_load_extension(False)
+    try:
+        load_sqlite_vec(db)
+    except VectorStoreError:
+        db.close()
+        raise
     return db
 
 
