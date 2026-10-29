@@ -22,7 +22,7 @@ dependencies = [
     "orjson>=3.13.0",
     # Cross-OS user cache dir for the fastembed model cache (persistent default,
     # not the reboot-wiped system temp dir fastembed uses out of the box).
-    "platformdirs>=4.13.7",
+    "platformdirs>=4.14.0",
     # Default embedding provider: light ONNX embeddings (no torch), offline after
     # the first model download. Composition falls back to the deterministic
     # placeholder if a model cannot be loaded.
@@ -124,7 +124,7 @@ bench = [
   # Lexical retrieval for the dense-vs-BM25-vs-hybrid comparison (scripts/score_hybrid_sweep.py).
   # PyStemmer supplies the snowball stemmers; the analyzer language follows the corpus, because an
   # English analyzer on German text understates BM25 and biases the comparison toward dense.
-  "bm25s>=0.3.15",
+  "bm25s>=0.3.16",
   "PyStemmer>=3.1.0",
 ]
 # Benchmark chart generation only (scripts/gen_bench_charts.py regenerates docs/benchmarks/img/*.png from
@@ -215,7 +215,7 @@ dev = [
   "ir_datasets>=0.6.3",
   "datasets>=5.1.0",
   # bench extra: scripts/score_hybrid_sweep.py imports bm25s and Stemmer (PyStemmer).
-  "bm25s>=0.3.15",
+  "bm25s>=0.3.16",
   "PyStemmer>=3.1.0",
   "lancedb>=0.40.0",
   # MCP server (mcp-server extra) mirrored into dev so CI's `.[dev]` pyright run
