@@ -16,7 +16,7 @@ dependencies = [
     "lib_log_rich>=8.1.2",
     # The logging setup reads the LOG_* lines of a .env itself (adapters/logging/setup.py).
     "python-dotenv>=1.2.4",
-    "lib_layered_config>=7.4.1",
+    "lib_layered_config>=7.5.0",
     "btx_lib_mail>=4.6.0",
     "pydantic>=2.14.1",
     "orjson>=3.13.0",
@@ -556,5 +556,5 @@ max-line-length = 120
 ignores = ["E003"]
 
 [tool.uv]
-exclude-newer = "1 day"
-exclude-newer-package = {btx-lib-mail = false, lib-cli-exit-tools = false, lib-layered-config = false, lib-log-rich = false}
+exclude-newer = "7 days"
+exclude-newer-package = {btx-lib-mail = false, lib-cli-exit-tools = false, lib-layered-config = false, lib-log-rich = false, bm25s = "2026-10-28T18:49:07Z", fastembed = "2026-10-24T18:23:47Z", fastmcp = "2026-10-26T06:25:21Z", fastmcp-slim = "2026-10-26T06:23:56Z", hatchling = "2026-10-28T02:27:31Z", hypothesis = "2026-10-28T14:03:40Z", platformdirs = "2026-10-28T18:27:31Z", pytest = "2026-10-27T21:30:21Z", pytest-asyncio = "2026-10-25T21:05:38Z", ruff = "2026-10-27T00:34:06Z", semantic-text-splitter = "2026-10-25T09:13:01Z", virtualenv = "2026-10-28T01:12:51Z"}
