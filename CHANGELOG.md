@@ -6,7 +6,7 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
 
-## [1.5.8] 2026-10-29 00:39:20
+## [1.5.8] - 2026-10-29
 
 ### Fixed
 
@@ -40,7 +40,7 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
   and pyright's `extraPaths`, and gives pyright an execution environment rooted at `tests/`. A test
   checks that every doctest collected from `src/` gets both redirects.
 
-## [1.5.7] 2026-10-24 15:27:00
+## [1.5.7] - 2026-10-24
 
 ### Changed
 - Raise the btx_lib_mail floor to 4.6.0.
@@ -51,7 +51,7 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
   fastembed's `TextEmbedding` and never its image path. The ignores go when a fastembed release
   allows pillow 13.
 
-## [1.5.6] 2026-10-15 12:49:43
+## [1.5.6] - 2026-10-15
 
 ### Added
 - `uv.lock` is committed, and `[tool.uv] exclude-newer` sets a cooldown that keeps releases younger
@@ -62,7 +62,7 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 - The install section explains why installing with uv protects against supply-chain attacks and why
   a plain `pip install` from PyPI does not.
 
-## [1.5.5] 2026-10-12 20:12:11
+## [1.5.5] - 2026-10-12
 
 ### Fixed
 - **A digit-only `.env` value no longer stops the program.** lib_layered_config 7.1 reads an
@@ -289,7 +289,7 @@ the [Keep a Changelog](https://keepachangelog.com/) format.
 - Fan-out search: `search_datasets(query, k, datasets)` MCP tool searches one, several, or all datasets (omit or pass `["all"]`) and fuses the per-dataset rankings by Reciprocal Rank Fusion (`[mcp].rrf_k`, default 60), embedding the query once per distinct model and never comparing raw cross-model similarity scores. Adds the `search_across_datasets` use case, `reciprocal_rank_fusion`, `FusedHit`, and `DatasetServices.model_key`.
 - Writable knowledge datasets: a `[[dataset]]` with `writable = true` (no `sources`, not `read_only`) is a database-backed store an MCP client writes to via the new `remember(dataset, text, title, entry_id)` and `forget(dataset, entry_id)` tools; content is keyed by `semdex://<dataset>/<id>`, `reindex` refuses writable datasets, and `list_datasets` reports `writable`. Source-mirrored datasets stay read-only over their sources. Adds the `remember` / `forget` use cases (reuse `index_sources`).
 
-## [1.5.4] 2026-06-14
+## [1.5.4] - 2026-06-14
 
 ### Changed
 - Added a `typed_click.py` facade wrapping rich-click's `option` / `version_option` decorators behind explicit, fully-known signatures, keeping the CLI strict-clean under pyright 1.1.410 (`reportUnknownMemberType`) without disabling the rule (ignore isolated to the facade).
