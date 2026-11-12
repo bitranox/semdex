@@ -1,6 +1,6 @@
 [project]
 name = "semdex"
-version = "1.5.8"
+version = "1.5.9"
 description = "Read-only, file-watching semantic-search MCP server and CLI over local files"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -557,4 +557,4 @@ ignores = ["E003"]
 
 [tool.uv]
 exclude-newer = "7 days"
-exclude-newer-package = {btx-lib-mail = false, lib-cli-exit-tools = false, lib-layered-config = false, lib-log-rich = false}
+exclude-newer-package = {btx-lib-mail = false, lib-cli-exit-tools = false, lib-layered-config = false, lib-log-rich = false, cuda-bindings = "2026-10-14T14:12:47Z"}

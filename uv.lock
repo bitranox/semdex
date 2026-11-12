@@ -25,6 +25,7 @@ exclude-newer-span = "P7D"
 
 [options.exclude-newer-package]
 btx-lib-mail = false
+cuda-bindings = "2026-10-14T14:12:47Z"
 lib-cli-exit-tools = false
 lib-layered-config = false
 lib-log-rich = false
@@ -5982,7 +5983,7 @@ wheels = [
 
 [[package]]
 name = "semdex"
-version = "1.5.8"
+version = "1.5.9"
 source = { editable = "." }
 dependencies = [
     { name = "btx-lib-mail" },
