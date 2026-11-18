@@ -7,13 +7,13 @@ requires-python = ">=3.11"
 dependencies = [
     "rich-click>=1.9.9",
     # Imported directly (adapters/cli/main.py, commands/config.py), not only through rich-click.
-    "click>=8.5.0",
+    "click>=8.5.1",
     # adapters/config/display.py names rich's Console type for type checking only; rich-click
     # pulls rich in at run time.
     "rich>=15.0.0",
-    "lib_cli_exit_tools>=2.4.1",
+    "lib_cli_exit_tools>=2.5.0",
     # 6.4.2: validate_config, the check config --profile runs, refuses exactly what init() refuses.
-    "lib_log_rich>=8.2.0",
+    "lib_log_rich>=8.2.2",
     # The logging setup reads the LOG_* lines of a .env itself (adapters/logging/setup.py).
     "python-dotenv>=1.2.4",
     "lib_layered_config>=8.1.0",
@@ -109,7 +109,7 @@ summary = [
 # (markdown/fast). Light; covers every strategy except semantic/late.
 chunk = [
   "chonkie>=1.7.0",
-  "semantic-text-splitter>=0.33.1",
+  "semantic-text-splitter>=0.33.2",
 ]
 # The embedding-driven chunkers (semantic/SDPM + late); heavier (pulls a model).
 chunk-semantic = [
@@ -120,7 +120,7 @@ chunk-semantic = [
 # is for FreshStack. Metrics are computed inline (no pytrec_eval/beir/torch).
 bench = [
   "ir_datasets>=0.6.3",
-  "datasets>=5.1.0",
+  "datasets>=5.2.0",
   # Lexical retrieval for the dense-vs-BM25-vs-hybrid comparison (scripts/score_hybrid_sweep.py).
   # PyStemmer supplies the snowball stemmers; the analyzer language follows the corpus, because an
   # English analyzer on German text understates BM25 and biases the comparison toward dense.
@@ -149,7 +149,7 @@ pg = [
 ]
 # MariaDB 11.8 native VECTOR backend (PyMySQL is pure-Python: no C build dep).
 mariadb = [
-  "pymysql>=1.2.3",
+  "pymysql>=1.2.4",
 ]
 # HTTP document-extractor backends. Each runs as its OWN Docker container reached
 # over HTTP, so semdex carries only a small HTTP/MCP client - never the
@@ -188,7 +188,7 @@ vision = [
 # Opt-in - the core CLI does not need it. Separate from the `markitdown`/`mcp`
 # client dep above (that is a converter client; this is the server).
 mcp-server = [
-  "fastmcp>=4.1.6",
+  "fastmcp>=4.1.8",
 ]
 # Live filesystem watching: watchfiles (Rust-backed, native OS events + polling
 # fallback). Enables auto-reindex on change while `semdex serve` runs.
@@ -204,29 +204,29 @@ dev = [
   "pymupdf>=2.1",
   "model2vec>=0.10.0",
   "chonkie>=1.7.0",
-  "semantic-text-splitter>=0.33.1",
+  "semantic-text-splitter>=0.33.2",
   # Optional-backend deps mirrored here so pyright (which type-checks against `.[dev]` in CI)
   # can resolve the pg/mariadb/bench/lance imports in the SQL adapters, bench scripts, and their
   # tests. Without them CI reported reportMissingImports (psycopg/ir_datasets) + downstream
   # reportUnknownMemberType, while local make test passed because the extras were installed.
   "pgvector>=0.5.1",
   "psycopg[binary]>=3.3.8",
-  "pymysql>=1.2.3",
+  "pymysql>=1.2.4",
   "ir_datasets>=0.6.3",
-  "datasets>=5.1.0",
+  "datasets>=5.2.0",
   # bench extra: scripts/score_hybrid_sweep.py imports bm25s and Stemmer (PyStemmer).
   "bm25s>=0.3.16",
   "PyStemmer>=3.1.0",
   "lancedb>=0.41.0",
   # MCP server (mcp-server extra) mirrored into dev so CI's `.[dev]` pyright run
   # can type-check the adapters/mcp/ modules and their tests.
-  "fastmcp>=4.1.6",
+  "fastmcp>=4.1.8",
   "pytest>=9.2.0",
   "pytest-asyncio>=1.4.1.post1",  # in-memory async testing of the FastMCP server (Client(server))
   "pytest-cov>=7.1.0",
   "pytest-xdist>=3.8.0",
-  "hypothesis>=6.170.14",
-  "ruff>=0.17.3",
+  "hypothesis>=6.170.15",
+  "ruff>=0.17.4",
   "pyright[nodejs]>=1.1.414",
   "bandit>=1.9.4",
   "build>=1.6.1",
@@ -240,17 +240,17 @@ dev = [
   # "codecov-cli>=11.2.8",
   "pip-audit>=2.10.1",
   "textual>=8.2.8",
-  "import-linter>=2.15",
+  "import-linter>=2.16",
   "rtoml>=0.14.0",
   "httpx2>=2.16.0",
   # Transitive CVE pins
-  "click>=8.5.0",                # CVE-2026-7246
+  "click>=8.5.1",                # CVE-2026-7246
   "jaraco-context>=6.1.2",       # CVE-2025-23949
   "python-multipart>=0.0.33",    # CVE-2025-24486
   "wheel>=0.48.0",               # CVE-2025-24049
   "pynacl>=1.6.2",               # CVE-2025-69277
   "urllib3>=2.8.0",              # CVE-2025-66471, CVE-2025-66418
-  "virtualenv>=21.15.5",         # CVE-2025-22702
+  "virtualenv>=21.15.6",         # CVE-2025-22702
 ]
 
 [project.scripts]
@@ -557,4 +557,4 @@ ignores = ["E003"]
 
 [tool.uv]
 exclude-newer = "7 days"
-exclude-newer-package = {btx-lib-mail = false, lib-cli-exit-tools = false, lib-layered-config = false, lib-log-rich = false, cuda-bindings = "2026-10-14T14:12:47Z"}
+exclude-newer-package = {btx-lib-mail = false, lib-cli-exit-tools = false, lib-layered-config = false, lib-log-rich = false}
